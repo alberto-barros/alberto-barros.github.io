@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Rede Local no Packet Tracer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: faixa verde de abertura, coluna de leitura de ~70ch, e um "laboratório" largo com topologia animada + pilha OSI lado a lado */
+:root{
+  --bg:#F5FAF5;
+  --surface:#FFFFFF;
+  --surface-2:#EAF6EC;
+  --ink:#17301C;
+  --muted:#55705B;
+  --line:#D4E8D7;
+  --green:#2F9E41;        /* verde IFSC */
+  --green-ink:#1F7A30;
+  --green-soft:#E3F6E6;
+  --green-chip:#C9ECD0;
+  --red:#CD191E;          /* vermelho IFSC, usado para o Echo Reply */
+  --red-soft:#FBE3E3;
+  --red-card:#C8191E;
+  --hero-a:#2F9E41;
+  --hero-b:#1F7A30;
+  --hero-bg:#1F7A30;
+  --hero-ink:#FFFFFF;
+  --hero-muted:#E2F5E5;
+  --node-pc:#FFFFFF;
+  --node-sw:#EAF6EC;
+  --wire:#9DBBA3;
+  --font-display:"Lexend","Segoe UI",system-ui,sans-serif;
+  --font-body:"Nunito Sans","Segoe UI",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1811;--surface:#142019;--surface-2:#18291E;--ink:#E3F3E6;--muted:#9DBAA3;--line:#25402D;
+  --green:#4CC560;--green-ink:#6FDD81;--green-soft:#173520;--green-chip:#1F4A29;--red:#FF6B6F;--red-soft:#3D1D1F;--red-card:#A51418;
+  --hero-a:#237A33;--hero-b:#14501F;--hero-bg:#14501F;--hero-ink:#FFFFFF;--hero-muted:#CDEBD2;--node-pc:#18271D;--node-sw:#1E3325;--wire:#4A6352;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1811;--surface:#142019;--surface-2:#18291E;--ink:#E3F3E6;--muted:#9DBAA3;--line:#25402D;
+  --green:#4CC560;--green-ink:#6FDD81;--green-soft:#173520;--green-chip:#1F4A29;--red:#FF6B6F;--red-soft:#3D1D1F;--red-card:#A51418;
+  --hero-a:#237A33;--hero-b:#14501F;--hero-bg:#14501F;--hero-ink:#FFFFFF;--hero-muted:#CDEBD2;--node-pc:#18271D;--node-sw:#1E3325;--wire:#4A6352;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.read{max-width:760px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.12;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.5rem,3vw,1.95rem);font-weight:750;letter-spacing:-.01em}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0}
+code,.mono{font-family:var(--font-mono);font-size:.86em}
+code{background:var(--surface-2);border:1px solid var(--line);padding:.08em .4em;border-radius:5px;white-space:nowrap}
+.eyebrow{font-family:var(--font-display);font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green-ink)}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,var(--hero-a) 0%,var(--hero-b) 100%);color:var(--hero-ink);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.16) 1.5px,transparent 1.5px);background-size:22px 22px;mask-image:linear-gradient(90deg,transparent 25%,#000 100%);-webkit-mask-image:linear-gradient(90deg,transparent 25%,#000 100%);pointer-events:none}
+.hero .wrap{padding-block:44px 40px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:36px;align-items:center;position:relative;z-index:1}
+.hero-text{display:grid;gap:16px;justify-items:start;min-width:0}
+.hero .eyebrow{color:#fff;background:rgba(255,255,255,.16);padding:6px 12px;border-radius:999px;display:inline-flex;gap:8px;align-items:center}
+.hero h1{font-size:clamp(2rem,5vw,3.25rem);font-weight:700;letter-spacing:-.015em;max-width:18ch}
+.hero p{color:var(--hero-muted);max-width:58ch;font-size:1.08rem}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:#fff;color:#1F7A30;font-weight:700;font-size:.85rem;padding:7px 13px;border-radius:999px}
+.chip svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.chip.back{background:#C8191E;color:#fff;border:0;text-decoration:none;font:inherit;font-weight:700;font-size:.85rem;cursor:pointer;box-shadow:0 6px 14px rgba(80,0,0,.25)}
+.chip.back:hover{background:#A51418}
+.chip.back:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.logo-card{background:#fff;border-radius:18px;padding:22px 26px;box-shadow:0 18px 40px rgba(0,40,10,.30);display:grid;place-items:center}
+.logo-card img{display:block;width:150px;height:auto}
+
+/* Navegação */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;gap:8px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.nav .wrap::-webkit-scrollbar{display:none}
+.nav a{flex:none;display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-family:var(--font-display);font-size:.86rem;font-weight:500;padding:7px 13px 7px 7px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.nav a:hover{border-color:var(--green);background:var(--green-soft)}
+.nav .n{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;font-size:.75rem;font-weight:700}
+.nav a:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+section[id]{scroll-margin-top:64px}
+
+section{padding-block:56px 8px}
+.sec-head{display:grid;gap:6px;margin-bottom:22px}
+.lead{color:var(--muted);max-width:68ch}
+
+/* Objetivos */
+.goals{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.goals li{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.goals svg{flex:0 0 22px;margin-top:2px;color:var(--green)}
+
+/* Laboratório */
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.lab-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.lab-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.stage-col{padding:16px 18px;border-right:1px solid var(--line);min-width:0;display:grid;gap:14px;align-content:start}
+.topo-scroll{overflow-x:auto}
+#topo{display:block;width:100%;min-width:620px;height:auto}
+.wire{stroke:var(--wire);stroke-width:2}
+.wire.hot{stroke:var(--green);stroke-width:3}
+.wire.hot.reply{stroke:var(--red)}
+.trunk{stroke:var(--wire);stroke-width:4}
+.trunk.hot{stroke:var(--green);stroke-width:5}
+.trunk.hot.reply{stroke:var(--red)}
+.dev rect.box{fill:var(--node-pc);stroke:var(--line);stroke-width:1.5;transition:stroke .25s,fill .25s}
+.dev.switch rect.box{fill:var(--node-sw);stroke:var(--wire)}
+.dev text{fill:var(--ink);font-family:var(--font-display);font-weight:700;font-size:15px;text-anchor:middle}
+.dev text.ip{font-family:var(--font-mono);font-weight:400;font-size:10.5px;fill:var(--muted);font-stretch:100%}
+.dev text.lbl{font-size:12px;fill:var(--muted);font-weight:600}
+.dev.endpoint rect.box{stroke:var(--green);stroke-dasharray:4 3}
+.dev.active rect.box{stroke:var(--green);stroke-width:3;stroke-dasharray:none;fill:var(--green-soft)}
+.dev.active.reply rect.box{stroke:var(--red);fill:var(--red-soft)}
+.dev .icon{fill:var(--muted)}
+.dev.active .icon{fill:var(--green)}
+.dev.active.reply .icon{fill:var(--red)}
+#pkt rect{fill:var(--green)}
+#pkt.reply rect{fill:var(--red)}
+#pkt path{stroke:#fff;fill:none;stroke-width:1.6}
+#pktTag rect{fill:var(--surface);stroke:var(--green)}
+#pktTag.reply rect{stroke:var(--red)}
+#pktTag text{fill:var(--ink);font-family:var(--font-mono);font-size:11px;text-anchor:middle}
+.halo{fill:none;stroke:var(--green);stroke-width:2;opacity:0}
+.halo.on{animation:halo 1.4s ease-out infinite}
+.halo.reply{stroke:var(--red)}
+@keyframes halo{0%{opacity:.7;r:16}100%{opacity:0;r:40}}
+
+.caption{background:var(--surface-2);border-radius:var(--radius);padding:14px 16px;display:grid;gap:4px;min-height:96px}
+.caption .kind{font-family:var(--font-mono);font-size:.78rem;color:var(--green-ink);font-weight:600}
+.caption.reply .kind{color:var(--red)}
+.caption h3{font-size:1.05rem}
+.caption p{color:var(--muted);font-size:.98rem}
+
+/* PDU */
+.pdu{display:grid;gap:6px}
+.pdu-label{font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.frame{display:flex;border-radius:8px;overflow:hidden;border:1px solid var(--line);font-family:var(--font-mono);font-size:.72rem;min-width:0}
+.seg{padding:7px 9px;border-right:1px solid var(--line);min-width:0;display:grid;gap:2px;transition:background .25s,opacity .25s;opacity:.5}
+.seg:last-child{border-right:0}
+.seg b{font-family:var(--font-display);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+.seg span{overflow-wrap:anywhere;color:var(--muted)}
+.seg.eth{flex:2.2}.seg.ip{flex:2.4}.seg.icmp{flex:1.4}.seg.fcs{flex:.6}
+.seg.read{opacity:1;background:var(--green-soft)}
+.reply-mode .seg.read{background:var(--red-soft)}
+.seg.read span{color:var(--ink)}
+
+/* Controles */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:inherit;cursor:pointer}
+.btn{font-family:var(--font-display);font-weight:650;font-size:.92rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 14px;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--green)}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn:focus-visible,.dot:focus-visible,.speed button:focus-visible,input:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.speed{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-left:auto}
+.speed button{border:0;background:var(--surface);color:var(--muted);padding:8px 11px;font-family:var(--font-mono);font-size:.8rem}
+.speed button[aria-pressed="true"]{background:var(--green-soft);color:var(--green-ink);font-weight:600}
+.dots{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.dot{width:24px;height:8px;border-radius:4px;border:0;background:var(--line);padding:0}
+.dot.done{background:var(--green);opacity:.45}
+.dot.done.r{background:var(--red)}
+.dot.cur{background:var(--green);opacity:1}
+.dot.cur.r{background:var(--red)}
+.dots .sep{width:1px;height:16px;background:var(--line);margin:0 4px}
+
+/* OSI */
+.osi-col{padding:16px 18px;display:grid;gap:10px;align-content:start;min-width:0}
+.osi-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.osi-dev{font-family:var(--font-display);font-weight:750;font-size:1.15rem}
+.dir{font-family:var(--font-mono);font-size:.78rem;color:var(--green-ink);display:inline-flex;align-items:center;gap:4px}
+.reply-mode .dir{color:var(--red)}
+.osi{display:grid;gap:5px}
+.layer{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:8px 10px;opacity:.42;transition:opacity .3s,background .3s,border-color .3s}
+.layer .n{font-family:var(--font-display);font-weight:800;font-size:1.05rem;color:var(--muted);text-align:center;line-height:1.3}
+.layer .nm{font-weight:700;font-size:.95rem;display:flex;justify-content:space-between;gap:8px}
+.layer .unit{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);font-weight:400;white-space:nowrap}
+.layer .note{font-size:.86rem;color:var(--muted);line-height:1.4;display:none;margin-top:2px}
+.layer.on{opacity:1;border-color:var(--green);background:var(--green-soft)}
+.layer.on .n{color:var(--green-ink)}
+.layer.on .note{display:block;color:var(--ink)}
+.reply-mode .layer.on{border-color:var(--red);background:var(--red-soft)}
+.reply-mode .layer.on .n{color:var(--red)}
+.layer.flash{animation:flash .6s ease}
+@keyframes flash{0%{transform:translateX(-4px)}100%{transform:none}}
+.osi-foot{font-size:.8rem;color:var(--muted)}
+
+/* Tabela */
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);font-size:.95rem}
+th{font-family:var(--font-display);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td.mono{font-family:var(--font-mono);font-size:.86rem}
+tr:last-child td{border-bottom:0}
+tr.grp td{background:var(--surface-2);font-family:var(--font-display);font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--green-ink)}
+.pill{display:inline-block;font-family:var(--font-mono);font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--green-chip);color:var(--green-ink)}
+
+/* Topologia desenhada + endereçamento */
+.drawing{margin:0 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 18px 12px;display:grid;gap:8px}
+.draw-scroll{overflow-x:auto}
+#draw{display:block;width:100%;min-width:640px;height:auto}
+.drawing figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+#draw .grp{fill:var(--green-soft);stroke:var(--line)}
+#draw .grp-l{fill:var(--green-ink);font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.12em}
+#draw .cab{stroke:var(--green);stroke-width:2.2;fill:none}
+#draw .cab-up{stroke:var(--green);stroke-width:5;stroke-linecap:round}
+#draw .sw-body{fill:var(--hero-b)}
+#draw .sw-top{fill:var(--green)}
+#draw .led{fill:#9BE7A6}
+#draw .sw-t{fill:#fff;font-family:var(--font-display);font-weight:700;font-size:15px;text-anchor:middle}
+#draw .mon{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+#draw .scr{fill:var(--green-chip)}
+#draw .stand{fill:var(--ink)}
+#draw .pc-t{fill:var(--ink);font-family:var(--font-display);font-weight:700;font-size:14px;text-anchor:middle}
+#draw .pc-ip{fill:var(--muted);font-family:var(--font-mono);font-size:11px;text-anchor:middle}
+#draw .port{fill:var(--muted);font-family:var(--font-mono);font-size:10px;text-anchor:middle}
+#draw .up-l{fill:var(--green-ink);font-family:var(--font-mono);font-size:11px;text-anchor:middle}
+.addr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.addr{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:0}
+.addr-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(90deg,var(--green-soft),var(--surface))}
+.addr-head .ic{width:40px;height:40px;border-radius:11px;background:var(--green);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:.85rem;flex:none}
+.addr-head strong{font-family:var(--font-display);font-size:1.05rem;display:block}
+.addr-head span{font-size:.85rem;color:var(--muted)}
+.addr table{min-width:0}
+.addr td,.addr th{padding:8px 14px}
+.uplink{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px dashed var(--green);border-radius:var(--radius);padding:12px 16px}
+.up-note{font-size:.9rem;color:var(--muted)}
+@media (max-width:700px){.addr-grid{grid-template-columns:1fr}}
+
+/* Roteiro */
+.phases{display:grid;gap:14px}
+.phase{display:grid;grid-template-columns:56px minmax(0,1fr);gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.phase .num{font-family:var(--font-display);font-weight:800;font-size:2rem;color:var(--green);line-height:1}
+.phase .body{display:grid;gap:10px;min-width:0}
+.phase ol{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.phase li::marker{color:var(--green-ink);font-weight:700}
+.tip{border-left:3px solid var(--green);background:var(--surface-2);padding:10px 14px;border-radius:0 8px 8px 0;font-size:.95rem}
+.tip strong{color:var(--green-ink)}
+.cmd{font-family:var(--font-mono);font-size:.9rem;background:#0F1A13;color:#C9F2D0;border-radius:8px;padding:12px 14px;overflow-x:auto;line-height:1.55}
+.cmd .p{color:#7FAE88}
+
+/* Observar */
+.observe{list-style:none;margin:0;padding:0;counter-reset:o;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.obs{counter-increment:o;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:grid;gap:6px;align-content:start}
+.obs::before{content:counter(o);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;font-family:var(--font-display);font-weight:700;font-size:.85rem;margin-bottom:4px}
+.obs .k{font-family:var(--font-mono);font-size:.78rem;color:var(--green-ink)}
+.obs p{color:var(--muted);font-size:.96rem}
+
+/* Reflexão */
+.reflect{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:var(--hero-ink);border-radius:16px;padding:32px clamp(18px,4vw,40px);display:grid;gap:22px}
+.reflect .eyebrow{color:var(--hero-muted)}
+.reflect h2{color:var(--hero-ink)}
+.reflect .lead{color:var(--hero-muted)}
+.qs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;counter-reset:q}
+.qs li{counter-increment:q;border-radius:12px;padding:16px 18px;display:grid;gap:6px;background:#FFFFFF;color:#17301C;box-shadow:0 10px 24px rgba(0,40,10,.22)}
+.qs code{background:none;border:0;padding:0;color:#1F7A30;font-weight:700}
+.qs li::before{content:"Pergunta " counter(q);font-family:var(--font-display);font-weight:800;color:#2F9E41;font-size:.85rem;letter-spacing:.08em}
+.qs li p{font-size:1.04rem;line-height:1.5}
+.qs li small{color:#C8191E;font-weight:600;font-size:.88rem}
+
+/* Checklist */
+.check{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.check label{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--green);margin-top:3px;flex:0 0 auto}
+.check input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--green)}
+.progress{font-family:var(--font-mono);font-size:.85rem;color:var(--green-ink)}
+
+footer{padding-block:48px 40px;color:var(--muted);font-size:.88rem}
+footer .wrap{border-top:1px solid var(--line);padding-top:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:760px){.hero .wrap{grid-template-columns:1fr}.logo-card{justify-self:start;padding:16px 20px}.logo-card img{width:110px}}
+@media (max-width:860px){
+  .lab-body{grid-template-columns:1fr}
+  .stage-col{border-right:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:520px){
+  body{font-size:16px}
+  .phase{grid-template-columns:1fr;gap:6px}
+  .speed{margin-left:0}
+  .frame{flex-wrap:wrap}
+  .seg{flex:1 1 45%!important;border-bottom:1px solid var(--line)}
+}
+@media (prefers-reduced-motion:reduce){
+  .halo.on{animation:none}
+  .layer.flash{animation:none}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-text">
+      <span class="eyebrow">Redes de Computadores · Atividade prática</span>
+      <h1>Uma rede local vista pelas camadas do Modelo OSI</h1>
+      <p>Monte uma LAN com dois switches no Cisco Packet Tracer, configure o endereçamento e acompanhe, camada por camada, o caminho de um ping do PC1 até o PC10.</p>
+      <div class="chips">
+        <a class="chip back" id="bBack" href="https://alberto-barros.github.io/HTML/Redes/"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Voltar</a>
+        <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>10 PCs</span>
+        <span class="chip"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 12h.01M11 12h.01M15 12h.01"/></svg>2 switches 2960</span>
+        <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>10.1.1.0/24</span>
+        <span class="chip"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>ICMP · ping</span>
+      </div>
+    </div>
+    <div class="logo-card"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCAG4ATcDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAcIAgYBBQkEA//EAGgQAAECBQIDAwQIDQwPBQcFAAECAwAEBQYRBxIIITETQVEJImFxFBUXGDJXlLMWIzc4VnWBkbGytNHSMzU2QlJicnN0laHTJCUnVFVjZXaChJKTosPiJig0o8EZKURFRqTwOUNTZIP/xAAcAQEAAwADAQEAAAAAAAAAAAAABAUGAQMHAgj/xAA4EQEAAQMCAwUHAgQGAwAAAAAAAQIDBAURExRREiFSodEGFTEzNEFxImEHIzVCFiQlMkORU4Gx/9oADAMBAAIRAxEAPwC/0IQgEIQgEIQgEIQgEIQgEIQgEIwKjuPOPzefS03vW4hCR1UsgAfdgP3hGrq1BslNS9rlXjQkze7Z2Bnmt+7w25zGwMzDbzYcafQ4k9FIIUD90QiYn4S+67VdEb1RMPohGOfTHBXjvg699mcIw3E8wYZV4xxudqGcIwyrxjgKO7BMN4O1D9IRjuwOscdpDc3ZwjDcTzBhuPjDc3hnCPz7SM0nIzHMd7lzCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBDMI4MBoeqGpFG0zsx6uVNJddWrs5WWSfOmHMckjwHie6KH35qpeuodScmK9VXRKkkop8soty7YzyG0HzuXerJz96N44pbpma7ri/Re1/sOjNJl20ZwA4oblq9fnAZ8BEKRndQy6qrk26fg9t9ivZuxYxaMy/Rvcr+G/2hh2Y/cjH7nwjbrH1MvXT+pombfq7yGQrK5F4lcu6O8KTnl6xz9UapCK+i7XRO9Mtxk4FjKtzavURMT+z0c0n1Qo+qNoJq8ggS06wQ3OSROSyvHj3pPUHv9caFxIXJXaQmhSNLqUxJNTHbOO9grYpZTs25UOePOPLvivHDhd0zbOvFMlQ6UylXPsF9GeSiQSg+sKwB6CYnLigVuqVteHZTH4W4ubuVNzFmunumH5n/iJpE6PXctWZ2pnaafxuhgXddeP2TVf5W5+eH0XXX9k1W+VufnjpoRRcW54peNczd8c/9y7n6Lrr+yarfK3PzxIWil43Q5rHTqZM1qcm5SdDjbrUw8pwea2pQI3dDlI6REkSBol9Xe3/AOG98wuO/Fu18WnvTdPybvM0R2p+MfdOHEJcVYoFhSSKTNuyapucDTjrJ2r2BClYB6jmBFaDdl0k7vomq2f5U5+eLC8T37B6L9sP+UqKwxK1O5XTfmIlP17Iu05U001TttDufotuof8A1NVvlbn54fRbdf2TVb5W5+eOmhFdxa/FKk5m745/7lvlg3tdctqVRU/RBPvtPTbTDrT7ynEuIUsJIwSe49YuuznsgCIoTZX1Srf+2LHziYvu3+pJ9UX+kV1VW57U7tl7N3a67dfbndlCEIt2lIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAI4PWOY4I5wHnRxAyj0pxJXSl5G3tphDyMnOUlCcH1GI3i3/ABU6VTdbk2b/AKFKqem5FstTzLacqcaHNKx4lPP7hHhFPM5wMdYy2daqtXpmfhL9D+yGpWs3TbVNM/qojaY/D9IRigHnyjhXj3eMQZ6NRvG28/BumkMg/UtdrUlZcHf7YtuEjqEpO5R+8DFl+J7nUrbJ5EtP8vDm3HScKelc1LzS9SK3KuMdo2WaY04nBKVfCd9RAAHozHfcUWDU7aPi3MD+luLebFVrDmavu/Nn8V9StZdyqmz3xb2j/wB7q/QhCKV4JBEgaJfV3t/+G98wuI/jftEj/d6oHoW98wuO/F+bT+U3T/qbf5hMHE9+wei/bD/lKisMWd4nVA2RRQOeKh/ylxWHIxnIxnGcxK1X58p/tB9XP4hzCOMg9CI5zFcpHeWV9Uq3/tix84mL8N/qSfVFB7LI90egfbGX6/xiYvu2ctD1RodGn+XLbezHfbrlnCEIuWoIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQgekB87yEq3JVhQPIgjPKIK1C4XrLu6oPVWiTCrdqDpKliWQFMLUe8tnkD/BxHX66amXbb18s0C35809hDCXnHGkgrcUonAyRyGBEWe67qT1+iyd+8n80VeVmWIqmi5Tvsr6Pa2dKyJ4FUxVHR2J4N7sE3tTdtILOP1VUuvPrxn/ANYkew+FS0LaqDNSuSfcuGZaO5LLiA3LhXjsHNXqJx64ib3XdSQrP0Wz3/D+aOTq9qQet2Tv3k/miHRlYlM7xQn5f8UszKt8O5XO37bR/wDF1mWm2m0IZCUITyShCcADHhGp39pxQNQZOVarBfaclVFTL7CtqkZxkekHA+9EWaE6mXVcl6TNvXBPKnmzLKmG3XUpCkFKkjHIcwd39Ed1r9f1xWkxSJG3poSy5ztVuvJSCvCCnATnpnd19EWVWVbrscSY/SqbmfYv4k3643pcDhotDH68VY+nen80Pe0Wh/heq/7afzRB51d1Iz+y2dPpwn80ce67qR9lk795P5orJy8PwKPn9N/8Kcfe0Wh/heq/7afzRsVm6K2tZdwitSbs5NziUqQ2qYcBDe4YJAGOeOWYrZ7rupH2WTv3k/mjf9H9VLzqmpslQa1VV1CUng4kh5KdyClBUCkgfvSMR22MnFmuIpo2lIxM7Am7TFu1tMp4vWx6PfVvilVlLobS4HW3GVbVoUOWQfUSIjc8NFoFZV7b1fJ/fo/RibweeOUZ4EWtePauTvXTvLQ3sGxeq7VyneUHe9ptD/C1W/20/mgOGi0M/rtVv9tP5onHAjjAj45Ox4HT7qxPAiW3dAbRt25JWtImqhNvSqw60h9Y2hY6KIA54iWGxhGIy2iOQMR327VFuNqI2SbGNasRtap2IQhH27yEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCB6QgekBUPiL+rIf5E1+ExEsS1xGfVjP8AIm/wmIljH5/z6nmer7c5cIQhEWIVmyXOHHnrK79rnfx0RsnFB+ult/xcx+FuNb4cPqyO/a578duNk4of10tv+LmPwtxc0R/kJam3H+j1K/whCKZlyN/0T+rrQv4bvzK40CJA0T+rrQf4TvzK4kYnzqU3TvqaPyuoO6MoxT1jKNk9RghCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAgekId0BUPiL+rH/qTX4TESxbrU7RiW1BuFisMVhVPm0I7FwFrtErSOYPUEERpPvX3zyF4Nn/U/+qM7l4F6u9VVRT3SxGpaLlXciu5bp7pV7hFhPevTP2Xo+Sf9UcHhff6fRg3nw9if9UR/dmR4UCNBzftS1jhw+rM6P8nPfjNxsnFD+ult/wAXMfhbje9MdHJawK27WH6quoTrrZYQQ32aW0HBPLJyTtHM+EdlqhphLajy8iVVFchNSal9mvYFpUlWNwUn/RHOLKjEuxh8OY72go0y/GnTj7fqlTKEWE969M/Zgk9+fYn/AFQHC9M5/Zej5H/1RW+68joz3uHNj+1XuN/0UUBrtQAe9b3zK4kb3r0z9lzfyP8A6o2ewdCZezLzauCarap96XSoMtpa7JKVKBSVHmc+aY7sfT71FyKqo+CXg6NlW79NdVO0RKaB1jKMApPLnGW5J740mzeOYRxuHjDIgOYRxuHjHMAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCB6QEEax6wV2y7xZoVClpXf2IfddmUleckgBIBGOnOI698ZqH+5pP+4V+lDiMx7smSM4kmuvrMRLGZzMu7TeqpiWB1PUsm3k10UV7RCWvfGaieFJ+Tq/Sjn3xmoWPgUnP8Qr9KIkhEXnb/2qQZ1fLn/klaPRzV+uXtdcxQa9KyoWGFTDT0uCgAJIBSQSf3UdrrVqZWLBZpcvRZaXXMTpcUpyYBUlCUbeWARknd/RERcOQzrG6f8AJzv47cbLxQn+2ltj/FzH4W4uIya5w5ub97Q0Z173ZN2Z/VH3ayOIvUMDAFJ+Tn9KHvjNRPCk/J1fpREsIp5zb0/3M/73y/HKWvfGaieFJ+Tq/SjdNL9brkunUWUt2vS0kpucSsNuy6CgoUlKlcxk5HmxXGJA0RA93igcuq3vmFx342Xdm5TE1JWDquTXkUU1VzMTKxmr9/ztgWgxOU2Vadm5p4MNdr8BHmlRUQOvSIN98XqDnkml4/iFfpRIfE6kCyKMe/2f/wAtUViiRqOTct3ezTVsl61qF+zkzRRVtCWvfF6g/uKX/uFfpQ98VqD+5pX+4V+lESwiBzl7xKj3tl+NPFmcQF21C+KbTKzKSL0pNvol1BlBQpJUoAEEk9MxZtvOzmcxQmyvql2/9sWPnExfdv8AUxF5pd6u7RM1y1ns/l3b9urizvsyhCEWjQkIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgED0hA9IConEZ9WT/UmvwmIk7olriL+rH/qTX4TESxkc/59TzLV/rLkEIQiJCuS5w4/Vje+1zv47cbJxQ/rrbf8XMfhbjW+HD6sjv2ud/HbjZeKIf20ts/4uYH9LcXNH0EtRb/pFSv0IQilZciQNEfq8W//AA3vmFxH8SDoj9Xi3/4bx/8AJXEjF+bT+UzT/qbf5hLvE9+wai4/wh/y1RWGLPcTn7BKL9sD82qKwxK1X6iVh7QfVz+IIQgOsVqjd5ZX1SrfP+UWPnExfhv9THqihFlDOpVvj/KLHziYvu3+pJ9UaHRvl1Nt7MfKqn92UIQi5aghCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCEAhCB6QEG6waOVm9rsZrtBnpRDvZBh1iaUpI5dCkpB8emIjn3uGoA/+LoZ/1hz+riWdUdZ27BuNqiytGNQmVtdq4VvFpKEnoOSTkmNEHFBUs/sOlvlp/QilyYw5uTxJ72Uz6NMm/VN6qYq+7ofe4agf31Q/lDn9XD3uGoH99UP5Q5/Vx3/voaj9hst8tP6Ece+hqWf2HS33Z1X6EdHZwOsonD0fxS2rR7R6r2PdExXq7Oyq31MKl2WJVSlJCSQSpSlAc/NHIR22sumNS1BlqbMUmdl2JqRLgKJjIQtKtueYBII2+EYaW6yt6gV+Yo81SBTptDRfRte7VLiAQDzwMEEiOx1W1RRpwxIJbppn5qcK9iC5sSlKduSTgn9sMDHjFhEY/A2j/YuaKcLkZiJ/loTHDhqBj/xVD+UOf1cPe4agf31Q/lDn9XHfjihqOB/2Olvlp/Qh76GpfYbLfLT+hFf2cDrKmmjR/FLoPe4agf31Q/lDn9XG6aX6H3FauoEtclen5HZJhXZMyilLK1KSUncVAYACjHVe+hqX2Gy3y0/oRtWnuu4vO9mben6CJByZSosONTHaAqSCog+aMcgTmO2zThduOxPekYlGl8anh1T2vs2jVywJrUC0GKfITbcvNyz4faLmdiztIIOASOsQf727UHP/AIuh4/lDn9XFsxz/AGsNgHQCLC9g2r1Xar+K6y9Ix8m5xLkTuqaOG2/yP/GUP5Q5/VwPDdqB3TlD+UOf1cW0AwOkMeiOn3VY/dG/w9h9JVms3h7uqmXxTqpW6hTUSkm8mYKZVa1rWUkEDmkADIizDRy2IEYHTMZJ6dMRKx8aixG1Cxw8G1iUzTbhzCEIkJhCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBA9IQPSAqHxF8tYz/Im/wmIliWuIz6sh/kTf4TESxj8+P59TzLV/rLn5IQhEaFclzhx56xu/a578duNk4oudVtv+LmPwtxrfDjy1jd+1z347cbJxQ/rpbf8XMfhbi5o+glqLf9IqV/hCEUrLkb9omP7u9BPgp75lcaDEgaJ/V1oP8ACd+ZXEjE+dSm6d9TR+V1E9YyjERlGyeokIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgED0hA9ICofEWR7shH/8ASa/CYiWLI63aW3ZdN7M1y3pVudbVLhhxoupbUgpJ5+cQCCD4xGHuH6n/AGNj5Wz+nGXzca7VeqmKe6Xn2q4N+rKrqpomYlHsIkL3D9T/ALGx8rZ/Th7h2p/2Nj5Wz+nEXlb0f2Sr/d+T4Jd1w4j+7I6P8nO/jtxsnFF+utuHu7KY/C3HY6IaWXTat6zNwXDLIkk+xjLtsh5LhcKik7vNJAACcde+O5150+uO8xR563pZuZcku1QtguBCile3BBVy5bYt4sXIwpo272joxb0aVNvsz2uiqsIkJOh2pxTkW4j7k2z+nHPuHan/AGNj5Wz+nFRyl7wyzvu7J8Eo8iQNFPq7UD+E9n/crjP3DtT/ALGx8rZ/Tjd9JtIbzoWp8lXq9IIkpaSC1gduhanFKQpAACSf3WY78bGuxdpmaUvA0/IpyKKpo2iJWaEZRiOREZRq3opCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIBCEIDAtgk8zzjnb6YyhAY7fTDb6YyhAYdmMjmeUc7BnrGUI42NnASAMQ2//mI5hHI42/8A5iMS2M5yYzhAcYEcwhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIQhAIEgAk9BCBGRiAg65uLrQW0LvqVsXBeD0pU6bMKlZln2umF7HEnChlKCDjxiZKRVZOuUGTrFOcLkpOMImGFqSUlTa0hSTg8xkEdY8ZOJJWOLnUZJAP9vpo5/0zHr5pfj3ELOOOtDkj/wDbogI5uPi+0CtO76nbFdvN2WqlMmXJOaZFOmVht1CilQ3JbIOCDzBjfdNtWLD1bt2YrlhVxNUk5Z8yzyi0tpTawArBQsA8wQQcYMeROvUtNTvGLqBJSTKnpl+6JxplpAypa1TCglI9JJAjdOE7Wh7RfXxhmrurl7crKhT6qheQGFZw28fShXX96V+iA9dSoJOMGIPf4vNBJa9nLSevF5NWbnTT1S/tdMEB4L7PbuCMfC5ZziJrbU2+A6ggpOClSTkKHUGPF2vfXp1D/PNX5bAe06lBIyc/cERFqZxN6MaU1NdJuu7UGqoAUumSDSpl9GegWE8kHmOSiDjnHba+3rUNPOGy8bwpIIn5GQV7GUP2jq1JbQv/AESsK+5Hk7o3prVNeddpO0HK8uVmJ4uzk5UX8vL2pTvWvBOVrJwPWcnpAeh1K49eH2ozol5qpV+kpP8A8RPUxWz/AMsrP9ETJK6v6bVHTio33Srtp1SoVNYMzOTMi52ymEBO470JypKsftSMxUK4PJuUv2qK7X1PnBOBOUipSKVNrPgS2QU+vB9USvo7wwzNj8KVz6aVmoyrNeuf2QieqUmFOobScoa2g7SQEDdjlzUYDuffu8NoODfb381zX9XD373DZ9nb381zX9XEDPeTaYQwt33W3FFCSop9pwCcD+OijtNoSJ+/5S2zMFCH6giR7fA5bnAjdj+mA9W/fvcNh5C+3v5rmv6uJRujVSybN0vZ1DuKqOSlvPIZcTN+x1rO10AoOxIKueR3RTg+TUYAONXnCfD2mH9dEqcYVJ+h/wAn5MUHt+3NOFOk+227e0Da0I3YycZx0gJT044i9JNWLpftyxLlcqNRYljNrZXJvM4aCkpKsrSB1Unl15x8t/cTujGmN7P2nel0u0+rMNtuuMJkX3gErTuSdyEEcwfGKQeTqAXxP1vI6W09+US8WK114MG9atZp2/F6gLo3smXYZEoKb2+wNo253doOuM4xAbd797hs+zt7+a5r+rh79/hs+zt7+a5r+rjz24lNAW+H676JQ27oNe9s5NU2XTKhjs9qyjbjcrPTOeUbvw78IDWu+k715uX2uhlqoOyPsZNPD+diEK3bu0Tj4fh3QHonplrfptrAal7n9ccqntb2fsoqlHWdnabtn6okZzsV0jULg4vtA7Wumo27W7xel6lTn1y0yyKdML2LQcEbggg8/Ax8fDbw2J4e1XAE3aa+K0ZfP9iex+x7Lf4LVnO8/ejzL19URxP6gdOdcmh/5hgPbCXfbmZVuYaJLbiQtJIxkEZEa3fuoNq6Z2RM3deVQXIUiWUhDswllbu0rUEp81AJOSR0Ed3R0hNuyAHQS7f4oivXHQNnBRchH7abkfylEBvmnHEdpFqxdD1vWJczlSqLLBmVsqkn2cNggE5WgDqRyzHw3xxTaJacXzOWfeF1uyFYk9hflxIPuhO9AWnzkIIPJQ74o/5O8j3zlVz/AICe+cbiw2s/BA1rBrVWNQXNRV0dVRDI9hCmh/s+zaS38PtE5zsz074DePfvcNn2dvfzXNf1cPfvcNn2dvfzXNf1ceenEfoG3oFfVIt1u5VV0VCRM52xlew2YcUjbjcrPwcxIugPBmxrfo41fKr/AF0UuTj0r7GFOD4+lkDdu7RPXPTEB6E6Za3ab6wt1Fen1dcqiacUCZKpV1jZvzt/VEjOdp6RuNXuCi2/RpirV2pytNkJZJW/NzbqWmmgO9SicCIR4b+G1vh7RX2UXaq4BVyyokyYl+y7Pd3b1Zzu/oii/F5rzVtU9YqhbchUnUWhQplyUlZVpWETLqFFK5hePhkkHbnkEjl1OQuncnHVw+UGdVKy9eqlbUlRSXKXT1qbyPBTmwH1jIj6LV44OH25p5Em7cc9QnHFBCFViSU02on/ABidyUj0qIEVj0a4B6lfFiSN16gXTMW+1PtB+VpspLpcmA0oZStxSjhJI5hODyI590dXrxwO1bTCw5q87KuN246XIJL09KTUuGpllsdXEFJIcSkZKhyIAzzGcB6YyNVp9TkGJ6nTbM5KzCQtqYl1hxtxJ6EKHIiPsjy64Jtd6vZerUhprWqi47a9deDEu06oqTJzZzsUgk+alZ81QHIkgx6hhWVkDGByMBlCEIBCEIBCEIBCEIDxV4k/rvNRvt7NfjmPX/S/6h9m/aOR/J0R5AcSf13mo329mvxzHr/pf9Q+zftHI/k6IDyR1YmVSfHtdU4jO5m9HnBjxTN5/wDSJQ44dFPc/wBXPo9okgpFvXKtTjgQMIlpzq4g/uQoeeP9Id0RPrN9fFeXLP8A2vmOX+tGPWHWHTOk6t6NViyKsEI9lNb5aZUMmVmEjLbo9SuviCR3wEKcEWtnui6QCyK1Ob7gthCGQpSsqmZPo2v0lPwFH0JJ5mKA1769Kfz1+jNX5bH66fXjdPDpxLM1SclXmahRJ5UjVKfkpLzIVtdb9OQMpPiEmPyr9QpdW4zX6vRZoTNOnbqRNS7w/bocmUrB/wCKA9e9TLJkNR9JbhsapLLcvVpNct2oBJaWcFCwB12rCVY78R4+1239TuHbWlpDwm6BcNMeK5SfZB7N9PMb21Hk4hSTzGO/BHdHtU8+zLp3vOobTnblZwMnujoLxsezr/oK6Jedu0+tSBz9KnGQvYfFKuqD6QQYCm2kHlBabOLlqFrBSkU944QK7TGyWD3ZdZ5qT6SnI9Ai7tIqdNrlHlKtSJ6XnpGaaDrMzLuBxDqT0KVDkR+aPMTi44ZKDoqin3bZ1ReVQKnMqlDT5s7nZV7aVDav9uggHrzBHUg8pm8nHedWqNqXdY04849I0l1idlCtWQ0Ht6VtpHcMt7vWTAXem0p9hOjAxsJ/ojw6tok68UfJ/wDn7P5SmPceb/8ABu/wFfgjw4tn6vFH+37P5SmA9zcDwitvHUAOC2vYAGZyT+eTFkordx1/WW13+WSfzyYCqXk6Prn65/m29+US8enhQgDISM+MeYfk6Prn65/m29+US8enx6GA82fKSADWGywBge0rhwP49UTf5PEA8KE/kZ/7QzPzLEQh5SX6sVl/aVfz6onDyeH1qE//AJwzPzLEBbUJSDkAZ8Y8StfvroL/APt7NfOGPbaPE/iEl3Zfip1CZdAStNcmiRnxWT/6wHtJSP2PyP8AJ2/xRFeeOrnwT3Hj++5H8pRE4WNcNOubTK3rhpjqXZSoU5iZaUn9yptJ++Oh9Iiv/HrWZKS4O6hTnXg3MVKpSjDDZ6uKS52px6ktk/e8YCr3k7frnKqf8hPfONx6hAADAEeYnk65KYXxI1yZQ3uZYobgcWOidzrYH38GPTsEHp3QHmt5SE41wtIj/AavyhcWI4AfrOpY/wCV5z8KYrt5SL6t9o/aNX5QuLE8AP1nUt9t5z8KYCxF2zb0hY1bnpc/TpenvvI54wUtqI/pAjxEsCQFx6zWxSJogoqValZd3dzBDj6UnP8AtGPcStSCKrQZ6lOckTks5LqPoWkpP4Y8Opdqp2Bq6wqZYWzP0Grgra/bJcYe5j15RAe6DLTLSEtstpQ2hO1KEjASByAA7hiPnq8gxU6LOU6ZaQ4zNMLYcSsZCgpJSQR3jBMfJbFxUq67Up1y0SaRM06oyyJph1ByFJUAR90dD6QY6rUm9aPp/pZXbwrM0iWlqdJOO7lq2lS9pCEJz1UpWEgd5MB4oSkw/beqDDso4pK6ZVUqaKTjBbeyMfdTHuy3kqCs45dI8NrBt+oX3rfb9DYbLkzVqsyhQHM4W4Co/cG4/cj3KQkjkRjHL1wGcIQgEIQgEIQgEcE4ST4RzCA8X+I+m1B3i11DdbkJlSF1yZKVJaUQobzgg45x66aXbvcQs4KSUKFEkgUqGCD7HRyPpjZzLS5zlhs565SOcfolKUJCUgADoBAeNOsVOqDnG9eLiJCaWg3fMEKS0ogj2UenKPZEDtEbckZ7xGSmGVAlTKFZ65SDmIvqfEZobQazN0ir6nUGTn5N1TExLOvHe04k4UkjHcYCrPH9oc469Jay21JLccIRI1pphGSe5l8gdemxX+hFKbEpVRTqrbSjITYSKtK8yyrA+nI9Eet6+KHh4dSUuarW2tJ6hTqiD9zbGyWXqvpfqLUJqRsW7aRXZiVaDzzUkrKm0E4BORy5wGjcX1u3FdHCdcFKtalTtSqZel3m2JJG93CHUqUpIHPkATy5x500TiT4jdNGhRWb3rco21hPsOsyyZhSMDGAH0FSR6iI9ULz1h0z06qsvTL6vSl0OamGe3ZZnFlKnEbincAAeWUkfcjUZriR4aZ9Gye1ItOZTnOH/P8AwpgPMq5b71z4j6/IU2pv1a7ZlhREtJSEklLbSlcirY0gJBP7pX349FuEbQme0S0umUXH2BuWtOJmZ5DJChLJSnCGdw67ckkjllRA6ZjbaDxAaB1GsSNv21qDbbs5PPolpaTkztLri1BKUABIGSSBiJBui57csq2Zi5Lpq0tSaXLbQ9OTCtqG8kJGfWSBAdnOq2yTvL/9tR/ojxFtymVJGudJcVTpxKE15lRUplWAPZCeZ5R6xHij4eyBu1Yt0/8A+yvzR2VF110MuSbRK0fU20X3lfAZM822tR9CVEH+iAk6K48crLsxwaVxlhtbizOShCEAqJ+nJ7hFi2nWXmUvMuIcbWMpWhQIUPEHvjF1KFlIUkKxzwYDzM8njKTcpxN1tx+UfaQq3H0hTrZQCfZEvyyR16/ej03UcIJiKqtxC6E25cE5RK1qLb9Pqck6qXmZZ1whbS0nCknA7iI+U8UvD2Rg6s27/vVfowFP/KOyk3NavWYuXlX3QKM4CW2yrH09XhE2eT3afleFWfbmJd1lX0QTJAcSUkjsWBkA+nl9yJys/WLSjUS4F0eyryo1dqDLBmHGJVW5aWgoJKuY6ZUn78fVemqOnOmz0m1e92Uy3zPhTkuJteztthAVjA54ymA3c80xRHjK4Wrjuu739WNN6b7ZTb7KU1elM8nnChISH2k/t/NACk9eWRnJiyHvouH1f0tOrNt5PLznykffxG3WxqXpxejyW7Tvi36291DUlPNuOf7IOfHugPJS0tfNetGqYu1Lfump0OWaWT7W1CTbdDBzz2ofQooycnAxH5VWt66cR93Szc8K9eU20eyZbl5fDEuVHJwEANt55ZPLpzj2UmqVTJ9IFRp0nNn/AB7KV/hEfs1KSsrL9lKyzTKAMBDSAkfeEBX7hO4evcN05nDXHpaaumsKQ5UHGPORLpSPMYSr9tt3KJUORJ8ADFiAAOkRzeWt2k+m1xIol63xTKNUXWUzCZeYKistkkA4Sk4GQrrH12LrBpvqZOzktYd4U+uOyaErmG5Yq3NhRISSFAcsgwFFvKMyc3N63WmqWlJh5CaIpJU22VDPbrOOUWF4CGXpbhClmX2ltL9tpw7VpIOMp54MWaUy0ob1NIUrHUpzGq3lqNYWmklLTl63JTrflZtxTTC5pRSHFgZIGB1xzgNtUgKVkmKK8XfCVXrsu2c1S0ukhOT743VWiIOHH1gAB9nuUojG5HIkjIzkiLd2VqjYWpDc47Yl10+vNyRSmZMmsq7IqBKd2RyyEn70bcltGM7QSeZ5d8B4xWtrFrvoc2/b9EuGtW2jtCV02oSqVoQrPMpafQQkk9SBzhcepmu2vk7K0qs1Wt3YptY7GnyMoA2FnootMISnPPqRyHhHstN02nz7eyekZaZT4PtJWP6RHMrT5GRa7OSkpeWT+5ZbCB/QICnHCFwp1TTWrI1K1Hlmm7kWz2dPpoUHDT0q5LW4Ry7Ug7cD4IJ55OBdCMQhAOQkD7kZQCEIQCEIQCEIQCEIQCEIQCPEfXMA8Tl+jlzr831/jjHtxHiPrkM8T9+88Yr82f8AzjAWNk/Jy6hT9Ol51OoFsoS+2l0IU0+SkKAOD5vpiwfCxwsXRoBe1erVduWk1ZmpSSJVCJFDiVIKV7sneBy9UddTfKA6EyNFk5N6Uu4uMsIbUU05vGQkA4+m9OUTNo1r7Y+ulOq07ZTNWbapbjbUx7Yy6WSS4FFO3apWR5pgKU+UeIGu1oZ/wCR/9w5Ec6H8Id1a76aO3pRLrotLlmp5yQLE626pZUhCFFWUgjGHB96JE8pDy1ytE/5BP5Q5GncPnGFM6D6UP2UzYjVcS7UHKh7KXUDLkFaEJ27ezV07POc98BMGm/ALfdk6wWreE5fFuzMtRqtK1Fxhhp4LcS06lZSkkYyQnvie+Nf6ye7vXK/lDcRrozxzTmrOudv6er04l6UiquOoVOCpl0tbGVu5CezGc7MdR1iSuNf6ye7vXK/lDcB5oaF6OVbXLUt2y6LVpKmTKJFye7ecSpSNqFJTtwnnk7x96JlvPgB1ltihv1OjT1BudLCCsyci64iYXjrtQtASr1BWT4Rj5PP67Sa/zfmfnGY9Sijcc5x9yA8jdA+JW+NDbwZpNVmp6oWp2/ZT9GmiVexeeFLZBOW1p709DjBGeY9ZqVUJGr0WVq1MmETMlOMomJeYbOUutrTuSoegg5jyh43bXkLV4wayqmy6WWKtKy9UWhPIBxYKVkeGVNqV6zF7OC2uzVe4MLVXNrK1SXbyCFE5JQ26oJ+8CB6gIDzP4ivrstRft/N/OmJ8t/yet+3FaNLr0vfltsM1GUanENrafJSlxCVgHzeo3YiA+Iv67PUX7fzfzpiy1teUTnres2kW+nSqXfTTpJmTDxqxSXA2gI3Y7LlnbnGYCYuGHhHuvQbVuoXdWroo1Wl5qlOU9LMk24laVKdaXuO8AYw2R92Iw8pWCKppwD//ABT/AOMxE/8ADHxOTHELOXKw/Z7VA9pkS6wUTpmO27UueKE4x2fp6xAPlLedW04P+Jn/AMLEBA2hHC1dOvlm1evW9clHpiKZNCULFQDmXFFAWCChJwOeOmY1nVfRvULh8vSny1zqZYfeSX5Cp0mYUUObTz2rwlSVJJHIgHnE+cGXEHphozpdc1KvurTcpOz1STMy7LEm4/vbDKU5ykYHMHkSI0Ti24i6JrzX6JIWvITUnRKN2qkzE8gIdmHHNoKtoJ2pASMDOeZ8IC7HBvq/W9W+H5T9zTJnK1RJs02Ym1fDmUbErQ4v98QrBPeU5ixa1JDSishKQMqJOAB64qpwHacVqxOHqbq1fknJSauKeE8wy6kpWJZKEpbUUnpuO5Q9BESHxUaie5vwtXNWGHuyn55n2qkSOvbP5TkfwUb1f6MB5q6q1qo6/cZtT9pV9uutVdNLpgI5BpKgy0ceGAFH1mNg4Tbzf0r4xqdTam4WJeovOW9PoVyGVqCUZ8MOoR6Y2TgFsUXNxPm5phkrlLbklzSVE9H3MtI9fJTh+4DGtcYdlv6e8YddnKeFystVlt1yTcSeaFuc3CD3YeSs47gUwHrqOkUf8pR9S6x/tq/8yItHo3f7WpehVr3ohSVO1CRQZnHLa+nzHRgdPPSrl4YirnlKPqXWP9tX/mRAdX5NP9YNQv5RJfiuxfSKF+TT/WDUL+USX4rsX0gEIQgEIQgEIQgEIQgEIQgEIQgEIQgEeJGuICuJ6/UnPOvzY5fxxj23jxH1y58T9+YI/X+b+eMBdyneTo01nqRKTjl93WhbzKHFJSmXwCpIOB9L9MTtoNw+W5oBS65IW7XarVW6s8066Z8N5QWwpI27EjkdxznwiVaAQbVphHT2I1+II7GA81PKQfV0tD7RH8ocjbeC3h/0f1R4dZu5L8suXrFURW35VMy5MvtkNpaZUlOG3EjkVq7s841LykBA1ztHJ/8AkJ/KHIhvSrin1Q0YsRdo2UujCnuTbk6v2ZJl5ZcWlKTz3DlhAgPTa0eGbQyxLzkbstOwZWm1iRUpUtNom5hZbKkFB5LcKTlKlDmO+NX41/rJ7u9cr+UNxVjSvjb1svHXCzrVrDtu+wKvWZSQmQzTtq+zceShWFb+RwoxafjX+snu71yv5Q3AUz8np9dpNf5vzPzjMepeTHiDpNqvdGjV8uXdaCpAVJcquTzOM9sjs1lJV5oI5+aO+JFu7i61/wBSKSu3HrlMrLTQ2LlaHJBhx4Yxt3pyvB7wDAfhxg33Tr/4sbgn6TMImpCnttUtqYbOUrLIIWUkciN6l4MeiHCFbE3avBzZ8nPILb83LrqJQR8FLy1OI/4Ck/dil3DlwZXhfF0yFzak0mYodrMOJeVKTiezmagAchCWzzSg8sqVjIyAO+PTuXl2ZOVQww2hptCQhDaE4SlIGAAB0AGBAeK3EV9dnqL9v5v50x6O2JwlcO9X0stmq1HTSTfnJykysw+6Z2aBW4tlKlKwHcDJJPKPOLiK58WWopBH6/zff/jTEm0jjr1yoVvSFFpzluCVkZZqUYDlO3KCG0BCcnfzOBzgPSjTvRjTLSd6oO6e2qxRF1FLaZotvvO9qEbtue0WrGN6umOsU08pb+u+nH8VP/hYjbOEbih1R1q1pqdsXoqjKkJajuz7Yk5TsVdol1pIydx5YWqNR8pUc1XTgYIPYz/I9fhMQEU8NnCzIa+aaXFcTl1TVInqbN+w5aXbYS404vsQtJWScgbiAcd0Rtp/UZXRniXk1ajWjL1Jiiz6pWp0udb39njzStKTyUpPw05BBwPGLn+Te+oxeY8a0gD/AHCY6fj40IXO05rWu3JIdvKhEtXGmxzW1nDcxy6lOQlR8Ck9xgLwUSpUyt25JVejzTM1TpxlL8tMMnzHG1AFKh6CCI89fKK6g+2N+23ptJPqLNLYNTnEjp2zvmtg+JCEk+jf6Y+zgY4hmqWy7o9edRQzJhK5uizbysBvGVuS5PgcFafTuHeIqjqVdc9q7xC1y5GAp6ZrlUKJNnOMoKg2ygZ6eaEDnAd3pHxD6gaH0+pytiGkNCpuIcmVzkmHlnYCEgHcMDzjy9MfFq5rne2t1RplQvj2qXNU5tbLDklKdiopUckK5nIzHrTY+kFjWvp5RLbctGgTTlOkGZZyYep7S1urSgBS1EpySVZPM98a7rloxa128Pl2USi2nRZWprp635N2UkWmnEvNfTEBKkgEbinb174Cvvk59QPZVsXLplNvHtJB5NVkkqOfpTgCHUj1LShWP36o+nylH1L7H+2r/wAyIqLwyaiDTTiitevvvdnJPzHtdPcj+oveYTy8CUq/0Itx5SZW7TGxhlOfbWY5D+JEB13k0/1g1C/lEl+K7F9I8WtHOIa/9DpOqy9kqpYTVFtrmPZ0r2+SgEJx5wx8IxJv/tAdf847S2Mfaw/pwHqxCI70Nu+tX9w/WneVwKl1VKqSCZiYMu32aNxJ6JycDlEiQCEIQCEIQCEIQCEIQCEIQCEYOrDbZWSABzJJwAPGOkZvO0pme9hyt1UR+YJ2hlueaUsq8MBWf6IDvSMpIzjMapNaYacT1Qcn56wbXmZp1ZcdfepTC3HFE5KiooJJJ78xtSVEgHxjKA/NlpDDKWm0pSlICUpSMAAcgAO4R+h5iEIDoKzY9nXHOtzlxWrRKxMNo7NDtRkWphSE5J2grSSBkk4Edd7k+l3xb2h/M0t+hG4QgNTltMNOZKoMT0jYdsSk0wtLrL7FKYQ40tJylSFBGUkHBBEd/VqPS67SnKZWqbJ1GSdILktOMpebXg5GUqBB5gR9sIDT/cn0uHTTe0f5nl/0I7el2nbNDbDdEt2kUxAOQmTkm2QP9kCO5hAYBvzwonJHf4xypG4jnj8MZQgNVmtM9O5+eenqhYlszk0+suPTExSmHHHFE5KlKUgkn0mPx9yfS74t7Q/maW/Qjv6pXaNRGw5WaxI05CjhCpx9DIUfAFRGYUyt0mst9rSKrI1BtJwpcpMIdCfWUkwHX0exLLt2omft606HSJooLSn6fINS61IJBKSpCQSMgcvRH61yzrVudTKrktuj1gsAho1GSbmOzz127wcZwOnhHeQgOpodr27bLLrFu0Kl0hh5Qccap8oiXStQGNxCAATjlmPunpKVqNPdkZ6XZmZZ5JQ6y+2HEOJPVKknkQfAx9EIDTk6TaYocStvTq0kKTzBTR5cY/4I/VjS/TaUmm5qT0/taWmGlBbTzNJl0LbUOYUlQRkEeIjbIQGKEbB1zHC29xJzjliM4QGn+5PpeAMac2lkc9xo8uTnxzsjuKxaltXDLMy1wW9SaswwcstT8m2+ls4xlIWCE8uXKPvnZ6Up1Oen5+bZlZZhJW6++sNtoSOZKlHkAPExhTanIVaQan6XPy0/JvJ3NTMq4lxtweKVJJBHqgNb9yjS74t7R/maW/Qh7k+l3xb2j/M0t+hG4QgPkptLp1HprNPpUjLyUmwnY1LSzYabbT4JSnAAj64QgEIQgEIQgEIQgEIQgEcK+AfVHMCMgiApDxQVK6NTOLizeHOTuGZoFvVCVRNTzrCikzJWXSQRkbwEtEBJ5bjzHKNnmvJ96IzVvplpKo3VIzqBj2wTPIW4o/vkFGz/AGQPXG0cSvDdUNVZ+kX3Y1xCgX1Q0hEnNFSkIfSFFaUlacqQpKiSlQBHMgjHMRVJcUWvGic/K0jiK0xfm6aVhkXBTQElf74FOWXFcumUEwFqtJ9O06XaUUmyRW5yt+wEqBqE4T2ju5aldCpW0DcAADgARrly8UegNo1pykVzUylNzjZ2uNSrb03sPgosoUAfQTmN5su+Lc1BsSQu6059M/SZ5G5p5PUEHBSpJ5hQIIIPTEV0qvvHdNavUZartWI7VHZlyYmkvse2bqHVKJUkZCwgAn4AwB4QE92Dq3pvqhIPzlhXbIVpEuQHkM7kONZ6FTawFpB7iRgx9Vf1Jse170otp1+4ZeQrNa3GnyjqV5mNvwsEDaMekiKK6R1zTceVCk3tEplLVqVenOpfl5ZtTLAc7FSloS2oDCQpCFAYwCeUbFxx23MXfxMaQ2nKOLadqwckgts7VJDkw2lRB9RVAWIqfFxw50itO0qc1RpxmWlFC/Y8tMTDYI6/TG21IPrBiS6Te1pV6yxd1HuKnTlCLSnjUWnkllKEjKipX7XGDnOMd8aFKcMehMnaAtxvTK3Fywl/YxfdkkLmVZGCsvkb9/fuzkHmMRXrgakw1XNYdNJtwz9vyFS7FEpNjtEKBW60rKTy85KEg+OOcB9R4wbXe44H2HdQ2pbS+TpCpcPJaWpiYnOR7QYQVHmopB+CQmLV2ZqZYuoNov3RZ9xy1So8u6tl2dCVtIbUgBSs7wnAAIJPSKRWTp7Ys55WC7rOmrPoT1vS8g6tqlOSTapZs9iyQQ1jaDlRPTvMXip1lWXblpTtv0m26PSqJMpc9kyMrLIYYWFp2rK0pAGCnkc90BHtX4tuHSh1V2nT+qNMU+2dqvYjD80gH+G02pJ+4YkOy9Q7J1EtxNdsm5JGtSBVsLsso5Qr9ytJAUg+hQBitLtS4CdO5JVAU1YkypglC8yhqrpPeFOlKyefcFY7o0Tg8nLSb439TqTplUXXrImKX7NkWyFJTyeZ2gJVzwgvOoTnniAvuTgZMV74s9eZvRbS2TRbSGnbprrq5Wmh1G9LISBvd2/tinckAHluUM5AIiwS87CBFD+KfZO+Uc0Xp04Euym6QPYrG5Ct0+rPm9Oe1I9PLwgO50+4IvozprF7cQV13DW7iqCA+9TkTm1LAVzCHHCCoqGeYTtSOgzG72twSWHYesVGvq0LpuWQYp0x27tKcmApt8BJ2o7RO1QTuwSDu3AYPWLQIzs59YLOGzzxAaheWpun+mlMTPX1dtMojTgy2mZd+mO45Hs205Uv/RBjTKBxW8Pdz3CxRKPqbTVzswsNtImWH5ZK1HoAt1tKcnuGecY60UHh/mZyjXLreu30ilh32AKrMbQvcU7x2YO54ZSDtwoDJ5c4qVxM3VwjXDohOSWmCLel7rlHmVyC6NSlSvaJ7QBxClhCQU7CpWD3gQF4NVNV7N0msGZuG7K5KyJLTnsKXdUe0nHkp3BttIBJJOB0wM5OBFe+Hri7sJeickdYNTpdF2uTUwXmn5dwrSgunsx9LbKcbcAejrG0GkUfUHyctPuS8KRIVipSlivTMvMzzCXlsvJklDtUKUDtWSgKyOecRqXBhpVptdnCRRa3cthW3Vqiqdm0qnJ6nNPPKCXlBIK1JJ5csc+UBaG6r+syyLeFdu65adRqeoZS/OOhsL5ZwkHmpWOe0An0RGsjxecONRqzVOltUJAPur7NJelJllvOcc3FtBIHpJxHd6yW3o9WLPkfdj9qEUSmTSZqWNSmewb7RKCNowob/NJ8wZ5dxiquu928FlZ0PuOkWVLWk3ciJMqpb1JpJl1h9JykB1KE8jzBBODAXyNRkfaw1FMy2uUDXb9ug7kFGN24EdRjnyiO/fEaLe5t9Hx1ApqbeMyqTTOLQ4kuPJAKkIbKd6iApJ5JPWI34TazP1zgApz9QfU8uWlZ6TaUrmQ02pxKAT34HKK58DmhttamUipXjf8AK+3dLos37FpdHnCVyoeWkLddUjOFHGwbSMHqc4GAthc196L66cM15vtXs8bOSyZSqVeVlnmVSpG1eQHG8kjKSQEkYIju9AKTYVo8ONElLBuB+s2q0088xVZkKCn/AKasuKwQNoCgoYwOn3TrWvdm2tZPBLqPTbQt+mUOSdpzj7ktTpdLDa3DsSVlKQBkhKQT6BHycLI/93naxyeVMn/yiYgNze4k9DGLBavR7UikIorz65Vp8hze44nBUlLW3tCQFJJwnvEZWTxH6JaiXGigWhqBIT9TcBLco409LLdx3IDqE7z6E5MU94EdDrJvqzq5fl7UOTr/ALGnva2Qkag2HpdnDaVuOFs+apRC0DmOWPHp3PHLptZOmVrWVqDYFuyFtVlmsCX7SksplkrAQp1KlJRgbgpsYV1wSIC+M7UafTae9P1GdYlJVlJW6++sIQ2kdSpR5AekxDs/xd8OVNqTkjM6o09TratqjLysy+jPoW22pJ+4YkCeZo116QOIvBuVNKqlKCqgh4hDQQ41lfM/BAySD3corZM3DwD2dTTbi2LDm0MpLK1NSBn3FA9cv7VFR59dxx97AWjtW8rWve2WLhtGuydYpj/JEzKL3pz4HvSR3g4I747yKK8BNQpqdWNXKBas+7MWm1NMzNMSvOOz7V5KF4PMEoCAc+Ai9UAhCEAhCEAhCEAjhRwgkeEcxwoEpIHXEBHlV1u0roeoMxZNwXvSqTXZcNqVJVFz2OT2iQpBSpQCVZB7iY1DXbV3Rek6K1+Quu4aFV2p+nvMs0eWmUTDs4spwlKEoJwdxSd3Lb1yMR2upXDTpBqxWzWrxtbtqooJQuoSsy4w8pCU4SklJwQPVGrW3wVcPttVtNRas12pLbIU2iqTjkw2FA5BKDgH1HI9EBX/AE0avyzvJG3dU6a1NSc1OzT8xLrJLa0Sa1NNuPIPXmAvB+735jd+FW2uG+W4b6ZcdSRaM5XXG1rrM1XHGXHmXkqJKCl34KQCkjAOQepzFw3KXIPUNVJekZZcktgy6pVTSS0WynbsKMY245YxjEV/nuCLh6nbmVWDZ00yFOhwybFQdRL9ckBGeST4AwFerFuyy7y8rFSqnp7ISEtbjEo7JSrkhLJYZmS3LrC3UpAAwVEgHvABiS+JY/8Af74fP5cfyhuLA0zRHTWk3rQrrpNpStMqVBlFSNOVKLU2hlk7spKAcKPnK5nJ59Y+25tKLLu/UG3L2r9KVM1q3XC5TZgPKQGSVBWdoOFcwDzgN5MUo4JuWvuuf23H5RMRdZQynl16xolkaRWLp1X67WrRoypCdrr3b1BwvLc7Ve5SsgKJxzUTy8YCpdLqtNsjyw1xTt1TrFKl6nIKRLPzTgbbcLjDWzzjyGdihz7xiN/44bvmnOEaacs2uS81KP1aXk6o9TphLmxlSVq2qUgnAKg0CD1Csd8S/qlw/wCl2sbsvMXxbRmZyXTtanpd5TD4TnOwqSeac9xzjuxGdnaC6aWLpjP6e0O20O2/UllyelZ9ZmfZCiACVFR8EgDGMQET6P0Phatfh1olwhuw3WhTWpioT9VLD75f2Zd3hzKgoKKkhIHLkBmIt4Sbnod5+UK1PuW2KZL02izdHc9gy0uyGUBlMxLIQoIAATuSkKI8VGJtk+CHh5k7kTVzZ81MBLhcEm/UHVy568ijPMDwJ9ee+UqFpNYlsamTt+W/brNPrc7Iopr7suShtTCNm1AbB2jAbQMgdEwG8npzinXHPp3cDshautlnS7jlVtJ8GaLQKlpYDiXG3ceDa0qzy6OZ6CLjR+T7KH07XEJWnBBSoZBB5EHMBCOknFPpVqfbEi6u66XRK6tv+yqRUn0sLQ4B52wqwFozkgg9CM4PKN4Z1h0wqF6y1l0+/aFOXBNKKGqfJzaXnVFKCs8k5xhKVHn4RHl2cG2gN31dyqTlkmnzTiit1VJmlyqXFHqSgHaPuAR22nXC1ovpdc8vcdq2q4KvLKUqXnpyacfcZKklB2gnaMpUR074CrKJe1L38qPd9L14fl106nNuIosjVXA1LKKey7BBBONpaUpzBOFHmeuI2PjIuXQuhaHzFkWZS7RXc1ReZUj2llmC7KMoWFqcW42nzQdoTjOTkxZTVLh20p1hm2Z69bZ7eoNJCE1CVeVLvlI6JUpPwh6wfRiOptnhU0TtO06tb9LstpTFXl1Ss6/MvrdmHGlEEpDpOUDIHwcdIDpbDlpid8mJJycq0p196w32m20DJWpUqsAAeJJjSeBfUOzZXhQYoE7ctLkJ+l1GZTMMTk0hlQS4vtELG8jKSFHn4pIi0Vs2xSLQsynWtQJT2NTKcwmWlmCor2IT0GTzP3Yhav8ABfoBcd1OV+bs+YlZh5faOy8lOuMsKX1J2A4GT1xgc4CAtb1UC6vKc29bmsE62myWJJn2CxNvFuUWVtlSdyh0C3RgnIzgAnHKN+4mKlw+2hw51y3rdotmKuGrShlKXJ0eUlnZpKiR9NCmwVJSkAknPq5xPOpWhWmurVHl5G97abnFyjfZSs204WZiXR3pS4nnjlzByI1yx+FLRLT12bmKDaHaTU0y5Lrmp6YW+6224goUlBJwnIJ5gZ9MBo/ByMeT+YGentn84uNd8nOP+7xcH29V8y3Fl7L02tTT3TgWNatMVKURIdxKl5Th+mklfnKOeZJj8NOdKbJ0nt2ZoVi0lVNkJh/2U412y3dzmACcqJ7gBiA1fik+s41D+1C/xkxrHCz/APp42v8Aauf/ACiYiarrtaj3rZ1RtW4pNU1SqiyWJpkLKN6D1GQcjoOkfJaliW5ZOnMrY1uSK5WhyrTjLMsXVKKUrUpShuJyclau+ArJ5OgD3sVdPeLje/J2I+LykA/uCWkM/wD1AOZ/k7sWb030ssrSa137esWkqptPfmVTbjSnlu7nClKScqJPRCeXoj8tStJ7J1coEnRL8oyqlIykwZtlsPra2ubSnOUkE8lKgKq8clXuOQ4StP5CmvTDNHnlsoqRZ+CsplkqabUf3JO846EpGegiUrfkOEzT7RuUr0szYCqIzKpeM5MhmcmJgkJGfP3LU4TyxjrywImq4LEte6bDVZtw0SWqdDU0hkycyncnagAJwc5ChgYUCCPGIdoPBPw+0G5Gqy1Zz844yoqRLVCecfYz3Etk4VjwPLxEBCvAXVpOva/6w1umyKZCTnnGZliVSgIDLa33ylASOQwCBgdIvnGl23pfZto37Xbxt6jJkatXg0Ki62tWx3s87cIztT1PSN0gEIQgEIQgEDyhHy1GZXKU92ZQy68W0lfZNDcteAThI7yYOJnaN5fTmGYi/wB12oA4Ol96Z9Mgc/0Rx7rtR+LC9PkCo6uNT1RuctdfKfRKOYZiLvddqPxX3p8hVD3Xaj8V96fIVQ41LjnbPXyn0SjmGYi73Xaj8V96fIVQ912o/FfenyFUONSc7Z6+U+iUcwzEXe67UfivvT5CqHuu1H4r70+QqhxqTnbPXyn0SjmGYi73Xaj8V96fIVQ912o/FfenyFUONSc7Z6+U+iUcwzEXe67UfivvT5CqHuu1H4r70+QqhxqTnbPXyn0SjmGYi73Xaj8V96fIVQ912o/FfenyFUONSc7Z6+U+iUcwzEXe67UfivvT5CqHuu1H4r70+QqhxqTnbPXyn0SjmGYi73Xaj8V96fIVQ912o/FfenyFUccak52z18p9Eo5hmIu912o/FfenyFUPddqPxX3p8hVHPGpOds9fKfRKOYZiLvddqPxX3p8hVD3Xaj8V96fIVQ41Jztnr5T6JRzDMRd7rtR+K+9PkKoe67UfivvT5CqHGpOds9fKfRKOYZiLvddqPxX3p8hVD3Xaj8V96fIVQ41Jztnr5T6JRzDMRd7rtR+K+9PkKoe67UfivvT5CqHGpOds9fKfRKOYZiLvddqPxX3p8hVD3Xaj8V96fIVQ41Jztnr5T6JRzDMRd7rtR+K+9PkKoe67UfivvT5CqOONSc7Z6+U+iUcwzEXe67UfivvT5CqHuu1H4r70+QqjnjUnO2evlPolHPohmIzldV5+Zn2ZdWmt4tBxYQVrkiAgEgbjnuGf6IklBKkAkYJj6pqir4O+3dpuRvS/SEIR9uwjggEcxmOYQHASO8CONo/ciMoRxtAx2jwENo8BGUIbQMdo8BDaPARlCG0GzHaPAQ2jwEZQhtBsx2jwEcYGcYEZKO1JOM4iN9Xdb7C0XtJNbvOoqbW8dspISwC5maV3hCM9B3qOAPHJAhtBskXzMZ5RzgZxgRTJrjS1PrjRqlncM1y1OjHz0Thde85Pj5jJSfuGJh0E4g061Lrco/YNctefo3ZpmUTwyhSl5wlJIB3eaSQR0we+G0GyazsSQDgEwBbIBBSQeYxFXddNdr6n9TJTRnh4lm6pebau2q08ppDsvTmwnPZrLgKAo5GSenIdTiNj4dtepzUKWm7D1DlFUfUqh5bqVOea7BU0lJx27aOn8IJ5DORyIhtBssDtHgIbR4CMicDOMxiFjvhtBsbR4CG0eAhu59IBeTgD7sNoNjaPAQ2jwEZRiVY6iG0GxtHgIbR4CAUCeUZQ2g2Y7R4CG0eAjKENoNmO0eAhtHgI5JA6wBBGRDaDZxtHgIbR4CMoQ2g2Y7R4CG0eAjKENoNmO0eAhtHgIyhDaDZjtHgIbR4CMoQ2g2Y7R4CMgOUIRyEIQgEIQgEIQgEIQgEIQgEIQgMHBlGM98UDtihscSHlMLrn7ta9n21ZgU1LSK/PZX2Sw00hQ8FL7R1Q7yCOkX9WQE5PTIiiPC5Ns2T5QbV6wql/Y79SefelQ/5qnS2+p0BOeuW3VLHoTmAvWyw2yylttAQhIwlCeQSPAAd0YKl2UhawgBSyCtSRgqPTJPjiP2QfpYJI6czHXXBWZCgWnUq9UndklT5ZybfWBuKW20lSjjv5A8oCtF1K4t6tqvX6bpnallWhb6Jgtork4hC3Z5I84Ok+cpXUj4HKNfsHWLVmzuKqkaV6/wBuW+/Uay12dLuKly6ULOchHngechRQUkciDjPp/O1tbuJ/Xx+erWjFsWrbFpy8wZdqo3EVLceWnmcYzzwRkJQQDy3RHV3U7V6n8fmjjesVy0Kt1VT6FSy6PL9ihprtV5QrzE7juB8eRgLBcWWu116Gylj1K3USjkrUak41UWnmO0U4ygIUQg5G1WCrn6o0mauHjlu+gfR3bNNta3KY6j2VI26/sXNusqG5O/eD523HIlJyeg6R8vlAZZidZ0nk5psOsPV9xpxBOApKuyBH3QYuWw0huXbbSjCUJSlIPgAMQFHLL4tdctX6RJWRptp/S0X4wHDV6nOKIkZZpJACwlR81RJIKSTgjkDnzfpq2t3Ezw+6h0BvXRNu1+06vNCXNQpyEpU3kp3FKgEkFIOdqk8wDgx9PAvKse6ZrTOlGXzWwyVfve2fOPvkx+vlHhjRKzccv7fn8ncgJs4ldT7h0v4aqrfdmvSRqEu/KoZXMtdq2UuuoSTtyM+arI5xCVtan8XmutsSlxaaU627St/sEtpn6okKdn30JSHVoSQrCCvdjCcAdSY2/jGH/u9JvA57aXj/AHrUSnw6N09vhP0/RT9pl/aVgj+EU5V/xboCHdGeI3UdjX5ehmv1ElKbczid0hUJNG1uZO0qCSASkhSQdq08sggjPTvtfdb74064k9LbIttdPTSrkmEt1ATEv2iyC+hHmKyNvJRiLOLUmX48NDZqlFSKgqblkrW18Io9nJGDjnjBWPVmPt4two8a+g+E5Hs0cx/KmoC7Q74rLw26533qjrPqhbN1O05Ujbk0GZASst2SgntnkeecndyQn+mLMpWkkjcM5ijfBKoL4l9dFIVyVPp2qH8qmIDvZvW3iG1p1iuiztBJO36JRLbmPYc3Wqtha1L3KTuAIOAS2vACScDJPdG8aXznF9S9VZOiaqylq1S1loc7esyW1K0bUkpwElJypWBzR4xqF6cNeqdlasVjVPhvvVulTlWfVM1CgVBQ7GYWVFStpIKFJKiSErAI3HCgI7DSXijuioaus6Pa42Ou1byeGyUmJdJTLza8EhOCTt3YO1SVKSSOogLXj4I559Mcxwn4A9UcwCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQGK0lScDHXPOKtcSHDJX74vmnataTVpuiX7T9mcr7JM32Yw2oOYO1xI83mCFJwDjHO08YqQlRBUM4gKZ07V3jmpMizSqloFSqtNtjYqe3hAeOfhHY+ED7mIlWwWdZ9TNH71o+t9AkLWmKw05I06UkgFhhlbG0rOFqJO85wVZ5Yidy2nuGPVGPYoIwcmAoppUri14e7TmdM5HReWvKlS8y85TqgzPIbQkrVknIVkoJJVhQScqPPAjhvRriKuTit071k1ApspMP+2QVPU+nOthqhSrZHZpJKvOKtyz5u45TzPOL2lpsjBTkdeffDsk4xAVh4wNNb41Jd03+gm336v7U1szU92bjaOxa+l+cd6hn4J6ZiziXUlAPQeJjLskZJh2SPD0QFXOErTO+tPLu1Snbzt1+lMVmsCakFuONr7dvtHTuGxRxyUnrjrHPG7pjfequlls0mwbeerM7J1j2S+y2622UN9itO4lakjqRFouzTjGMj0xx2KM9DAVj4y2nJXgBn5d9BQ6yaYhac8woPNgjI9IMRjpLWeKrSTRi36VbmmtO1DtaakUT9MmWprsn5RDyd/YrG4EgFR5bT6DE4cZFsV66+Eeu0O16POVepPTUotEpKNlxxYTMIUSAOeABEi6PU2bp3D7ZdNqkm7KTktRpVl6XeGFtLS0AUkdxBgK4aTaLawX/wAT6de9e6fK0V+nDbSKGy4lfZKSCEHzVKCUI3KVzJUpRyekbZxbaHXjqM1at9aaqaXddrTCnWJRxYR7IQVJWNilebuSpAOD1BPMYizKWkpxjIxGSk7u8j1QFQFalcaV0Uw25K6H0m3J+aBlnq9MzoLUsFcu0SntDzHM8t3PoOUY8HuiOomjupmoib1p7nsSdEu1J1UOpWmfKHHN7iee8Z3A+cATmLfpaQk5AjgMNjPLOe484Cqk1qdxh2jdtTp85ohTbxo6Jx72FPyM2hhxbBWS2FYWRkJwDlAMdBbGmmuWsnFNbWreslp06zKXa6AZGlsPhx19QUVJzhSjjcrJJI6AAc4uX2SeXXl09Ec9mnOcc4DlOdoz1xHMIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCPhqlWplFpE1VavUJaRkZVBcfmZhwNttJHUqUeQEfdFGeKuqV3V3its/hlolSdkqY+W5yrrZ57lKCnPPT3htlBWAeWVg90BvVzce2jtIrCqZbUhcd3PoUUKXTJUIbIHekrIKh9yPrsXjn0ivK6pO3Z+RuO36pOTCZZliclO0SXFHCUktkkZJA6RNVh6U2LpnbcvRbRtuQkWGUgF5LQU88rGCtxwjcpR6kk+rA5R2NRsi0KrV5Or1C1qNM1CRfE1Kzbsm2p1l0dFpXjIV6YDY0HDY3HnGW5PiI1DUS7JuxdLatdklbc/cL9PZDqKXJKHbTGVBOE5B6ZycAnAOATFaJviA4uBRZi5Jfhpl2KShCnw2+84qYDQGclAUFFWPBIPogLjFSR1UBHG9B6LT9+Io0C1qouu2l30VUiQdpkxLTCpOep7qgvsHgkK81QA3JIUCDgeB6RCM3xqP0fUHUGzJ+yRU61Rq0qi25TKUXFvVRwPPNqU4TnaEhtBO0E5XyHeAuNuTnGRDcPERBuil/663jX6q1q5pZK2bIy8ul2TfbWpRfcKuaTlasYAz3RG1d4t73uzUupWlw76WKvZulEonavMOKSwo5wCjaUgJyFYKlZVjIGBzC3eR4w3JzjcMxUu1eLO7KPqrIae8QemqrGnKopKZGotOKVLK3HakLyTyKuW4KOMjIHWJS4jtWKrotoe9fFGpUlVJlueYlRLTi1Jbw4SCSUkHIwICYdyFd6THO5PiIqAzxQ60agJNR0K0QXXqAykNu1apuKZQ++BlYaTuT5oVlI5k8ueOkbdoRxQPakah1DTLUG0HLNvmUC1iSWoluYCeagkKG5Kgnng5BHMGAsjuTjORAqSOqhEUa36oXJpjalOnLU07qt61KozXsNiUp+SGVbSoLc2pUQnkRywPSIgW4OJzia0+pDN0aicPkjJW226hEy8xNK7RsKOPhb17T3ZUMZ9cBcSqTipKkTc82neWGFuhJOASlJOCfTiIn4bdaJ7XXSB29ajRJejOtVR2Q9jsPqdSQhDagrJA69pjHojbaDelF1E0DTe1vrWqnVWlOTDYcGFoOxQUhX75KgUnuyOUUM4Wtbb3tPQ9WnGlemM3ed1Lqj1UfK1FuVlGFoZSkrUCMqJbV3pHLv6QHpXuT+6EMjxEVAofFhf1p6oUq0eIXSv6DGauoIkqtKrK2EqzjK8lQKckZKVZTnJGOcWavO5HrT06rF0SdGm647T5Vc0inyOC7MBIztR15kc++A2XI8RAKSr4KgfUYp57vnFrUaY5W6Jw0MM0lSS60zOvOGYLeM807kknHcEgnwiX+HbXml672PO1Vmku0asU14S1Sprjm8NLIylSTyO1WFdQDlJB6QEywhCAQhCAQhCAQhCAQhCAQhCAQhCAQhCAQhCARRetTCLa8tPITtWKGmKvINtyri+8rkCynHpLjZT92L0RW3im4earq7IUy7rIm0yF8W+rfIOlXZCYQFbg32n7VQUNyVHkCSD1zATlfNJrNd03rlGt6sGj1acknWJSogE+xXVIIS5y58iQeUefOt9N4ktBEWzPVniCq9bbrM6ZZLcs463s2BBJVu6ghQGIkqhcXmr1itM27rRoVc8xUmE9mqo01laBMkd+woKFHxUheD4RG+uV+6h8VE9a1Js3Qy85GVo08uYM1MsqKXQsIBCjsCEEBJPNZzmAuNrTrra2hdjydYuJqYqE/PK7GQpkpjtptYSCeZ+CkE81HxAAJOIitrWDi8uultVO2OHakUuRmElTft1VEpeUnngltS21p5fvY63jS0wvm427F1Es6gv1121X1Lm6Yw0px1aSptYWlIyVDLW0hIzzzzAjlXFrf+oVKNr6VaFXWzdc8jsPZdTa7OTkVKGC6peOieo3bRy556QHQeToW+qj6m+yG22nRU5Urab+ChRS9kD0d33I6zhmo9NqPlL9aKlOSqHZmnTtTclHFdWVrn9ilD0lJKc+BMblwK2Nd1g+6dSLwos7ITSaow0iYfl3Gm5woDyVONKWBvSeRyPEeMfHw02pdFI4/da65Vbbq8jS56ZnjKT01JuNMTIVP7kltxQCV5TzGCcjnAWM10n52jcNN+VWlhRnGKHNraAyefZEREHANSafJcIEpPyrbaZmfqc07NOJHNakq2Jz6kpEWRr9IlK/a9QoU+2XJSfl1yryAcEoWkpUAe44JijdiV3VXgyqtZse5NPq9eFgTE4ucplXo6CstZGMEc0p3AJyhRTggkFWYDfvKE0enzHC/JVl7s0TtOrTHsVwgbvpiFpWgH0gBR/gDwjquK6oTdT8mdbNUn1KXNzTVGmHlL6la2QpWfTkmNTvOa1S407uoFsyFh1mzNOabNCcnqjV2ylb6wCklIIAUoJK0pSknBUSojpEm8c0jKUrgl9rJFkNSkrUZFhlroEoTkJA9QAEBK/DpISUrwl6dsSzLaG1UCUdUGxgKUtsLUfWVKJPpMVz4iZCWovlMNE65Sn+yqNRdlmJtLZwpSEzJbClY5nchxSOfcjHdHX6S8R1+6OaJW5bV/6RXRWaYmQacoVdojfaNTUotO9pC+WApKVAdd2AMp5ZP26V2dqVr/AMXsnxAaiWfN2vbVEbSmjSE6lSHXCjd2QSFAKUEqWpwrIAKiAMjOAmPWviXpOlF4U+yaFa1Ru+9Kk2HJejyJwUpJ80rVgqyrBwkJPIE8oh7WW/eK2v6D3ai49ELcoNsP0p0z7rtUQ/MsMlPNQAdB3Dkcbe7pDXKl33pBxy07iFpFk1G7bdekkys01JoU4uWPZlpaeQOw4wpJI2kkjIzGOpGsmqXEfphWLF0t0huSjUx+VW5VaxXGy1lpsFRYZCQQta9oGASTnGOeYCUuFFRX5PqjqP8AeU9y8PpjsaP5OmkU9nh5r9ZQoGdna4pl7nkhDTLezl3c1riReGGiVmi8CVKo9YpM9T6iiUnQuTm2FNPJKnHCAUKAIzkY5d4isHDlXNauG2x369XdILirNm110uPtSsutE7IPNZRvU0U5SlQ/dAA4zu5cwm/yg1KkFcKUvUFsJM1K1qXDDh6o3pcCsesdfHEblN680DSXhAse+r6VMzc5P0iTQzJyyR203MKYCiADySABkqPIcu8gRAeoNx6n8ZtyUOxLb06rtqWNJziZup1OsNlBURkZ6bcpSVbUAkknJxEgcZujNz3No1Zs3p7RXqkbOdKfallvetcuW0J3JQPhFJZSCkcyFHHSA+2T1p4tbwpMtWbM4caZIU99O5l2uVVKHVJI5HYtbShkY7ucaLwAOzz+qesT9Sk2JKdXNSxmZZhWUNOdrNbkJOTkAlQByfWY2mV4xL4uqkN29Y2gN3OXm+gMhM42USUs6RtLilbc7EnnhQT05kR8nBNp/fVgatatyN80idYmlvyqRUHJdaJedWHJgrWytSQFpyoHl+6EBc2EIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCEIQCB6QhAYbFHOVerEchJHfnPUxlCAxKc+iOAg5yTnnnGYzhAYbeXLx8Y52n0YjKEAjFSSrGDiMoQGGw9c5PrisPHs269wdzaWmlrPttKHCRnluVz5RaGPyXLNOpAdSFgHI3AHB8YCPNAwr3renaSFIKbdkgQrkQewTEjpBCcE5PjGLbaGhhCQkdMAYjOAw2eGPXAII78+sxnCAx29ehjjZz7h6ozhAYpTtPUnwycwUkk93r74yhAfmUKIxkAeEZhOFZ9EcwgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgEIQgP//Z" alt="Instituto Federal de Santa Catarina, Câmpus Garopaba" width="311" height="440"></div>
+  </div>
+</header>
+
+<nav class="nav" aria-label="Seções">
+  <div class="wrap">
+    <a href="#objetivos"><span class="n">1</span>Objetivos</a>
+    <a href="#simulacao"><span class="n">2</span>Simulação</a>
+    <a href="#topologia"><span class="n">3</span>Topologia</a>
+    <a href="#roteiro"><span class="n">4</span>Roteiro</a>
+    <a href="#observar"><span class="n">5</span>Onde olhar</a>
+    <a href="#refletir"><span class="n">6</span>Para refletir</a>
+    <a href="#entrega"><span class="n">7</span>Checklist</a>
+  </div>
+</nav>
+
+<main>
+  <section class="wrap" id="objetivos">
+    <div class="sec-head">
+      <div class="eyebrow">Objetivos</div>
+      <h2>Ao final da atividade você terá</h2>
+    </div>
+    <ul class="goals">
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Montado uma LAN com dois switches interligados no Packet Tracer.</span></li>
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Conectado PCs e switches com o cabo adequado.</span></li>
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Configurado IPs estáticos com máscara de sub-rede.</span></li>
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Testado a conectividade com <code>ping</code> e com o Modo Simulação.</span></li>
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Relacionado o que acontece em cada dispositivo com as camadas OSI.</span></li>
+    </ul>
+  </section>
+
+  <section class="wrap" id="simulacao">
+    <div class="sec-head">
+      <div class="eyebrow">A comunicação, passo a passo</div>
+      <h2>Acompanhe o ping de PC1 até PC10</h2>
+      <p class="lead">Esta animação mostra o que você vai observar no Modo Simulação do Packet Tracer. Repare em quais camadas cada dispositivo usa e em qual parte do pacote ele lê.</p>
+    </div>
+
+    <div class="lab" id="lab">
+      <div class="lab-top">
+        <div class="legend">
+          <span><i class="sw" style="background:var(--green)"></i>ICMP Echo Request</span>
+          <span><i class="sw" style="background:var(--red)"></i>ICMP Echo Reply</span>
+          <span><i class="sw" style="border:2px dashed var(--green)"></i>Origem e destino</span>
+        </div>
+        <div class="dots" id="dots" aria-label="Etapas da simulação"></div>
+      </div>
+      <div class="lab-body">
+        <div class="stage-col">
+          <div class="topo-scroll">
+            <svg id="topo" viewBox="0 0 1000 330" role="img" aria-label="Topologia: PC1 a PC5 ligados ao SW1, PC6 a PC10 ligados ao SW2, e os dois switches interligados">
+              <g id="wires"></g>
+              <text x="500" y="88" text-anchor="middle" style="fill:var(--muted);font-family:var(--font-mono);font-size:11px">Gi0/1 ↔ Gi0/1</text>
+              <g id="devs"></g>
+              <circle id="halo" class="halo" cx="0" cy="0" r="16"/>
+              <g id="pktTag" transform="translate(-100,-100)">
+                <rect x="-52" y="-40" width="104" height="20" rx="5" stroke-width="1.4"/>
+                <text id="pktTagText" x="0" y="-26">Echo Request</text>
+              </g>
+              <g id="pkt" transform="translate(-100,-100)">
+                <rect x="-14" y="-10" width="28" height="20" rx="3"/>
+                <path d="M-11 -6 L0 3 L11 -6"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="caption" id="caption" aria-live="polite">
+            <span class="kind" id="capKind"></span>
+            <h3 id="capTitle"></h3>
+            <p id="capText"></p>
+          </div>
+
+          <div class="pdu" id="pdu">
+            <div class="pdu-label"><span>Conteúdo do quadro · em destaque, o que este dispositivo lê</span><span class="mono">MACs ilustrativos</span></div>
+            <div class="frame">
+              <div class="seg eth" data-seg="eth"><b>Ethernet</b><span id="fEth"></span></div>
+              <div class="seg ip" data-seg="ip"><b>IP</b><span id="fIp"></span></div>
+              <div class="seg icmp" data-seg="icmp"><b>ICMP</b><span id="fIcmp"></span></div>
+              <div class="seg fcs" data-seg="fcs"><b>FCS</b><span>CRC</span></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="btn" id="bPrev" aria-label="Etapa anterior">◀ Voltar</button>
+            <button class="btn primary" id="bPlay">❚❚ Pausar</button>
+            <button class="btn" id="bNext" aria-label="Próxima etapa">Avançar ▶</button>
+            <button class="btn" id="bReset">Reiniciar</button>
+            <div class="speed" role="group" aria-label="Velocidade">
+              <button data-s="0.5" aria-pressed="false">0,5×</button>
+              <button data-s="1" aria-pressed="true">1×</button>
+              <button data-s="2" aria-pressed="false">2×</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="osi-col" aria-label="Camadas do Modelo OSI no dispositivo atual">
+          <div class="osi-head">
+            <span class="osi-dev" id="osiDev">PC1</span>
+            <span class="dir" id="osiDir"></span>
+          </div>
+          <div class="osi" id="osi"></div>
+          <p class="osi-foot">Camadas apagadas não participam do processamento neste dispositivo.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="topologia">
+    <div class="sec-head">
+      <div class="eyebrow">Topologia e endereçamento</div>
+      <h2>A rede que você vai montar</h2>
+      <p class="lead">Todos os PCs ficam na mesma rede <code>10.1.1.0/24</code>, com máscara <code>255.255.255.0</code>. Não há roteador, então o gateway padrão fica em branco.</p>
+    </div>
+    <figure class="drawing">
+      <div class="draw-scroll"><svg id="draw" viewBox="0 0 1000 330" role="img" aria-label="Desenho da topologia: SW1 com PC1 a PC5, SW2 com PC6 a PC10, switches ligados entre si"></svg></div>
+      <figcaption>Desenho da topologia: cinco PCs em cada switch e um cabo direto entre SW1 e SW2.</figcaption>
+    </figure>
+    <div class="addr-grid">
+      <div class="addr" id="addr1"></div>
+      <div class="addr" id="addr2"></div>
+    </div>
+    <div class="uplink"><span class="pill">SW1 Gi0/1</span><svg viewBox="0 0 60 12" width="60" height="12" aria-hidden="true"><path d="M2 6h56" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/></svg><span class="pill">SW2 Gi0/1</span><span class="up-note">Cabo Copper Straight-Through · os switches não recebem IP nesta atividade</span></div>
+  </section>
+
+  <section class="wrap" id="roteiro">
+    <div class="sec-head">
+      <div class="eyebrow">Roteiro no Packet Tracer</div>
+      <h2>Construa e teste a rede</h2>
+    </div>
+    <div class="phases">
+      <article class="phase"><div class="num">1</div><div class="body">
+        <h3>Crie o projeto e insira os switches</h3>
+        <ol>
+          <li>Abra o Packet Tracer e crie um arquivo novo em <strong>File › New</strong>.</li>
+          <li>Na categoria <strong>Switches</strong>, arraste dois switches <strong>2960</strong>, um à esquerda e outro à direita.</li>
+          <li>Renomeie-os como <code>SW1</code> e <code>SW2</code> (clique no nome abaixo do ícone ou em <strong>Config › Display Name</strong>).</li>
+        </ol>
+      </div></article>
+
+      <article class="phase"><div class="num">2</div><div class="body">
+        <h3>Insira os 10 computadores</h3>
+        <ol>
+          <li>Em <strong>End Devices</strong>, arraste 10 <strong>PC-PT</strong>: cinco perto do SW1 e cinco perto do SW2.</li>
+          <li>Renomeie-os de <code>PC1</code> a <code>PC10</code>: PC1 a PC5 ao lado do SW1, PC6 a PC10 ao lado do SW2.</li>
+        </ol>
+      </div></article>
+
+      <article class="phase"><div class="num">3</div><div class="body">
+        <h3>Faça o cabeamento</h3>
+        <ol>
+          <li>Em <strong>Connections</strong> (ícone de raio), escolha <strong>Copper Straight-Through</strong>.</li>
+          <li>Ligue a porta <code>FastEthernet0</code> de cada PC a uma porta livre do seu switch (<code>Fa0/1</code>, <code>Fa0/2</code>…).</li>
+          <li>Interligue SW1 e SW2 com o mesmo tipo de cabo, usando uma porta livre de cada um (por exemplo <code>Gi0/1</code>). Os switches Cisco têm Auto-MDIX, então o cabo direto funciona.</li>
+        </ol>
+        <div class="tip"><strong>Indicadores de link:</strong> verde significa porta ativa. Âmbar indica que o Spanning Tree ainda está negociando; aguarde alguns segundos até ficar verde.</div>
+      </div></article>
+
+      <article class="phase"><div class="num">4</div><div class="body">
+        <h3>Configure os endereços IP</h3>
+        <ol>
+          <li>Clique em um PC e abra <strong>Desktop › IP Configuration</strong>.</li>
+          <li>Selecione <strong>Static</strong>, preencha o IP conforme a tabela e a máscara <code>255.255.255.0</code>. Deixe o gateway em branco.</li>
+          <li>Repita para os 10 PCs. Cada um precisa de um IP único.</li>
+        </ol>
+      </div></article>
+
+      <article class="phase"><div class="num">5</div><div class="body">
+        <h3>Teste rápido em modo Realtime</h3>
+        <ol>
+          <li>No PC1, abra <strong>Desktop › Command Prompt</strong> e execute o ping para o PC10:</li>
+        </ol>
+        <div class="cmd"><span class="p">C:\&gt;</span> ping 10.1.1.10<br><br>Reply from 10.1.1.10: bytes=32 time&lt;1ms TTL=128<br>Reply from 10.1.1.10: bytes=32 time&lt;1ms TTL=128<br>…</div>
+        <p>Quatro respostas <em>Reply</em> confirmam que o PC1 alcança o PC10, mesmo estando em switches diferentes.</p>
+      </div></article>
+
+      <article class="phase"><div class="num">6</div><div class="body">
+        <h3>Simule a comunicação e observe as camadas</h3>
+        <ol>
+          <li>No canto inferior direito, mude de <strong>Realtime</strong> para <strong>Simulation</strong>.</li>
+          <li>Em <strong>Edit Filters</strong>, desmarque tudo e deixe visível apenas o protocolo <strong>ICMP</strong>.</li>
+          <li>Clique em <strong>Add Simple PDU</strong> (envelope fechado), depois no PC1 e em seguida no PC10.</li>
+          <li>Use <strong>Capture/Forward</strong> para avançar um evento por vez e compare com a animação acima.</li>
+          <li>Na <strong>Event List</strong>, clique no quadrado colorido de cada evento para abrir a <strong>PDU Information</strong>.</li>
+        </ol>
+        <div class="tip"><strong>Se aparecer falha</strong> na coluna de status da Event List, revise o cabeamento (etapa 3) e os IPs (etapa 4) antes de repetir.</div>
+      </div></article>
+    </div>
+  </section>
+
+  <section class="wrap" id="observar">
+    <div class="sec-head">
+      <div class="eyebrow">Na janela PDU Information</div>
+      <h2>Onde olhar no Packet Tracer</h2>
+    </div>
+    <p class="lead" style="margin-bottom:16px">As camadas só aparecem depois que você clica em um pacote da simulação. Siga esta ordem em cada evento.</p>
+    <ol class="observe">
+      <li class="obs"><span class="k">Event List ou topologia</span><h3>Clique no pacote da simulação</h3><p>Na Event List, clique no quadrado colorido da coluna <strong>Info</strong>. Outra opção é clicar no envelope que aparece sobre o dispositivo durante a simulação. Isso abre a janela <strong>PDU Information at Device</strong>.</p></li>
+      <li class="obs"><span class="k">aba OSI Model</span><h3>Abra In Layers e Out Layers</h3><p><strong>In Layers</strong> mostra as camadas que trataram o pacote na chegada ao dispositivo. <strong>Out Layers</strong> mostra as camadas usadas na saída. Clique em cada camada para ler o que ela fez.</p></li>
+      <li class="obs"><span class="k">abas Inbound / Outbound PDU Details</span><h3>Confira os cabeçalhos</h3><p>Veja os campos de Ethernet II, IP e ICMP: endereços MAC, endereços IP, TTL e o tipo da mensagem ICMP.</p></li>
+      <li class="obs"><span class="k">próximo evento</span><h3>Repita em cada dispositivo</h3><p>Avance com <strong>Capture/Forward</strong> e clique no pacote no PC1, no SW1, no SW2 e no PC10. Compare as camadas usadas em cada um.</p></li>
+    </ol>
+  </section>
+
+  <section class="wrap" id="refletir">
+    <div class="reflect">
+      <div class="sec-head" style="margin:0">
+        <div class="eyebrow">Para refletir</div>
+        <h2>Pense sobre o que você observou</h2>
+        <p class="lead">Estas perguntas não precisam ser entregues. Use-as para interpretar a simulação e discutir com a turma.</p>
+      </div>
+      <ul class="qs">
+        <li><p>Em qual camada do Modelo OSI o ICMP é processado? O que aparece nessa camada na janela do Packet Tracer?</p><small>Observe os PCs na aba OSI Model.</small></li>
+        <li><p>Quais camadas são usadas para o pacote sair do PC1, passar pelo SW1 e pelo SW2 e chegar ao PC10? O que acontece em cada uma?</p><small>Compare a origem, os switches e o destino.</small></li>
+        <li><p>Por que os switches não processam o pacote até a camada de Rede e encaminham os quadros apenas pelo endereço MAC?</p><small>Repare em qual parte do quadro eles leem.</small></li>
+        <li><p>Quantos switches o pacote atravessou entre PC1 e PC10? O que aconteceria com o tempo de resposta se houvesse um terceiro switch no caminho?</p><small>Pense também no TTL: ele mudou?</small></li>
+        <li><p>O quadro do ping leva o MAC do PC10 como destino. Como o PC1 descobriu esse endereço se só conhecia o IP?</p><small>Pesquise sobre o protocolo ARP.</small></li>
+        <li><p>O pedido saiu em um quadro com destino ao MAC do PC10. Como o SW1 sabia por qual porta enviá-lo?</p><small>Tente <code>show mac address-table</code> na CLI do switch.</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap read" id="entrega">
+    <div class="sec-head">
+      <div class="eyebrow">Autoavaliação</div>
+      <h2>Checklist da atividade</h2>
+      <p class="lead">Não é preciso enviar nada. Use a lista para conferir se você completou cada etapa.</p>
+      <p class="progress" id="progress"></p>
+    </div>
+    <ul class="check" id="check">
+      <li><label><input type="checkbox" id="c1"><span>Topologia com 10 PCs e 2 switches interligados (5 PCs por switch).</span></label></li>
+      <li><label><input type="checkbox" id="c2"><span>Todos os links com indicador verde.</span></label></li>
+      <li><label><input type="checkbox" id="c3"><span>IPs de 10.1.1.1 a 10.1.1.10, máscara 255.255.255.0.</span></label></li>
+      <li><label><input type="checkbox" id="c4"><span>Ping de PC1 para PC10 com sucesso no Command Prompt.</span></label></li>
+      <li><label><input type="checkbox" id="c5"><span>Simulação (Simple PDU) executada, com In Layers e Out Layers observados em cada dispositivo.</span></label></li>
+    </ul>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>Instituto Federal de Santa Catarina · Redes de Computadores</span><span>Cisco Packet Tracer · LAN, endereçamento IP e ICMP no Modelo OSI</span></div></footer>
+
+<script>
+(function(){
+  const NS="http://www.w3.org/2000/svg";
+  const SW={sw1:{x:270,y:80},sw2:{x:730,y:80}};
+  const pcX=i=>60+(i-1)*97.8, PCY=250;
+  const pos=id=>id.startsWith("sw")?SW[id]:{x:pcX(+id.slice(2)),y:PCY};
+  const ip=i=>"10.1.1."+i;
+
+  // Fios
+  const wires=document.getElementById("wires");
+  const wireEl={};
+  function line(a,b,cls,key){const l=document.createElementNS(NS,"line");const p=pos(a),q=pos(b);
+    l.setAttribute("x1",p.x);l.setAttribute("y1",p.y);l.setAttribute("x2",q.x);l.setAttribute("y2",q.y);l.setAttribute("class",cls);wires.appendChild(l);wireEl[key]=l;}
+  for(let i=1;i<=10;i++) line(i<=5?"sw1":"sw2","pc"+i,"wire",(i<=5?"sw1":"sw2")+"-pc"+i);
+  line("sw1","sw2","trunk","sw1-sw2");
+
+  // Dispositivos
+  const devs=document.getElementById("devs"), devEl={};
+  function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+  ["sw1","sw2"].forEach((id,k)=>{const p=pos(id);const g=el("g",{class:"dev switch",transform:`translate(${p.x},${p.y})`},devs);
+    el("rect",{class:"box",x:-68,y:-26,width:136,height:52,rx:8},g);
+    for(let j=0;j<8;j++) el("rect",{class:"icon",x:-52+j*13,y:8,width:9,height:7,rx:1.5},g);
+    const t=el("text",{y:-1},g);t.textContent=k?"SW2":"SW1";
+    const l=el("text",{class:"lbl",y:-34},g);l.textContent="Switch 2960";
+    devEl[id]=g;});
+  for(let i=1;i<=10;i++){const p=pos("pc"+i);const g=el("g",{class:"dev"+(i===1||i===10?" endpoint":""),transform:`translate(${p.x},${p.y})`},devs);
+    el("rect",{class:"box",x:-39,y:-26,width:78,height:52,rx:7},g);
+    const t=el("text",{y:-2},g);t.textContent="PC"+i;
+    const s=el("text",{class:"ip",y:14},g);s.textContent=ip(i);
+    el("rect",{class:"icon",x:-14,y:30,width:28,height:4,rx:2},g);
+    devEl["pc"+i]=g;}
+
+  // Tabelas lado a lado
+  ["addr1","addr2"].forEach((id,k)=>{let h=`<div class="addr-head"><span class="ic">SW${k+1}</span><div><strong>Grupo SW${k+1}</strong><span>Switch 2960 · PC${k*5+1} a PC${k*5+5}</span></div></div><table><thead><tr><th>PC</th><th>Porta</th><th>Endereço IP</th></tr></thead><tbody>`;
+    for(let j=1;j<=5;j++){const n=k*5+j;h+=`<tr><td><strong>PC${n}</strong></td><td class="mono">Fa0/${j}</td><td class="mono">${ip(n)}</td></tr>`;}
+    document.getElementById(id).innerHTML=h+"</tbody></table>";});
+
+  // Desenho da topologia
+  (function(){const d=document.getElementById("draw");let h="";
+    const px=k=>k<5?70+k*90:570+(k-5)*90, sx=[250,750];
+    h+=`<rect class="grp" x="16" y="14" width="468" height="302" rx="18"/><rect class="grp" x="516" y="14" width="468" height="302" rx="18"/>`;
+    h+=`<text class="grp-l" x="36" y="40">GRUPO SW1</text><text class="grp-l" x="536" y="40">GRUPO SW2</text>`;
+    for(let k=0;k<10;k++){const s=sx[k<5?0:1];h+=`<path class="cab" d="M${s} 112 C ${s} 160, ${px(k)} 150, ${px(k)} 206"/>`;}
+    h+=`<line class="cab-up" x1="${sx[0]+70}" y1="88" x2="${sx[1]-70}" y2="88"/><text class="up-l" x="500" y="78">Gi0/1 ↔ Gi0/1</text>`;
+    sx.forEach((x,k)=>{h+=`<g transform="translate(${x},88)"><rect class="sw-body" x="-70" y="-24" width="140" height="48" rx="8"/><rect class="sw-top" x="-70" y="-24" width="140" height="10" rx="5"/>`;
+      for(let j=0;j<8;j++)h+=`<rect class="led" x="${-54+j*14}" y="10" width="8" height="5" rx="1.5"/>`;
+      h+=`<text class="sw-t" y="4">SW${k+1}</text></g>`;});
+    for(let k=0;k<10;k++){const x=px(k);h+=`<g transform="translate(${x},232)"><rect class="mon" x="-30" y="-26" width="60" height="40" rx="5"/><rect class="scr" x="-24" y="-20" width="48" height="28" rx="2"/><rect class="stand" x="-4" y="14" width="8" height="8"/><rect class="stand" x="-14" y="21" width="28" height="4" rx="2"/>
+      <text class="pc-t" y="46">PC${k+1}</text><text class="pc-ip" y="62">${ip(k+1)}</text><text class="port" y="-34">Fa0/${k%5+1}</text></g>`;}
+    d.innerHTML=h;})();
+
+  // Camadas OSI
+  const OSI=[[7,"Aplicação","Dados"],[6,"Apresentação","Dados"],[5,"Sessão","Dados"],[4,"Transporte","Segmento"],[3,"Rede","Pacote"],[2,"Enlace","Quadro"],[1,"Física","Bits"]];
+  const osi=document.getElementById("osi"),layerEl={};
+  OSI.forEach(([n,nm,u])=>{const d=document.createElement("div");d.className="layer";
+    d.innerHTML=`<span class="n">${n}</span><div><div class="nm">${nm}<span class="unit">${u}</span></div><div class="note"></div></div>`;osi.appendChild(d);layerEl[n]=d;});
+
+  const MAC1="0060.2F3A.1101", MAC10="00D0.97B4.110A";
+  const REQ={eth:`dst ${MAC10}<br>src ${MAC1}`,ip:"src 10.1.1.1<br>dst 10.1.1.10 · TTL 128",icmp:"tipo 8<br>Echo Request"};
+  const REP={eth:`dst ${MAC1}<br>src ${MAC10}`,ip:"src 10.1.1.10<br>dst 10.1.1.1 · TTL 128",icmp:"tipo 0<br>Echo Reply"};
+
+  const fwdNotes=(port,who)=>({1:`Recebe os sinais na porta ${port} e reconstrói os bits do quadro.`,2:`Lê o MAC de destino, consulta a tabela de endereços MAC e encaminha o quadro ${who}.`});
+  const S=[
+    {k:"node",dev:"pc1",r:0,dir:"down",title:"PC1 monta o Echo Request",text:"O comando ping gera uma mensagem ICMP. Ela desce pelas camadas e é encapsulada até virar sinal no cabo.",
+      notes:{3:"Cria o pacote IP com origem 10.1.1.1 e destino 10.1.1.10. Dentro dele vai a mensagem ICMP Echo Request.",2:"Coloca o pacote em um quadro Ethernet com o MAC do PC1 como origem e o MAC do PC10 como destino.",1:"Transmite o quadro como sinais elétricos pela porta FastEthernet0."},read:["eth","ip","icmp","fcs"]},
+    {k:"link",from:"pc1",to:"sw1",r:0,title:"Bits no cabo PC1 → SW1",text:"O quadro viaja pelo par trançado até a porta Fa0/1 do SW1."},
+    {k:"node",dev:"sw1",r:0,dir:"fwd",title:"SW1 encaminha o quadro",text:"O switch abre só o cabeçalho Ethernet. O pacote IP e o ICMP passam por ele sem serem lidos.",notes:fwdNotes("Fa0/1","pela porta de interligação com o SW2"),read:["eth"]},
+    {k:"link",from:"sw1",to:"sw2",r:0,title:"Bits no cabo SW1 → SW2",text:"O quadro atravessa o link entre os switches, sem nenhuma alteração."},
+    {k:"node",dev:"sw2",r:0,dir:"fwd",title:"SW2 encaminha o quadro",text:"Mesmo processo do SW1: só o MAC de destino importa para decidir a porta de saída.",notes:fwdNotes("Gi0/1","somente pela porta onde está o PC10"),read:["eth"]},
+    {k:"link",from:"sw2",to:"pc10",r:0,title:"Bits no cabo SW2 → PC10",text:"O quadro chega à placa de rede do PC10."},
+    {k:"node",dev:"pc10",r:0,dir:"up",title:"PC10 recebe o Echo Request",text:"O quadro sobe pelas camadas. Cada uma confere o seu cabeçalho, retira-o e entrega o restante à camada de cima.",
+      notes:{1:"Recebe os sinais e reconstrói o quadro.",2:"O MAC de destino é o seu. Confere o FCS, retira o cabeçalho Ethernet e entrega o pacote à camada 3.",3:"O IP de destino é o seu. Lê a mensagem ICMP Echo Request e prepara a resposta."},read:["eth","ip","icmp","fcs"]},
+    {k:"node",dev:"pc10",r:1,dir:"down",title:"PC10 monta o Echo Reply",text:"A resposta faz o caminho inverso, agora com origem e destino trocados.",
+      notes:{3:"Cria um novo pacote IP com origem 10.1.1.10 e destino 10.1.1.1, contendo o ICMP Echo Reply.",2:"Novo quadro Ethernet: MAC do PC10 como origem, MAC do PC1 como destino.",1:"Transmite o quadro pela porta FastEthernet0."},read:["eth","ip","icmp","fcs"]},
+    {k:"link",from:"pc10",to:"sw2",r:1,title:"Bits no cabo PC10 → SW2",text:"A resposta volta para o switch do PC10."},
+    {k:"node",dev:"sw2",r:1,dir:"fwd",title:"SW2 encaminha a resposta",text:"O switch já aprendeu em qual porta está o MAC do PC1 e envia o quadro pela interligação.",notes:fwdNotes("Fa0/5","pela porta de interligação com o SW1"),read:["eth"]},
+    {k:"link",from:"sw2",to:"sw1",r:1,title:"Bits no cabo SW2 → SW1",text:"O quadro cruza o link entre os switches."},
+    {k:"node",dev:"sw1",r:1,dir:"fwd",title:"SW1 encaminha a resposta",text:"Consulta a tabela MAC e envia o quadro somente para a porta do PC1.",notes:fwdNotes("Gi0/1","pela porta Fa0/1, onde está o PC1"),read:["eth"]},
+    {k:"link",from:"sw1",to:"pc1",r:1,title:"Bits no cabo SW1 → PC1",text:"A resposta chega ao computador de origem."},
+    {k:"node",dev:"pc1",r:1,dir:"up",title:"PC1 recebe o Echo Reply",text:"O ping está completo. O PC1 mostra Reply from 10.1.1.10 com o tempo de ida e volta.",
+      notes:{1:"Recebe os sinais e reconstrói o quadro.",2:"O MAC de destino é o seu. Retira o cabeçalho Ethernet e entrega o pacote à camada 3.",3:"O IP de destino é o seu. Identifica o ICMP Echo Reply e calcula o tempo de resposta."},read:["eth","ip","icmp","fcs"]}
+  ];
+  const DUR={node:3400,link:1500};
+  const DIR={down:"↓ encapsulando",up:"↑ desencapsulando",fwd:"⇄ encaminhando pela camada 2"};
+
+  // Pontos de progresso
+  const dots=document.getElementById("dots");
+  S.forEach((s,i)=>{ if(i===7){const sp=document.createElement("span");sp.className="sep";dots.appendChild(sp);}
+    const b=document.createElement("button");b.className="dot"+(s.r?" r":"");b.setAttribute("aria-label","Etapa "+(i+1)+": "+s.title);
+    b.addEventListener("click",()=>{go(i);});dots.appendChild(b);});
+  const dotEls=[...dots.querySelectorAll(".dot")];
+
+  const pkt=document.getElementById("pkt"),tag=document.getElementById("pktTag"),tagText=document.getElementById("pktTagText"),halo=document.getElementById("halo");
+  const lab=document.getElementById("lab"),cap=document.getElementById("caption");
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let i=0,t=0,playing=!reduce,speed=1,last=null,lastNode=0;
+
+  function wireKey(a,b){return wireEl[a+"-"+b]?a+"-"+b:b+"-"+a;}
+  function place(x,y){pkt.setAttribute("transform",`translate(${x},${y})`);tag.setAttribute("transform",`translate(${x},${y})`);}
+  const ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+
+  function render(){
+    const s=S[i];
+    lab.classList.toggle("reply-mode",!!s.r);
+    cap.classList.toggle("reply",!!s.r);
+    pkt.classList.toggle("reply",!!s.r);tag.classList.toggle("reply",!!s.r);halo.classList.toggle("reply",!!s.r);
+    tagText.textContent=s.r?"Echo Reply":"Echo Request";
+    document.getElementById("capKind").textContent=`Etapa ${i+1} de ${S.length} · ${s.r?"resposta":"pedido"}`;
+    document.getElementById("capTitle").textContent=s.title;
+    document.getElementById("capText").textContent=s.text;
+    Object.values(devEl).forEach(g=>g.classList.remove("active","reply"));
+    Object.values(wireEl).forEach(w=>w.classList.remove("hot","reply"));
+    const F=s.r?REP:REQ;
+    document.getElementById("fEth").innerHTML=F.eth;document.getElementById("fIp").innerHTML=F.ip;document.getElementById("fIcmp").innerHTML=F.icmp;
+    let node=s;
+    if(s.k==="node"){
+      devEl[s.dev].classList.add("active");if(s.r)devEl[s.dev].classList.add("reply");
+      const p=pos(s.dev);place(p.x,p.y);halo.setAttribute("cx",p.x);halo.setAttribute("cy",p.y);halo.classList.add("on");
+    } else {
+      halo.classList.remove("on");
+      const w=wireEl[wireKey(s.from,s.to)];w.classList.add("hot");if(s.r)w.classList.add("reply");
+      node=null;
+    }
+    document.querySelectorAll(".seg").forEach(el=>el.classList.toggle("read",!!node&&node.read.includes(el.dataset.seg)));
+    // OSI
+    if(node){
+      document.getElementById("osiDev").textContent=node.dev.toUpperCase();
+      document.getElementById("osiDir").textContent=DIR[node.dir];
+      OSI.forEach(([n])=>{const L=layerEl[n],on=!!node.notes[n];L.classList.toggle("on",on);L.querySelector(".note").textContent=node.notes[n]||"";
+        L.classList.remove("flash");if(on){void L.offsetWidth;L.classList.add("flash");}});
+    } else {
+      document.getElementById("osiDev").textContent="No cabo";
+      document.getElementById("osiDir").textContent=`${s.from.toUpperCase()} → ${s.to.toUpperCase()}`;
+      OSI.forEach(([n])=>{const L=layerEl[n],on=n===1;L.classList.toggle("on",on);L.querySelector(".note").textContent=on?"O quadro trafega como sinais elétricos no par trançado. Nenhum dispositivo processa o conteúdo aqui.":"";});
+    }
+    dotEls.forEach((d,k)=>{d.classList.toggle("cur",k===i);d.classList.toggle("done",k<i);d.setAttribute("aria-current",k===i?"step":"false");});
+    move();
+  }
+  function move(){
+    const s=S[i];if(s.k!=="link")return;
+    const a=pos(s.from),b=pos(s.to),p=reduce?1:ease(Math.min(1,t/DUR.link));
+    place(a.x+(b.x-a.x)*p,a.y+(b.y-a.y)*p);
+  }
+  function go(k){i=(k+S.length)%S.length;t=0;render();}
+
+  const bPlay=document.getElementById("bPlay");
+  function setPlay(v){playing=v;bPlay.textContent=v?"❚❚ Pausar":"▶ Reproduzir";}
+  bPlay.addEventListener("click",()=>setPlay(!playing));
+  document.getElementById("bNext").addEventListener("click",()=>{setPlay(false);go(i+1);});
+  document.getElementById("bPrev").addEventListener("click",()=>{setPlay(false);go(i-1);});
+  document.getElementById("bReset").addEventListener("click",()=>{go(0);setPlay(true);});
+  document.querySelectorAll(".speed button").forEach(b=>b.addEventListener("click",()=>{speed=+b.dataset.s;
+    document.querySelectorAll(".speed button").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));}));
+
+  function loop(ts){
+    if(last==null)last=ts;const dt=Math.min(100,ts-last);last=ts;
+    if(playing){t+=dt*speed;const d=DUR[S[i].k]+(i===S.length-1?1600:0);
+      if(t>=d){go(i+1);} else if(S[i].k==="link") move();}
+    requestAnimationFrame(loop);
+  }
+  setPlay(playing);render();requestAnimationFrame(loop);
+
+  // Checklist
+  const boxes=[...document.querySelectorAll("#check input")],prog=document.getElementById("progress");
+  function upd(){const n=boxes.filter(b=>b.checked).length;prog.textContent=`${n} de ${boxes.length} itens concluídos`;
+    try{localStorage.setItem("ifsc-lan-check-v2",JSON.stringify(boxes.map(b=>b.checked)));}catch(e){}}
+  try{const v=JSON.parse(localStorage.getItem("ifsc-lan-check-v2")||"[]");boxes.forEach((b,k)=>b.checked=!!v[k]);}catch(e){}
+  boxes.forEach(b=>b.addEventListener("change",upd));upd();
+})();
+</script>
+
+</body>
+</html>
