@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alberto Barros · Disciplinas</title>
+<meta name="description" content="Materiais, laboratórios e projetos das disciplinas do professor Alberto Barros.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070b14;
+    --bg2:#0d1424;
+    --text:#e8eefc;
+    --muted:#8a97b5;
+    --line:rgba(120,160,255,.16);
+    --glass:rgba(16,24,44,.55);
+    --c1:#38bdf8;   /* ciano  */
+    --c2:#a78bfa;   /* lilás  */
+    --c3:#34d399;   /* verde  */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Space Grotesk",system-ui,sans-serif;
+    color:var(--text);
+    background:radial-gradient(1200px 800px at 15% 10%,#13204099,transparent 60%),
+               radial-gradient(900px 700px at 90% 90%,#2a165099,transparent 60%),
+               var(--bg);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  #rede{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+
+  main{
+    position:relative;z-index:1;
+    max-width:1100px;margin:0 auto;
+    padding:clamp(48px,10vh,110px) 20px 60px;
+    display:flex;flex-direction:column;align-items:center;
+  }
+
+  /* ---------- Cabeçalho ---------- */
+  .tag{
+    font-family:"JetBrains Mono",monospace;font-size:.8rem;
+    color:var(--c1);letter-spacing:.15em;text-transform:uppercase;
+    border:1px solid var(--line);border-radius:999px;
+    padding:6px 14px;background:var(--glass);backdrop-filter:blur(8px);
+    opacity:0;animation:sobe .8s .1s forwards;
+  }
+  h1{
+    margin-top:22px;text-align:center;
+    font-size:clamp(2.4rem,7vw,4.8rem);font-weight:700;line-height:1.05;
+    letter-spacing:-.02em;
+    background:linear-gradient(100deg,var(--text) 20%,var(--c1) 50%,var(--c2) 80%);
+    background-size:200% auto;
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    opacity:0;animation:sobe .9s .25s forwards, brilho 8s linear 1.2s infinite;
+  }
+  .terminal{
+    margin-top:18px;min-height:1.6em;
+    font-family:"JetBrains Mono",monospace;font-size:clamp(.9rem,2.4vw,1.1rem);
+    color:var(--muted);
+    opacity:0;animation:sobe .8s .45s forwards;
+  }
+  .terminal .prompt{color:var(--c3)}
+  .cursor{display:inline-block;width:.6em;height:1.1em;background:var(--c1);
+    vertical-align:-.15em;margin-left:2px;animation:pisca 1s steps(1) infinite}
+
+  /* ---------- Cartões ---------- */
+  .grade{
+    margin-top:clamp(40px,8vh,72px);width:100%;
+    display:grid;gap:22px;
+    grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+  }
+  .card{
+    --cor:var(--c1);
+    position:relative;display:flex;flex-direction:column;gap:14px;
+    padding:28px 26px 24px;border-radius:20px;
+    background:var(--glass);backdrop-filter:blur(14px);
+    border:1px solid var(--line);
+    text-decoration:none;color:inherit;
+    overflow:hidden;isolation:isolate;
+    opacity:0;transform:translateY(30px);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s;
+  }
+  .card.visivel{animation:entra .8s cubic-bezier(.2,.8,.2,1) forwards}
+  .card.pronto{opacity:1;transform:none}
+  /* brilho que segue o mouse */
+  .card::before{
+    content:"";position:absolute;inset:0;z-index:-1;
+    background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),
+               color-mix(in srgb,var(--cor) 22%,transparent),transparent 60%);
+    opacity:0;transition:opacity .35s;
+  }
+  .card:hover::before{opacity:1}
+  .card:hover{
+    border-color:color-mix(in srgb,var(--cor) 55%,transparent);
+    box-shadow:0 20px 60px -20px color-mix(in srgb,var(--cor) 45%,transparent);
+  }
+  .icone{
+    width:58px;height:58px;border-radius:16px;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--cor) 14%,transparent);
+    border:1px solid color-mix(in srgb,var(--cor) 35%,transparent);
+    color:var(--cor);
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .card:hover .icone{transform:rotate(-8deg) scale(1.08)}
+  .icone svg{width:30px;height:30px}
+  .card h2{font-size:1.45rem;font-weight:700}
+  .card p{color:var(--muted);line-height:1.55;font-size:.98rem;flex:1}
+  .rodape-card{
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--cor);
+  }
+  .seta{transition:transform .35s}
+  .card:hover .seta{transform:translateX(6px)}
+
+  .card.em-breve{cursor:default;filter:saturate(.35)}
+  .card.em-breve:hover{box-shadow:none;border-color:var(--line)}
+  .card.em-breve .rodape-card{color:var(--muted)}
+  .selo{
+    position:absolute;top:18px;right:18px;
+    font-family:"JetBrains Mono",monospace;font-size:.7rem;letter-spacing:.08em;
+    padding:4px 10px;border-radius:999px;
+    border:1px dashed var(--muted);color:var(--muted);
+  }
+
+  footer{
+    position:relative;z-index:1;text-align:center;
+    color:var(--muted);font-size:.85rem;padding:0 20px 36px;
+    font-family:"JetBrains Mono",monospace;
+  }
+
+  @keyframes sobe{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes entra{to{opacity:1;transform:none}}
+  @keyframes brilho{to{background-position:-200% center}}
+  @keyframes pisca{50%{opacity:0}}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before{animation-duration:.01s!important;animation-iteration-count:1!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="rede" aria-hidden="true"></canvas>
+
+<main>
+  <span class="tag">Prof. Alberto Barros</span>
+  <h1>Laboratório de<br>Aprendizagem</h1>
+  <div class="terminal"><span class="prompt">~$</span> <span id="digitando"></span><span class="cursor"></span></div>
+
+  <section class="grade" id="grade"></section>
+</main>
+
+<footer>© <span id="ano"></span> Alberto Barros · feito com HTML, CSS & curiosidade</footer>
+
+<script>
+/* =========================================================
+   DISCIPLINAS — para adicionar uma nova, basta copiar um bloco.
+   ativo:false mostra o cartão como "em breve".
+   ========================================================= */
+const disciplinas = [
+  {
+    titulo: "Redes",
+    descricao: "Fundamentos de redes de computadores: modelos OSI e TCP/IP, endereçamento IP, sub-redes e protocolos.",
+    link: "https://alberto-barros.github.io/HTML/Redes",
+    cor: "#38bdf8",
+    icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><path d="M12 7.5v4.5M12 12l-5.3 4.8M12 12l5.3 4.8M7.5 19h9"/></svg>`
+  },
+  {
+    titulo: "Robô Labirinto",
+    descricao: "Programe um robô para encontrar a saída do labirinto. Lógica, algoritmos e muita tentativa e erro.",
+    link: "https://alberto-barros.github.io/HTML/robolabirinto/",
+    cor: "#a78bfa",
+    icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 8V4.5"/><circle cx="12" cy="3.5" r="1"/><circle cx="9.5" cy="13" r="1.2" fill="currentColor"/><circle cx="14.5" cy="13" r="1.2" fill="currentColor"/><path d="M9.5 16.5h5M3 12v3M21 12v3"/></svg>`
+  },
+  {
+    titulo: "Linux",
+    descricao: "Terminal, sistema de arquivos, permissões, processos e scripts em shell.",
+    link: "HTML/Linux/",
+    cor: "#34d399",
+    ativo: false,
+    icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 10l3 2.5L7 15M12.5 15H17"/></svg>`
+  },
+];
+
+/* ---------- Monta os cartões ---------- */
+const grade = document.getElementById("grade");
+disciplinas.forEach((d, i) => {
+  const ativo = d.ativo !== false;
+  const el = document.createElement(ativo ? "a" : "div");
+  el.className = "card" + (ativo ? "" : " em-breve");
+  el.style.setProperty("--cor", d.cor);
+  if (ativo) el.href = d.link;
+  el.innerHTML = `
+    ${ativo ? "" : '<span class="selo">EM BREVE</span>'}
+    <div class="icone">${d.icone}</div>
+    <h2>${d.titulo}</h2>
+    <p>${d.descricao}</p>
+    <div class="rodape-card">
+      <span>${ativo ? "acessar" : "em construção"}</span>
+      ${ativo ? '<span class="seta">→</span>' : ""}
+    </div>`;
+  el.addEventListener("pointermove", e => {
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", (e.clientX - r.left) + "px");
+    el.style.setProperty("--my", (e.clientY - r.top) + "px");
+    if (!ativo) return;
+    const rx = ((e.clientY - r.top) / r.height - .5) * -6;
+    const ry = ((e.clientX - r.left) / r.width - .5) * 6;
+    el.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+  });
+  el.addEventListener("pointerleave", () => { el.style.transform = ""; });
+  grade.appendChild(el);
+  setTimeout(() => el.classList.add("visivel"), 650 + i * 140);
+});
+// depois da animação de entrada, libera o transform para o efeito 3D
+grade.addEventListener("animationend", e => {
+  if (e.target.classList.contains("card")) {
+    e.target.classList.add("pronto");
+    e.target.classList.remove("visivel");
+  }
+});
+
+/* ---------- Texto digitando ---------- */
+const frases = [
+  "escolha uma disciplina para começar",
+  "ping aprendizado.local ... ok",
+  "./robo --resolver labirinto",
+  "sudo apt install conhecimento",
+];
+const alvo = document.getElementById("digitando");
+let f = 0, c = 0, apagando = false;
+(function digita(){
+  const frase = frases[f];
+  alvo.textContent = frase.slice(0, c);
+  if (!apagando && c < frase.length) { c++; setTimeout(digita, 55); }
+  else if (!apagando) { apagando = true; setTimeout(digita, 1800); }
+  else if (c > 0) { c--; setTimeout(digita, 25); }
+  else { apagando = false; f = (f + 1) % frases.length; setTimeout(digita, 400); }
+})();
+
+document.getElementById("ano").textContent = new Date().getFullYear();
+
+/* ---------- Fundo animado: rede de nós com "pacotes" viajando ---------- */
+const cv = document.getElementById("rede");
+const ctx = cv.getContext("2d");
+const cores = ["56,189,248", "167,139,250", "52,211,153"];
+let W, H, nos = [], pacotes = [], mouse = { x: -999, y: -999 };
+const DIST = 140;
+
+function redimensiona(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const qtd = Math.min(110, Math.floor(W * H / 13000));
+  nos = Array.from({ length: qtd }, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    vx: (Math.random() - .5) * .35, vy: (Math.random() - .5) * .35,
+    r: Math.random() * 1.6 + .8,
+    cor: cores[Math.floor(Math.random() * cores.length)]
+  }));
+  pacotes = [];
+}
+addEventListener("resize", redimensiona);
+addEventListener("pointermove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+addEventListener("pointerleave", () => { mouse.x = mouse.y = -999; });
+
+function quadro(){
+  ctx.clearRect(0, 0, W, H);
+
+  for (const n of nos){
+    n.x += n.vx; n.y += n.vy;
+    if (n.x < 0 || n.x > W) n.vx *= -1;
+    if (n.y < 0 || n.y > H) n.vy *= -1;
+    // leve atração pelo mouse
+    const dx = mouse.x - n.x, dy = mouse.y - n.y, d = Math.hypot(dx, dy);
+    if (d < 180){ n.x += dx * .004; n.y += dy * .004; }
+  }
+
+  // ligações
+  for (let i = 0; i < nos.length; i++){
+    for (let j = i + 1; j < nos.length; j++){
+      const a = nos[i], b = nos[j];
+      const d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (d < DIST){
+        ctx.strokeStyle = `rgba(${a.cor},${(1 - d / DIST) * .35})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        // às vezes dispara um "pacote" pela ligação
+        if (Math.random() < .0006 && pacotes.length < 25) pacotes.push({ a, b, t: 0 });
+      }
+    }
+  }
+
+  // nós
+  for (const n of nos){
+    ctx.fillStyle = `rgba(${n.cor},.9)`;
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fill();
+  }
+
+  // pacotes viajando
+  pacotes = pacotes.filter(p => (p.t += .018) < 1);
+  for (const p of pacotes){
+    const x = p.a.x + (p.b.x - p.a.x) * p.t;
+    const y = p.a.y + (p.b.y - p.a.y) * p.t;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, 8);
+    g.addColorStop(0, `rgba(${p.a.cor},1)`);
+    g.addColorStop(1, `rgba(${p.a.cor},0)`);
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI * 2); ctx.fill();
+  }
+
+  if (animar) requestAnimationFrame(quadro);
+}
+
+const animar = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+redimensiona();
+quadro();
+</script>
+</body>
+</html>
