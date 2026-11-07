@@ -41,6 +41,27 @@
   }
 
   /* ---------- Cabeçalho ---------- */
+  .avatar{
+    position:relative;width:clamp(120px,22vw,150px);aspect-ratio:1;
+    margin-bottom:22px;border-radius:50%;
+    opacity:0;animation:surge 1s cubic-bezier(.2,.8,.2,1) forwards,
+              flutua 6s ease-in-out 1s infinite;
+  }
+  .avatar::before{                     /* anel girando */
+    content:"";position:absolute;inset:-5px;border-radius:50%;
+    background:conic-gradient(var(--c1),var(--c2),var(--c3),var(--c1));
+    animation:gira 6s linear infinite;
+  }
+  .avatar::after{                      /* halo */
+    content:"";position:absolute;inset:-18px;border-radius:50%;z-index:-1;
+    background:radial-gradient(circle,rgba(56,189,248,.35),transparent 70%);
+    filter:blur(8px);
+  }
+  .avatar img{
+    position:relative;width:100%;height:100%;display:block;
+    border-radius:50%;object-fit:cover;
+    border:4px solid var(--bg);
+  }
   .tag{
     font-family:"JetBrains Mono",monospace;font-size:.8rem;
     color:var(--c1);letter-spacing:.15em;text-transform:uppercase;
@@ -136,6 +157,9 @@
   @keyframes entra{to{opacity:1;transform:none}}
   @keyframes brilho{to{background-position:-200% center}}
   @keyframes pisca{50%{opacity:0}}
+  @keyframes surge{from{opacity:0;transform:scale(.6) rotate(-10deg)}to{opacity:1;transform:none}}
+  @keyframes flutua{50%{transform:translateY(-8px)}}
+  @keyframes gira{to{transform:rotate(360deg)}}
 
   @media (prefers-reduced-motion:reduce){
     *,*::before{animation-duration:.01s!important;animation-iteration-count:1!important;transition:none!important}
@@ -147,6 +171,7 @@
 <canvas id="rede" aria-hidden="true"></canvas>
 
 <main>
+  <div class="avatar"><img src="foto.jpg" alt="Prof. Alberto Barros" width="400" height="400"></div>
   <span class="tag">Prof. Alberto Barros</span>
   <h1>Laboratório de<br>Aprendizagem</h1>
   <div class="terminal"><span class="prompt">~$</span> <span id="digitando"></span><span class="cursor"></span></div>
