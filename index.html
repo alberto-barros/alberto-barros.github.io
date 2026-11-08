@@ -21,14 +21,15 @@
     --c3:#34d399;   /* verde  */
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
+  html{-webkit-text-size-adjust:100%}
   body{
     font-family:"Space Grotesk",system-ui,sans-serif;
     color:var(--text);
     background:radial-gradient(1200px 800px at 15% 10%,#13204099,transparent 60%),
                radial-gradient(900px 700px at 90% 90%,#2a165099,transparent 60%),
                var(--bg);
-    min-height:100vh;
+    min-height:100vh;min-height:100dvh;
+    background-attachment:fixed;
     overflow-x:hidden;
   }
   #rede{position:fixed;inset:0;width:100%;height:100%;z-index:0}
@@ -92,7 +93,7 @@
   .grade{
     margin-top:clamp(40px,8vh,72px);width:100%;
     display:grid;gap:22px;
-    grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+    grid-template-columns:1fr;
   }
   .card{
     --cor:var(--c1);
@@ -114,11 +115,12 @@
                color-mix(in srgb,var(--cor) 22%,transparent),transparent 60%);
     opacity:0;transition:opacity .35s;
   }
-  .card:hover::before{opacity:1}
+  @media (hover:hover){.card:hover::before{opacity:1}}
+  @media (hover:hover){
   .card:hover{
     border-color:color-mix(in srgb,var(--cor) 55%,transparent);
     box-shadow:0 20px 60px -20px color-mix(in srgb,var(--cor) 45%,transparent);
-  }
+  }}
   .icone{
     width:58px;height:58px;border-radius:16px;display:grid;place-items:center;
     background:color-mix(in srgb,var(--cor) 14%,transparent);
@@ -126,7 +128,7 @@
     color:var(--cor);
     transition:transform .5s cubic-bezier(.2,.8,.2,1);
   }
-  .card:hover .icone{transform:rotate(-8deg) scale(1.08)}
+  @media (hover:hover){.card:hover .icone{transform:rotate(-8deg) scale(1.08)}}
   .icone svg{width:30px;height:30px}
   .card h2{font-size:1.45rem;font-weight:700}
   .card p{color:var(--muted);line-height:1.55;font-size:.98rem;flex:1}
@@ -135,7 +137,7 @@
     font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--cor);
   }
   .seta{transition:transform .35s}
-  .card:hover .seta{transform:translateX(6px)}
+  @media (hover:hover){.card:hover .seta{transform:translateX(6px)}}
 
   .card.em-breve{cursor:default;filter:saturate(.35)}
   .card.em-breve:hover{box-shadow:none;border-color:var(--line)}
@@ -160,6 +162,35 @@
   @keyframes surge{from{opacity:0;transform:scale(.6) rotate(-10deg)}to{opacity:1;transform:none}}
   @keyframes flutua{50%{transform:translateY(-8px)}}
   @keyframes gira{to{transform:rotate(360deg)}}
+
+  /* ---------- Responsivo ---------- */
+  .terminal{max-width:100%;text-align:center;overflow-wrap:anywhere}
+  @media (min-width:600px){
+    .grade{grid-template-columns:repeat(2,1fr)}
+    /* cartão sobrando numa linha ímpar ocupa a largura toda, centralizado */
+    .card:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 11px)}
+  }
+  @media (min-width:960px){
+    .grade{grid-template-columns:repeat(3,1fr)}
+    .card:last-child:nth-child(odd){grid-column:auto;justify-self:stretch;width:auto}
+    .card:nth-child(3n+1):last-child{grid-column:2}
+  }
+  @media (max-width:480px){
+    main{padding:40px 16px 40px}
+    .grade{gap:16px;margin-top:36px}
+    .card{padding:22px 20px 20px;gap:10px;border-radius:16px}
+    .icone{width:50px;height:50px;border-radius:14px}
+    .icone svg{width:26px;height:26px}
+    .card h2{font-size:1.3rem}
+    .card p{font-size:.94rem}
+    .tag{font-size:.72rem;letter-spacing:.12em}
+    .terminal{font-size:.82rem}
+    footer{font-size:.75rem}
+  }
+  /* em telas de toque não há "hover" de verdade: mantém só um toque leve */
+  @media (hover:none){
+    .card:active{transform:scale(.98)}
+  }
 
   @media (prefers-reduced-motion:reduce){
     *,*::before{animation-duration:.01s!important;animation-iteration-count:1!important;transition:none!important}
@@ -228,6 +259,7 @@ disciplinas.forEach((d, i) => {
       ${ativo ? '<span class="seta">→</span>' : ""}
     </div>`;
   el.addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;
     const r = el.getBoundingClientRect();
     el.style.setProperty("--mx", (e.clientX - r.left) + "px");
     el.style.setProperty("--my", (e.clientY - r.top) + "px");
@@ -289,7 +321,13 @@ function redimensiona(){
   }));
   pacotes = [];
 }
-addEventListener("resize", redimensiona);
+// no celular a barra de endereço muda a altura ao rolar: só recria a rede se a largura mudar
+let larguraAnterior = innerWidth;
+addEventListener("resize", () => {
+  if (innerWidth !== larguraAnterior) { larguraAnterior = innerWidth; redimensiona(); }
+  else { H = innerHeight; const dpr = Math.min(window.devicePixelRatio || 1, 2);
+         cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+});
 addEventListener("pointermove", e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 addEventListener("pointerleave", () => { mouse.x = mouse.y = -999; });
 
