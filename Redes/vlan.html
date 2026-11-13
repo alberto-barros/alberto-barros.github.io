@@ -284,6 +284,7 @@ section.sec,.step{scroll-margin-top:72px}
 .ck-sub,.qs-sub{margin:12px 0 2px;display:flex;align-items:center;gap:10px;font:700 .75rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong)}
 .ck-sub::after,.qs-sub::after{content:"";height:1px;flex:1;background:var(--line)}
 .qs-sub{margin-top:4px}
+.deliver.solo{grid-template-columns:minmax(0,760px)}
 @media (max-width:860px){.deliver{grid-template-columns:1fr}}
 
 .topo-h{margin:36px 0 14px;font-size:1.25rem}
@@ -356,6 +357,65 @@ section.sec,.step{scroll-margin-top:72px}
   footer .wrap{flex-direction:column;align-items:flex-start}
 }
 @media (max-width:860px){.code pre{white-space:pre-wrap;overflow-wrap:anywhere}}
+
+/* ---- layout do Laboratório de sub-redes ---- */
+.hero-net{min-width:0;max-width:480px;width:100%;justify-self:center}
+#hero-svg{display:block;width:100%;height:auto}
+#hero-svg .hl{stroke-width:2.5;stroke-dasharray:4 7;animation:flow 1.2s linear infinite;opacity:.75}
+@keyframes flow{to{stroke-dashoffset:-22}}
+#hero-svg .hr-ring{fill:none;stroke:#4DC262;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:rring 2.6s ease-out infinite}
+#hero-svg .hr-ring.b{animation-delay:1.3s}
+@keyframes rring{from{transform:scale(1);opacity:.7}to{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion:reduce){#hero-svg .hl,#hero-svg .hr-ring{animation:none}}
+.chip-ch{border-color:color-mix(in srgb,var(--red) 40%,var(--line))}
+.chip-ch svg{color:var(--red)}
+.menu-btn{display:none;place-content:center;gap:5px;width:44px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
+.menu-btn span{display:block;width:20px;height:2.5px;border-radius:2px;background:var(--green-strong);transition:transform .2s,opacity .2s}
+.menu-btn[aria-expanded="true"]{background:var(--surface-2);border-color:var(--green)}
+.menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+@keyframes navIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.nav a{background:transparent!important;border:0!important}
+.nav a:hover{background:var(--surface-2)!important}
+@media (max-width:860px){
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:2px;margin:0;overflow:visible;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px color-mix(in srgb,var(--ink) 40%,transparent);padding:8px 16px 14px;counter-reset:navi}
+  .nav.open{display:flex;animation:navIn .18s ease-out}
+  .nav a{font-size:1rem;padding:12px 14px;border-radius:12px;display:flex;align-items:center;gap:12px;color:var(--ink)}
+  .nav a:first-child{margin-left:0}
+  .nav a::before{content:counter(navi,decimal-leading-zero);counter-increment:navi;font:600 .75rem var(--f-mono);color:var(--green)}
+  .nav a.nav-ch::before{color:var(--red)}
+  .menu-btn{display:inline-grid}
+  .back{margin-left:auto!important}
+  .bar .wrap{gap:10px}
+  .brand{min-width:0;margin-right:0}
+  .brand-txt span{white-space:nowrap}
+}
+@media (max-width:400px){.brand{gap:9px}.ifsc-logo{height:34px}.bar .brand-txt{display:flex}.brand-txt .b1{font-size:.76rem}.brand-txt .b2{font-size:.74rem}.back{padding:7px 11px 7px 9px;font-size:.8rem}}
+@media (max-width:350px){.back-txt{display:none}.back{padding:9px}}
+.ck-group{font:700 .74rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);padding:12px 10px 2px;border-top:1px dashed var(--line);margin-top:4px}
+.ck-group:first-child{border-top:0;margin-top:0;padding-top:4px}
+.ck-group.ck-ch{color:var(--red)}
+.ck-n{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-right:8px;padding:0 6px;border-radius:7px;background:var(--mint);color:var(--green-strong);font:700 .72rem var(--f-mono);font-style:normal;vertical-align:1px}
+.check input:checked + span .ck-n{background:var(--green);color:var(--surface)}
+.ck-n.ch{background:color-mix(in srgb,var(--red) 14%,var(--surface));color:var(--red)}
+.check input:checked + span .ck-n.ch{background:var(--red);color:#fff}
+.deliver .dcard{border-radius:22px;padding:22px;gap:16px}
+.err-g{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.err-g::after{content:"";height:1px;flex:1;background:var(--line)}
+.err-g.ch{color:var(--red);margin-top:28px}
+.err-ch{border-color:color-mix(in srgb,var(--red) 30%,var(--line));background:color-mix(in srgb,var(--red) 4%,var(--surface))}
+.topo-h{font-family:var(--f-display);font-size:1.02rem;font-weight:700;margin:32px 0 14px;display:flex;align-items:center;gap:10px}
+.topo-h::before{content:"";width:16px;height:3px;border-radius:3px;background:var(--green)}
+section.sec{scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
+@media (max-width:480px){
+  .step{grid-template-columns:36px minmax(0,1fr);gap:12px;padding-bottom:32px}
+  .step-n{width:36px;height:36px;border-radius:12px;font-size:1rem}
+  .step::before{left:17px;top:36px}
+  .step-body ul{padding-left:16px}
+  .check label{padding:8px 4px;gap:8px;font-size:.9rem}
+  .deliver .dcard{padding:16px}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -369,6 +429,7 @@ section.sec,.step{scroll-margin-top:72px}
         <rect x="0" y="435" width="120" height="120" rx="10"/><rect x="145" y="435" width="120" height="120" rx="10"/>
       </g>
     </symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4"/><path d="M4 4h12l-2 4 2 4H4"/></symbol>
     <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></symbol>
     <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="m2 16 10 5 10-5"/><path d="m2 12 10 5 10-5"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
@@ -396,35 +457,30 @@ section.sec,.step{scroll-margin-top:72px}
       <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg>
       <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
     </div>
-    <button type="button" class="burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
-    <nav class="nav" id="menu" aria-label="Seções"><a href="#conceito">VLAN</a><a href="#dominios">Domínios</a><a href="#cenas">Cenas</a><a href="#animacao">Simulador</a><a href="#m1">1 Topologia</a><a href="#m2">2 IPs</a><a href="#m3">3 CLI</a><a href="#m4">4 VLANs</a><a href="#m5">5 Portas</a><a href="#m6">6 Sem uso</a><a href="#m7">7 Trunk</a><a href="#m8">8 Salvar</a><a href="#m9">9 Verificar</a><a href="#erros">Erros</a><a class="nav-ch" href="#desafio">Desafio</a><a href="#entrega">Checklist</a></nav>
-    <a class="back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Voltar</a>
+    <nav class="nav" id="menu" aria-label="Seções">
+      <a href="#conceito">Conceito</a><a href="#dominios">Domínios</a><a href="#cenas">Cenas</a><a href="#animacao">Simulador</a><a href="#passos">Passo a passo</a><a class="nav-ch" href="#desafio">Desafio</a><a href="#entrega">Checklist</a><a href="#erros">Erros</a>
+    </nav>
+    <a class="back" aria-label="Voltar para Redes" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span class="back-txt">Voltar</span></a>
+    <button class="menu-btn" type="button" id="menu-btn" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu"><span></span><span></span><span></span></button>
   </div>
 </header>
 
 <div class="hero">
   <div class="wrap">
     <div>
-      <span class="eyebrow">Aula prática · Cisco Packet Tracer</span>
+      <span class="eyebrow">Laboratório · Cisco Packet Tracer</span>
       <h1>Configurando <em>4 VLANs</em> em um switch Cisco</h1>
       <p class="lead"><b>Objetivo:</b> entender o que é uma VLAN, por que ela divide os domínios de broadcast e configurar 4 VLANs em um switch Cisco no Packet Tracer, testando o isolamento entre os setores.</p>
       <div class="chips">
         <span class="chip"><svg><use href="#i-switch"/></svg>Switch 2960-24TT</span>
         <span class="chip"><svg><use href="#i-pc"/></svg>8 PCs</span>
-        <span class="chip"><svg><use href="#i-layers"/></svg>VLANs 10 · 20 · 30 · 40</span>
-        <span class="chip"><svg><use href="#i-layers"/></svg>9 passos + desafio</span>
+        <span class="chip"><svg><use href="#i-layers"/></svg>4 VLANs</span>
+        <span class="chip chip-ch"><svg><use href="#i-flag"/></svg>Desafio: roteamento entre VLANs</span>
         <span class="chip"><svg><use href="#i-clock"/></svg>Tempo estimado: 1h30</span>
       </div>
     </div>
-    <div class="hero-card">
-      <h3>Cenário do laboratório</h3>
-      <div class="vlist">
-        <div class="vrow" style="--vc:var(--v10)"><span class="vtag">VLAN 10</span><b>ALUNOS</b><span>Fa0/1–2</span></div>
-        <div class="vrow" style="--vc:var(--v20)"><span class="vtag">VLAN 20</span><b>ADMINISTRATIVO</b><span>Fa0/3–4</span></div>
-        <div class="vrow" style="--vc:var(--v30)"><span class="vtag">VLAN 30</span><b>RH</b><span>Fa0/5–6</span></div>
-        <div class="vrow" style="--vc:var(--v40)"><span class="vtag">VLAN 40</span><b>FINANCEIRO</b><span>Fa0/7–8</span></div>
-      </div>
-      <p class="hint">Cada VLAN usa a sub-rede 192.168.X.0/24, com o gateway em .1.</p>
+    <div class="hero-net">
+      <svg id="hero-svg" viewBox="0 0 400 300" role="img" aria-label="Animação: pacotes viajando entre as 4 VLANs pelo SW-IFSC e o roteador"></svg>
     </div>
   </div>
 </div>
@@ -433,7 +489,7 @@ section.sec,.step{scroll-margin-top:72px}
 <section class="sec" id="conceito">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Conceito</span>
+      <span class="sec-num">Parte 1 · Conceito</span>
       <h2>O que é uma VLAN?</h2>
     </div>
     <div class="def">
@@ -454,7 +510,7 @@ section.sec,.step{scroll-margin-top:72px}
 <section class="sec" id="beneficios">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Por que usar</span>
+      <span class="sec-num">Parte 1 · Por que usar</span>
       <h2>Benefícios das VLANs</h2>
       <p>Em uma rede de câmpus, separar setores traz ganhos de desempenho, segurança e organização sem comprar mais switches.</p>
     </div>
@@ -472,7 +528,7 @@ section.sec,.step{scroll-margin-top:72px}
 <section class="sec" id="dominios">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Fundamentos</span>
+      <span class="sec-num">Parte 1 · Fundamentos</span>
       <h2>Domínios de colisão e de broadcast</h2>
       <p><b>Domínio de colisão</b> é o trecho da rede onde dois quadros enviados ao mesmo tempo podem colidir. <b>Domínio de broadcast</b> é o conjunto de dispositivos que recebe um quadro enviado para <code>FF:FF:FF:FF:FF:FF</code>.</p>
     </div>
@@ -620,7 +676,7 @@ section.sec,.step{scroll-margin-top:72px}
 </style>
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Animação em cenas</span>
+      <span class="sec-num">Parte 1 · Animação em cenas</span>
       <h2>Colisão, broadcast, sub-rede e VLAN</h2>
       <p>Seis cenas curtas, do hub até as 4 VLANs do laboratório. Cada quadro que corre pelos cabos é um frame Ethernet: observe até onde ele consegue chegar em cada cenário.</p>
     </div>
@@ -973,7 +1029,7 @@ requestAnimationFrame(frame);
 <section class="sec" id="animacao">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Simulador</span>
+      <span class="sec-num">Parte 1 · Simulador</span>
       <h2>Simule o broadcast no laboratório</h2>
       <p>Escolha o PC de origem e compare o mesmo broadcast ARP em um switch sem VLANs e no switch configurado com 4 VLANs.</p>
     </div>
@@ -1001,7 +1057,7 @@ requestAnimationFrame(frame);
 <section class="sec" id="enderecos">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Planejamento</span>
+      <span class="sec-num">Parte 1 · Planejamento</span>
       <h2>Plano de endereçamento</h2>
       <p>Cada VLAN usa uma sub-rede própria. O terceiro octeto acompanha o número da VLAN para facilitar a leitura.</p>
     </div>
@@ -1032,7 +1088,7 @@ requestAnimationFrame(frame);
 <section class="sec" id="passos">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Prática</span>
+      <span class="sec-num">Parte 1 · Prática</span>
       <h2>Passo a passo no Packet Tracer</h2>
       <p>Siga a ordem. Os passos 1 a 6 e 8 formam o laboratório básico; o passo 7 prepara o switch para o roteamento entre VLANs.</p>
     </div>
@@ -1197,7 +1253,7 @@ copy running-config startup-config
 <section class="sec" id="completo">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Resumo</span>
+      <span class="sec-num">Parte 1 · Resumo</span>
       <h2>Configuração completa do switch</h2>
       <p>Todos os comandos em sequência, prontos para colar na CLI do SW-IFSC.</p>
     </div>
@@ -1244,20 +1300,6 @@ copy running-config startup-config</pre></div>
   </div>
 </section>
 
-<section class="sec" id="erros">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Solução de problemas</span>
-      <h2>Erros comuns</h2>
-    </div>
-    <div class="errs">
-      <article class="err"><h3><svg><use href="#i-alert"/></svg>Ping falha dentro da mesma VLAN</h3><p>Confira o IP e a máscara no PC e se o cabo está na porta certa. Rode <code>show vlan brief</code> e veja se a porta aparece na VLAN esperada.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"/></svg>Porta não aparece em nenhuma VLAN</h3><p>Portas configuradas como trunk não aparecem no <code>show vlan brief</code>. Use <code>show interfaces trunk</code> para vê-las.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% Invalid input detected”</h3><p>Verifique o modo da CLI no prompt. VLANs e interfaces se configuram em <code>(config)#</code>, e comandos <code>show</code> em <code>#</code> (ou com <code>do</code> na frente).</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"/></svg>Configuração sumiu ao reabrir</h3><p>Faltou <code>copy running-config startup-config</code> e salvar o arquivo .pkt (Ctrl+S) antes de fechar o Packet Tracer.</p></article>
-    </div>
-  </div>
-</section>
 <section class="sec desafio" id="desafio">
 <style>
 /* desafio em vermelho (padrão das aulas) */
@@ -1327,9 +1369,9 @@ copy running-config startup-config</pre></div>
 </style>
   <div class="wrap">
     <div class="ch-banner">
-      <div class="ico"><svg><use href="#i-route"/></svg></div>
+      <div class="ico"><svg><use href="#i-flag"/></svg></div>
       <div>
-        <span class="sec-num">Desafio · Roteamento entre VLANs</span>
+        <span class="sec-num">Parte 2 · Desafio · Roteamento entre VLANs</span>
         <h2>Faça as 4 VLANs se comunicarem</h2>
         <p>Até aqui, cada VLAN ficou isolada: o PC0 (ALUNOS) não alcança o PC6 (FINANCEIRO). Para que redes diferentes conversem, é preciso um equipamento de <b>camada 3</b>. Neste desafio você vai incluir um roteador e configurar o <b>router-on-a-stick</b>: um único cabo trunk entre switch e roteador, com uma subinterface para cada VLAN.</p>
       </div>
@@ -1649,55 +1691,62 @@ tracert 192.168.40.10
   <div class="wrap">
     <div class="sec-head">
       <span class="sec-num">Revisão</span>
-      <h2>Checklist e perguntas</h2>
-      <p>Marque cada item conforme concluir a atividade. O percentual fica salvo neste navegador.</p>
+      <h2>Checklist da atividade</h2>
+      <p>Cada item corresponde a uma tarefa do passo a passo; o número indica o passo. Marque conforme concluir. O progresso fica salvo neste navegador.</p>
     </div>
-    <div class="deliver">
-      <div class="dcard ck-card">
+    <div class="deliver solo">
+      <div class="dcard">
         <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 14</span></div>
         <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
         <div class="check" id="checklist">
-          <label><input type="checkbox" id="ck1"><span>Topologia com 1 switch 2960 e 8 PCs nas portas Fa0/1 a Fa0/8</span></label>
-          <label><input type="checkbox" id="ck2"><span>PC0 a PC7 com IP, máscara e gateway do plano de endereçamento</span></label>
-          <label><input type="checkbox" id="ck3"><span>VLANs 10 ALUNOS, 20 ADMINISTRATIVO, 30 RH e 40 FINANCEIRO criadas</span></label>
-          <label><input type="checkbox" id="ck4"><span>Portas Fa0/1 a Fa0/8 em modo access na VLAN correta</span></label>
-          <label><input type="checkbox" id="ck5"><span>Portas Fa0/9 a Fa0/24 na VLAN 999 e desligadas</span></label>
-          <label><input type="checkbox" id="ck6"><span>Configuração salva com <code>copy running-config startup-config</code></span></label>
-          <label><input type="checkbox" id="ck7"><span><code>show vlan brief</code> conferido</span></label>
-          <label><input type="checkbox" id="ck8"><span>Pings dentro da mesma VLAN funcionando e entre VLANs falhando (antes do desafio)</span></label>
-          <label><input type="checkbox" id="ck10"><span>Roteador 2911 <code>R-IFSC</code> ligado: <code>G0/0</code> → <code>Gi0/1</code> do switch</span></label>
-          <label><input type="checkbox" id="ck11"><span>Porta <code>Gi0/1</code> do switch em modo trunk com as VLANs 10, 20, 30 e 40</span></label>
-          <label><input type="checkbox" id="ck12"><span><code>G0/0</code> ligada e subinterfaces <code>G0/0.10</code> a <code>G0/0.40</code> com <code>encapsulation dot1Q</code> e o IP .1</span></label>
-          <label><input type="checkbox" id="ck13"><span><code>show ip interface brief</code> com as 4 subinterfaces <i>up/up</i></span></label>
-          <label><input type="checkbox" id="ck14"><span>Ping e <code>tracert</code> do PC0 para o PC6 funcionando entre VLANs</span></label>
-          <label><input type="checkbox" id="ck15"><span>Arquivo .pkt do desafio salvo</span></label>
+          <div class="ck-group">Parte 1 · VLANs</div>
+          <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>Topologia com 1 switch 2960 e 8 PCs nas portas Fa0/1 a Fa0/8</span></label>
+          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 2">2</em>PC0 a PC7 com IP, máscara e gateway do plano de endereçamento</span></label>
+          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 4">4</em>VLANs 10 ALUNOS, 20 ADMINISTRATIVO, 30 RH e 40 FINANCEIRO criadas</span></label>
+          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 5">5</em>Portas Fa0/1 a Fa0/8 em modo access na VLAN correta</span></label>
+          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 6">6</em>Portas Fa0/9 a Fa0/24 na VLAN 999 e desligadas</span></label>
+          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 8">8</em>Configuração salva com <code>copy running-config startup-config</code></span></label>
+          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 9">9</em><code>show vlan brief</code> conferido</span></label>
+          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 9">9</em>Pings dentro da mesma VLAN respondem e entre VLANs dão <i>Request timed out</i></span></label>
+          <div class="ck-group ck-ch">Parte 2 · Roteamento entre VLANs</div>
+          <label><input type="checkbox" id="ck10"><span><em class="ck-n ch" title="Desafio, passo 1">D1</em>Roteador 2911 <code>R-IFSC</code> ligado: <code>G0/0</code> → <code>Gi0/1</code> do switch</span></label>
+          <label><input type="checkbox" id="ck11"><span><em class="ck-n ch" title="Desafio, passo 2">D2</em>Porta <code>Gi0/1</code> do switch em modo trunk com as VLANs 10, 20, 30 e 40</span></label>
+          <label><input type="checkbox" id="ck12"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>G0/0</code> ligada e subinterfaces <code>G0/0.10</code> a <code>G0/0.40</code> com <code>encapsulation dot1Q</code> e o IP .1</span></label>
+          <label><input type="checkbox" id="ck13"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em><code>show ip interface brief</code> com as 4 subinterfaces <i>up/up</i></span></label>
+          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 5">D5</em>Ping e <code>tracert</code> do PC0 para o PC6 funcionando entre VLANs</span></label>
+          <label><input type="checkbox" id="ck15"><span><em class="ck-n ch" title="Desafio, passo 5">D5</em>Arquivo .pkt do desafio salvo</span></label>
         </div>
       </div>
-      <div class="dcard hl">
-        <h3>Perguntas</h3>
-        <ol class="qs">
-          <li>O que é uma VLAN e em qual camada do modelo OSI ela atua?</li>
-          <li>Quantos domínios de colisão e de broadcast existem no switch deste laboratório?</li>
-          <li>Por que o PC0 (ALUNOS) não consegue pingar o PC6 (FINANCEIRO), se os dois estão no mesmo switch?</li>
-          <li>Qual a diferença entre uma porta <code>access</code> e uma porta <code>trunk</code>?</li>
-          <li>Para que serve a etiqueta 802.1Q?</li>
-          <li>Por que é recomendado colocar as portas sem uso em uma VLAN separada e desligá-las?</li>
-          <li>Que dispositivo é necessário para a comunicação entre as VLANs? Por quê?</li>
-          <li>O que é o <i>router-on-a-stick</i> e por que basta um único cabo entre o switch e o roteador?</li>
-          <li>O que faz o comando <code>encapsulation dot1Q 40</code> na subinterface <code>G0/0.40</code>?</li>
-          <li>Por que a interface física <code>G0/0</code> não recebe endereço IP?</li>
-          <li>Quantos saltos o <code>tracert</code> do PC0 para o PC6 mostrou? Quais endereços aparecem?</li>
-          <li>Por que o primeiro ping entre VLANs pode dar <i>Request timed out</i>?</li>
-          <li>Se a VLAN 30 for retirada de <code>switchport trunk allowed vlan</code>, o que acontece com os PCs do RH?</li>
-        </ol>
-      </div>
+    </div>
+  </div>
+</section>
+<section class="sec" id="erros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Solução de problemas</span>
+      <h2>Erros comuns</h2>
+      <p>Antes de pedir ajuda, confira estes casos. No switch, o comando que mais ajuda é <code>show vlan brief</code>; no roteador, <code>show ip interface brief</code>.</p>
+    </div>
+    <h3 class="err-g">Parte 1 · VLANs</h3>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Ping falha dentro da mesma VLAN</h3><p>Confira o IP e a máscara no PC e se o cabo está na porta certa. Rode <code>show vlan brief</code> e veja se a porta aparece na VLAN esperada.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Porta não aparece em nenhuma VLAN</h3><p>Portas configuradas como trunk não aparecem no <code>show vlan brief</code>. Use <code>show interfaces trunk</code> para vê-las.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% Invalid input detected”</h3><p>Verifique o modo da CLI no prompt. VLANs e interfaces se configuram em <code>(config)#</code>, e comandos <code>show</code> em <code>#</code> (ou com <code>do</code> na frente).</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Configuração sumiu ao reabrir</h3><p>Faltou <code>copy running-config startup-config</code> e salvar o arquivo .pkt (Ctrl+S) antes de fechar o Packet Tracer.</p></article>
+    </div>
+    <h3 class="err-g ch">Parte 2 · Roteamento entre VLANs</h3>
+    <div class="errs">
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Ping entre VLANs ainda falha</h3><p>Teste primeiro o <code>ping</code> ao gateway (<code>.1</code>) da própria VLAN. Se falhar, confira o Default Gateway no PC e se a subinterface da VLAN existe no roteador.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Subinterfaces aparecem <i>down</i></h3><p>A interface física <code>G0/0</code> está desligada. Entre em <code>interface gigabitEthernet 0/0</code> e rode <code>no shutdown</code>; as subinterfaces sobem junto.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Uma VLAN não alcança as outras</h3><p>O número em <code>encapsulation dot1Q</code> não bate com a VLAN, ou a VLAN ficou fora de <code>switchport trunk allowed vlan</code> na <code>Gi0/1</code> do switch.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>“% Configuring IP routing on a LAN subinterface…”</h3><p>Faltou o <code>encapsulation dot1Q</code> antes do <code>ip address</code>. Na subinterface, a etiqueta da VLAN vem sempre primeiro.</p></article>
     </div>
   </div>
 </section>
 </main>
 
 <footer>
-  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Câmpus Garopaba</span><span>Configurando 4 VLANs · Cisco Packet Tracer</span></div>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Redes de Computadores</span><span>Cisco Packet Tracer · Catalyst 2960 e Router 2911</span></div>
 <script>
 (function(){
   var $=function(id){return document.getElementById(id);};
@@ -1762,12 +1811,62 @@ document.querySelectorAll('table.stack').forEach(function(t){
 </footer>
 <script>
 (function(){
-  var btn=document.getElementById('burger'), menu=document.getElementById('menu');
-  function setOpen(o){ menu.classList.toggle('open',o); btn.setAttribute('aria-expanded',o); btn.setAttribute('aria-label',o?'Fechar menu das seções':'Abrir menu das seções'); }
-  btn.addEventListener('click',function(e){ e.stopPropagation(); setOpen(!menu.classList.contains('open')); });
-  menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ setOpen(false); }); });
-  document.addEventListener('click',function(e){ if(menu.classList.contains('open') && !menu.contains(e.target)) setOpen(false); });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && menu.classList.contains('open')){ setOpen(false); btn.focus(); } });
+  var menu=document.getElementById('menu'), mbtn=document.getElementById('menu-btn');
+  function setMenu(open){ menu.classList.toggle('open',open); mbtn.setAttribute('aria-expanded',open); mbtn.setAttribute('aria-label',open?'Fechar menu':'Abrir menu'); }
+  mbtn.addEventListener('click',function(e){ e.stopPropagation(); setMenu(!menu.classList.contains('open')); });
+  menu.addEventListener('click',function(e){ if(e.target.closest('a')) setMenu(false); });
+  document.addEventListener('click',function(e){ if(menu.classList.contains('open') && !e.target.closest('.bar')) setMenu(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape' && menu.classList.contains('open')){ setMenu(false); mbtn.focus(); } });
+})();
+</script>
+<script>
+(function(){
+  var V=[{c:'#2F9E41',f:'ALUNOS',id:10},{c:'#1C7EC0',f:'ADMINISTRATIVO',id:20},{c:'#C98204',f:'RH',id:30},{c:'#8250C8',f:'FINANCEIRO',id:40}];
+  var HN={nodes:[{x:64,y:46},{x:336,y:46},{x:64,y:208},{x:336,y:208}], R:{x:200,y:150}, pk:[]};
+  var svg=document.getElementById('hero-svg'), N='http://www.w3.org/2000/svg';
+  function mk(t,a,p,tx){ var e=document.createElementNS(N,t); for(var k in a) e.setAttribute(k,a[k]); if(tx!=null) e.textContent=tx; (p||svg).appendChild(e); return e; }
+  var defs=mk('defs',{}), gr=mk('radialGradient',{id:'hn-glow'},defs);
+  mk('stop',{offset:'0','stop-color':'#4DC262','stop-opacity':'.22'},gr); mk('stop',{offset:'1','stop-color':'#4DC262','stop-opacity':'0'},gr);
+  mk('circle',{cx:HN.R.x,cy:HN.R.y,r:115,fill:'url(#hn-glow)'});
+  HN.nodes.forEach(function(n,k){ mk('line',{'class':'hl',x1:n.x,y1:n.y,x2:HN.R.x,y2:HN.R.y,style:'stroke:'+V[k].c}); });
+  mk('line',{x1:HN.R.x,y1:HN.R.y-62,x2:HN.R.x,y2:HN.R.y-20,stroke:'#4DC262','stroke-width':3});
+  mk('circle',{'class':'hr-ring',cx:HN.R.x,cy:HN.R.y-74,r:20}); mk('circle',{'class':'hr-ring b',cx:HN.R.x,cy:HN.R.y-74,r:20});
+  HN.gpk=mk('g',{});
+  mk('circle',{cx:HN.R.x,cy:HN.R.y-74,r:20,fill:'#000',stroke:'#4DC262','stroke-width':3});
+  mk('path',{d:'M-9,-4 H8 M4,-8 L8,-4 L4,0 M9,4 H-8 M-4,0 L-8,4 L-4,8',transform:'translate('+HN.R.x+','+(HN.R.y-74)+')',fill:'none',stroke:'#8BE39B','stroke-width':2.2,'stroke-linecap':'round','stroke-linejoin':'round'});
+  mk('text',{x:HN.R.x+28,y:HN.R.y-70,'font-size':11,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--ink)'},null,'R-IFSC');
+  mk('rect',{x:HN.R.x-46,y:HN.R.y-20,width:92,height:38,rx:8,fill:'#000'}); mk('rect',{x:HN.R.x-46,y:HN.R.y-20,width:92,height:7,rx:3.5,fill:'#4DC262'});
+  for(var j=0;j<4;j++) mk('rect',{x:HN.R.x-36+j*20,y:HN.R.y+6,width:12,height:6,rx:1.5,fill:V[j].c});
+  mk('text',{x:HN.R.x,y:HN.R.y+2,'text-anchor':'middle','font-size':11,'font-weight':700,'font-family':'Sora, sans-serif',fill:'#D7F2DD'},null,'SW-IFSC');
+  HN.nodes.forEach(function(n,k){
+    var g=mk('g',{transform:'translate('+n.x+','+n.y+')'});
+    HN.nodes[k].halo=mk('circle',{r:34,fill:'none','stroke-width':2.5,opacity:0,style:'stroke:'+V[k].c},g);
+    mk('rect',{x:-27,y:-20,width:54,height:36,rx:5,'stroke-width':2.5,style:'fill:var(--surface);stroke:'+V[k].c},g);
+    mk('rect',{x:-22,y:-15,width:44,height:25,rx:2,opacity:.28,style:'fill:'+V[k].c},g);
+    mk('rect',{x:-4,y:16,width:8,height:6,style:'fill:var(--ink)'},g); mk('rect',{x:-13,y:21,width:26,height:4,rx:2,style:'fill:var(--ink)'},g);
+    mk('text',{y:42,'text-anchor':'middle','font-size':12,'font-weight':800,'font-family':'Sora, sans-serif','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:'+V[k].c+';stroke:var(--bg)'},g,'VLAN '+V[k].id);
+    mk('text',{y:55,'text-anchor':'middle','font-size':10,'font-weight':700,'font-family':'JetBrains Mono, monospace','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:'+V[k].c+';stroke:var(--bg)'},g,V[k].f);
+    mk('text',{y:68,'text-anchor':'middle','font-size':10,'font-weight':600,'font-family':'JetBrains Mono, monospace','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:var(--muted);stroke:var(--bg)'},g,'192.168.'+V[k].id+'.0/24');
+  });
+  function spawn(){ var a=Math.floor(Math.random()*4), b=(a+1+Math.floor(Math.random()*3))%4, c=document.createElementNS(N,'circle');
+    c.setAttribute('r',5.5); c.style.fill=V[a].c; c.style.stroke='var(--surface)'; c.setAttribute('stroke-width',1.5); HN.gpk.appendChild(c);
+    HN.pk.push({a:a,b:b,t:0,el:c,sp:0.0035+Math.random()*0.0015}); }
+  function frame(ts){
+    if(!HN.last) HN.last=ts; var dt=Math.min(ts-HN.last,50); HN.last=ts; HN.acc=(HN.acc||0)+dt;
+    if(HN.acc>1600){ HN.acc=0; spawn(); }
+    var R={x:HN.R.x,y:HN.R.y}, T={x:HN.R.x,y:HN.R.y-74};
+    HN.pk=HN.pk.filter(function(p){
+      p.t+=p.sp*dt/16; var A=HN.nodes[p.a], B=HN.nodes[p.b], x, y, t=p.t;
+      if(t<.3){ var u=t/.3; x=A.x+(R.x-A.x)*u; y=A.y+(R.y-A.y)*u; }
+      else if(t<.45){ var u2=(t-.3)/.15; x=R.x; y=R.y+(T.y-R.y)*u2; }
+      else if(t<.6){ var u3=(t-.45)/.15; x=T.x; y=T.y+(R.y-T.y)*u3; p.el.style.fill=V[p.b].c; }
+      else { var v=Math.min((t-.6)/.4,1); x=R.x+(B.x-R.x)*v; y=R.y+(B.y-R.y)*v; }
+      p.el.setAttribute('cx',x); p.el.setAttribute('cy',y);
+      if(p.t>=1){ p.el.remove(); var hb=HN.nodes[p.b].halo; hb.setAttribute('opacity',1); setTimeout(function(){ hb.setAttribute('opacity',0); },450); return false; }
+      return true; });
+    requestAnimationFrame(frame);
+  }
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){ spawn(); requestAnimationFrame(frame); }
 })();
 </script>
 
@@ -1970,6 +2069,7 @@ document.querySelectorAll('table.stack').forEach(function(t){
   paint();
 })();
 </script>
+
 
 </body>
 </html>
