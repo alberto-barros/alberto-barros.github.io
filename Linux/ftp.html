@@ -1,0 +1,1897 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>Servidor FTP no Linux</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
+<style>
+
+/* Layout: barra IFSC fixa com menu e Voltar, hero com roteiro da aula, seções em coluna de 1080px com passos em linha do tempo */
+:root{
+  --bg:#F3F9F4; --surface:#FFFFFF; --surface-2:#E7F5EA; --ink:#0F2417; --muted:#4A6353; --line:#D2E6D7;
+  --green:#2F9E41; --green-strong:#1E7A30; --mint:#C6EECD; --red:#C8191E;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#7FA88B; --code-key:#8BE39B;
+  --s1:#1C7EC0; --s2:#C98204; --s3:#8250C8; --s4:#D1407A; --neutral:#8A9A90;
+  --ok:#1E7A30; --bad:#C8191E; --warn:#A86A00;
+  --f-display:"Sora","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);padding:.1em .4em;border-radius:6px;color:var(--green-strong)}
+a{color:var(--green-strong)}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:6px}
+
+/* barra */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.ifsc-logo{height:40px;width:auto;flex:none;overflow:visible}
+.brand-txt{display:flex;flex-direction:column;line-height:1.05}
+.brand-txt .b1{font-family:"Open Sans",var(--f-body);font-weight:800;font-size:.95rem;letter-spacing:.01em}
+.brand-txt .b2{font-family:"Open Sans",var(--f-body);font-weight:400;font-size:.88rem}
+.brand-sep{width:1px;height:28px;background:var(--line)}
+.brand-course{font-weight:600;color:var(--muted);font-size:.8rem}
+@media (max-width:520px){.brand-sep,.brand-course{display:none}}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{text-decoration:none;color:var(--muted);font-weight:600;font-size:.85rem;padding:6px 10px;border-radius:999px}
+.nav a:hover{background:var(--surface-2);color:var(--green-strong)}
+.back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#C8191E;color:#fff;font-weight:700;font-size:.85rem;padding:7px 14px 7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px #C8191E;transition:background .2s,transform .2s}
+.back:hover{background:#A51318;transform:translateY(-1px)}
+.back svg{width:16px;height:16px}
+@media (max-width:860px){.back{margin-left:auto}}
+
+/* hero */
+.hero{background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding-block:56px 48px}
+.hero .wrap > *{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-strong)}
+.eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--green)}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.5rem);font-weight:800;letter-spacing:-.035em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.lead{font-size:1.12rem;color:var(--muted);max-width:56ch;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:600}
+.chip svg{width:16px;height:16px;color:var(--green)}
+.hero-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 40px -24px color-mix(in srgb,var(--green) 55%,transparent)}
+.hero-card h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.hero-card .hint{font-size:.8rem;color:var(--muted);margin-top:12px}
+.vlist{display:grid;gap:8px}
+.vrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--surface-2)}
+.vtag{font-family:var(--f-mono);font-weight:600;font-size:.78rem;color:#fff;background:var(--vc);padding:3px 8px;border-radius:7px;white-space:nowrap}
+:root[data-theme="dark"] .vtag{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
+.vrow b{font-family:var(--f-display);font-size:.9rem}
+.vrow span.net{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* seções */
+section.sec{padding-block:64px;border-bottom:1px solid var(--line)}
+.sec-head{display:grid;gap:10px;margin-bottom:32px}
+.sec-head p{color:var(--muted);font-size:1.05rem;max-width:70ch}
+.sec-num{font-family:var(--f-mono);font-size:.8rem;color:var(--green-strong);font-weight:600}
+
+.def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+.def > *{min-width:0}
+.def p+p{margin-top:14px}
+.def .big{font-size:1.2rem;line-height:1.55}
+.def .big strong{color:var(--green-strong)}
+.ip-anatomy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:16px}
+.ip-anatomy h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ipline{font-family:var(--f-mono);font-size:clamp(1.05rem,2.6vw,1.5rem);font-weight:600;display:flex;flex-wrap:wrap;gap:2px;font-variant-numeric:tabular-nums}
+.ipline .n{color:var(--green-strong)} .ipline .h{color:var(--s3)}
+.anat-rows{display:grid;gap:8px}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:8px 0;border-top:1px dashed var(--line)}
+.anat b{font-family:var(--f-display);font-size:.88rem}
+.anat span{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--mint);color:var(--green-strong);flex:none}
+.ico svg{width:22px;height:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ben{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:10px;align-content:start;transition:transform .2s,border-color .2s}
+.ben:hover{transform:translateY(-3px);border-color:var(--green)}
+.ben p{color:var(--muted);font-size:.95rem}
+.note{margin-top:20px;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;background:var(--surface-2);border-radius:var(--r);padding:18px 20px}
+.note p{font-size:.98rem}
+
+/* planejador */
+.planner{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+.pform{background:var(--surface);border:2px solid var(--green);border-radius:22px;padding:20px;display:grid;gap:18px}
+.field{display:grid;gap:6px}
+.field > label,.field > .lbl{font-weight:700;font-size:.88rem}
+.field small{color:var(--muted);font-size:.8rem;line-height:1.4}
+.field input[type=text],.field input[type=number],.field select{font:600 1rem var(--f-mono);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);width:100%}
+.field input:focus{border-color:var(--green)}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .78rem var(--f-mono);padding:5px 9px;border-radius:999px;cursor:pointer}
+.presets button:hover{border-color:var(--green);color:var(--green-strong)}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg button{border:0;background:transparent;font:600 .85rem var(--f-body);color:var(--muted);padding:7px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--green);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#08130C}}
+.msg{font-size:.85rem;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:start}
+.msg svg{width:18px;height:18px;margin-top:2px}
+.msg.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok)}
+.msg.warn{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)}
+.msg.bad{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+.msg span{color:var(--ink)}
+
+.pout{display:grid;gap:16px;min-width:0}
+.bits{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:10px}
+.bits-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline}
+.bits-top b{font-family:var(--f-mono);font-size:1rem}
+.bits-top span{font-size:.82rem;color:var(--muted)}
+.bitrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.oct{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:2px}
+.bit{aspect-ratio:1/1.3;max-width:100%;border-radius:4px;display:grid;place-items:center;font:600 .68rem var(--f-mono);background:var(--surface-2);color:var(--muted)}
+.bit.on{background:var(--green);color:#fff}
+:root[data-theme="dark"] .bit.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bit.on{color:#08130C}}
+.bitleg{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);font-weight:600}
+.bitleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.stat b{font-family:var(--f-display);font-size:1.5rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.76rem;color:var(--muted);font-weight:600}
+
+/* tabelas */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:.9rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td{font-variant-numeric:tabular-nums}
+td.mono{font-family:var(--f-mono);font-size:.84rem}
+tr:last-child td{border-bottom:0}
+
+/* animação */
+.anim{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.anim-ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.anim-ctl .seg{background:var(--surface)}
+.anim-ctl label{font-size:.85rem;font-weight:600;color:var(--muted);display:flex;gap:8px;align-items:center}
+.anim-ctl select{font:600 .85rem var(--f-body);padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn{border:0;background:var(--green);color:#fff;font:700 .9rem var(--f-body);padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.btn:hover{background:var(--green-strong)}
+:root[data-theme="dark"] .btn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#08130C}}
+.btn svg{width:16px;height:16px}
+.stage{overflow-x:auto}
+.stage svg{display:block;width:100%;min-width:600px;height:auto}
+.status{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);font-size:.92rem}
+.pill{font:700 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.pill.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.status .desc{color:var(--muted);flex:1;min-width:240px}
+
+/* passos */
+.steps{display:grid;list-style:none;padding:0;margin:0}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;position:relative;padding-bottom:40px}
+.step::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(var(--green),var(--line))}
+.step:last-child::before{display:none}
+.step-n{width:56px;height:56px;border-radius:18px;background:var(--green);color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.3rem;display:grid;place-items:center;box-shadow:0 10px 24px -12px var(--green);position:relative;z-index:1}
+:root[data-theme="dark"] .step-n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .step-n{color:#08130C}}
+.step.test .step-n{background:var(--surface);color:var(--green-strong);border:2px dashed var(--green)}
+.step-body{display:grid;gap:12px;min-width:0;padding-top:4px}
+.step-body h3{font-size:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--mint);color:var(--green-strong)}
+.step-body > p{color:var(--muted);max-width:70ch}
+.step-body ul{margin:0;padding-left:20px;color:var(--muted)}
+.step-body li{margin-block:4px}
+.step-body li b{color:var(--ink)}
+.pt-ui{display:flex;flex-wrap:wrap;gap:8px}
+.pt-ui span{font-size:.82rem;font-weight:600;background:var(--surface);border:1px solid var(--line);padding:5px 10px;border-radius:8px}
+.pt-ui span::after{content:"›";margin-left:8px;color:var(--green)}
+.pt-ui span:last-child::after{content:none}
+
+.code{background:var(--code-bg);color:var(--code-fg);border-radius:14px;overflow:hidden;min-width:0}
+.code-top{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-bottom:1px solid color-mix(in srgb,var(--code-fg) 12%,transparent)}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:#3b5a46}.dots i:first-child{background:#5BC46D}
+.code-top span{font:600 .75rem var(--f-mono);color:var(--code-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy{border:1px solid color-mix(in srgb,var(--code-fg) 25%,transparent);background:transparent;color:var(--code-fg);font:600 .75rem var(--f-body);padding:5px 10px;border-radius:8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.copy:hover{background:color-mix(in srgb,var(--code-fg) 10%,transparent)}
+.copy svg{width:14px;height:14px}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font:400 .86rem/1.65 var(--f-mono);white-space:pre}
+.code .c{color:var(--code-muted);font-style:italic}
+.code .p{color:var(--code-key);font-weight:600}
+
+/* testes */
+.tests{display:grid;gap:10px}
+.test-row{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:8px}
+.test-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.test-head .kind{font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.kind.same{background:var(--mint);color:var(--green-strong)}
+.kind.cross{background:color-mix(in srgb,var(--s1) 15%,transparent);color:var(--s1)}
+.test-head b{font-family:var(--f-mono);font-size:.88rem}
+.test-head small{color:var(--muted);font-size:.85rem}
+.test-row details{font-size:.88rem;color:var(--muted)}
+.test-row summary{cursor:pointer;font-weight:600;color:var(--green-strong);width:fit-content}
+.test-row details p{margin-top:6px;display:flex;gap:8px;align-items:flex-start}
+.test-row details svg{width:18px;height:18px;flex:none;margin-top:2px}
+.r-ok{color:var(--ok)} .r-bad{color:var(--bad)}
+.observe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.obs{background:var(--surface-2);border-radius:14px;padding:14px;display:grid;grid-template-columns:40px 1fr;gap:12px;font-size:.92rem}
+.obs b{display:block;font-family:var(--f-display)}
+.obs span{color:var(--muted)}
+
+/* entrega */
+.deliver.solo{grid-template-columns:minmax(0,720px)}
+.deliver{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
+.deliver > *{min-width:0}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;gap:16px}
+.dcard.hl{border:2px solid var(--green);background:linear-gradient(180deg,var(--surface-2),var(--surface) 60%)}
+.fname{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--code-bg);color:var(--code-key);font:600 1.15rem var(--f-mono);padding:14px 16px;border-radius:14px;word-break:break-all}
+.fname span{flex:1;min-width:0}
+.check{display:grid;gap:8px}
+.check label{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:.95rem;cursor:pointer;padding:8px 10px;border-radius:10px}
+.check label:hover{background:var(--surface-2)}
+.check input{width:18px;height:18px;accent-color:var(--green);margin-top:3px}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+.qs{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--ink)}
+.qs li::marker{font-family:var(--f-display);font-weight:700;color:var(--green-strong)}
+
+.errs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.err{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:8px}
+.err h3{font-size:1rem;display:flex;gap:10px;align-items:center}
+.err h3 svg{width:20px;height:20px;color:var(--red);flex:none}
+.err p{font-size:.92rem;color:var(--muted)}
+
+footer{padding-block:36px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand svg{height:52px;width:auto}
+
+@media (max-width:920px){.planner{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .hero .wrap,.def,.deliver{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .nav{display:none}
+}
+@media (max-width:600px){
+  .grid3,.errs,.observe,.stats{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .step{grid-template-columns:44px minmax(0,1fr);gap:14px}
+  .step-n{width:44px;height:44px;border-radius:14px;font-size:1.1rem}
+  .step::before{left:21px;top:44px}
+  section.sec{padding-block:48px}
+  .bit{font-size:.55rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.fixed{display:flex;align-items:baseline;gap:10px;padding:10px 12px;border-radius:12px;border:1px dashed var(--green);background:var(--surface-2)}
+.fixed b{font:700 1.2rem var(--f-mono);color:var(--green-strong)}
+.fixed span{font:600 .85rem var(--f-mono);color:var(--muted)}
+.bit{animation:bitpop .35s both;animation-delay:calc(var(--i,0) * 22ms)}
+.r-ring{transform-box:view-box;transform-origin:360px 62px;animation:rring 2.4s ease-out infinite}
+@keyframes rring{from{transform:scale(1);opacity:.7}to{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion:reduce){.r-ring{animation:none;opacity:0}}
+.step-body h4.sub{font-family:var(--f-display);font-size:1.02rem;font-weight:700;margin:10px 0 0;display:flex;align-items:center;gap:10px}
+.step-body h4.sub::before{content:"";width:16px;height:3px;border-radius:3px;background:var(--green)}
+@keyframes bitpop{from{transform:scale(.6);opacity:.35}}
+@media (prefers-reduced-motion:reduce){.bit{animation:none}}
+
+/* ---- acréscimos desta aula ---- */
+.osi-wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.osi-wrap > *{min-width:0}
+.osi{display:grid;gap:6px}
+.layer{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.layer .ln{font:800 1.15rem var(--f-display);color:var(--muted);text-align:center}
+.layer b{font-family:var(--f-display);font-size:.95rem}
+.layer small{display:block;color:var(--muted);font-size:.8rem;line-height:1.35}
+.layer .pdu{font:600 .72rem var(--f-mono);color:var(--muted);background:var(--surface-2);padding:3px 8px;border-radius:7px;white-space:nowrap}
+.layer.hl{border:2px solid var(--green);background:linear-gradient(90deg,var(--mint),var(--surface) 75%);padding:14px}
+.layer.hl .ln{color:var(--green-strong);font-size:1.4rem}
+.layer.hl b{font-size:1.05rem}
+.layer.hl .pdu{background:var(--green);color:#fff}
+:root[data-theme="dark"] .layer.hl .pdu{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .layer.hl .pdu{color:#08130C}}
+.layer.sw{border-style:dashed;border-color:var(--s1)}
+.layer .dev{font:700 .66rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--s1);margin-left:6px}
+.encap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:14px}
+.encap h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.hdr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;font:600 .74rem var(--f-mono)}
+.hdr span{background:var(--surface-2);padding:8px 4px;border-radius:8px;text-align:center;color:var(--muted)}
+.hdr .w2{grid-column:span 2}.hdr .w4{grid-column:span 4}
+.hdr .ip{background:var(--mint);color:var(--green-strong);font-size:.84rem}
+.hdr .ip em{font-style:normal;display:block;font-size:.66rem;opacity:.8;letter-spacing:.06em;text-transform:uppercase}
+.nest{display:grid;gap:0;font:600 .78rem var(--f-mono)}
+.nest div{border-radius:10px;padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nest .f{background:color-mix(in srgb,var(--s1) 14%,transparent);color:var(--s1)}
+.nest .p{background:var(--mint);color:var(--green-strong)}
+.nest .s{background:var(--surface-2);color:var(--muted)}
+.nest i{font-style:normal;padding:3px 7px;border-radius:6px;background:var(--surface)}
+
+.cls-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.cls{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--vc);border-radius:var(--r);padding:20px;display:grid;gap:12px;align-content:start}
+.cls-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.cls-top b{font:800 2.2rem var(--f-display);color:var(--vc);line-height:1}
+.cls-top span{font:600 .8rem var(--f-mono);color:var(--muted)}
+.cls .range{font:600 1.05rem var(--f-mono)}
+.cls .oct4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;font:600 .72rem var(--f-mono);text-align:center}
+.cls .oct4 span{padding:7px 2px;border-radius:7px;background:var(--surface-2);color:var(--muted)}
+.cls .oct4 span.n{background:var(--vc);color:#fff}
+:root[data-theme="dark"] .cls .oct4 span.n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cls .oct4 span.n{color:#08130C}}
+.cls dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.88rem}
+.cls dt{color:var(--muted)}
+.cls dd{margin:0;font-family:var(--f-mono);font-size:.84rem;text-align:right;font-variant-numeric:tabular-nums}
+.minor{margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.minor div{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:.9rem}
+.minor b{font-family:var(--f-display);display:block}
+.minor code{background:var(--surface)}
+.minor span{color:var(--muted)}
+
+.classify{margin-top:28px;display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
+.cbadge{display:flex;align-items:center;gap:14px}
+.cbadge b{font:800 2.6rem var(--f-display);color:var(--vc,var(--muted));line-height:1}
+.cbadge span{font-size:.95rem;color:var(--muted)}
+.first-oct{font:600 1.2rem var(--f-mono);letter-spacing:.04em}
+.first-oct .lead-bits{color:var(--vc,var(--green-strong));text-decoration:underline;text-underline-offset:4px}
+
+.panel{display:grid;gap:16px}
+.cfg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.cfg-grid > *{min-width:0}
+.cfg-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;min-width:0}
+.cfg-card > p{color:var(--muted);font-size:.93rem}
+.os-tabs{margin-bottom:20px}
+
+.anim-body{display:grid;grid-template-columns:minmax(0,1fr) 270px}
+.anim-body > *{min-width:0}
+.mac{border-left:1px solid var(--line);padding:16px;display:grid;gap:10px;align-content:start;background:var(--surface)}
+.mac h3{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mac table{min-width:0;font-size:.8rem}
+.mac th,.mac td{padding:7px 8px}
+.mac td{font-family:var(--f-mono);font-size:.76rem}
+.mac .empty{font-size:.84rem;color:var(--muted)}
+.mac tr.new td{animation:flash 1.2s}
+@keyframes flash{from{background:var(--mint)}}
+.linkbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .8rem var(--f-body);padding:6px 10px;border-radius:999px;cursor:pointer;justify-self:start}
+.linkbtn:hover{border-color:var(--green);color:var(--green-strong)}
+.log{margin:0;padding:12px 18px 16px 38px;border-top:1px solid var(--line);display:grid;gap:6px;font-size:.9rem;color:var(--muted);min-height:58px}
+.log li::marker{font-family:var(--f-mono);font-weight:600;color:var(--green-strong)}
+.log li b{color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);font-weight:600}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.btn[disabled]{opacity:.55;cursor:wait}
+.term{font-family:var(--f-mono)}
+@media (max-width:920px){.classify{grid-template-columns:1fr}}
+@media (max-width:860px){.osi-wrap,.cfg-grid,.anim-body{grid-template-columns:1fr}.cls-grid,.minor{grid-template-columns:1fr}.mac{border-left:0;border-top:1px solid var(--line)}}
+
+/* desenho da topologia + endereçamento */
+.drawing{margin:0 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 18px 12px;display:grid;gap:8px}
+.draw-scroll{overflow-x:auto}
+#draw{display:block;width:100%;min-width:680px;height:auto}
+.drawing figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+#draw .grp-l{font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.1em}
+#draw .grp-n{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+#draw .cab{stroke-width:2.2;fill:none}
+#draw .sw-body{fill:var(--code-bg)}
+#draw .sw-top{fill:var(--green)}
+#draw .led{fill:var(--code-key)}
+#draw .sw-t{fill:var(--code-fg);font-family:var(--f-display);font-weight:700;font-size:15px;text-anchor:middle}
+#draw .sw-s{fill:var(--code-muted);font-family:var(--f-mono);font-size:10px;text-anchor:middle}
+#draw .mon{fill:var(--surface);stroke-width:2}
+#draw .stand{fill:var(--ink)}
+#draw .pc-t{fill:var(--ink);font-family:var(--f-display);font-weight:700;font-size:14px;text-anchor:middle}
+#draw .pc-ip{fill:var(--muted);font-family:var(--f-mono);font-size:11px;text-anchor:middle}
+#draw .port{fill:var(--muted);font-family:var(--f-mono);font-size:10px;text-anchor:middle}
+.addr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.addr{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
+.addr-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(90deg,color-mix(in srgb,var(--vc) 16%,var(--surface)),var(--surface))}
+.addr-head .ic{width:40px;height:40px;border-radius:11px;background:var(--vc);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.1rem;flex:none}
+:root[data-theme="dark"] .addr-head .ic{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .addr-head .ic{color:#08130C}}
+.addr-head strong{font-family:var(--f-display);font-size:1.05rem;display:block}
+.addr-head span{font-size:.85rem;color:var(--muted)}
+.addr table{min-width:0}
+.addr td,.addr th{padding:8px 14px}
+.uplink{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px dashed var(--green);border-radius:var(--r);padding:12px 16px;font-size:.9rem;color:var(--muted)}
+@media (max-width:700px){.addr-grid{grid-template-columns:1fr}}
+.prog-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+#prog-txt{font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+#prog-txt b{font:800 1.5rem var(--f-display);color:var(--green-strong)}
+#prog-txt.done{color:var(--ok);font-weight:700}
+.progress{height:12px}
+.progress i{background:linear-gradient(90deg,var(--green),var(--green-strong))}
+.dots{gap:7px}
+.dots i{width:13px;height:13px;border-radius:50%;display:grid;place-items:center;font:700 10px/1 var(--f-body);font-style:normal;color:rgba(0,0,0,.6)}
+.dots i:nth-child(1){background:#28C840}
+.dots i:nth-child(2){background:#FEBC2E}
+.dots i:nth-child(3){background:#FF5F57}
+.dots i:nth-child(1)::before{content:"+"}
+.dots i:nth-child(2)::before{content:"−"}
+.dots i:nth-child(3)::before{content:"×";font-size:12px}
+.shot{margin:0;display:grid;gap:8px;justify-items:center}
+.shot img{display:block;width:100%;max-width:340px;height:auto;border-radius:12px;border:1px solid var(--line);box-shadow:0 14px 30px -20px rgba(0,0,0,.45)}
+.shot figcaption{font-size:.8rem;color:var(--muted);text-align:center}
+.cfg-grid.one{grid-template-columns:minmax(0,1fr)}
+.shot.ncpa img{max-width:100%}
+.gui-lin{grid-column:1/-1}
+.gui-lin .shot img{max-width:560px}
+.hdr{gap:3px}
+.hdr span{border:1px solid transparent;font-weight:600}
+.hdr .f-fmt,.hdr-leg .f-fmt{background:color-mix(in srgb,var(--s1) 14%,var(--surface));color:var(--s1);border-color:color-mix(in srgb,var(--s1) 30%,transparent)}
+.hdr .f-frag,.hdr-leg .f-frag{background:color-mix(in srgb,var(--s2) 16%,var(--surface));color:var(--warn);border-color:color-mix(in srgb,var(--s2) 35%,transparent)}
+.hdr .f-ttl,.hdr-leg .f-ttl{background:color-mix(in srgb,var(--s4) 15%,var(--surface));color:var(--s4);border-color:color-mix(in srgb,var(--s4) 35%,transparent)}
+.hdr .f-proto,.hdr-leg .f-proto{background:color-mix(in srgb,var(--s3) 15%,var(--surface));color:var(--s3);border-color:color-mix(in srgb,var(--s3) 35%,transparent)}
+.hdr .f-chk{background:var(--surface-2);color:var(--muted)}
+.hdr .ip,.hdr-leg .ip{background:var(--green);color:#fff;border-color:var(--green-strong)}
+.hdr .ip.dst{background:var(--green-strong)}
+.hdr .ip{font-size:.95rem;padding:10px 4px}
+.hdr .ip em{opacity:.85}
+:root[data-theme="dark"] .hdr .ip{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hdr .ip{color:#08130C}}
+.hdr-ruler{display:flex;justify-content:space-between;font:600 .66rem var(--f-mono);color:var(--muted);margin-bottom:-8px;padding-inline:2px}
+.hdr-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.78rem;color:var(--muted);font-weight:600}
+.hdr-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px;border:1px solid}
+/* ---- responsivo ---- */
+#draw .sw-s{text-anchor:middle}
+/* barra: logo, botões das seções e Voltar na mesma linha */
+.bar .wrap{flex-wrap:nowrap;gap:12px}
+.brand{flex:none}
+.nav{display:flex;flex:1 1 auto;min-width:0;margin-left:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-block:2px}
+.nav::-webkit-scrollbar{display:none}
+.nav a:first-child{margin-left:auto}
+.nav a{white-space:nowrap;flex:none}
+.back{flex:none;margin-left:0!important}
+@media (max-width:1100px){.nav a{background:var(--surface);border:1px solid var(--line)}}
+.burger{display:none}
+@media (max-width:700px){
+  .bar .wrap{gap:10px}
+  .brand{margin-right:auto}
+  .burger{order:3;display:inline-grid;place-content:center;gap:4px;width:42px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
+  .burger span{display:block;width:18px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s}
+  .burger[aria-expanded="true"]{background:var(--green);border-color:var(--green)}
+  .burger[aria-expanded="true"] span{background:var(--surface)}
+  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;overflow:visible;
+    background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px rgba(0,0,0,.35);
+    padding:10px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
+  .nav.open{display:flex}
+  .nav a:first-child{margin-left:0}
+  .nav a{background:transparent;border:0;border-radius:12px;font-size:1rem;padding:12px 14px;color:var(--ink)}
+  .nav a:hover,.nav a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
+  .back{padding:7px 12px 7px 10px}
+}
+@media (max-width:400px){.brand-txt{display:none}}
+@media (max-width:600px){
+  .stage svg{min-width:0}
+  #draw{min-width:0}
+  .drawing{padding:12px 10px 10px}
+  .hero .wrap{padding-block:36px 32px;gap:28px}
+  .anim-ctl{gap:10px}
+  .anim-ctl label{flex:1 1 100%;justify-content:space-between}
+  .anim-ctl select{flex:1;max-width:220px}
+  .anim-ctl .btn{flex:1 1 100%;justify-content:center}
+  table{min-width:0;font-size:.8rem}
+  th,td{padding:9px 8px}
+  th{font-size:.64rem}
+  .addr{overflow-x:auto}
+  .addr td,.addr th{padding:8px 8px}
+  .code pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.78rem}
+  .hdr{font-size:.66rem}
+  .hdr span{padding:7px 2px}
+  .cls-top b{font-size:1.9rem}
+  .classify .ip-anatomy{padding:16px}
+  .first-oct{font-size:1rem}
+  .test-head b{font-size:.8rem;overflow-wrap:anywhere}
+  .layer{grid-template-columns:30px minmax(0,1fr);row-gap:4px}
+  .layer .pdu{grid-column:2;justify-self:start}
+  .uplink{font-size:.84rem}
+  .dcard{padding:18px}
+  .err{padding:16px}
+  h2{font-size:1.55rem}
+  .lead{font-size:1.02rem}
+}
+/* destaque: descubra a classe */
+.finder{margin-top:40px;border:2px solid var(--green);border-radius:26px;padding:28px;display:grid;gap:22px;
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 18%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,var(--mint),var(--surface) 70%);
+  box-shadow:0 24px 50px -30px color-mix(in srgb,var(--green) 70%,transparent)}
+.finder-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center}
+.finder-head .ico{width:64px;height:64px;border-radius:18px;background:var(--green);color:#fff}
+.finder-head .ico svg{width:34px;height:34px}
+:root[data-theme="dark"] .finder-head .ico{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .finder-head .ico{color:#08130C}}
+.finder-head h3{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em;margin-top:6px}
+.finder-head p{color:var(--muted);margin-top:6px;max-width:62ch}
+.finder .classify{margin-top:0}
+.finder #cip{font-size:1.6rem;padding:14px 16px;border:2px solid var(--green);background:var(--surface)}
+.finder #cip:focus{box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 25%,transparent);outline:none}
+.finder .pform{border-width:1px;border-color:var(--line)}
+.finder #cout{border:2px solid var(--vc,var(--line));box-shadow:0 12px 30px -22px var(--vc,#000)}
+.finder .cbadge b{font-size:3.4rem}
+@media (max-width:600px){.finder{padding:18px;border-radius:20px;margin-top:28px}.finder-head{grid-template-columns:1fr}.finder-head .ico{width:52px;height:52px}.finder #cip{font-size:1.3rem}}
+
+
+
+/* ---- acréscimos: guia servidor web ---- */
+section.sec{scroll-margin-top:64px}
+.lab-row{display:flex;flex-wrap:wrap;gap:6px}
+.lab-row code{background:var(--surface);border:1px solid var(--line)}
+.out pre{color:var(--code-muted)}
+.out .ok{color:var(--code-key);font-weight:600}
+.out .w{color:#F0B23B}
+.code .c{font-style:italic}
+.ou{font:800 .8rem var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:var(--green-strong);display:flex;align-items:center;gap:10px}
+.ou::before,.ou::after{content:"";height:1px;flex:1;background:var(--line)}
+.note.warn{background:color-mix(in srgb,var(--red) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--red) 28%,transparent)}
+.note.warn .ico{background:color-mix(in srgb,var(--red) 14%,var(--surface));color:var(--red)}
+.step-body .note{margin-top:0}
+kbd{font-family:var(--f-mono);font-size:.8em;background:var(--surface);border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;white-space:nowrap;color:var(--ink)}
+.sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:28px 0 12px}
+.files td:first-child{font-family:var(--f-mono);font-size:.84rem;color:var(--green-strong)}
+.files table{min-width:0}
+.files td{white-space:normal}
+/* linha de log anotada */
+.logline{background:var(--code-bg);border-radius:14px;padding:16px;font:400 .82rem/2.4 var(--f-mono);color:var(--code-fg);overflow-x:auto}
+.logline .seg{padding:3px 4px;border-radius:5px;border-bottom:2px solid}
+.g1{background:rgba(111,224,129,.16);border-color:#6fe081}
+.g2{background:rgba(255,211,107,.14);border-color:#ffd36b}
+.g3{background:rgba(127,190,255,.14);border-color:#7fbeff}
+.g4{background:rgba(255,130,130,.16);border-color:#ff8a8a}
+.g5{background:rgba(200,160,255,.14);border-color:#c8a0ff}
+.leg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px}
+.leg div{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;background:var(--surface-2);border-radius:10px;padding:8px 10px}
+.leg i{width:12px;height:12px;border-radius:3px;flex:none;margin-top:6px}
+.codes{display:flex;flex-wrap:wrap;gap:8px}
+.codes span{font-size:.86rem;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.codes b{font-family:var(--f-mono);margin-right:4px}
+/* Apache x Nginx */
+.cmp{--ap:#E0A800;--ng:var(--green);border:2px solid #111;border-radius:16px;background:var(--surface);overflow-x:auto;box-shadow:0 12px 30px -18px rgba(0,0,0,.3)}
+.cmp table{min-width:0}
+.cmp th,.cmp td{white-space:normal;padding:14px 18px}
+.cmp th{background:#1B1F1C;color:#C9D3CC}
+.cmp th .sel{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;letter-spacing:.02em;text-transform:none;font-weight:700;color:#fff}
+.cmp th .sel::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--sc)}
+.cmp tbody tr:hover td{background:var(--surface-2)}
+.cmp td:first-child{color:var(--muted);font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.cmp td:nth-child(2){box-shadow:inset 3px 0 0 color-mix(in srgb,var(--ap) 70%,transparent)}
+.cmp td:nth-child(3){box-shadow:inset 3px 0 0 color-mix(in srgb,var(--ng) 70%,transparent)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cmp{border-color:#000}}
+:root[data-theme="dark"] .cmp{border-color:#000}
+/* exercícios */
+.exs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:14px}
+.exc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;transition:transform .2s,border-color .2s}
+.exc:hover{transform:translateY(-3px);border-color:var(--green)}
+.exc .n{width:44px;height:44px;border-radius:14px;background:var(--green);color:#fff;font:800 1.05rem var(--f-display);display:grid;place-items:center}
+:root[data-theme="dark"] .exc .n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .exc .n{color:#08130C}}
+.exc p{padding-top:8px}
+.hero h1 em{color:var(--green)}
+.vrow .net{text-align:right}
+@media (max-width:600px){
+  .cmp table,.cmp tbody,.cmp tr,.cmp td{display:block;width:100%}
+  .cmp thead{display:none}
+  .cmp tbody tr{border-bottom:1px solid var(--line)}
+  .cmp tbody tr:last-child{border-bottom:0}
+  .cmp td{border:0!important;box-shadow:none!important;padding:6px 14px}
+  .cmp td:first-child{padding-top:12px;white-space:normal}
+  .cmp td:nth-child(2),.cmp td:nth-child(3){display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;align-items:start}
+  .cmp td:nth-child(3){padding-bottom:12px}
+  .cmp td code{justify-self:start}
+  .cmp td:nth-child(2)::before,.cmp td:nth-child(3)::before{font-weight:700;font-size:.82rem}
+  .cmp td:nth-child(2)::before{content:"● Apache";color:#B8900C}
+  .cmp td:nth-child(3)::before{content:"● Nginx";color:var(--green-strong)}
+  .logline{font-size:.72rem;line-height:2.2}
+  .files td:first-child{overflow-wrap:anywhere}
+  .vrow{grid-template-columns:auto 1fr}
+  .vrow .net{grid-column:1/-1;text-align:left}
+}
+
+
+/* ---- acréscimos: guia servidor FTP ---- */
+.ports{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px}
+.port-card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--vc);border-radius:var(--r);padding:16px 18px;display:grid;gap:6px;align-content:start}
+.port-card b{font:800 2rem var(--f-display);color:var(--vc);line-height:1;font-variant-numeric:tabular-nums}
+.port-card strong{font-family:var(--f-display);font-size:.95rem}
+.port-card span{font-size:.88rem;color:var(--muted)}
+.care{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.care .err h3 svg{color:var(--warn);transition:color .2s}
+.care .err{transition:background .2s,border-color .2s,transform .2s}
+.care .err:hover{background:color-mix(in srgb,var(--red) 9%,var(--surface));border-color:color-mix(in srgb,var(--red) 40%,var(--line));transform:translateY(-3px)}
+.care .err:hover h3 svg{color:var(--red)}
+@media (max-width:700px){.care{grid-template-columns:1fr}}
+
+/* topologia hospedeira x VM */
+.topo{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;display:grid;grid-template-columns:minmax(0,1fr) 230px minmax(0,1fr);gap:14px;align-items:center}
+.topo > *{min-width:0}
+.box{border:2px solid var(--vc);border-radius:16px;padding:14px 16px;display:grid;gap:8px;background:color-mix(in srgb,var(--vc) 7%,var(--surface))}
+.box .bh{display:flex;align-items:center;gap:10px}
+.box .bh svg{width:26px;height:26px;color:var(--vc);flex:none}
+.box .bh b{font-family:var(--f-display);font-size:1rem;display:block;line-height:1.2}
+.box .bh span{font-size:.8rem;color:var(--muted)}
+.box ul{margin:0;padding-left:18px;font-size:.88rem;color:var(--muted);display:grid;gap:2px}
+.box ul code{font-size:.8rem}
+.link{display:grid;gap:8px;justify-items:center;text-align:center}
+.link > b{font:700 .95rem var(--f-mono);color:var(--green-strong)}
+.track{position:relative;width:100%;height:46px}
+.track .wire{position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:4px;background:repeating-linear-gradient(90deg,var(--green) 0 10px,transparent 10px 16px);background-size:16px 4px;animation:wire 1s linear infinite}
+@keyframes wire{to{background-position:16px 0}}
+.pkt{position:absolute;top:50%;left:0;transform:translate(0,-50%);display:inline-flex;align-items:center;gap:4px;font:700 .68rem var(--f-mono);white-space:nowrap;padding:4px 8px;border-radius:999px;color:#fff;opacity:0;box-shadow:0 6px 14px -6px rgba(0,0,0,.45)}
+.pkt svg{width:12px;height:12px}
+:root[data-theme="dark"] .pkt{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pkt{color:#08130C}}
+.pkt.p1{background:var(--s2);animation:pr 9s ease-in-out infinite}
+.pkt.p2{background:var(--s1);animation:pl 9s ease-in-out infinite}
+.pkt.p3{background:var(--green);animation:pr 9s ease-in-out infinite 6s}
+.pkt.p1{animation-name:pr1}
+@keyframes pr1{0%{left:0;transform:translate(0,-50%);opacity:0}4%{opacity:1}28%{left:100%;transform:translate(-100%,-50%);opacity:1}32%,100%{left:100%;transform:translate(-100%,-50%);opacity:0}}
+@keyframes pl{0%,33%{left:100%;transform:translate(-100%,-50%);opacity:0}37%{opacity:1}61%{left:0;transform:translate(0,-50%);opacity:1}65%,100%{left:0;transform:translate(0,-50%);opacity:0}}
+@keyframes pr{0%{left:0;transform:translate(0,-50%);opacity:0}4%{opacity:1}28%{left:100%;transform:translate(-100%,-50%);opacity:1}32%,100%{left:100%;transform:translate(-100%,-50%);opacity:0}}
+.pkt.p3{animation-delay:0s;animation-name:pr3}
+@keyframes pr3{0%,66%{left:0;transform:translate(0,-50%);opacity:0}70%{opacity:1}94%{left:100%;transform:translate(-100%,-50%);opacity:1}98%,100%{left:100%;transform:translate(-100%,-50%);opacity:0}}
+.phase{display:grid;width:100%;min-height:2.6em}
+.phase span{grid-area:1/1;font-size:.8rem;color:var(--muted);opacity:0;animation:ph 9s infinite}
+.phase span b{display:block;color:var(--ink);font-size:.86rem}
+.phase .ph2{animation-delay:3s}.phase .ph3{animation-delay:6s}
+@keyframes ph{0%{opacity:0}3%,30%{opacity:1}33.3%,100%{opacity:0}}
+.topo .box{transition:box-shadow .3s}
+.topo .bx-host{animation:glow-h 9s infinite}
+.topo .bx-vm{animation:glow-v 9s infinite}
+@keyframes glow-h{0%,30%,66%,96%{box-shadow:0 0 0 4px color-mix(in srgb,var(--s1) 30%,transparent)}33%,63%,99%,100%{box-shadow:none}}
+@keyframes glow-v{0%,32%,64%,100%{box-shadow:none}35%,61%{box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 30%,transparent)}}
+@media (max-width:760px){
+  .topo{grid-template-columns:1fr}
+  .track{width:120px;height:110px}
+  .track .wire{left:50%;right:auto;top:0;bottom:0;width:4px;height:auto;margin:0 0 0 -2px;background:repeating-linear-gradient(180deg,var(--green) 0 10px,transparent 10px 16px);background-size:4px 16px;animation-name:wirev}
+  @keyframes wirev{to{background-position:0 16px}}
+  .pkt{left:50%;top:0;transform:translate(-50%,0)}
+  .pkt.p1{animation-name:vd1}.pkt.p2{animation-name:vu}.pkt.p3{animation-name:vd3}
+  @keyframes vd1{0%{top:0;transform:translate(-50%,0);opacity:0}4%{opacity:1}28%{top:100%;transform:translate(-50%,-100%);opacity:1}32%,100%{top:100%;transform:translate(-50%,-100%);opacity:0}}
+  @keyframes vu{0%,33%{top:100%;transform:translate(-50%,-100%);opacity:0}37%{opacity:1}61%{top:0;transform:translate(-50%,0);opacity:1}65%,100%{top:0;transform:translate(-50%,0);opacity:0}}
+  @keyframes vd3{0%,66%{top:0;transform:translate(-50%,0);opacity:0}70%{opacity:1}94%{top:100%;transform:translate(-50%,-100%);opacity:1}98%,100%{top:100%;transform:translate(-50%,-100%);opacity:0}}
+}
+@media (prefers-reduced-motion:reduce){
+  .track .wire,.pkt,.topo .bx-host,.topo .bx-vm{animation:none}
+  .pkt{display:none}
+  .phase{gap:6px}
+  .phase span{grid-area:auto;opacity:1;animation:none}
+}
+
+/* tabela de configuração */
+.cfg td:first-child{font-family:var(--f-mono);font-size:.84rem;color:var(--green-strong)}
+.cfg td{white-space:normal}
+.cfg table{min-width:0}
+
+/* maquete do FileZilla */
+.fz{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);font-size:.8rem}
+.fz-title{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface-2);border-bottom:1px solid var(--line);font-weight:700;color:var(--muted)}
+.fz-quick{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);align-items:end}
+.fz-f{display:grid;gap:3px;flex:1 1 110px;min-width:0}
+.fz-f.port{flex:0 0 70px}
+.fz-f label{font-weight:700;font-size:.72rem;color:var(--muted)}
+.fz-f div{font:600 .8rem var(--f-mono);padding:6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--bg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fz-f.hl div{border:2px solid var(--green)}
+.fz-go{font:700 .8rem var(--f-body);padding:7px 12px;border-radius:7px;background:var(--green);color:#fff;white-space:nowrap}
+:root[data-theme="dark"] .fz-go{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fz-go{color:#08130C}}
+.fz-log{padding:8px 12px;border-bottom:1px solid var(--line);font:400 .74rem/1.6 var(--f-mono);color:var(--muted);background:var(--bg)}
+.fz-log .ok{color:var(--ok);font-weight:600}
+.fz-panes{display:grid;grid-template-columns:1fr 1fr}
+.fz-pane{min-width:0;display:grid;align-content:start}
+.fz-pane + .fz-pane{border-left:1px solid var(--line)}
+.fz-ph{padding:8px 12px;font-weight:700;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.fz-ph em{font-style:normal;font:700 .66rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--vc);color:#fff}
+:root[data-theme="dark"] .fz-ph em{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fz-ph em{color:#08130C}}
+.fz-path{margin:8px 12px;font:600 .76rem var(--f-mono);padding:5px 8px;border-radius:7px;border:1px solid var(--line);background:var(--bg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fz-path.hl{border:2px solid var(--vc)}
+.fz-file{display:flex;align-items:center;gap:8px;padding:5px 12px;font-family:var(--f-mono);font-size:.76rem}
+.fz-file svg{width:15px;height:15px;color:var(--vc);flex:none}
+.fz-file.sel{background:color-mix(in srgb,var(--vc) 14%,transparent)}
+.fz-queue{border-top:1px solid var(--line);padding:8px 12px;display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-weight:600;background:var(--surface-2)}
+.fz-queue b{color:var(--ok)}
+.fz-cap{font-size:.84rem;color:var(--muted);text-align:center;margin-top:8px}
+@media (max-width:560px){.fz-panes{grid-template-columns:1fr}.fz-pane + .fz-pane{border-left:0;border-top:1px solid var(--line)}}
+
+/* download do modelo */
+.dl{border:2px solid var(--green);border-radius:22px;padding:22px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:center;
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 16%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,var(--mint),var(--surface) 70%)}
+.dl > *{min-width:0}
+.dl h3{font-size:1.35rem;font-weight:800}
+.dl p{color:var(--muted);margin-top:6px}
+.dl-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
+.btn.ghost{background:var(--surface);color:var(--green-strong);border:1px solid var(--green)}
+.btn.ghost:hover{background:var(--surface-2)}
+#dl-msg{font-size:.88rem;margin-top:10px;min-height:1.4em;color:var(--muted)}
+#dl-msg.ok{color:var(--ok);font-weight:600}
+#dl-msg.bad{color:var(--bad);font-weight:600}
+.mock{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#F3F9F4;color:#0F2417;box-shadow:0 18px 36px -24px rgba(0,0,0,.45);font-family:var(--f-body)}
+.mock-bar{background:#E3E9E5;padding:6px 10px;display:flex;gap:6px;align-items:center}
+.mock-bar i{width:8px;height:8px;border-radius:50%;background:#B9C6BE}
+.mock-bar span{flex:1;margin-left:6px;background:#fff;border-radius:6px;font:600 .66rem var(--f-mono);padding:3px 8px;color:#4A6353}
+.mock-hd{background:#2F9E41;color:#fff;text-align:center;padding:16px 10px}
+.mock-hd b{font-family:var(--f-display);font-size:.95rem;display:block}
+.mock-hd small{font-size:.66rem;opacity:.9}
+.mock-bd{padding:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mock-bd div{background:#fff;border:1px solid #D2E6D7;border-radius:8px;padding:8px;font-size:.62rem;color:#4A6353}
+.mock-bd div b{display:block;color:#0F2417;font-size:.72rem}
+details.src{margin-top:16px}
+details.src summary{cursor:pointer;font-weight:700;color:var(--green-strong)}
+details.src .code{margin-top:10px}
+details.src pre{max-height:360px;overflow:auto}
+@media (max-width:820px){.dl{grid-template-columns:1fr}}
+/* desafio em vermelho */
+.desafio{--green:var(--red);--green-strong:var(--red);--mint:color-mix(in srgb,var(--red) 16%,var(--surface));--surface-2:color-mix(in srgb,var(--red) 7%,var(--surface));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--red) 6%,var(--bg)),var(--bg) 70%);border-top:4px solid var(--red)}
+.desafio .step-n,.desafio .btn{color:#fff}
+:root[data-theme="dark"] .desafio .step-n{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .desafio .step-n{color:#1A0505}}
+.ch-banner{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;border:2px solid var(--red);border-radius:24px;padding:24px;margin-bottom:24px;
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--red) 18%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--red) 14%,var(--surface)),var(--surface) 70%)}
+.ch-banner .ico{width:60px;height:60px;border-radius:18px;background:var(--red);color:#fff}
+.ch-banner .ico svg{width:32px;height:32px}
+.ch-banner h2{color:var(--red);margin-top:6px}
+.ch-banner p{color:var(--muted);margin-top:8px;max-width:70ch}
+.ch-keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:36px}
+.desafio .err{border-color:color-mix(in srgb,var(--red) 30%,var(--line))}
+.desafio .tbl-wrap{border-color:color-mix(in srgb,var(--red) 25%,var(--line))}
+.desafio .step-body h3 .tag{background:var(--red);color:#fff}
+.desafio .note.warn{margin-top:0}
+.nav a.nav-ch{color:var(--red)}
+@media (max-width:600px){.ch-banner{grid-template-columns:1fr;padding:18px}.ch-keys{grid-template-columns:1fr}}
+
+.ck-card{background:var(--surface);border:2px solid var(--green);border-radius:22px;padding:22px;display:grid;gap:12px}
+.ck-title{font-family:var(--f-display);font-size:1.1rem}
+.ck-group{font:700 .75rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:10px 0 2px}
+.ck-group.ch{color:var(--red)}
+.ck-card .check label{grid-template-columns:22px minmax(0,1fr) auto;border:1px solid var(--line)}
+.ck-card .check em{font:700 .8rem var(--f-mono);font-style:normal;color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;align-self:center;font-variant-numeric:tabular-nums}
+.ck-card .check input:checked ~ em{background:var(--ok);color:#fff}
+.ck-card .check label.ck-ch{border:2px solid var(--red);background:color-mix(in srgb,var(--red) 7%,var(--surface))}
+.ck-card .check label.ck-ch span{color:var(--ink);font-weight:600}
+.ck-card .check label.ck-ch input{accent-color:var(--red)}
+.ck-card .check label.ck-ch em{color:var(--red);background:color-mix(in srgb,var(--red) 14%,var(--surface))}
+.ck-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);margin-top:4px}
+#prog-txt.done b{color:var(--ok)}
+.progress.done i{background:var(--ok)}
+
+/* animação da conexão no FileZilla */
+.fz-replay{margin-left:auto;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .72rem var(--f-body);padding:4px 10px;border-radius:999px;cursor:pointer}
+.fz-replay:hover{border-color:var(--green);color:var(--green-strong)}
+.fz-f div{min-height:2.1em}
+.fz-f.typing div{border:2px solid var(--green)}
+.fz-f.typing div::after{content:"";display:inline-block;width:1.5px;height:1em;background:var(--ink);margin-left:1px;vertical-align:-2px;animation:caret .7s steps(1) infinite}
+@keyframes caret{50%{opacity:0}}
+.fz-go{transition:transform .12s,box-shadow .2s}
+.fz-go.press{transform:scale(.92);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 35%,transparent)}
+.fz-log{min-height:9.9em}
+.fz-log > div{transition:opacity .25s}
+.fz-log .ok{color:var(--ok);font-weight:600}
+.fz-empty{margin:6px 12px;font-size:.76rem;color:var(--muted);display:none}
+.fz.off .fz-empty{display:block}
+.fz.off #fz-rpath{color:transparent}
+.fz-file.hide,.fz-log > div.hide{opacity:0}
+#fz-remote .fz-file{transition:opacity .3s,background .6s}
+#fz-remote .fz-file.new{background:color-mix(in srgb,var(--green) 16%,transparent)}
+@media (prefers-reduced-motion:reduce){.fz-replay{display:none}}
+
+/* animação de transferência - antes de começar */
+.xfer{margin:0 0 28px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 18px 14px;display:grid;gap:10px;
+  background-image:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 14%,transparent) 1px,transparent 1.5px);background-size:22px 22px}
+.xsvg{display:block;width:100%;height:auto;margin:0 auto}
+.xsvg.h{max-width:760px}
+.xsvg.v{display:none;max-width:380px}
+@media (max-width:600px){.xsvg.h{display:none}.xsvg.v{display:block}.xfer{padding:14px 10px 12px}.xfer figcaption{flex-direction:column;align-items:center;gap:4px}}
+.xsvg .arc{fill:none;stroke:var(--green);stroke-width:2.5;stroke-dasharray:7 7;opacity:.7;animation:arcmove 1.2s linear infinite}
+@keyframes arcmove{to{stroke-dashoffset:-14}}
+.xsvg .mid{font:700 12px var(--f-mono);fill:var(--green-strong);text-anchor:middle}
+.xsvg .mon{fill:var(--surface-2);stroke:var(--line);stroke-width:2}
+.xsvg .scr{fill:var(--bg);stroke:var(--line)}
+.xsvg .term{fill:var(--code-bg)}
+.xsvg .scr-bar-host{fill:var(--s1)}
+.xsvg .scr-bar-vm{fill:var(--green)}
+.xsvg .scr-t{font:700 8.5px var(--f-body);fill:#fff}
+.xsvg .ln{fill:var(--line)}
+.xsvg .tt{font:400 8.5px var(--f-mono);fill:var(--code-fg)}
+.xsvg .tt.ok{fill:var(--code-key);font-weight:600}
+.xsvg .pb{fill:var(--surface-2);stroke:var(--line)}
+.xsvg .pb.dark{fill:#1b2a20;stroke:#2c4434}
+.xsvg .pb-fill-host{fill:var(--s2)}
+.xsvg .pb-fill-vm{fill:var(--s1)}
+.xsvg .stand{fill:var(--muted);opacity:.55}
+.xsvg .lbl{font:700 13px var(--f-display);fill:var(--ink);text-anchor:middle}
+.xsvg .ip{font:500 10.5px var(--f-mono);fill:var(--muted);text-anchor:middle}
+.xsvg .doc-body{fill:var(--surface);stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round}
+.xsvg .doc-fold{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round}
+.xsvg .pkt-up{color:var(--s2)}
+.xsvg .pkt-down{color:var(--s1)}
+.xsvg .doc-x{font:800 5.5px var(--f-mono);fill:#fff;text-anchor:middle}
+.xsvg .pill-up{fill:var(--s2)}
+.xsvg .pill-down{fill:var(--s1)}
+.xsvg .pill-t{font:700 9.5px var(--f-mono);fill:#fff;text-anchor:middle}
+.xfer figcaption{display:flex;justify-content:center;gap:10px 24px;flex-wrap:wrap;font-size:.85rem;font-weight:600}
+.xfer .cap-up{color:var(--warn)}
+.xfer .cap-down{color:var(--s1)}
+@media (prefers-reduced-motion:reduce){.xsvg .arc{animation:none}}
+
+/* terminal do topo com os comandos da aula */
+.ht-wrap{position:relative;min-width:0;isolation:isolate}
+.ht-wrap::before{content:"";position:absolute;inset:-28px -18px;z-index:-1;border-radius:40px;filter:blur(36px);opacity:.75;
+  background:radial-gradient(40% 50% at 20% 30%,#35c46a,transparent 70%),radial-gradient(45% 55% at 85% 70%,#1fb6a6,transparent 70%),radial-gradient(35% 40% at 60% 10%,#8be39b,transparent 70%)}
+.hero-term{position:relative;min-width:0;overflow:hidden;border-radius:18px;font-family:var(--f-mono);font-size:.78rem;color:#e6f2ea;
+  background:rgba(0,0,0,.95);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border:1px solid rgba(139,227,155,.18);box-shadow:0 30px 60px -24px rgba(0,60,25,.55),inset 0 1px 0 rgba(255,255,255,.08)}
+.hero-term::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.015) 0 1px,transparent 1px 3px)}
+.hero-term .bar{display:flex;align-items:center;gap:7px;padding:10px 12px;background:#0b0b0b;border-bottom:1px solid rgba(139,227,155,.14)}
+.hero-term .dot{width:11px;height:11px;border-radius:50%;background:#ff5f57;display:inline-block;flex:none}
+.hero-term .dot:nth-child(2){background:#febc2e}.hero-term .dot:nth-child(3){background:#28c840}
+.hero-term .tab{margin-left:10px;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:8px;background:rgba(139,227,155,.12);color:#c9f2d3;font-size:.72rem;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.hero-term .tab svg{width:13px;height:13px;color:#8be39b;flex:none}
+.hero-term .sh{margin-left:auto;color:#7d9b88;font-size:.68rem;white-space:nowrap}
+.ht-screen{height:27em;overflow:hidden;position:relative}
+.hero-term pre{margin:0;padding:14px 16px 16px;white-space:pre-wrap;line-height:1.65;overflow-wrap:anywhere;font:inherit;color:inherit}
+.hero-term .pu{color:#7ee787;font-weight:700}.hero-term .pc{color:#e6f2ea}.hero-term .pd{color:#79c0ff;font-weight:700}
+.hero-term .dim{color:#7d9b88}.hero-term .ok{color:#56d364;font-weight:700}.hero-term .w{color:#f2cc60;font-weight:600}
+.hero-term .lg{color:#87cf3e;font-weight:700;white-space:pre}
+.hero-term .nu{color:#87cf3e;font-weight:700}.hero-term .nd{color:#7d9b88}.hero-term .nk{color:#87cf3e;font-weight:700}
+.hero-term .cb{display:inline-block;width:1.6em;height:.95em;vertical-align:-1px}
+.hero-term .c1{background:#ff5f57}.hero-term .c2{background:#febc2e}.hero-term .c3{background:#28c840}.hero-term .c4{background:#79c0ff}.hero-term .c5{background:#d2a8ff}.hero-term .c6{background:#56d4dd}
+.hero-term .cursor{display:inline-block;width:8px;height:1.05em;background:#7ee787;vertical-align:-2px;border-radius:1px;box-shadow:0 0 8px rgba(126,231,135,.7);animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.hero-term .cursor{animation:none}}
+@media (max-width:600px){.ht-screen{height:25em}.hero-term{font-size:.68rem}.hero-term .sh{display:none}.ht-wrap::before{inset:-14px -8px}}
+/* roteiro abaixo do topo */
+.roteiro{border-bottom:1px solid var(--line);background:var(--bg)}
+.roteiro .wrap{padding-block:28px}
+.rot-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;display:grid;gap:14px;box-shadow:0 18px 40px -28px color-mix(in srgb,var(--green) 55%,transparent)}
+.rot-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px 16px;flex-wrap:wrap}
+.rot-head h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.rot-head .hint{font-size:.82rem;color:var(--muted);margin:0}
+.rot-card .vlist{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ifsc-mark" viewBox="0 0 410 555">
+      <circle cx="60" cy="60" r="66" fill="#CD191E"></circle>
+      <g fill="#2F9E41">
+        <rect x="145" y="0" width="120" height="120" rx="10"></rect><rect x="290" y="0" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="145" width="120" height="120" rx="10"></rect><rect x="145" y="145" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="290" width="120" height="120" rx="10"></rect><rect x="145" y="290" width="120" height="120" rx="10"></rect><rect x="290" y="290" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="435" width="120" height="120" rx="10"></rect><rect x="145" y="435" width="120" height="120" rx="10"></rect>
+      </g>
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-term" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
+    <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></symbol>
+    <symbol id="i-pc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-mint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 16V8l4 5 4-5v8"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+    <symbol id="i-log" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">
+      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg>
+      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    </div>
+    <button type="button" class="burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+    <nav class="nav" id="menu" aria-label="Seções"><a href="#ftp">FTP</a><a href="#m1">1 Instalar</a><a href="#m2">2 Configurar</a><a href="#m3">3 Permissões</a><a href="#m4">4 IP</a><a href="#m5">5 FileZilla</a><a href="#m6">6 Backup</a><a href="#m7">7 Nova página</a><a href="#m8">8 Conferir</a><a href="#m9">9 Exercícios</a><a href="#checklist-sec">Checklist</a><a class="nav-ch" href="#desafio">Desafio</a></nav>
+    <a class="back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Voltar</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Aula prática · vsftpd e FileZilla</span>
+      <h1><em>Servidor FTP</em> no Linux</h1>
+      <p class="lead"><b>Objetivo:</b> Instalar e configurar um servidor FTP na máquina virtual, acessar pelo FileZilla da máquina hospedeira, fazer backup do site em <code>/var/www/html</code> e publicar uma nova página.</p>
+      <div class="chips">
+        <span class="chip"><svg><use href="#i-mint"/></svg>Linux Mint (VM)</span>
+        <span class="chip"><svg><use href="#i-server"/></svg>vsftpd</span>
+        <span class="chip"><svg><use href="#i-swap"/></svg>FileZilla</span>
+        <span class="chip"><svg><use href="#i-term"/></svg>Terminal</span>
+        <span class="chip"><svg><use href="#i-list"/></svg>9 passos</span>
+        <span class="chip"><svg><use href="#i-clock"/></svg>Tempo estimado: 2h30</span>
+      </div>
+    </div>
+    <div class="ht-wrap">
+    <div class="hero-term" aria-label="Terminal do Linux Mint mostrando o login, o neofetch e os comandos da aula">
+      <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="tab"><svg aria-hidden="true"><use href="#i-term"/></svg>ifsc@mint: ~</span><span class="sh">bash · 80×24</span></div>
+      <div class="ht-screen"><pre id="ht-pre"><span class="dim">Linux Mint 22 mint tty1</span>
+
+mint login: ifsc
+Password: 
+<span class="dim">Last login: Mon Nov  9 10:12:03 on tty1</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> neofetch
+<span class="lg"> ___________  </span><span class="nu">ifsc</span>@<span class="nu">mint</span>
+<span class="lg">|_          \ </span><span class="nd">----------</span>
+<span class="lg">  | | _____ | </span><span class="nk">OS</span>: Linux Mint 22 x86_64
+<span class="lg">  | | | | | | </span><span class="nk">Host</span>: VirtualBox 1.2
+<span class="lg">  | | | | | | </span><span class="nk">Kernel</span>: 6.8.0-45-generic
+<span class="lg">  | \_____/ | </span><span class="nk">Shell</span>: bash 5.2.21
+<span class="lg">  \_________/ </span><span class="nk">DE</span>: Cinnamon 6.2
+<span class="lg">              </span><span class="nk">Memory</span>: 1024MiB / 3923MiB
+<span class="lg">              </span>
+<span class="lg">              </span><span class="cb c1"></span><span class="cb c2"></span><span class="cb c3"></span><span class="cb c4"></span><span class="cb c5"></span><span class="cb c6"></span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> sudo apt install -y vsftpd
+<span class="dim">Configurando vsftpd (3.0.5) ...</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> systemctl is-active vsftpd
+<span class="ok">active</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> sudo nano /etc/vsftpd.conf
+<span class="dim"># write_enable=YES · local_umask=022</span>
+<span class="dim"># local_root=/var/www/html</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> sudo systemctl restart vsftpd
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> sudo chown -R $USER:$USER /var/www/html
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> hostname -I
+<span class="w">192.168.56.101</span>
+<span class="dim"># no FileZilla: Host 192.168.56.101, porta 21</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> sudo tail -n 2 /var/log/vsftpd.log
+<span class="ok">OK DOWNLOAD</span>: "/var/www/html/index.html"
+<span class="ok">OK UPLOAD</span>: "/var/www/html/index.html"
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> <span class="cursor"></span></pre></div>
+    </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<div class="roteiro">
+  <div class="wrap">
+    <div class="rot-card">
+      <div class="rot-head"><h3>Roteiro da aula</h3><p class="hint">Os passos 1 a 4 são feitos no terminal da VM. Os passos 5 a 7, no FileZilla da máquina hospedeira.</p></div>
+      <div class="vlist"><div class="vrow" style="--vc:var(--s1)"><span class="vtag">PASSOS 1–4</span><b>Instalar e configurar o FTP</b><span class="net">vsftpd</span></div><div class="vrow" style="--vc:var(--green)"><span class="vtag">PASSO 5</span><b>Conectar pelo FileZilla</b><span class="net">porta 21</span></div><div class="vrow" style="--vc:var(--s3)"><span class="vtag">PASSOS 6–7</span><b>Backup e nova página</b><span class="net">/var/www/html</span></div><div class="vrow" style="--vc:var(--s4)"><span class="vtag">PASSO 8</span><b>Conferir no navegador e no log</b><span class="net">vsftpd.log</span></div><div class="vrow" style="--vc:var(--s2)"><span class="vtag">PASSO 9</span><b>Exercícios</b><span class="net">2 tarefas</span></div><div class="vrow" style="--vc:var(--red)"><span class="vtag">DESAFIO</span><b>FTP seguro com TLS</b><span class="net">openssl</span></div></div>
+    </div>
+  </div>
+</div>
+
+<main>
+<section class="sec" id="inicio">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Antes de começar</span>
+      <h2>Prepare as duas máquinas</h2>
+      <p>Nesta aula você usa a máquina virtual (servidor) e a máquina hospedeira (cliente) ao mesmo tempo.</p>
+    </div>
+    <figure class="xfer">
+      <svg id="xfer-svg" class="xsvg h" viewBox="0 0 640 240" role="img" aria-labelledby="xfer-t">
+        <title id="xfer-t">Animação: a máquina hospedeira envia o index.html para a VM e a VM devolve o backup do site</title>
+        <defs>
+          <path id="arc-up" d="M205 78 Q320 -6 435 78"/>
+          <path id="arc-down" d="M435 120 Q320 204 205 120"/>
+          <g id="doc">
+            <path d="M-13 -17 h17 l9 9 v25 h-26 z" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round"/>
+            <path d="M4 -17 v9 h9" style="fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round"/>
+            <rect x="-9" y="1" width="18" height="8" rx="2" style="fill:currentColor"/>
+          </g>
+        </defs>
+
+        <use href="#arc-up" class="arc"/>
+        <use href="#arc-down" class="arc"/>
+        <text x="320" y="104" class="mid">FTP · porta 21</text>
+
+        <!-- hospedeira -->
+        <g>
+          <rect x="35" y="28" width="170" height="118" rx="10" class="mon"/>
+          <rect x="45" y="38" width="150" height="90" rx="5" class="scr"/>
+          <rect x="45" y="38" width="150" height="14" rx="5" class="scr-bar-host"/>
+          <text x="52" y="48.5" class="scr-t">FileZilla</text>
+          <rect x="53" y="60" width="62" height="6" rx="3" class="ln"/>
+          <rect x="53" y="72" width="80" height="6" rx="3" class="ln"/>
+          <rect x="53" y="84" width="52" height="6" rx="3" class="ln"/>
+          <rect x="53" y="110" width="134" height="7" rx="3.5" class="pb"/>
+          <rect x="53" y="110" width="0" height="7" rx="3.5" class="pb-fill-host">
+            <animate attributeName="width" values="0;134;134;0;0" keyTimes="0;0.42;0.5;0.5;1" dur="6s" repeatCount="indefinite"/>
+          </rect>
+          <path d="M110 146 h20 l6 22 h-32 z" class="stand"/>
+          <rect x="92" y="168" width="56" height="6" rx="3" class="stand"/>
+          <text x="120" y="198" class="lbl">Máquina hospedeira</text>
+          <text x="120" y="215" class="ip">192.168.56.1 · cliente</text>
+        </g>
+
+        <!-- VM -->
+        <g>
+          <rect x="435" y="28" width="170" height="118" rx="10" class="mon"/>
+          <rect x="445" y="38" width="150" height="90" rx="5" class="term"/>
+          <rect x="445" y="38" width="150" height="14" rx="5" class="scr-bar-vm"/>
+          <text x="452" y="48.5" class="scr-t">vsftpd · Linux Mint</text>
+          <text x="453" y="66" class="tt">$ ls /var/www/html</text>
+          <text x="453" y="80" class="tt ok">index.html</text>
+          <text x="453" y="94" class="tt">index.html.original</text>
+          <rect x="453" y="110" width="134" height="7" rx="3.5" class="pb dark"/>
+          <rect x="453" y="110" width="0" height="7" rx="3.5" class="pb-fill-vm">
+            <animate attributeName="width" values="0;0;134;134" keyTimes="0;0.5;0.92;1" dur="6s" repeatCount="indefinite"/>
+          </rect>
+          <path d="M510 146 h20 l6 22 h-32 z" class="stand"/>
+          <rect x="492" y="168" width="56" height="6" rx="3" class="stand"/>
+          <text x="520" y="198" class="lbl">VM Linux Mint</text>
+          <text x="520" y="215" class="ip">192.168.56.101 · servidor</text>
+        </g>
+
+        <!-- upload: index.html vai para a VM -->
+        <g class="pkt-up">
+          <use href="#doc"/>
+          <text y="5.5" class="doc-x">HTML</text>
+          <rect x="-34" y="20" width="68" height="16" rx="8" class="pill-up"/>
+          <text y="31.5" class="pill-t">index.html</text>
+          <animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.42;1" calcMode="linear"><mpath href="#arc-up"/></animateMotion>
+          <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.04;0.4;0.46;1" dur="6s" repeatCount="indefinite"/>
+        </g>
+        <!-- download: backup volta para a hospedeira -->
+        <g class="pkt-down" opacity="0">
+          <use href="#doc"/>
+          <text y="5.5" class="doc-x">HTML</text>
+          <rect x="-28" y="20" width="56" height="16" rx="8" class="pill-down"/>
+          <text y="31.5" class="pill-t">backup</text>
+          <animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.5;0.92;1" calcMode="linear"><mpath href="#arc-down"/></animateMotion>
+          <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.5;0.54;0.9;0.96" dur="6s" repeatCount="indefinite"/>
+        </g>
+      </svg>
+      <svg id="xfer-svg-v" class="xsvg v" viewBox="0 0 340 486" role="img" aria-labelledby="xfer-tv">
+        <title id="xfer-tv">Animação: a máquina hospedeira envia o index.html para a VM e a VM devolve o backup do site</title>
+        <defs>
+          <path id="arc-up-v" d="M235 200 Q330 250 235 300"/>
+          <path id="arc-down-v" d="M105 300 Q10 250 105 200"/>
+          <g id="doc-v"><path d="M-13 -17 h17 l9 9 v25 h-26 z" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round"/><path d="M4 -17 v9 h9" style="fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round"/><rect x="-9" y="1" width="18" height="8" rx="2" style="fill:currentColor"/></g>
+        </defs>
+        <use href="#arc-up-v" class="arc"/>
+        <use href="#arc-down-v" class="arc"/>
+        <text x="170" y="254" class="mid">FTP · porta 21</text>
+
+        <g>
+          <rect x="85" y="8" width="170" height="118" rx="10" class="mon"/>
+          <rect x="95" y="18" width="150" height="90" rx="5" class="scr"/>
+          <rect x="95" y="18" width="150" height="14" rx="5" class="scr-bar-host"/>
+          <text x="102" y="28.5" class="scr-t">FileZilla</text>
+          <rect x="103" y="40" width="62" height="6" rx="3" class="ln"/>
+          <rect x="103" y="52" width="80" height="6" rx="3" class="ln"/>
+          <rect x="103" y="64" width="52" height="6" rx="3" class="ln"/>
+          <rect x="103" y="90" width="134" height="7" rx="3.5" class="pb"/>
+          <rect x="103" y="90" width="0" height="7" rx="3.5" class="pb-fill-host">
+            <animate attributeName="width" values="0;134;134;0;0" keyTimes="0;0.42;0.5;0.5;1" dur="6s" repeatCount="indefinite"/>
+          </rect>
+          <path d="M160 126 h20 l6 18 h-32 z" class="stand"/>
+          <rect x="142" y="144" width="56" height="6" rx="3" class="stand"/>
+          <text x="170" y="170" class="lbl">Máquina hospedeira</text>
+          <text x="170" y="186" class="ip">192.168.56.1 · cliente</text>
+        </g>
+
+        <g>
+          <rect x="85" y="310" width="170" height="118" rx="10" class="mon"/>
+          <rect x="95" y="320" width="150" height="90" rx="5" class="term"/>
+          <rect x="95" y="320" width="150" height="14" rx="5" class="scr-bar-vm"/>
+          <text x="102" y="330.5" class="scr-t">vsftpd · Linux Mint</text>
+          <text x="103" y="348" class="tt">$ ls /var/www/html</text>
+          <text x="103" y="362" class="tt ok">index.html</text>
+          <text x="103" y="376" class="tt">index.html.original</text>
+          <rect x="103" y="392" width="134" height="7" rx="3.5" class="pb dark"/>
+          <rect x="103" y="392" width="0" height="7" rx="3.5" class="pb-fill-vm">
+            <animate attributeName="width" values="0;0;134;134" keyTimes="0;0.5;0.92;1" dur="6s" repeatCount="indefinite"/>
+          </rect>
+          <path d="M160 428 h20 l6 18 h-32 z" class="stand"/>
+          <rect x="142" y="446" width="56" height="6" rx="3" class="stand"/>
+          <text x="170" y="466" class="lbl">VM Linux Mint</text>
+          <text x="170" y="480" class="ip">192.168.56.101 · servidor</text>
+        </g>
+
+        <g class="pkt-up">
+          <use href="#doc-v"/>
+          <text y="5.5" class="doc-x">HTML</text>
+          <rect x="-34" y="20" width="68" height="16" rx="8" class="pill-up"/>
+          <text y="31.5" class="pill-t">index.html</text>
+          <animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.42;1" calcMode="linear"><mpath href="#arc-up-v"/></animateMotion>
+          <animate attributeName="opacity" values="0;1;1;0;0" keyTimes="0;0.04;0.4;0.46;1" dur="6s" repeatCount="indefinite"/>
+        </g>
+        <g class="pkt-down" opacity="0">
+          <use href="#doc-v"/>
+          <text y="5.5" class="doc-x">HTML</text>
+          <rect x="-28" y="20" width="56" height="16" rx="8" class="pill-down"/>
+          <text y="31.5" class="pill-t">backup</text>
+          <animateMotion dur="6s" repeatCount="indefinite" keyPoints="0;0;1;1" keyTimes="0;0.5;0.92;1" calcMode="linear"><mpath href="#arc-down-v"/></animateMotion>
+          <animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;0.5;0.54;0.9;0.96" dur="6s" repeatCount="indefinite"/>
+        </g>
+      </svg>
+      <figcaption><span class="cap-up">↑ Envio (upload): hospedeira → VM</span><span class="cap-down">↓ Download: VM → hospedeira</span></figcaption>
+    </figure>
+    <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-server"/></svg></div><h3>Apache funcionando</h3><p>A VM precisa ter o Apache instalado da aula anterior, com uma página em <code>/var/www/html</code>. Teste com <code>curl -I http://localhost</code>.</p></div><div class="ben"><div class="ico"><svg><use href="#i-route"/></svg></div><h3>Rede somente hospedeiro</h3><p>No VirtualBox, ligue um adaptador da VM em <b>Placa de rede exclusiva de hospedeiro</b> (host-only). Assim a hospedeira e a VM conversam numa rede só delas, em geral <code>192.168.56.0/24</code>. Deixe outro adaptador em <b>NAT</b> para a VM ter internet e instalar pacotes.</p></div><div class="ben"><div class="ico"><svg><use href="#i-pc"/></svg></div><h3>FileZilla na hospedeira</h3><p>O <b>FileZilla Client</b> deve estar instalado na máquina hospedeira. Ele é o programa que vai se conectar ao servidor.</p></div></div>
+    <div class="note"><div class="ico"><svg><use href="#i-term"/></svg></div><p>Abra o terminal da VM com <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>. Quando pedir senha, digite a sua. Ela não aparece na tela, é normal.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="ftp">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Conceito</span>
+      <h2>O que é FTP</h2>
+      <p>Entenda o protocolo antes de instalar o servidor.</p>
+    </div>
+    <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-bulb"/></svg></div><h3>O que é</h3><p><b>FTP</b> (File Transfer Protocol) é o protocolo de transferência de arquivos. Ele existe desde 1971 e funciona no modelo <b>cliente e servidor</b>: o servidor guarda os arquivos e o cliente se conecta para enviar ou baixar.</p></div><div class="ben"><div class="ico"><svg><use href="#i-swap"/></svg></div><h3>Para que serve</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Publicar sites: enviar HTML, CSS e imagens para o servidor web</li><li>Fazer backup de arquivos do servidor</li><li>Trocar arquivos grandes entre computadores</li><li>Atualizar sites em hospedagens</li></ul></div><div class="ben"><div class="ico"><svg><use href="#i-check"/></svg></div><h3>Vantagens</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Gratuito e aceito em quase todo sistema</li><li>Transfere pastas inteiras de uma vez</li><li>Retoma transferências interrompidas</li><li>Clientes fáceis de usar, como o FileZilla</li><li>Controle de acesso por usuário e senha</li></ul></div></div>
+
+    <h3 class="sub-h">Portas usadas</h3>
+    <div class="ports">
+      <div class="port-card" style="--vc:var(--green)"><b>21</b><strong>Controle</strong><span>Porta onde o servidor espera a conexão. Por ela passam o login e os comandos (listar, enviar, baixar).</span></div>
+      <div class="port-card" style="--vc:var(--s1)"><b>20</b><strong>Dados (modo ativo)</strong><span>No modo ativo, o servidor abre a conexão de dados a partir desta porta até o cliente.</span></div>
+      <div class="port-card" style="--vc:var(--s3)"><b>&gt;1023</b><strong>Dados (modo passivo)</strong><span>No modo passivo, o padrão do FileZilla, o servidor abre uma porta alta e o cliente se conecta nela.</span></div>
+      <div class="port-card" style="--vc:var(--s4)"><b>22</b><strong>SFTP</strong><span>Transferência de arquivos segura pelo SSH. Tudo vai criptografado, inclusive a senha.</span></div>
+    </div>
+
+    <h3 class="sub-h">Cuidados</h3>
+    <div class="care">
+      <div class="err"><h3><svg><use href="#i-lock"/></svg>A senha viaja sem criptografia</h3><p>No FTP comum, o usuário, a senha e os arquivos passam pela rede em texto puro. Quem capturar o tráfego (Wireshark, por exemplo) consegue ler tudo. Na internet, prefira <b>SFTP</b> (porta 22) ou <b>FTPS</b> (FTP com TLS).</p></div>
+      <div class="err"><h3><svg><use href="#i-alert"/></svg>Desative o acesso anônimo</h3><p>Com <code>anonymous_enable=YES</code>, qualquer pessoa entra sem senha. Deixe sempre <code>NO</code>, a não ser que o servidor seja de downloads públicos.</p></div>
+      <div class="err"><h3><svg><use href="#i-folder"/></svg>Limite as pastas</h3><p>Sem restrição, o usuário navega por todo o sistema de arquivos. Em produção use <code>chroot_local_user=YES</code> para prender cada usuário na própria pasta.</p></div>
+      <div class="err"><h3><svg><use href="#i-shield"/></svg>Senhas fortes e firewall</h3><p>Robôs tentam senhas na porta 21 o tempo todo. Use senhas fortes, nunca libere o usuário <b>root</b> e abra no firewall só as portas necessárias.</p></div>
+    </div>
+
+    <h3 class="sub-h">Como vai funcionar nesta aula</h3>
+    <div class="topo">
+      <div class="box bx-host" style="--vc:var(--s1)"><div class="bh"><svg><use href="#i-pc"/></svg><div><b>Máquina hospedeira</b><span>Cliente FTP</span></div></div><ul><li>FileZilla Client</li><li>Pasta de backup do site</li><li>Arquivo <code>index.html</code> baixado</li></ul></div>
+      <div class="link" aria-label="Animação: login, download do backup e envio da nova página pela porta 21"><b>FTP · porta 21</b><div class="track" aria-hidden="true"><div class="wire"></div><span class="pkt p1"><svg><use href="#i-lock"/></svg>login</span><span class="pkt p2"><svg><use href="#i-down"/></svg>backup</span><span class="pkt p3"><svg><use href="#i-up"/></svg>index.html</span></div><div class="phase"><span class="ph1"><b>1 · Login</b>usuário e senha →</span><span class="ph2"><b>2 · Download</b>← backup do site</span><span class="ph3"><b>3 · Upload</b>nova página →</span></div></div>
+      <div class="box bx-vm" style="--vc:var(--green)"><div class="bh"><svg><use href="#i-mint"/></svg><div><b>VM Linux Mint</b><span>Servidor FTP + servidor web</span></div></div><ul><li>vsftpd (porta 21)</li><li>Apache (porta 80)</li><li>Site em <code>/var/www/html</code></li></ul></div>
+    </div>
+
+    <h3 class="sub-h">Arquivos do vsftpd</h3>
+    <div class="tbl-wrap files"><table><thead><tr><th>Caminho</th><th>Para que serve</th></tr></thead><tbody><tr><td>/etc/vsftpd.conf</td><td>Arquivo de configuração do servidor FTP</td></tr><tr><td>/var/log/vsftpd.log</td><td>Registro de logins e de cada arquivo enviado ou baixado</td></tr><tr><td>/etc/ftpusers</td><td>Usuários proibidos de entrar por FTP (o root está nesta lista)</td></tr><tr><td>/usr/sbin/vsftpd</td><td>O programa do servidor</td></tr></tbody></table></div>
+  </div>
+</section>
+
+<section class="sec" id="m1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 01 · VM</span>
+      <h2>Instalar o servidor FTP</h2>
+      <p>Vamos usar o <b>vsftpd</b> (Very Secure FTP Daemon), o servidor FTP mais usado no Linux.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Atualize e instale</h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo apt update
+sudo apt install -y vsftpd</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Veja o status</h3>
+          <p>Procure <b>active (running)</b> em verde. Aperte <kbd>q</kbd> para sair.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>systemctl status vsftpd</pre></div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Confira a porta 21</h3>
+          <p>O comando <code>ss</code> lista as portas abertas. A linha com <code>:21</code> mostra que o servidor está esperando conexões.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo ss -tlnp | grep :21</pre></div><div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>saída esperada</span></div><pre><span class="ok">LISTEN 0  32  *:21  *:*  users:(("vsftpd",pid=2154,fd=3))</span></pre></div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="m2">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 02 · VM</span>
+      <h2>Configurar o vsftpd</h2>
+      <p>Por padrão o vsftpd só deixa baixar arquivos. Vamos liberar o envio para poder trocar a página do site.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Guarde a configuração original</h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.original</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Abra o arquivo de configuração</h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo nano /etc/vsftpd.conf</pre></div>
+          <p>Procure cada linha com <kbd>Ctrl</kbd>+<kbd>W</kbd>. Para ativar uma linha, apague o <code>#</code> do começo. Deixe assim:</p>
+          <div class="tbl-wrap cfg"><table><thead><tr><th>Linha</th><th>O que faz</th></tr></thead><tbody><tr><td>listen=NO</td><td>Já vem assim. O servidor atende IPv4 e IPv6 pela linha de baixo</td></tr><tr><td>listen_ipv6=YES</td><td>Já vem assim</td></tr><tr><td>anonymous_enable=NO</td><td>Bloqueia o acesso sem senha</td></tr><tr><td>local_enable=YES</td><td>Permite entrar com os usuários do Linux</td></tr><tr><td>write_enable=YES</td><td><b>Tire o #.</b> Libera enviar, apagar e renomear arquivos</td></tr><tr><td>local_umask=022</td><td><b>Tire o #.</b> Arquivos enviados ficam com permissão 644, que o Apache consegue ler</td></tr><tr><td>xferlog_enable=YES</td><td>Já vem assim. Registra as transferências no log</td></tr></tbody></table></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Defina a pasta inicial</h3>
+          <p>Vá até o fim do arquivo com <kbd>Ctrl</kbd>+<kbd>End</kbd> e cole estas linhas. A <code>local_root</code> faz o FTP abrir direto na pasta do site, <code>/var/www/html</code>, em vez da pasta pessoal do usuário.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>final do /etc/vsftpd.conf</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre><span class="c"># pasta onde o FTP abre depois do login</span>
+local_root=/var/www/html</pre></div>
+          <p>Salve com <kbd>Ctrl</kbd>+<kbd>O</kbd> e <kbd>Enter</kbd>. Saia com <kbd>Ctrl</kbd>+<kbd>X</kbd>.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Confira e reinicie</h3>
+          <p>O <code>grep</code> mostra só as linhas ativas. Depois reinicie para valer a nova configuração.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>grep -v '^#' /etc/vsftpd.conf | grep -v '^$'
+sudo systemctl restart vsftpd
+systemctl is-active vsftpd     <span class="c"># active</span></pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Firewall, se estiver ligado</h3>
+          <p>No Linux Mint o firewall (ufw) vem desligado. Se o seu disser <b>Status: active</b>, desabilite o firewall para a aula.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo ufw status
+sudo ufw disable
+sudo ufw status     <span class="c"># Status: inactive</span></pre></div>
+          <p>Com o firewall desabilitado, o FileZilla consegue usar a porta 21 e as portas de dados sem bloqueio.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="m3">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 03 · VM</span>
+      <h2>Dar permissão na pasta do site</h2>
+      <p>A pasta <code>/var/www/html</code> pertence ao <b>root</b>. Pelo FTP você entra com o seu usuário, então ele precisa ser o dono da pasta para conseguir gravar.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Veja quem é o dono hoje</h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>ls -ld /var/www/html
+ls -l /var/www/html</pre></div><div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>saída esperada</span></div><pre>drwxr-xr-x 2 <span class="w">root root</span> 4096 nov  9 10:12 /var/www/html</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Passe a pasta para o seu usuário</h3>
+          <p>A variável <code>$USER</code> já tem o seu nome de usuário. O Apache continua lendo os arquivos normalmente.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo chown -R $USER:$USER /var/www/html</pre></div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Confira</h3>
+          <p>Agora aparece o seu usuário no lugar de <b>root</b>.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>ls -l /var/www/html</pre></div><div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>saída esperada</span></div><pre>-rw-r--r-- 1 <span class="ok">aluno aluno</span>  242 nov  9 10:15 index.html
+-rw-r--r-- 1 <span class="ok">aluno aluno</span> 10671 nov  9 10:12 index.html.original</pre></div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="m4">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 04 · VM</span>
+      <h2>Descobrir o IP e testar</h2>
+      <p>O FileZilla precisa do IP da VM. Antes de ir para a hospedeira, teste o login no próprio servidor.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Descubra o IP da VM</h3>
+          <p>Anote o IP que começa com <code>192.168.56</code>, por exemplo <code>192.168.56.101</code>. O outro IP (<code>10.0.2.15</code>) é o do NAT e não serve para o FileZilla. Anote também o seu usuário.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>hostname -I
+whoami</pre></div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Teste o login FTP no próprio servidor</h3>
+          <p>O <code>curl</code> também fala FTP. Digite a sua senha quando pedir. Se aparecer a lista de arquivos do site, o login funciona e o FTP já abriu em <code>/var/www/html</code>.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>curl -u $USER ftp://localhost/</pre></div><div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>saída esperada</span></div><pre>Enter host password for user 'aluno':
+<span class="ok">-rw-r--r--    1 1000     1000          242 Nov 09 10:15 index.html</span>
+<span class="ok">-rw-r--r--    1 1000     1000        10671 Nov 09 10:12 index.html.original</span></pre></div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Teste a rede pela hospedeira</h3>
+          <div class="note"><div class="ico"><svg><use href="#i-pc"/></svg></div><p>Na máquina hospedeira, abra o Prompt de Comando e rode <code>ping 192.168.56.101</code> com o IP da sua VM. Se aparecer <b>Resposta de…</b>, as duas máquinas se enxergam.</p></div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="m5">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 05 · Hospedeira</span>
+      <h2>Conectar pelo FileZilla</h2>
+      <p>A partir daqui você trabalha na máquina hospedeira. O lado esquerdo do FileZilla é a hospedeira e o lado direito é a VM.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Preencha a Conexão rápida</h3>
+          <p>Abra o FileZilla. Na barra do topo, preencha os campos e clique em <b>Conexão rápida</b>.</p>
+          <div class="tbl-wrap cfg"><table><thead><tr><th>Campo</th><th>O que digitar</th></tr></thead><tbody><tr><td>Host</td><td>O IP da VM, por exemplo <code>192.168.56.101</code></td></tr><tr><td>Nome de usuário</td><td>O seu usuário do Linux Mint (o resultado do <code>whoami</code>)</td></tr><tr><td>Senha</td><td>A senha do seu usuário do Linux Mint</td></tr><tr><td>Porta</td><td><code>21</code></td></tr></tbody></table></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Aceite o aviso de FTP inseguro</h3>
+          <p>O FileZilla avisa que o servidor não usa TLS. Isso é esperado, porque configuramos FTP simples. Clique em <b>OK</b>.</p>
+          <div class="note warn"><div class="ico"><svg><use href="#i-lock"/></svg></div><p>Esse aviso é o cuidado da seção de conceito na prática: a sua senha está passando pela rede sem criptografia. No laboratório tudo bem; na internet, use SFTP.</p></div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Confira a conexão</h3>
+          <p>No quadro de mensagens deve aparecer <b>Diretório listado com sucesso</b> e o painel da direita já abre em <code>/var/www/html</code>, a pasta do site na VM.</p>
+          <div class="fz" id="fz-anim" aria-label="Maquete animada do FileZilla: preencher os campos, clicar em Conexão rápida e ver a lista de arquivos">
+            <div class="fz-title"><svg style="width:16px;height:16px" aria-hidden="true"><use href="#i-swap"/></svg>FileZilla<button type="button" class="fz-replay" id="fz-replay">Repetir animação</button></div>
+            <div class="fz-quick"><div class="fz-f"><label>Host</label><div data-full="192.168.56.101">192.168.56.101</div></div><div class="fz-f"><label>Nome de usuário</label><div data-full="ifsc">ifsc</div></div><div class="fz-f"><label>Senha</label><div data-full="••••">••••</div></div><div class="fz-f port"><label>Porta</label><div data-full="21">21</div></div><span class="fz-go" id="fz-go">Conexão rápida</span></div>
+            <div class="fz-log" id="fz-log"><div>Status: Conectando a 192.168.56.101:21...</div><div>Status: Conexão estabelecida, aguardando mensagem de boas-vindas...</div><div>Status: Servidor inseguro, ele não suporta FTP sobre TLS.</div><div>Status: Logado</div><div>Status: Lendo a listagem do diretório...</div><div class="ok">Status: Diretório listado com sucesso: "/var/www/html"</div></div>
+            <div class="fz-panes">
+              <div class="fz-pane" style="--vc:var(--s1)"><div class="fz-ph">Site local <em>hospedeira</em></div><div class="fz-path">C:\Users\aluno\Desktop\</div><div class="fz-file"><svg><use href="#i-folder"/></svg>Documentos</div><div class="fz-file"><svg><use href="#i-folder"/></svg>Downloads</div></div>
+              <div class="fz-pane" style="--vc:var(--green)" id="fz-remote"><div class="fz-ph">Site remoto <em>VM</em></div><div class="fz-path" id="fz-rpath">/var/www/html</div><p class="fz-empty">Não conectado a nenhum servidor</p><div class="fz-file"><svg><use href="#i-file"/></svg>index.html</div><div class="fz-file"><svg><use href="#i-file"/></svg>index.html.original</div></div>
+            </div>
+            <div class="fz-queue"><span>Arquivos na fila: 0</span><span>Transferências falharam: 0</span><span>Transferências bem sucedidas: <b>0</b></span></div>
+          </div>
+          <p class="fz-cap">Maquete simplificada. Os nomes dos campos podem mudar um pouco conforme a versão do FileZilla.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="m6">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 06 · Hospedeira</span>
+      <h2>Fazer backup do site antigo</h2>
+      <p>Antes de trocar qualquer arquivo, copie o site atual da VM para a hospedeira. Se algo der errado, é só devolver.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Crie a pasta do backup na hospedeira</h3>
+          <p>O backup vai para a pasta <code>/Arquivos/Salvar Dados</code> da máquina hospedeira. No painel da <b>esquerda</b> do FileZilla, entre nessa pasta.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Confira a pasta do site na VM</h3>
+          <p>No painel da <b>direita</b>, o campo <b>Site remoto</b> já mostra <code>/var/www/html</code>, por causa da linha <code>local_root</code>. Se mostrar outra pasta, digite o caminho abaixo e aperte <kbd>Enter</kbd>.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>campo Site remoto</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>/var/www/html</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Baixe todos os arquivos</h3>
+          <p>Clique em um arquivo da direita e aperte <kbd>Ctrl</kbd>+<kbd>A</kbd> para selecionar tudo. Depois arraste para o painel da esquerda, ou clique com o botão direito e escolha <b>Baixar</b>.</p>
+          <div class="fz" aria-label="Maquete do FileZilla fazendo o backup">
+            <div class="fz-panes">
+              <div class="fz-pane" style="--vc:var(--s1)"><div class="fz-ph">Site local <em>hospedeira</em></div><div class="fz-path hl">/Arquivos/Salvar Dados</div><div class="fz-file"><svg><use href="#i-file"/></svg>index.html</div><div class="fz-file"><svg><use href="#i-file"/></svg>index.html.original</div></div>
+              <div class="fz-pane" style="--vc:var(--green)"><div class="fz-ph">Site remoto <em>VM</em></div><div class="fz-path hl">/var/www/html</div><div class="fz-file sel"><svg><use href="#i-file"/></svg>index.html</div><div class="fz-file sel"><svg><use href="#i-file"/></svg>index.html.original</div></div>
+            </div>
+            <div class="fz-queue"><span><svg style="width:14px;height:14px;vertical-align:-2px" aria-hidden="true"><use href="#i-down"/></svg> VM → hospedeira</span><span>Transferências falharam: 0</span><span>Transferências bem sucedidas: <b>2</b></span></div>
+          </div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Confira o backup</h3>
+          <p>Veja a aba <b>Transferências bem sucedidas</b> no rodapé do FileZilla. Depois abra a pasta <code>Salvar Dados</code> em Arquivos e dê dois cliques no <code>index.html</code>: deve abrir o seu site antigo.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="m7">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 07 · Hospedeira</span>
+      <h2>Publicar a nova página</h2>
+      <p>Baixe o <code>index.html</code> padrão abaixo e envie pelo FileZilla para substituir a página da VM.</p>
+    </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Baixe o index padrão</h3>
+          <div class="dl">
+            <div>
+              <h3>index.html · página padrão</h3>
+              <p>Página pronta, com tudo em um arquivo só. Escolha a pasta onde salvar na máquina hospedeira e lembre qual foi.</p>
+              <div class="dl-actions">
+                <button class="btn" type="button" id="dl-btn"><svg><use href="#i-down"/></svg>Baixar index.html</button>
+                <button class="btn ghost" type="button" id="cp-btn"><svg><use href="#i-copy"/></svg>Copiar código</button>
+              </div>
+              <p id="dl-msg" role="status"></p>
+            </div>
+            <div class="mock" aria-label="Prévia da página padrão">
+              <div class="mock-bar"><i></i><i></i><i></i><span>http://192.168.56.101</span></div>
+              <div class="mock-hd"><b>Site publicado via FTP</b><small>Linux Mint · Apache · vsftpd</small></div>
+              <div class="mock-bd"><div><b>Aluno</b>Seu Nome</div><div><b>Turma</b>Sua turma</div><div><b>Enviado com</b>FileZilla</div><div><b>Porta</b>21</div></div>
+            </div>
+          </div>
+          <details class="src"><summary>Ver o código da página</summary><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>index.html · modelo</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre id="modelo-pre"></pre></div></details>
+          <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>Se o botão de baixar não funcionar, clique em <b>Copiar código</b>, cole no Bloco de Notas da máquina hospedeira e salve com o nome <code>index.html</code>.</p></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Troque Seu Nome</h3>
+          <p>Abra o <code>index.html</code> baixado no Bloco de Notas (botão direito, <b>Abrir com</b>) e troque <b>Seu Nome</b> e <b>Sua turma</b>. Salve.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Envie para a VM</h3>
+          <p>No painel da <b>esquerda</b>, entre na pasta onde você salvou o <code>index.html</code>. No da <b>direita</b>, continue em <code>/var/www/html</code>. Arraste o <code>index.html</code> da esquerda para a direita, ou clique com o botão direito e escolha <b>Enviar</b>.</p>
+          <div class="fz" aria-label="Maquete do FileZilla enviando a nova página">
+            <div class="fz-panes">
+              <div class="fz-pane" style="--vc:var(--s1)"><div class="fz-ph">Site local <em>hospedeira</em></div><div class="fz-path hl">/Arquivos/Salvar Dados</div><div class="fz-file sel"><svg><use href="#i-file"/></svg>index.html</div></div>
+              <div class="fz-pane" style="--vc:var(--green)"><div class="fz-ph">Site remoto <em>VM</em></div><div class="fz-path hl">/var/www/html</div><div class="fz-file"><svg><use href="#i-file"/></svg>index.html</div><div class="fz-file"><svg><use href="#i-file"/></svg>index.html.original</div></div>
+            </div>
+            <div class="fz-queue"><span><svg style="width:14px;height:14px;vertical-align:-2px" aria-hidden="true"><use href="#i-up"/></svg> hospedeira → VM</span><span>Transferências falharam: 0</span><span>Transferências bem sucedidas: <b>1</b></span></div>
+          </div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Substitua o arquivo</h3>
+          <p>Como já existe um <code>index.html</code> na VM, o FileZilla pergunta o que fazer. Escolha <b>Sobrescrever</b> e clique em <b>OK</b>. Você já tem a cópia antiga na pasta <code>Salvar Dados</code>.</p>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Abra o site pela hospedeira</h3>
+          <div class="note"><div class="ico"><svg><use href="#i-globe"/></svg></div><p>No navegador da hospedeira, digite <code>http://</code> seguido do IP da VM. Se ainda aparecer a página antiga, aperte <kbd>Ctrl</kbd>+<kbd>F5</kbd> para recarregar sem cache.</p></div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="m8">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 08 · VM</span>
+      <h2>Conferir no servidor</h2>
+      <p>Volte ao terminal da VM e veja o que o FTP registrou.</p>
+    </div>
+    <ol class="steps">
+      <li class="step test">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Veja o arquivo novo</h3>
+          <p>O horário do <code>index.html</code> deve ser o do envio.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>ls -l /var/www/html
+curl http://localhost</pre></div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Leia o log do FTP</h3>
+          <p>Cada login e cada transferência viram uma linha. Procure <b>OK LOGIN</b>, <b>OK DOWNLOAD</b> (o backup) e <b>OK UPLOAD</b> (a página nova).</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo tail -n 20 /var/log/vsftpd.log</pre></div><div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>saída esperada</span></div><pre>Mon Nov  9 10:31:02 2026 [pid 2310] [aluno] <span class="ok">OK LOGIN</span>: Client "::ffff:192.168.56.1"
+Mon Nov  9 10:33:47 2026 [pid 2312] [aluno] <span class="ok">OK DOWNLOAD</span>: Client "::ffff:192.168.56.1", "/var/www/html/index.html", 242 bytes
+Mon Nov  9 10:38:15 2026 [pid 2312] [aluno] <span class="ok">OK UPLOAD</span>: Client "::ffff:192.168.56.1", "/var/www/html/index.html", 2894 bytes</pre></div>
+        </div>
+      </li>
+    </ol>
+
+    <h3 class="sub-h">Erros comuns</h3>
+    <div class="errs">
+      <div class="err"><h3><svg><use href="#i-alert"/></svg>530 Login incorrect</h3><p>Usuário ou senha errados. Use o resultado do <code>whoami</code> e a senha do Linux Mint, não a da hospedeira.</p></div>
+      <div class="err"><h3><svg><use href="#i-alert"/></svg>553 Could not create file</h3><p>Sem permissão para gravar. Confira se <code>write_enable=YES</code> está sem <code>#</code> e refaça o Passo 3 (<code>chown</code>).</p></div>
+      <div class="err"><h3><svg><use href="#i-alert"/></svg>Tempo limite de conexão</h3><p>A hospedeira não alcança a VM. Confira o IP, se um adaptador da VM está em <b>Placa de rede exclusiva de hospedeiro</b> e se o firewall libera a porta 21.</p></div>
+      <div class="err"><h3><svg><use href="#i-alert"/></svg>Falha ao listar o diretório</h3><p>O login funciona mas a lista não aparece. O firewall da VM está bloqueando as portas de dados. Confira com <code>sudo ufw status</code> e, no laboratório, desligue com <code>sudo ufw disable</code>.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="m9">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Passo 09</span>
+      <h2>Lista de exercícios</h2>
+      <p>Agora é com você. Use o FileZilla e o terminal, e pesquise quando precisar.</p>
+    </div>
+    <div class="exs"><div class="exc"><span class="n">01</span><p>Pelo FileZilla, crie a pasta <code>images</code> dentro de <code>/var/www/html</code> e envie uma imagem da hospedeira para ela.</p></div><div class="exc"><span class="n">02</span><p>Insira a imagem na página: edite o <code>index.html</code> na hospedeira, envie de novo e confira no navegador.</p></div></div>
+    <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>Depois de cada exercício, confira o resultado no <code>/var/log/vsftpd.log</code> e no navegador da hospedeira.</p></div>
+  </div>
+</section>
+<section class="sec" id="checklist-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Checklist da aula</span>
+      <h2>Quanto você já concluiu</h2>
+      <p>Marque cada item quando terminar. Cada um vale o percentual ao lado e o total é 100%.</p>
+    </div>
+    <div class="ck-card" id="checklist">
+      <div class="prog-head"><b class="ck-title">Progresso</b><p id="prog-txt"><b>0%</b> concluído</p></div>
+      <div class="progress" role="progressbar" aria-label="Progresso da aula" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="prog-bar"></i></div>
+      <div class="check"><p class="ck-group">Passos da aula</p><label for="ck1"><input type="checkbox" id="ck1" data-w="6"><span>Passo 1 · vsftpd instalado e porta 21 aberta</span><em>6%</em></label><label for="ck2"><input type="checkbox" id="ck2" data-w="10"><span>Passo 2 · <code>write_enable</code>, <code>local_umask</code> e <code>local_root</code> configurados e vsftpd reiniciado</span><em>10%</em></label><label for="ck3"><input type="checkbox" id="ck3" data-w="5"><span>Passo 3 · Pasta <code>/var/www/html</code> passada para o seu usuário com <code>chown</code></span><em>5%</em></label><label for="ck4"><input type="checkbox" id="ck4" data-w="5"><span>Passo 4 · IP da VM anotado e login testado com <code>curl</code></span><em>5%</em></label><label for="ck5"><input type="checkbox" id="ck5" data-w="8"><span>Passo 5 · Conectado pelo FileZilla da hospedeira</span><em>8%</em></label><label for="ck6"><input type="checkbox" id="ck6" data-w="10"><span>Passo 6 · Backup do site antigo na pasta <code>Salvar Dados</code></span><em>10%</em></label><label for="ck7"><input type="checkbox" id="ck7" data-w="10"><span>Passo 7 · Nova página baixada, com o seu nome, enviada e aberta pelo IP</span><em>10%</em></label><label for="ck8"><input type="checkbox" id="ck8" data-w="6"><span>Passo 8 · Arquivo conferido na VM e transferências vistas no <code>vsftpd.log</code></span><em>6%</em></label><p class="ck-group">Exercícios</p><label for="ck9"><input type="checkbox" id="ck9" data-w="10"><span>Exercício 01 · Pasta <code>images</code> criada e imagem enviada</span><em>10%</em></label><label for="ck10"><input type="checkbox" id="ck10" data-w="10"><span>Exercício 02 · Imagem inserida na página e conferida no navegador</span><em>10%</em></label><p class="ck-group ch">Desafio</p><label for="ck11" class="ck-ch"><input type="checkbox" id="ck11" data-w="20"><span>Desafio · vsftpd seguro com TLS: chave, certificado, configuração e conexão com cadeado no FileZilla</span><em>20%</em></label></div>
+      <div class="ck-foot"><span>Passos 60% · Exercícios 20% · Desafio 20%</span><button class="linkbtn" type="button" id="ck-reset">Desmarcar tudo</button></div>
+    </div>
+  </div>
+</section>
+<section class="sec desafio" id="desafio">
+  <div class="wrap">
+    <div class="ch-banner">
+      <div class="ico"><svg><use href="#i-lock"/></svg></div>
+      <div>
+        <span class="sec-num">Desafio · VM e hospedeira</span>
+        <h2>Deixar o vsftpd seguro com TLS</h2>
+        <p>Hoje a sua senha passa pela rede em texto puro. Neste desafio você cria uma chave e um certificado e obriga o vsftpd a criptografar tudo. Esse modo se chama <b>FTPS</b> (FTP sobre TLS) e continua usando a porta 21.</p>
+      </div>
+    </div>
+
+    <div class="ch-keys">
+      <div class="err"><h3><svg><use href="#i-lock"/></svg>Chave privada</h3><p>Arquivo <code>vsftpd.key</code>. Fica só no servidor e só o root pode ler. É ela que prova que o servidor é ele mesmo.</p></div>
+      <div class="err"><h3><svg><use href="#i-shield"/></svg>Certificado</h3><p>Arquivo <code>vsftpd.pem</code>. É público e vai para o FileZilla na hora da conexão. Como nós mesmos assinamos, ele é <b>autoassinado</b>.</p></div>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Crie a chave e o certificado <span class="tag">VM</span></h3>
+          <p>O <code>openssl</code> gera uma chave RSA de 2048 bits e um certificado válido por 365 dias. Troque o IP no final pelo IP da sua VM.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout /etc/ssl/private/vsftpd.key \
+  -out /etc/ssl/certs/vsftpd.pem \
+  -subj "/C=BR/ST=Santa Catarina/L=Garopaba/O=IFSC/CN=192.168.56.101"</pre></div>
+          <div class="tbl-wrap cfg"><table><thead><tr><th>Opção</th><th>O que faz</th></tr></thead><tbody><tr><td>-x509</td><td>Cria um certificado em vez de um pedido de certificado</td></tr><tr><td>-nodes</td><td>Não coloca senha na chave, para o vsftpd iniciar sozinho</td></tr><tr><td>-days 365</td><td>O certificado vale por um ano</td></tr><tr><td>-newkey rsa:2048</td><td>Cria uma chave RSA nova de 2048 bits</td></tr><tr><td>-subj</td><td>Dados do certificado: país, estado, cidade, instituição e o IP do servidor (CN)</td></tr></tbody></table></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Proteja a chave privada <span class="tag">VM</span></h3>
+          <p>Só o root pode ler a chave. O certificado pode ficar público.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo chmod 600 /etc/ssl/private/vsftpd.key
+sudo ls -l /etc/ssl/private/vsftpd.key /etc/ssl/certs/vsftpd.pem</pre></div><div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>saída esperada</span></div><pre><span class="ok">-rw-------</span> 1 root root 1704 nov  9 11:40 /etc/ssl/private/vsftpd.key
+-rw-r--r-- 1 root root 1342 nov  9 11:40 /etc/ssl/certs/vsftpd.pem</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Guarde a configuração atual <span class="tag">VM</span></h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.antes-tls</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Desative as linhas antigas de SSL <span class="tag">VM</span></h3>
+          <p>Abra o arquivo e procure com <kbd>Ctrl</kbd>+<kbd>W</kbd> as três linhas abaixo. Coloque um <code>#</code> no começo de cada uma, para não ficarem repetidas.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo nano /etc/vsftpd.conf</pre></div><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>deixe assim</span></div><pre>#rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+#rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+#ssl_enable=NO</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Cole a configuração segura <span class="tag">VM</span></h3>
+          <p>Vá até o fim do arquivo com <kbd>Ctrl</kbd>+<kbd>End</kbd> e cole o bloco. Salve com <kbd>Ctrl</kbd>+<kbd>O</kbd>, <kbd>Enter</kbd> e saia com <kbd>Ctrl</kbd>+<kbd>X</kbd>.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>final do /etc/vsftpd.conf</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre><span class="c"># FTPS - FTP seguro com TLS</span>
+ssl_enable=YES
+rsa_cert_file=/etc/ssl/certs/vsftpd.pem
+rsa_private_key_file=/etc/ssl/private/vsftpd.key
+allow_anon_ssl=NO
+force_local_logins_ssl=YES
+force_local_data_ssl=YES
+ssl_tlsv1=YES
+ssl_sslv2=NO
+ssl_sslv3=NO
+require_ssl_reuse=NO
+ssl_ciphers=HIGH</pre></div>
+          <div class="tbl-wrap cfg"><table><thead><tr><th>Linha</th><th>O que faz</th></tr></thead><tbody><tr><td>ssl_enable=YES</td><td>Liga a criptografia TLS</td></tr><tr><td>rsa_cert_file</td><td>Onde está o certificado criado no item 1</td></tr><tr><td>rsa_private_key_file</td><td>Onde está a chave privada</td></tr><tr><td>allow_anon_ssl=NO</td><td>Não deixa usuário anônimo usar TLS</td></tr><tr><td>force_local_logins_ssl=YES</td><td>Obriga o login (usuário e senha) a ir criptografado</td></tr><tr><td>force_local_data_ssl=YES</td><td>Obriga os arquivos e as listagens a irem criptografados</td></tr><tr><td>ssl_tlsv1=YES · ssl_sslv2=NO · ssl_sslv3=NO</td><td>Aceita só TLS e recusa os protocolos SSL antigos e quebrados</td></tr><tr><td>require_ssl_reuse=NO</td><td>Evita erro de conexão de dados com alguns clientes, como o FileZilla</td></tr><tr><td>ssl_ciphers=HIGH</td><td>Usa só cifras fortes</td></tr></tbody></table></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <h3>Reinicie e veja se subiu <span class="tag">VM</span></h3>
+          <p>Deve aparecer <b>active</b>. Se não aparecer, confira os caminhos do certificado e da chave no <code>vsftpd.conf</code>.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo systemctl restart vsftpd
+systemctl is-active vsftpd     <span class="c"># active</span></pre></div>
+        </div>
+      </li>
+            <li class="step">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <h3>Configure o FileZilla com TLS <span class="tag">Hospedeira</span></h3>
+          <p>A Conexão rápida não serve mais. Abra o <b>Gerenciador de Sites</b> com <kbd>Ctrl</kbd>+<kbd>S</kbd>, clique em <b>Novo site</b>, dê o nome <code>VM segura</code> e preencha:</p>
+          <div class="tbl-wrap cfg"><table><thead><tr><th>Campo</th><th>O que escolher</th></tr></thead><tbody><tr><td>Protocolo</td><td>FTP - Protocolo de Transferência de Arquivos</td></tr><tr><td>Host · Porta</td><td>IP da VM, por exemplo <code>192.168.56.101</code> · porta <code>21</code></td></tr><tr><td>Criptografia</td><td><b>Requer FTP explícito sobre TLS</b></td></tr><tr><td>Tipo de logon</td><td>Normal</td></tr><tr><td>Usuário · Senha</td><td>O seu usuário e a senha do Linux Mint</td></tr></tbody></table></div>
+          <p>Clique em <b>Conectar</b>.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">8</div>
+        <div class="step-body">
+          <h3>Aceite o certificado <span class="tag">Hospedeira</span></h3>
+          <p>Aparece a janela <b>Certificado desconhecido</b>. Confira se o nome comum (CN) é o IP da sua VM e se a instituição é IFSC: são os dados que você colocou no item 1. Marque <b>Sempre confiar neste certificado em sessões futuras</b> e clique em <b>OK</b>.</p>
+          <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p>O FileZilla pergunta porque o certificado é autoassinado e nenhuma autoridade certificadora confirmou quem é o servidor. Em produção se usa um certificado assinado por uma autoridade, como o Let's Encrypt.</p></div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">9</div>
+        <div class="step-body">
+          <h3>Prove que está seguro <span class="tag">Hospedeira</span></h3>
+          <ul>
+            <li>No quadro de mensagens aparece <b>Conexão TLS estabelecida</b> e um <b>cadeado</b> no rodapé da janela.</li>
+            <li>Envie de novo o <code>index.html</code> e confira no navegador.</li>
+          </ul>
+        </div>
+      </li>
+    </ol>
+
+    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Em caso de erros</b>, para desfazer o desafio: <code>sudo cp /etc/vsftpd.conf.antes-tls /etc/vsftpd.conf</code> e <code>sudo systemctl restart vsftpd</code>.</p></div>
+
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Câmpus Garopaba</span><span>Servidor FTP no Linux · vsftpd e FileZilla</span></div>
+</footer>
+
+<script type="text/plain" id="modelo"><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Site publicado via FTP</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Ubuntu, Arial, sans-serif; background: #f3f9f4; color: #0f2417; line-height: 1.6; }
+    header { background: #2f9e41; color: #fff; text-align: center; padding: 48px 20px; }
+    header h1 { margin: 0; font-size: 2.4rem; }
+    header p { margin: 8px 0 0; opacity: .9; }
+    main { max-width: 860px; margin: 32px auto; padding: 0 16px; display: grid; gap: 20px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+    .card { background: #fff; border: 1px solid #d2e6d7; border-radius: 14px; padding: 16px 18px; }
+    .card span { display: block; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: #4a6353; }
+    .card b { font-size: 1.15rem; }
+    .box { background: #fff; border: 1px solid #d2e6d7; border-left: 6px solid #2f9e41; border-radius: 14px; padding: 18px 22px; }
+    .box h2 { margin: 0 0 8px; font-size: 1.2rem; color: #1e7a30; }
+    ol { margin: 0; padding-left: 20px; }
+    code { background: #e7f5ea; padding: 2px 6px; border-radius: 5px; }
+    footer { text-align: center; color: #4a6353; font-size: .9rem; padding: 24px 16px 40px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Site publicado via FTP</h1>
+    <p>Linux Mint · Apache · vsftpd</p>
+  </header>
+
+  <main>
+    <div class="cards">
+      <div class="card"><span>Aluno</span><b>Seu Nome</b></div>
+      <div class="card"><span>Turma</span><b>Sua turma</b></div>
+      <div class="card"><span>Enviado com</span><b>FileZilla</b></div>
+      <div class="card"><span>Protocolo</span><b>FTP · porta 21</b></div>
+    </div>
+
+    <div class="box">
+      <h2>O que eu fiz nesta aula</h2>
+      <ol>
+        <li>Instalei e configurei o servidor FTP <code>vsftpd</code> na máquina virtual.</li>
+        <li>Conectei pelo FileZilla da máquina hospedeira.</li>
+        <li>Fiz backup do site antigo de <code>/var/www/html</code>.</li>
+        <li>Enviei esta página e substituí o <code>index.html</code>.</li>
+      </ol>
+    </div>
+  </main>
+
+  <footer>IFSC · Câmpus Garopaba</footer>
+</body>
+</html>
+</script>
+
+<script>
+(function(){
+  function selectEl(el){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  var modelo = document.getElementById('modelo').textContent.replace(/^\s+/, '');
+  var pre = document.getElementById('modelo-pre');
+  pre.textContent = modelo;
+
+  document.querySelectorAll('.code .copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var el = btn.closest('.code').querySelector('pre'), label = btn.innerHTML;
+      var done = function(msg){ btn.innerHTML = msg; setTimeout(function(){ btn.innerHTML = label; }, 1600); };
+      try { navigator.clipboard.writeText(el.textContent).then(function(){ done('Copiado'); }, function(){ selectEl(el); done('Selecionado: Ctrl+C'); }); }
+      catch(e){ selectEl(el); done('Selecionado: Ctrl+C'); }
+    });
+  });
+
+  var msg = document.getElementById('dl-msg');
+  function say(t, cls){ msg.textContent = t; msg.className = cls || ''; }
+
+  document.getElementById('cp-btn').addEventListener('click', function(){
+    var det = pre.closest('details');
+    try { navigator.clipboard.writeText(modelo).then(function(){ say('Código copiado. Cole no Bloco de Notas e salve como index.html.', 'ok'); }, function(){ det.open = true; selectEl(pre); say('Código selecionado. Aperte Ctrl+C para copiar.'); }); }
+    catch(e){ det.open = true; selectEl(pre); say('Código selecionado. Aperte Ctrl+C para copiar.'); }
+  });
+
+  var downloads = null;
+  var dlBtn = document.getElementById('dl-btn');
+  if (window.claude && window.claude.use) {
+    window.claude.use('downloads').then(function(d){ downloads = d; }, function(){ downloads = null; });
+  }
+  dlBtn.addEventListener('click', function(){
+    if (!downloads && !window.claude) {
+      try {
+        var url = URL.createObjectURL(new Blob([modelo], {type:'text/html;charset=utf-8'}));
+        var a = document.createElement('a'); a.href = url; a.download = 'index.html';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+        say('Arquivo salvo. Procure o index.html na pasta onde você salvou Ex: (Salvar Dados) ou Recentes.', 'ok');
+      } catch(e) { say('Não foi possível baixar aqui. Use Copiar código e salve no Bloco de Notas.', 'bad'); }
+      return;
+    }
+    if (!downloads) { say('O download não está disponível nesta visualização. Use Copiar código e salve no Bloco de Notas.', 'bad'); return; }
+    dlBtn.disabled = true;
+    downloads.save({ filename: 'index.html', data: modelo }).then(function(){
+      say('Arquivo salvo. Procure o index.html na pasta onde você salvou Ex: (Salvar Dados) ou Recentes.', 'ok');
+    }, function(err){
+      var c = err && err.code;
+      if (c === 'declined') say('Download cancelado. Clique de novo quando quiser.');
+      else if (c === 'rate_limited') say('Já existe uma janela de download aberta. Responda a ela e tente de novo.');
+      else say('Não foi possível baixar aqui. Use Copiar código e salve no Bloco de Notas.', 'bad');
+    }).then(function(){ dlBtn.disabled = false; });
+  });
+
+
+  (function(){
+    var boxes=[].slice.call(document.querySelectorAll('#checklist input[type=checkbox]'));
+    var txt=document.getElementById('prog-txt'), bar=document.getElementById('prog-bar'), wrap=bar.parentNode, KEY='ftp-aula-check';
+    function save(){ try{ localStorage.setItem(KEY, JSON.stringify(boxes.map(function(b){return b.checked;}))); }catch(e){} }
+    function update(){
+      var t=boxes.reduce(function(a,b){return a+(b.checked?+b.dataset.w:0);},0);
+      bar.style.width=t+'%'; wrap.setAttribute('aria-valuenow',t);
+      var done=t===100; txt.classList.toggle('done',done); wrap.classList.toggle('done',done);
+      txt.innerHTML='<b>'+t+'%</b> '+(done?'concluído · aula completa!':'concluído');
+    }
+    try{ var st=JSON.parse(localStorage.getItem(KEY)||'[]'); boxes.forEach(function(b,i){ b.checked=!!st[i]; }); }catch(e){}
+    boxes.forEach(function(b){ b.addEventListener('change', function(){ update(); save(); }); });
+    document.getElementById('ck-reset').addEventListener('click', function(){ boxes.forEach(function(b){b.checked=false;}); update(); save(); });
+    update();
+  })();
+
+  (function(){
+    var fz=document.getElementById('fz-anim'); if(!fz) return;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var fields=[].slice.call(fz.querySelectorAll('.fz-quick .fz-f')), go=document.getElementById('fz-go');
+    var logs=[].slice.call(document.querySelectorAll('#fz-log > div')), files=[].slice.call(document.querySelectorAll('#fz-remote .fz-file'));
+    var timers=[], run=0;
+    function at(ms,fn){ timers.push(setTimeout(fn,ms)); }
+    function reset(){
+      timers.forEach(clearTimeout); timers=[];
+      fields.forEach(function(f){ f.classList.remove('typing'); f.querySelector('div').textContent=''; });
+      logs.forEach(function(l){ l.classList.add('hide'); }); files.forEach(function(f){ f.classList.add('hide'); f.classList.remove('new'); });
+      fz.classList.add('off'); go.classList.remove('press');
+    }
+    function play(){
+      reset(); var id=++run, t=500;
+      fields.forEach(function(f){
+        var box=f.querySelector('div'), txt=box.getAttribute('data-full');
+        at(t,function(){ f.classList.add('typing'); });
+        for (var i=1;i<=txt.length;i++){ (function(n){ at(t+n*85,function(){ box.textContent=txt.slice(0,n); }); })(i); }
+        t+=txt.length*85+350;
+        at(t-60,function(){ f.classList.remove('typing'); });
+      });
+      at(t+200,function(){ go.classList.add('press'); });
+      at(t+450,function(){ go.classList.remove('press'); });
+      t+=700;
+      logs.forEach(function(l,i){ at(t+i*550,function(){ l.classList.remove('hide'); }); });
+      t+=logs.length*550;
+      at(t,function(){ fz.classList.remove('off'); });
+      files.forEach(function(f,i){ at(t+250+i*300,function(){ f.classList.remove('hide'); f.classList.add('new'); }); });
+      t+=250+files.length*300+1200;
+      at(t,function(){ files.forEach(function(f){ f.classList.remove('new'); }); });
+      at(t+4500,function(){ if(id===run) play(); });
+    }
+    document.getElementById('fz-replay').addEventListener('click', play);
+    var started=false;
+    function start(){ if(!started){ started=true; play(); } }
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es,o){ es.forEach(function(e){ if(e.isIntersecting){ start(); o.disconnect(); } }); },{threshold:.4}).observe(fz);
+    } else setTimeout(start,1000);
+  })();
+
+  (function(){
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ ['xfer-svg','xfer-svg-v'].forEach(function(id){ var sv=document.getElementById(id); if(sv && sv.pauseAnimations){ sv.setCurrentTime && sv.setCurrentTime(1.5); sv.pauseAnimations(); } }); }
+  })();
+
+  (function(){
+    var pre=document.getElementById('ht-pre'); if(!pre) return;
+    var scr=pre.parentNode; scr.scrollTop=scr.scrollHeight;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var PR="<span class=\"pu\">ifsc@mint</span><span class=\"pc\">:</span><span class=\"pd\">~</span><span class=\"pc\">$</span> ", LOGIN=["<span class=\"dim\">Linux Mint 22 mint tty1</span>", "", "mint login: ifsc", "Password: ", "<span class=\"dim\">Last login: Mon Nov  9 10:12:03 on tty1</span>"], CMDS=[["neofetch", ["<span class=\"lg\"> ___________  </span><span class=\"nu\">ifsc</span>@<span class=\"nu\">mint</span>", "<span class=\"lg\">|_          \\ </span><span class=\"nd\">----------</span>", "<span class=\"lg\">  | | _____ | </span><span class=\"nk\">OS</span>: Linux Mint 22 x86_64", "<span class=\"lg\">  | | | | | | </span><span class=\"nk\">Host</span>: VirtualBox 1.2", "<span class=\"lg\">  | | | | | | </span><span class=\"nk\">Kernel</span>: 6.8.0-45-generic", "<span class=\"lg\">  | \\_____/ | </span><span class=\"nk\">Shell</span>: bash 5.2.21", "<span class=\"lg\">  \\_________/ </span><span class=\"nk\">DE</span>: Cinnamon 6.2", "<span class=\"lg\">              </span><span class=\"nk\">Memory</span>: 1024MiB / 3923MiB", "<span class=\"lg\">              </span>", "<span class=\"lg\">              </span><span class=\"cb c1\"></span><span class=\"cb c2\"></span><span class=\"cb c3\"></span><span class=\"cb c4\"></span><span class=\"cb c5\"></span><span class=\"cb c6\"></span>"]], ["sudo apt install -y vsftpd", ["<span class=\"dim\">Configurando vsftpd (3.0.5) ...</span>"]], ["systemctl is-active vsftpd", ["<span class=\"ok\">active</span>"]], ["sudo nano /etc/vsftpd.conf", ["<span class=\"dim\"># write_enable=YES · local_umask=022</span>", "<span class=\"dim\"># local_root=/var/www/html</span>"]], ["sudo systemctl restart vsftpd", []], ["sudo chown -R $USER:$USER /var/www/html", []], ["hostname -I", ["<span class=\"w\">192.168.56.101</span>", "<span class=\"dim\"># no FileZilla: Host 192.168.56.101, porta 21</span>"]], ["sudo tail -n 2 /var/log/vsftpd.log", ["<span class=\"ok\">OK DOWNLOAD</span>: \"/var/www/html/index.html\"", "<span class=\"ok\">OK UPLOAD</span>: \"/var/www/html/index.html\""]]];
+    var done='', timer;
+    function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+    function show(tail){ pre.innerHTML=done+tail+'<span class="cursor"></span>'; scr.scrollTop=scr.scrollHeight; }
+    function typeText(prefix,text,cb){
+      var n=0;
+      (function t(){ if(n<=text.length){ show(prefix+esc(text.slice(0,n))); n++; timer=setTimeout(t,45+Math.random()*45); } else timer=setTimeout(cb,300); })();
+    }
+    function wait(ms,cb){ timer=setTimeout(cb,ms); }
+    function login(cb){
+      done=LOGIN[0]+'\n\n'; show('');
+      wait(700,function(){ typeText('mint login: ','ifsc',function(){
+        done+='mint login: ifsc\n'; show('Password: ');
+        wait(1100,function(){ done+='Password: \n'+LOGIN[4]+'\n'; show(PR); wait(600,cb); });
+      }); });
+    }
+    function run(i){
+      if(i>=CMDS.length){ wait(3200,function(){ typeText(PR,'clear',function(){ start(); }); }); return; }
+      var c=CMDS[i];
+      typeText(PR,c[0],function(){
+        done+=PR+esc(c[0])+'\n';
+        if(c[0]==='neofetch'){ var k=0; (function line(){ if(k<c[1].length){ done+=c[1][k++]+'\n'; show(''); timer=setTimeout(line,70); } else { show(PR); wait(2600,function(){ run(i+1); }); } })(); return; }
+        done+=c[1].map(function(l){return l+'\n';}).join(''); show(PR);
+        wait(c[1].length?900:500,function(){ run(i+1); });
+      });
+    }
+    function start(){ clearTimeout(timer); done=''; login(function(){ run(0); }); }
+    wait(900,start);
+  })();
+  var btn = document.getElementById('burger'), menu = document.getElementById('menu');
+  function setOpen(o){ menu.classList.toggle('open', o); btn.setAttribute('aria-expanded', o); btn.setAttribute('aria-label', o ? 'Fechar menu das seções' : 'Abrir menu das seções'); }
+  btn.addEventListener('click', function(e){ e.stopPropagation(); setOpen(!menu.classList.contains('open')); });
+  menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
+  document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !menu.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', function(e){ if (e.key==='Escape' && menu.classList.contains('open')){ setOpen(false); btn.focus(); } });
+})();
+</script>
+
+</body>
+</html>

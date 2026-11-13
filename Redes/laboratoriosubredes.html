@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Sub-redes /26 no Packet Tracer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
+<style>
+/* Layout: barra IFSC fixa, hero com cartão das 3 sub-redes, seções em coluna de 1080px; o planejador alimenta tabelas, comandos do roteador, testes e animação */
+:root{
+  --bg:#F3F9F4; --surface:#FFFFFF; --surface-2:#E7F5EA; --ink:#0F2417; --muted:#4A6353; --line:#D2E6D7;
+  --green:#2F9E41; --green-strong:#1E7A30; --mint:#C6EECD; --red:#C8191E;
+  --code-bg:#0D1F14; --code-fg:#D7F2DD; --code-muted:#7FA88B; --code-key:#8BE39B;
+  --s1:#1C7EC0; --s2:#C98204; --s3:#8250C8; --s4:#D1407A; --neutral:#8A9A90;
+  --ok:#1E7A30; --bad:#C8191E; --warn:#A86A00;
+  --f-display:"Sora","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#06100A; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#06100A; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);padding:.1em .4em;border-radius:6px;color:var(--green-strong)}
+a{color:var(--green-strong)}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:6px}
+
+/* barra */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.ifsc-logo{height:40px;width:auto;flex:none;overflow:visible}
+.brand-txt{display:flex;flex-direction:column;line-height:1.05}
+.brand-txt .b1{font-family:"Open Sans",var(--f-body);font-weight:800;font-size:.95rem;letter-spacing:.01em}
+.brand-txt .b2{font-family:"Open Sans",var(--f-body);font-weight:400;font-size:.88rem}
+.menu-btn{display:none;width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;padding:0;flex-direction:column;align-items:center;justify-content:center;gap:5px;flex:none}
+.menu-btn span{display:block;width:20px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s}
+.menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{text-decoration:none;color:var(--muted);font-weight:600;font-size:.85rem;padding:6px 10px;border-radius:999px}
+.nav a:hover{background:var(--surface-2);color:var(--green-strong)}
+.back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#C8191E;color:#fff;font-weight:700;font-size:.85rem;padding:7px 14px 7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px #C8191E;transition:background .2s,transform .2s}
+.back:hover{background:#A51318;transform:translateY(-1px)}
+.back svg{width:16px;height:16px}
+@media (max-width:860px){.back{margin-left:auto}}
+
+/* hero */
+.hero{background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding-block:56px 48px}
+.hero .wrap > *{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-strong)}
+.eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--green)}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.5rem);font-weight:800;letter-spacing:-.035em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.lead{font-size:1.12rem;color:var(--muted);max-width:56ch;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:600}
+.chip svg{width:16px;height:16px;color:var(--green)}
+.hero-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 40px -24px color-mix(in srgb,var(--green) 55%,transparent)}
+.hero-card h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.hero-card .hint{font-size:.8rem;color:var(--muted);margin-top:12px}
+.vlist{display:grid;gap:8px}
+.vrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--surface-2)}
+.vtag{font-family:var(--f-mono);font-weight:600;font-size:.78rem;color:#fff;background:var(--vc);padding:3px 8px;border-radius:7px;white-space:nowrap}
+:root[data-theme="dark"] .vtag{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
+.vrow b{font-family:var(--f-display);font-size:.9rem}
+.vrow span.net{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* seções */
+section.sec{padding-block:64px;border-bottom:1px solid var(--line)}
+.sec-head{display:grid;gap:10px;margin-bottom:32px}
+.sec-head p{color:var(--muted);font-size:1.05rem;max-width:70ch}
+.sec-num{font-family:var(--f-mono);font-size:.8rem;color:var(--green-strong);font-weight:600}
+
+.def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+.def > *{min-width:0}
+.def p+p{margin-top:14px}
+.def .big{font-size:1.2rem;line-height:1.55}
+.def .big strong{color:var(--green-strong)}
+.ip-anatomy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:16px}
+.ip-anatomy h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ipline{font-family:var(--f-mono);font-size:clamp(1.05rem,2.6vw,1.5rem);font-weight:600;display:flex;flex-wrap:wrap;gap:2px;font-variant-numeric:tabular-nums}
+.ipline .n{color:var(--green-strong)} .ipline .h{color:var(--s3)}
+.anat-rows{display:grid;gap:8px}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:8px 0;border-top:1px dashed var(--line)}
+.anat b{font-family:var(--f-display);font-size:.88rem}
+.anat span{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--mint);color:var(--green-strong);flex:none}
+.ico svg{width:22px;height:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ben{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:10px;align-content:start;transition:transform .2s,border-color .2s}
+.ben:hover{transform:translateY(-3px);border-color:var(--green)}
+.ben p{color:var(--muted);font-size:.95rem}
+.note{margin-top:20px;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;background:var(--surface-2);border-radius:var(--r);padding:18px 20px}
+.note p{font-size:.98rem}
+
+/* planejador */
+.planner{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+.pform{background:var(--surface);border:2px solid var(--green);border-radius:22px;padding:20px;display:grid;gap:18px}
+.field{display:grid;gap:6px}
+.field > label,.field > .lbl{font-weight:700;font-size:.88rem}
+.field small{color:var(--muted);font-size:.8rem;line-height:1.4}
+.field input[type=text],.field input[type=number],.field select{font:600 1rem var(--f-mono);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);width:100%}
+.field input:focus{border-color:var(--green)}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .78rem var(--f-mono);padding:5px 9px;border-radius:999px;cursor:pointer}
+.presets button:hover{border-color:var(--green);color:var(--green-strong)}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg button{border:0;background:transparent;font:600 .85rem var(--f-body);color:var(--muted);padding:7px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--green);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#08130C}}
+.msg{font-size:.85rem;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:start}
+.msg svg{width:18px;height:18px;margin-top:2px}
+.msg.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok)}
+.msg.warn{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)}
+.msg.bad{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+.msg span{color:var(--ink)}
+
+.pout{display:grid;gap:16px;min-width:0}
+.bits{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:10px}
+.bits-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline}
+.bits-top b{font-family:var(--f-mono);font-size:1rem}
+.bits-top span{font-size:.82rem;color:var(--muted)}
+.bitrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.oct{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:2px}
+.bit{aspect-ratio:1/1.3;max-width:100%;border-radius:4px;display:grid;place-items:center;font:600 .68rem var(--f-mono);background:var(--surface-2);color:var(--muted)}
+.bit.on{background:var(--green);color:#fff}
+:root[data-theme="dark"] .bit.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bit.on{color:#08130C}}
+.bitleg{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);font-weight:600}
+.bitleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.stat b{font-family:var(--f-display);font-size:1.5rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.76rem;color:var(--muted);font-weight:600}
+
+/* tabelas */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:.9rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td{font-variant-numeric:tabular-nums}
+td.mono{font-family:var(--f-mono);font-size:.84rem}
+tr:last-child td{border-bottom:0}
+
+/* animação */
+.anim{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.anim-ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.anim-ctl .seg{background:var(--surface)}
+.anim-ctl label{font-size:.85rem;font-weight:600;color:var(--muted);display:flex;gap:8px;align-items:center}
+.anim-ctl select{font:600 .85rem var(--f-body);padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn{border:0;background:var(--green);color:#fff;font:700 .9rem var(--f-body);padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.btn:hover{background:var(--green-strong)}
+:root[data-theme="dark"] .btn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#08130C}}
+.btn svg{width:16px;height:16px}
+.stage{overflow-x:auto}
+.stage svg{display:block;width:100%;min-width:600px;height:auto}
+.status{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);font-size:.92rem}
+.pill{font:700 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.pill.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.status .desc{color:var(--muted);flex:1;min-width:240px}
+
+/* passos */
+.steps{display:grid;list-style:none;padding:0;margin:0}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;position:relative;padding-bottom:40px}
+.step::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(var(--green),var(--line))}
+.step:last-child::before{display:none}
+.step-n{width:56px;height:56px;border-radius:18px;background:var(--green);color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.3rem;display:grid;place-items:center;box-shadow:0 10px 24px -12px var(--green);position:relative;z-index:1}
+:root[data-theme="dark"] .step-n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .step-n{color:#08130C}}
+.step.test .step-n{background:var(--surface);color:var(--green-strong);border:2px dashed var(--green)}
+.step-body{display:grid;gap:12px;min-width:0;padding-top:4px}
+.step-body h3{font-size:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--mint);color:var(--green-strong)}
+.step-body > p{color:var(--muted);max-width:70ch}
+.step-body ul{margin:0;padding-left:20px;color:var(--muted)}
+.step-body li{margin-block:4px}
+.step-body li b{color:var(--ink)}
+.pt-ui{display:flex;flex-wrap:wrap;gap:8px}
+.pt-ui span{font-size:.82rem;font-weight:600;background:var(--surface);border:1px solid var(--line);padding:5px 10px;border-radius:8px}
+.pt-ui span::after{content:"›";margin-left:8px;color:var(--green)}
+.pt-ui span:last-child::after{content:none}
+
+.code{background:var(--code-bg);color:var(--code-fg);border-radius:14px;overflow:hidden;min-width:0}
+.code-top{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-bottom:1px solid color-mix(in srgb,var(--code-fg) 12%,transparent)}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:#3b5a46}.dots i:first-child{background:#5BC46D}
+.code-top span{font:600 .75rem var(--f-mono);color:var(--code-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy{border:1px solid color-mix(in srgb,var(--code-fg) 25%,transparent);background:transparent;color:var(--code-fg);font:600 .75rem var(--f-body);padding:5px 10px;border-radius:8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.copy:hover{background:color-mix(in srgb,var(--code-fg) 10%,transparent)}
+.copy svg{width:14px;height:14px}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font:400 .86rem/1.65 var(--f-mono);white-space:pre}
+.code .c{color:var(--code-muted);font-style:italic}
+.code .p{color:var(--code-key);font-weight:600}
+
+/* testes */
+.tests{display:grid;gap:10px}
+.test-row{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:8px}
+.test-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.test-head .kind{font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.kind.same{background:var(--mint);color:var(--green-strong)}
+.kind.cross{background:color-mix(in srgb,var(--s1) 15%,transparent);color:var(--s1)}
+.test-head b{font-family:var(--f-mono);font-size:.88rem}
+.test-head small{color:var(--muted);font-size:.85rem}
+.test-row details{font-size:.88rem;color:var(--muted)}
+.test-row summary{cursor:pointer;font-weight:600;color:var(--green-strong);width:fit-content}
+.test-row details p{margin-top:6px;display:flex;gap:8px;align-items:flex-start}
+.test-row details svg{width:18px;height:18px;flex:none;margin-top:2px}
+.r-ok{color:var(--ok)} .r-bad{color:var(--bad)}
+.observe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.obs{background:var(--surface-2);border-radius:14px;padding:14px;display:grid;grid-template-columns:40px 1fr;gap:12px;font-size:.92rem}
+.obs b{display:block;font-family:var(--f-display)}
+.obs span{color:var(--muted)}
+
+/* entrega */
+.deliver.solo{grid-template-columns:minmax(0,720px)}
+.deliver{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
+.deliver > *{min-width:0}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;gap:16px}
+.dcard.hl{border:2px solid var(--green);background:linear-gradient(180deg,var(--surface-2),var(--surface) 60%)}
+.fname{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--code-bg);color:var(--code-key);font:600 1.15rem var(--f-mono);padding:14px 16px;border-radius:14px;word-break:break-all}
+.fname span{flex:1;min-width:0}
+.check{display:grid;gap:8px}
+.check label{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:.95rem;cursor:pointer;padding:8px 10px;border-radius:10px}
+.check label:hover{background:var(--surface-2)}
+.check input{width:18px;height:18px;accent-color:var(--green);margin-top:3px}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+.qs{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--ink)}
+.qs li::marker{font-family:var(--f-display);font-weight:700;color:var(--green-strong)}
+
+.errs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.err{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:8px}
+.err h3{font-size:1rem;display:flex;gap:10px;align-items:center}
+.err h3 svg{width:20px;height:20px;color:var(--red);flex:none}
+.err p{font-size:.92rem;color:var(--muted)}
+
+footer{padding-block:36px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand svg{height:52px;width:auto}
+
+@media (max-width:920px){.planner{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .hero .wrap,.def,.deliver{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .menu-btn{display:inline-flex}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;margin:0;flex-direction:column;gap:2px;padding:10px max(16px,env(safe-area-inset-left,0px)) 16px;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -20px rgba(0,0,0,.35)}
+  .nav.open{display:flex;animation:navdrop .2s ease-out}
+  .nav a{font-size:1rem;padding:12px 14px;border-radius:12px}
+}
+@media (max-width:600px){
+  .grid3,.errs,.observe,.stats{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .step{grid-template-columns:44px minmax(0,1fr);gap:14px}
+  .step-n{width:44px;height:44px;border-radius:14px;font-size:1.1rem}
+  .step::before{left:21px;top:44px}
+  section.sec{padding-block:48px}
+  .bit{font-size:.55rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.fixed{display:flex;align-items:baseline;gap:10px;padding:10px 12px;border-radius:12px;border:1px dashed var(--green);background:var(--surface-2)}
+.fixed b{font:700 1.2rem var(--f-mono);color:var(--green-strong)}
+.fixed span{font:600 .85rem var(--f-mono);color:var(--muted)}
+.bit{animation:bitpop .35s both;animation-delay:calc(var(--i,0) * 22ms)}
+.r-ring{transform-box:view-box;animation:rring 2.4s ease-out infinite}
+@keyframes rring{from{transform:scale(1);opacity:.7}to{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion:reduce){.r-ring{animation:none;opacity:0}}
+.step-body h4.sub{font-family:var(--f-display);font-size:1.02rem;font-weight:700;margin:10px 0 0;display:flex;align-items:center;gap:10px}
+.step-body h4.sub::before{content:"";width:16px;height:3px;border-radius:3px;background:var(--green)}
+
+/* ---------- celular ---------- */
+@media (max-width:640px){
+  .stage svg{min-width:0}
+  .anim-ctl{padding:14px}
+  .anim-ctl .seg{width:100%}
+  .anim-ctl .seg button{flex:1;padding:8px 6px;font-size:.8rem}
+  .anim-ctl label{width:100%;justify-content:space-between}
+  .anim-ctl select{flex:1;min-width:0}
+  .anim-ctl .btn{width:100%;justify-content:center}
+  .status{flex-direction:column;align-items:flex-start;gap:8px}
+  .status .desc{min-width:0}
+  .tbl-wrap{border:0;background:transparent;overflow:visible}
+  .tbl-wrap table{min-width:0;font-size:.88rem}
+  .tbl-wrap thead{display:none}
+  .tbl-wrap tbody{display:grid;gap:10px}
+  .tbl-wrap tr{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 0}
+  .tbl-wrap td{display:flex;justify-content:space-between;align-items:center;gap:12px;border:0;padding:6px 14px;white-space:normal;text-align:right}
+  .tbl-wrap td::before{content:attr(data-label);font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;flex:none}
+  .tbl-wrap td:first-child{font-weight:700;font-family:var(--f-display)}
+  .code pre{font-size:.76rem;padding:12px 14px}
+  .code-top span{font-size:.7rem}
+  .hero .wrap{padding-block:36px 32px;gap:24px}
+  .hero h1{font-size:2rem}
+  .lead{font-size:1rem}
+  .sec-head{margin-bottom:24px}
+  .vrow{grid-template-columns:auto 1fr;row-gap:2px}
+  .vrow span.net{grid-column:2}
+  .planner .pform{padding:16px}
+  .stats{gap:6px}
+  .stat b{font-size:1.25rem}
+  .note{grid-template-columns:1fr;gap:10px}
+  .err,.ben{padding:16px}
+}
+@media (max-width:520px){
+  .bar .wrap{flex-wrap:nowrap;gap:10px}
+  .brand{gap:9px;min-width:0}
+  .ifsc-logo{height:34px}
+  .brand-txt .b1{font-size:.8rem}
+  .brand-txt .b2{font-size:.76rem}
+  .back{padding:7px 11px 7px 8px;font-size:.8rem;flex:none}
+  .menu-btn{width:40px;height:40px}
+}
+@keyframes navdrop{from{opacity:0;transform:translateY(-6px)}}
+@keyframes bitpop{from{transform:scale(.6);opacity:.35}}
+@media (prefers-reduced-motion:reduce){.bit{animation:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ifsc-mark" viewBox="0 0 410 555">
+      <circle cx="60" cy="60" r="66" fill="#CD191E"></circle>
+      <g fill="#2F9E41">
+        <rect x="145" y="0" width="120" height="120" rx="10"></rect><rect x="290" y="0" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="145" width="120" height="120" rx="10"></rect><rect x="145" y="145" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="290" width="120" height="120" rx="10"></rect><rect x="145" y="290" width="120" height="120" rx="10"></rect><rect x="290" y="290" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="435" width="120" height="120" rx="10"></rect><rect x="145" y="435" width="120" height="120" rx="10"></rect>
+      </g>
+    </symbol>
+    <symbol id="i-split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M12 3v18M3 12h18"></path></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path><path d="m9 12 2 2 4-4"></path></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-4"></path><path d="M3.3 19a10 10 0 1 1 17.4 0"></path></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"></circle><path d="M2 21v-1a6 6 0 0 1 12 0v1"></path><path d="M16 4a4 4 0 0 1 0 8"></path><path d="M22 21v-1a6 6 0 0 0-4-5.6"></path></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"></ellipse><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"></path><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"></circle><circle cx="18" cy="5" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path></symbol>
+    <symbol id="i-switch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="2"></rect><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"></path></symbol>
+    <symbol id="i-pc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6M9 9l6 6"></path></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"></path><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"></path></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m17 8-5-5-5 5M12 3v12"></path></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8M7 3v5h8"></path></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">
+      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg>
+      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    </div>
+    <nav class="nav" id="site-nav" aria-label="Seções">
+      <a href="#conceito">Conceito</a><a href="#planejador">Planejador</a><a href="#animacao">Animação</a><a href="#passos">Passo a passo</a><a href="#entrega">Checklist</a>
+    </nav>
+    <a class="back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Voltar</a>
+    <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="site-nav" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Laboratório · Cisco Packet Tracer</span>
+      <h1>Ligando <em>3 sub-redes /26</em> com um roteador</h1>
+      <p class="lead">Divida uma rede /24 em blocos de 64 endereços, monte três setores com seus switches e configure um roteador Cisco 2911 como gateway e servidor DHCP de todos eles. No caminho, veja o que acontece quando o roteador ainda não está configurado.</p>
+      <div class="chips">
+        <span class="chip"><svg><use href="#i-route"></use></svg>1× Roteador 2911</span>
+        <span class="chip"><svg><use href="#i-switch"></use></svg>3× Switch 2960</span>
+        <span class="chip"><svg><use href="#i-pc"></use></svg>6 + 6 PCs</span>
+        <span class="chip"><svg><use href="#i-route"></use></svg>DHCP no roteador</span>
+        <span class="chip"><svg><use href="#i-split"></use></svg>3 sub-redes /26</span>
+        <span class="chip"><svg><use href="#i-clock"></use></svg>≈ 50 min</span>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>Seu plano de endereçamento</h3>
+      <div class="vlist" id="hero-list"></div>
+      <p class="hint">Estes valores mudam quando você altera o <a href="#planejador">planejador</a>.</p>
+    </div>
+  </div>
+</div>
+
+<main>
+<section class="sec" id="conceito">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Conceito</span>
+      <h2>O que é uma sub-rede /26?</h2>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big">Uma <strong>sub-rede</strong> é um pedaço de uma rede IP maior. A <strong>máscara</strong> diz quantos bits do endereço identificam a rede e quantos sobram para os hosts.</p>
+        <p>Todo endereço IPv4 tem 32 bits. Em <code>/26</code>, os 26 primeiros bits são da rede e os 6 últimos são dos hosts. Isso dá 2⁶ = 64 endereços por sub-rede, e uma /24 cabe em exatamente 4 blocos: <code>.0</code>, <code>.64</code>, <code>.128</code> e <code>.192</code>. Nesta atividade usamos os três primeiros.</p>
+        <p>Dois PCs só se comunicam diretamente se estiverem na mesma sub-rede. Quando o destino está em outra, o PC entrega o pacote ao seu <strong>gateway padrão</strong>. Aqui o gateway é uma interface do <strong>roteador</strong>: cada porta dele fica dentro de uma sub-rede diferente.</p>
+        <p>Em cada sub-rede, dois endereços são reservados: o <strong>endereço de rede</strong> (bits de host em 0) e o <strong>broadcast</strong> (bits de host em 1). Por isso sobram <code>2⁶ − 2 = 62</code> hosts úteis.</p>
+      </div>
+      <div class="ip-anatomy">
+        <h3>Anatomia de 192.168.10.70 /26</h3>
+        <div class="ipline" aria-label="Endereço em binário">
+          <span class="n">11000000.10101000.00001010.01</span><span class="h">000110</span>
+        </div>
+        <div class="bitleg"><span><i style="background:var(--green-strong)"></i>26 bits de rede</span><span><i style="background:var(--s3)"></i>6 bits de host</span></div>
+        <div class="anat-rows">
+          <div class="anat"><b>Máscara</b><span>255.255.255.192</span></div>
+          <div class="anat"><b>Endereço de rede</b><span>192.168.10.64</span></div>
+          <div class="anat"><b>Faixa de hosts</b><span>192.168.10.65 – 192.168.10.126</span></div>
+          <div class="anat"><b>Broadcast</b><span>192.168.10.127</span></div>
+          <div class="anat"><b>Hosts úteis</b><span>2⁶ − 2 = 62</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="beneficios">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Por que usar</span>
+      <h2>Por que separar os setores com um roteador</h2>
+      <p>Administrativo, RH e Financeiro ficam em redes diferentes. O roteador é o único caminho entre elas, e isso traz vantagens.</p>
+    </div>
+    <div class="grid3">
+      <article class="ben"><div class="ico"><svg><use href="#i-gauge"></use></svg></div><h3>Menos broadcast</h3><p>Roteadores não repassam broadcast. O ARP e o DHCP de um setor ficam no switch dele e não ocupam a banda dos outros.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-shield"></use></svg></div><h3>Mais segurança</h3><p>Todo tráfego entre setores passa pelo roteador. É nele que se aplicam ACLs para, por exemplo, proteger o Financeiro.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-users"></use></svg></div><h3>Organização por setor</h3><p>O endereço já diz de onde vem o tráfego: 192.168.x.70 é do RH, 192.168.x.130 é do Financeiro.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-coin"></use></svg></div><h3>Espaço para crescer</h3><p>Três /26 usam 192 dos 256 endereços. O quarto bloco (.192/26) fica livre para um novo setor sem refazer o plano.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-search"></use></svg></div><h3>Diagnóstico mais rápido</h3><p>Um problema fica limitado a uma sub-rede. Com <code>ping</code> ao gateway e <code>tracert</code> você acha rápido o setor afetado.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-route"></use></svg></div><h3>Roteamento sem esforço</h3><p>Redes ligadas diretamente às interfaces entram sozinhas na tabela de rotas. Não é preciso rota estática nem protocolo.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="planejador">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Planejamento · sua escolha</span>
+      <h2>Escolha sua faixa e seus IPs</h2>
+      <p>Cada aluno deve ter um plano diferente. Sugestão: use o seu <b>número de chamada</b> no terceiro octeto (ex.: aluno 17 → <code>192.168.17.0</code>). Tabelas, comandos e testes abaixo se ajustam às suas escolhas.</p>
+    </div>
+    <div class="planner">
+      <form class="pform" id="pform" autocomplete="off">
+        <div class="field">
+          <label for="base">Rede base (privada)</label>
+          <input type="text" id="base" value="192.168.10.0" inputmode="decimal" spellcheck="false">
+          <div class="presets" aria-label="Exemplos de faixas privadas">
+            <button type="button" data-base="192.168.10.0">192.168.x.0</button>
+            <button type="button" data-base="172.16.10.0">172.16.x.0</button>
+            <button type="button" data-base="10.10.0.0">10.x.0.0</button>
+          </div>
+          <small>Faixas privadas (RFC 1918): 10.0.0.0/8, 172.16.0.0/12 e 192.168.0.0/16.</small>
+        </div>
+        <div class="field">
+          <span class="lbl">Máscara de cada sub-rede</span>
+          <div class="fixed"><b>/26</b><span>255.255.255.192 · 62 hosts</span></div>
+          <small>Fixa nesta atividade.</small>
+        </div>
+        <div class="field">
+          <span class="lbl" id="gw-lbl">Gateway (interface do roteador)</span>
+          <div class="seg" role="group" aria-labelledby="gw-lbl">
+            <button type="button" id="gw-first" aria-pressed="true">Primeiro host</button>
+            <button type="button" id="gw-last" aria-pressed="false">Último host</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="pcstart">Número do 1º PC dentro da sub-rede</label>
+          <input type="number" id="pcstart" value="10" min="1" max="61">
+          <small>O 2º PC recebe o número seguinte. Ex.: 10 → PCs nos hosts .10 e .11 de cada sub-rede.</small>
+        </div>
+        <div id="pmsg"></div>
+      </form>
+      <div class="pout">
+        <div class="bits">
+          <div class="bits-top"><b id="mask-txt">255.255.255.192 · /26</b><span>bits da máscara</span></div>
+          <div class="bitrow" id="bitrow"></div>
+          <div class="bitleg"><span><i style="background:var(--green)"></i>bits de rede (1)</span><span><i style="background:var(--surface-2);border:1px solid var(--line)"></i>bits de host (0)</span></div>
+          <div class="stats">
+            <div class="stat"><b>64</b><span>endereços por sub-rede</span></div>
+            <div class="stat"><b>62</b><span>hosts úteis</span></div>
+            <div class="stat"><b>192</b><span>endereços usados de 256</span></div>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Setor</th><th>Porta R-IFSC</th><th>Rede / CIDR</th><th>Gateway</th><th>Faixa útil</th><th>Broadcast</th></tr></thead>
+            <tbody id="plan-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="animacao">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Animação</span>
+      <h2>Veja o pacote atravessar (ou não) o roteador</h2>
+      <p>Escolha origem e destino. Compare o roteador recém-colocado, com as interfaces desligadas, com o roteador depois da configuração.</p>
+    </div>
+    <div class="anim">
+      <div class="anim-ctl">
+        <div class="seg" role="group" aria-label="Estado do roteador">
+          <button type="button" id="m-off" aria-pressed="false">Roteador sem configuração</button>
+          <button type="button" id="m-on" aria-pressed="true">Roteador configurado</button>
+        </div>
+        <label for="a-src">Origem <select id="a-src"></select></label>
+        <label for="a-dst">Destino <select id="a-dst"></select></label>
+        <button type="button" class="btn" id="play"><svg><use href="#i-play"></use></svg>Enviar ping</button>
+      </div>
+      <div class="stage"><svg id="topo" viewBox="0 0 720 440" role="img" aria-label="Topologia: roteador R-IFSC no topo, três switches de setor e seis PCs"></svg></div>
+      <div class="status">
+        <span class="pill" id="a-pill">Pronto</span>
+        <div class="desc" id="a-desc">Escolha um PC de origem e um de destino e clique em “Enviar ping”.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="passos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Prática</span>
+      <h2>Passo a passo no Packet Tracer</h2>
+      <p>Siga a ordem. Os passos com número tracejado são <b>testes</b>: execute, observe e anote o que acontece antes de abrir o resultado esperado.</p>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Registre seu plano</h3>
+          <p>Use o <a href="#planejador">planejador</a> para escolher a rede base, o gateway e os IPs dos PCs. Anote a tabela no caderno: você vai precisar dela nos próximos passos e nas perguntas da tarefa.</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Monte a topologia</h3>
+          <div class="pt-ui"><span>Network Devices</span><span>Routers</span><span>2911</span></div>
+          <ul>
+            <li><b>1 roteador 2911</b> no centro, renomeado para <code>R-IFSC</code>. Ele já tem três portas Gigabit (<code>G0/0</code>, <code>G0/1</code>, <code>G0/2</code>), uma por sub-rede.</li>
+            <li><b>3 switches 2960</b>: <code>SW-ADM</code>, <code>SW-RH</code> e <code>SW-FIN</code>.</li>
+            <li><b>6 PCs</b> (<i>End Devices › PC-PT</i>), dois por setor, nomeados PC0 a PC5.</li>
+            <li>Cabo <b>Copper Straight-Through</b> de cada PC (<code>FastEthernet0</code>) até <code>Fa0/1</code> e <code>Fa0/2</code> do switch do setor.</li>
+            <li>Cabo <b>Copper Straight-Through</b> da porta <code>Gig0/1</code> de cada 2960 até o roteador: ADM em <code>G0/0</code>, RH em <code>G0/1</code>, FIN em <code>G0/2</code>.</li>
+            <li>Os links PC–switch ficam <b>verdes</b> em cerca de 30 s. Os três links do roteador ficam <b>vermelhos</b>: as interfaces de um roteador Cisco vêm desligadas (<i>shutdown</i>). Isso é resolvido no passo 5.</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Configure o IP de cada PC</h3>
+          <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>Static</span></div>
+          <p>Preencha IPv4 Address, Subnet Mask e Default Gateway de acordo com o <b>seu</b> plano:</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>PC</th><th>Conexão</th><th>Setor</th><th>Endereço IP</th><th>Máscara</th><th>Gateway</th></tr></thead>
+              <tbody id="pc-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Teste 1: roteador ainda sem configuração <span class="tag">Observe</span></h3>
+          <p>Abra <b>Desktop › Command Prompt</b> no PC de origem e faça os pings abaixo. Depois repita no <b>modo Simulation</b> (canto inferior direito), filtrando por <code>ARP</code> e <code>ICMP</code>, e acompanhe os envelopes passo a passo.</p>
+          <div class="tests" id="tests1"></div>
+          <div class="observe">
+            <div class="obs"><div class="ico"><svg><use href="#i-eye"></use></svg></div><div><b>O que observar</b><span>Para qual IP o PC manda o ARP quando o destino é de outra sub-rede? O envelope chega a passar do switch?</span></div></div>
+            <div class="obs"><div class="ico"><svg><use href="#i-bulb"></use></svg></div><div><b>Pense nisto</b><span>Os cabos até o roteador estão ligados. Por que os links dele estão vermelhos e os pings entre setores falham?</span></div></div>
+          </div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Configure as interfaces do R-IFSC</h3>
+          <p>Clique no roteador e abra a aba <b>CLI</b>. Se aparecer <i>“Would you like to enter the initial configuration dialog?”</i>, responda <code>no</code>. Cada interface recebe o IP de gateway do seu setor e o comando <code>no shutdown</code> a liga. Os IPs abaixo saem do seu plano.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R-IFSC · configuração das interfaces</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre id="cli-r"></pre></div>
+          <div class="note" style="margin-top:0"><div class="ico"><svg><use href="#i-bulb"></use></svg></div><p>Diferente de um switch de camada 3, o roteador já vem com o roteamento IP ligado. Não é preciso digitar <code>ip routing</code> nem criar rotas: as três redes estão conectadas direto nas interfaces dele.</p></div>
+          <p>Em alguns segundos os links ficam verdes. Confira com <code>show ip interface brief</code> (as 3 interfaces devem estar <i>up/up</i> com o IP certo) e <code>show ip route</code> (devem aparecer 3 redes /26 marcadas com <b>C</b>, de <i>connected</i>).</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R-IFSC# show ip route · trecho esperado</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre id="cli-route"></pre></div>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <h3>Teste 2: roteador configurado <span class="tag">Observe</span></h3>
+          <p>Repita os testes e acrescente um <code>tracert</code>. O primeiro ping entre redes pode perder 1 pacote enquanto o ARP é resolvido; isso é normal. Repare também no <b>TTL</b> da resposta.</p>
+          <div class="tests" id="tests2"></div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <h3>Configure o DHCP no R-IFSC <span class="tag">Novo</span></h3>
+          <p>Agora o roteador também vai distribuir os endereços. Cada sub-rede ganha um <b>pool</b> com a rede, a máscara e o gateway. Antes dos pools, reserve os primeiros IPs de cada bloco com <code>excluded-address</code>, para o DHCP nunca entregar o IP do gateway ou de um futuro servidor.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R-IFSC · servidor DHCP</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre id="cli-dhcp"></pre></div>
+          <div class="note" style="margin-top:0"><div class="ico"><svg><use href="#i-bulb"></use></svg></div><p>Os três pools ficam no mesmo roteador, e ele escolhe qual usar pela interface onde o pedido chegou. Um pedido que entra pela <code id="dhcp-ex-port">G0/1</code> só pode receber IP do pool cuja rede é a dessa interface.</p></div>
+
+          <h4 class="sub">Mude os PCs para IP automático</h4>
+          <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>DHCP</span></div>
+          <ul>
+            <li>Faça isso nos <b>6 PCs</b> que você já tem. Deve aparecer <i>“DHCP request successful”</i>, e IP, máscara e gateway se preenchem sozinhos.</li>
+            <li>Os IPs fixos do passo 3 são substituídos. Cada PC recebe o primeiro endereço livre do pool do seu setor, a partir do host <b>.10</b> do bloco.</li>
+          </ul>
+
+          <h4 class="sub">Adicione mais dois PCs em cada sub-rede</h4>
+          <p>Arraste mais 6 PCs, ligue com cabo <b>Copper Straight-Through</b> e já marque <b>DHCP</b> em cada um. Nenhum IP precisa ser digitado.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>PC</th><th>Conexão</th><th>Setor</th><th>Configuração</th><th>Recebe IP da faixa</th><th>Gateway recebido</th></tr></thead>
+              <tbody id="dhcp-body"></tbody>
+            </table>
+          </div>
+
+          <h4 class="sub">Confira</h4>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R-IFSC# e PC › Command Prompt</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre data-hl="">show ip dhcp binding
+! no roteador: devem aparecer 12 endereços, 4 por sub-rede
+ipconfig /all
+! no PC: IP dentro da faixa do setor, máscara 255.255.255.192</pre></div>
+          <p>Por fim, faça um ping de um PC novo do Administrativo para um PC novo do Financeiro. Ele deve responder com <b>TTL=127</b>, como no Teste 2.</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">8</div>
+        <div class="step-body">
+          <h3>Salve a configuração e o arquivo</h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R-IFSC#</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre data-hl="">copy running-config startup-config
+! confirme com Enter: Destination filename [startup-config]?</pre></div>
+          <p>Depois salve o laboratório em <b>File › Save As</b> e confira o <a href="#entrega">checklist final</a>.</p>
+        </div>
+      </li>
+
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="entrega">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Revisão</span>
+      <h2>Checklist final</h2>
+      <p>Marque cada item antes de encerrar a atividade.</p>
+    </div>
+    <div class="deliver solo">
+      <div class="dcard">
+        <h3>Itens da atividade</h3>
+        <div class="progress" aria-hidden="true"><i id="prog"></i></div>
+        <div class="check" id="checklist">
+          <label><input type="checkbox" id="ck1"><span>Topologia com 1 roteador 2911, 3 switches 2960 e 6 PCs iniciais</span></label>
+          <label><input type="checkbox" id="ck2"><span>IPs dos 6 PCs configurados conforme o meu plano</span></label>
+          <label><input type="checkbox" id="ck3"><span>Teste 1 feito e resultados anotados</span></label>
+          <label><input type="checkbox" id="ck4"><span>R-IFSC com IP e <code>no shutdown</code> nas 3 interfaces</span></label>
+          <label><input type="checkbox" id="ck5"><span>Teste 2 feito: pings entre setores funcionando</span></label>
+          <label><input type="checkbox" id="ck9"><span>DHCP com 3 pools e 12 PCs recebendo IP automático</span></label>
+          <label><input type="checkbox" id="ck6"><span><code>copy running-config startup-config</code> executado</span></label>
+          <label><input type="checkbox" id="ck7"><span>Arquivo do laboratório salvo (.pkt)</span></label>
+        </div>
+        <div class="note" style="margin-top:0"><div class="ico"><svg><use href="#i-upload"></use></svg></div><p>Feche e reabra o arquivo no Packet Tracer para conferir se a configuração foi salva.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="erros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Solução de problemas</span>
+      <h2>Erros comuns</h2>
+    </div>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Link vermelho no roteador</h3><p>A interface continua desligada. Entre nela (<code>interface g0/x</code>) e digite <code>no shutdown</code>. Confira com <code>show ip interface brief</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Ping funciona no setor, mas não entre setores</h3><p>Verifique o Default Gateway do PC: ele deve ser exatamente o IP da interface do R-IFSC ligada ao switch daquele setor.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>“% Bad mask” ou “overlaps with”</h3><p>O IP digitado é o endereço de rede ou o broadcast, ou duas interfaces estão na mesma sub-rede. Volte ao planejador e use um host da faixa útil.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Máscara 255.255.255.0 no PC</h3><p>Com /24 o PC acha que todos os endereços .x estão na rede dele e não usa o gateway. Use 255.255.255.192 em todos os dispositivos.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Cabo na porta errada do roteador</h3><p>Se SW-RH estiver na <code>G0/0</code>, o RH fica com o gateway do Administrativo. Passe o mouse sobre o cabo para ver as portas e compare com a tabela do plano.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>PC recebe 169.254.x.x</h3><p>“DHCP request failed”: o PC não achou servidor. Confira se o <code>network</code> do pool é a mesma rede da interface do setor e se a interface está <i>up</i>. Depois clique em DHCP de novo.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>“IP address conflict” ou gateway entregue a um PC</h3><p>Faltou o <code>ip dhcp excluded-address</code> antes dos pools. Adicione a exclusão, rode <code>clear ip dhcp binding *</code> e peça o IP de novo nos PCs.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Configuração sumiu ao reabrir</h3><p>Faltou <code>copy running-config startup-config</code> no R-IFSC ou salvar o arquivo (Ctrl+S) antes de fechar o Packet Tracer.</p></article>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Redes de Computadores</span><span>Cisco Packet Tracer · Roteador 2911 e Catalyst 2960</span></div>
+</footer>
+
+<script>
+(function(){
+  var SECT = [
+    {n:'ADMINISTRATIVO', s:'ADM', c:'var(--s1)'},
+    {n:'RH', s:'RH', c:'var(--s2)'},
+    {n:'FINANCEIRO', s:'FIN', c:'var(--s3)'}
+  ];
+  var PREFIX = 26, BLOCK = 64, USABLE = 62, MASK = '255.255.255.192';
+  var ICON = function(id){ return '<svg><use href="#'+id+'"/></svg>'; };
+  var $ = function(id){ return document.getElementById(id); };
+
+  // ---------- menu ----------
+  var mBtn = document.getElementById('menu-btn'), mNav = document.getElementById('site-nav');
+  function setMenu(open){ mNav.classList.toggle('open', open); mBtn.setAttribute('aria-expanded', open); mBtn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu'); }
+  mBtn.addEventListener('click', function(){ setMenu(mBtn.getAttribute('aria-expanded') !== 'true'); });
+  mNav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+  document.addEventListener('click', function(e){ if (!e.target.closest('.bar')) setMenu(false); });
+
+  // ---------- IP helpers ----------
+  function toInt(s){
+    var m = String(s).trim().match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+    if(!m) return null;
+    var p = m.slice(1).map(Number);
+    if (p.some(function(x){return x>255;})) return null;
+    return p[0]*16777216 + p[1]*65536 + p[2]*256 + p[3];
+  }
+  function toStr(n){ return [Math.floor(n/16777216)%256, Math.floor(n/65536)%256, Math.floor(n/256)%256, n%256].join('.'); }
+  function isPrivate(n){
+    var a = Math.floor(n/16777216), b = Math.floor(n/65536)%256;
+    return a===10 || (a===172 && b>=16 && b<=31) || (a===192 && b===168);
+  }
+
+  // ---------- estado ----------
+  var st = {base:'192.168.10.0', gw:'first', start:10};
+  try { var saved = JSON.parse(localStorage.getItem('subredes3-plan')||'null'); if(saved && saved.base) st = Object.assign(st, saved); } catch(e){}
+  var plan = null;
+
+  function compute(){
+    var msgs = [], err = false;
+    var b = toInt(st.base);
+    if (b===null){ return {err:true, msgs:[['bad','Digite um endereço IPv4 válido, por exemplo 192.168.17.0.']]}; }
+    var net0 = b - (b % 256);
+    if (net0 !== b) msgs.push(['warn','A rede base foi ajustada para '+toStr(net0)+', o início da /24 que será dividida.']);
+    var gwOff = st.gw==='first' ? 1 : USABLE;
+    var s = Math.floor(Number(st.start));
+    var nets = [];
+    for (var k=0;k<3;k++){
+      var net = net0 + k*BLOCK;
+      nets.push({k:k, net:net, bc:net+BLOCK-1, first:net+1, last:net+BLOCK-2, gw:net+gwOff, pcs:[net+s, net+s+1]});
+    }
+    if (!isPrivate(net0)){ msgs.push(['bad','Use uma faixa privada: 10.x.x.x, 172.16–31.x.x ou 192.168.x.x.']); err = true; }
+    if (!(s>=1) || s+1>USABLE){ msgs.push(['bad','Em /26 os hosts vão de 1 a 62. Escolha o 1º PC entre 1 e 61.']); err = true; }
+    else if (s===gwOff || s+1===gwOff){ msgs.push(['bad','O número escolhido coincide com o gateway (host '+gwOff+'). Escolha outro.']); err = true; }
+    if (!err) msgs.push(['ok','Plano válido: 3 sub-redes /26 sem sobreposição. O bloco '+toStr(net0+192)+'/26 fica livre.']);
+    return {err:err, msgs:msgs, nets:nets};
+  }
+
+  // ---------- render ----------
+  var KW = /^(\s*)(ip dhcp excluded-address|ip dhcp pool|network|default-router|show ip dhcp binding|ipconfig|enable|configure terminal|interface|ip address|no shutdown|no ip domain-lookup|description|hostname|exit|end|copy)\b/;
+  function hlText(txt){
+    return txt.split('\n').map(function(l){
+      var esc = l.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      if (/^\s*!/.test(l)) return '<span class="c">'+esc+'</span>';
+      if (/^C\s/.test(l)) return '<span class="p">C</span>'+esc.slice(1);
+      return esc.replace(KW, '$1<span class="p">$2</span>');
+    }).join('\n');
+  }
+  document.querySelectorAll('pre[data-hl]').forEach(function(pre){ pre.innerHTML = hlText(pre.textContent); });
+
+  // bits fixos /26
+  (function(){
+    var html = '';
+    for (var o=0;o<4;o++){
+      html += '<div class="oct">';
+      for (var i=0;i<8;i++){ var on = o*8+i < PREFIX; html += '<span class="bit'+(on?' on':'')+'" style="--i:'+(o*8+i)+'">'+(on?1:0)+'</span>'; }
+      html += '</div>';
+    }
+    $('bitrow').innerHTML = html;
+  })();
+
+  function render(){
+    var r = compute();
+    $('pmsg').innerHTML = r.msgs.map(function(m){
+      var ic = m[0]==='ok' ? 'i-check' : (m[0]==='warn' ? 'i-alert' : 'i-x');
+      return '<div class="msg '+m[0]+'">'+ICON(ic)+'<span>'+m[1]+'</span></div>';
+    }).join('');
+    $('gw-first').setAttribute('aria-pressed', st.gw==='first');
+    $('gw-last').setAttribute('aria-pressed', st.gw==='last');
+    if (!r.nets) return;
+    plan = r;
+    try { localStorage.setItem('subredes3-plan', JSON.stringify(st)); } catch(e){}
+
+    $('hero-list').innerHTML = r.nets.map(function(n){
+      var s = SECT[n.k];
+      return '<div class="vrow" style="--vc:'+s.c+'"><span class="vtag">'+s.s+'</span><b>'+s.n+'</b><span class="net">'+toStr(n.net)+'/26</span></div>';
+    }).join('') + '<div class="vrow" style="--vc:var(--neutral)"><span class="vtag">LIVRE</span><b>Reserva</b><span class="net">'+toStr(r.nets[0].net+192)+'/26</span></div>';
+
+    $('plan-body').innerHTML = r.nets.map(function(n){
+      var s = SECT[n.k];
+      return '<tr><td><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td class="mono">G0/'+n.k+'</td><td class="mono">'+toStr(n.net)+'/26</td><td class="mono">'+toStr(n.gw)+'</td><td class="mono">'+toStr(n.first)+' – '+toStr(n.last)+'</td><td class="mono">'+toStr(n.bc)+'</td></tr>';
+    }).join('');
+
+    var rows = '';
+    r.nets.forEach(function(n){
+      var s = SECT[n.k];
+      [0,1].forEach(function(j){
+        var pc = n.k*2+j;
+        rows += '<tr><td>PC'+pc+'</td><td class="mono">SW-'+s.s+' Fa0/'+(j+1)+'</td><td><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td class="mono">'+toStr(n.pcs[j])+'</td><td class="mono">'+MASK+'</td><td class="mono">'+toStr(n.gw)+'</td></tr>';
+      });
+    });
+    $('pc-body').innerHTML = rows;
+
+    var cli = 'enable\nconfigure terminal\nhostname R-IFSC\nno ip domain-lookup\n';
+    r.nets.forEach(function(n){
+      cli += '! ---- '+SECT[n.k].n+' · rede '+toStr(n.net)+'/26 ----\n';
+      cli += 'interface gigabitEthernet 0/'+n.k+'\n description '+SECT[n.k].n+'\n ip address '+toStr(n.gw)+' '+MASK+'\n no shutdown\n exit\n';
+    });
+    cli += 'end';
+    $('cli-r').innerHTML = hlText(cli);
+    $('cli-route').innerHTML = hlText(r.nets.map(function(n){
+      return 'C    '+toStr(n.net)+'/26 is directly connected, GigabitEthernet0/'+n.k;
+    }).join('\n'));
+
+    var dh = 'enable\nconfigure terminal\n! ---- IPs que o DHCP nunca vai entregar ----\n';
+    r.nets.forEach(function(n){
+      dh += 'ip dhcp excluded-address '+toStr(n.net+1)+' '+toStr(n.net+9)+'\n';
+      if (st.gw==='last') dh += 'ip dhcp excluded-address '+toStr(n.gw)+'\n';
+    });
+    r.nets.forEach(function(n){
+      dh += '! ---- pool '+SECT[n.k].n+' · rede '+toStr(n.net)+'/26 ----\n';
+      dh += 'ip dhcp pool '+SECT[n.k].n+'\n network '+toStr(n.net)+' '+MASK+'\n default-router '+toStr(n.gw)+'\n exit\n';
+    });
+    dh += 'end';
+    $('cli-dhcp').innerHTML = hlText(dh);
+    var drows = '';
+    r.nets.forEach(function(n){
+      var s = SECT[n.k], hi = st.gw==='last' ? n.gw-1 : n.last;
+      [0,1].forEach(function(j){
+        drows += '<tr><td>PC'+(6+n.k*2+j)+'</td><td class="mono">SW-'+s.s+' Fa0/'+(j+3)+'</td><td><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td><span class="kind same" style="font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px">DHCP</span></td><td class="mono">'+toStr(n.net+10)+' – '+toStr(hi)+'</td><td class="mono">'+toStr(n.gw)+'</td></tr>';
+      });
+    });
+    $('dhcp-body').innerHTML = drows;
+    var ip = function(pc){ return toStr(r.nets[Math.floor(pc/2)].pcs[pc%2]); };
+    var gw = function(k){ return toStr(r.nets[k].gw); };
+    var T1 = [
+      {src:0,dst:1,kind:'same',ok:true,why:'PC0 e PC1 estão na sub-rede do Administrativo. O ARP pergunta direto pelo IP do PC1, o SW-ADM entrega e o ping responde com TTL=128.'},
+      {src:2,dst:3,kind:'same',ok:true,why:'PC2 e PC3 estão na sub-rede do RH. Comunicação direta pelo switch, sem precisar do roteador.'},
+      {src:0,dst:2,kind:'cross',ok:false,why:'O destino é de outra sub-rede, então PC0 manda um ARP perguntando pelo gateway '+gw(0)+'. A G0/0 do roteador está desligada e sem IP: ninguém responde e aparece “Request timed out”.'},
+      {src:4,dst:3,kind:'cross',ok:false,why:'Financeiro tentando falar com o RH. O pacote nem sai do PC4, porque o gateway '+gw(2)+' ainda não existe.'},
+      {src:0,cmd:'ping '+gw(0),kind:'same',ok:false,why:'Até o próprio gateway falha. Este é o primeiro teste a fazer quando algo não funciona entre redes.'}
+    ];
+    var T2 = [
+      {src:0,dst:1,kind:'same',ok:true,why:'Continua funcionando: o tráfego dentro da sub-rede não passa pelo roteador. TTL=128.'},
+      {src:0,cmd:'ping '+gw(0),kind:'same',ok:true,why:'Agora a G0/0 tem o IP '+gw(0)+' e responde. O PC alcança o seu gateway.'},
+      {src:0,dst:2,kind:'cross',ok:true,why:'O R-IFSC recebe o pacote pela G0/0 (Administrativo) e entrega pela G0/1 (RH). A resposta chega com TTL=127: o roteador descontou 1.'},
+      {src:4,dst:3,kind:'cross',ok:true,why:'O R-IFSC recebe pela G0/2 (Financeiro) e entrega pela G0/1 (RH). A resposta faz o caminho inverso.'},
+      {src:0,cmd:'tracert '+ip(5),kind:'cross',ok:true,why:'Aparecem 2 saltos: primeiro o gateway '+gw(0)+' e depois o PC5 ('+ip(5)+'). Dentro da mesma sub-rede, o tracert mostra só 1 salto.'}
+    ];
+    function renderTests(list, id){
+      $(id).innerHTML = list.map(function(t){
+        var cmd = t.cmd || ('ping '+ip(t.dst));
+        var sec = SECT[Math.floor(t.src/2)].s + (t.dst!==undefined ? ' → '+SECT[Math.floor(t.dst/2)].s : ' → gateway');
+        var label = t.kind==='same' ? 'Mesma rede' : 'Entre redes';
+        return '<div class="test-row"><div class="test-head"><span class="kind '+t.kind+'">'+label+'</span><b>PC'+t.src+' › '+cmd+'</b><small>'+sec+'</small></div>'+
+          '<details><summary>Ver resultado esperado</summary><p class="'+(t.ok?'r-ok':'r-bad')+'">'+ICON(t.ok?'i-check':'i-x')+'<span style="color:var(--muted)"><b class="'+(t.ok?'r-ok':'r-bad')+'">'+(t.ok?'Responde. ':'Falha. ')+'</b>'+t.why+'</span></p></details></div>';
+      }).join('');
+    }
+    renderTests(T1,'tests1'); renderTests(T2,'tests2');
+    labelTables();
+    drawLabels();
+  }
+  function labelTables(){
+    document.querySelectorAll('.tbl-wrap table').forEach(function(t){
+      var hs = Array.prototype.map.call(t.querySelectorAll('thead th'), function(th){ return th.textContent; });
+      t.querySelectorAll('tbody tr').forEach(function(tr){ Array.prototype.forEach.call(tr.children, function(td,i){ td.setAttribute('data-label', hs[i]||''); }); });
+    });
+  }
+
+  // ---------- planejador: eventos ----------
+  $('base').value = st.base; $('pcstart').value = st.start;
+  $('pform').addEventListener('submit', function(e){ e.preventDefault(); });
+  $('base').addEventListener('input', function(){ st.base = this.value; render(); });
+  $('pcstart').addEventListener('input', function(){ st.start = this.value; render(); });
+  $('gw-first').addEventListener('click', function(){ st.gw='first'; render(); });
+  $('gw-last').addEventListener('click', function(){ st.gw='last'; render(); });
+  document.querySelectorAll('.presets button').forEach(function(b){
+    b.addEventListener('click', function(){ st.base = b.dataset.base; $('base').value = st.base; render(); $('base').focus(); });
+  });
+
+  // ---------- copiar ----------
+  function selectEl(el){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  function copyFrom(btn, el){
+    var label = btn.innerHTML;
+    var done = function(msg){ btn.innerHTML = msg; setTimeout(function(){ btn.innerHTML = label; }, 1600); };
+    try { navigator.clipboard.writeText(el.textContent).then(function(){ done('Copiado'); }, function(){ selectEl(el); done('Selecionado: Ctrl+C'); }); }
+    catch(e){ selectEl(el); done('Selecionado: Ctrl+C'); }
+  }
+  document.querySelectorAll('.code .copy').forEach(function(b){ b.addEventListener('click', function(){ copyFrom(b, b.closest('.code').querySelector('pre')); }); });
+
+  // ---------- checklist ----------
+  var cks = Array.prototype.slice.call(document.querySelectorAll('#checklist input'));
+  var ckState = {};
+  try { ckState = JSON.parse(localStorage.getItem('subredes3-check')||'{}') || {}; } catch(e){}
+  function updProg(){ var n = cks.filter(function(c){return c.checked;}).length; $('prog').style.width = (n/cks.length*100)+'%'; }
+  cks.forEach(function(c){
+    c.checked = !!ckState[c.id];
+    c.addEventListener('change', function(){ ckState[c.id] = c.checked; try{ localStorage.setItem('subredes3-check', JSON.stringify(ckState)); }catch(e){} updProg(); });
+  });
+  updProg();
+
+  // ---------- animação ----------
+  var NS = 'http://www.w3.org/2000/svg', svg = $('topo');
+  function el(tag, attrs, parent){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+  var R, SWS, PCS, gPk, xMark, rRing, rRect, rSub, compact = null;
+  function build(cmp){
+    compact = cmp;
+    var L = cmp
+      ? {w:360,h:440,R:{x:118,y:50},sw:[60,180,300],swY:200,swW:84,ports:2,pcDx:30,pcY:325,netY:402,nameY:419,netF:9.5,name:'s'}
+      : {w:720,h:440,R:{x:360,y:62},sw:[140,360,580],swY:205,swW:104,ports:4,pcDx:50,pcY:330,netY:405,nameY:422,netF:11,name:'n'};
+    svg.innerHTML = '';
+    svg.setAttribute('viewBox','0 0 '+L.w+' '+L.h);
+    R = L.R;
+    SWS = L.sw.map(function(x,k){ return {x:x,y:L.swY,k:k}; });
+    PCS = [];
+    SWS.forEach(function(s){ [-L.pcDx,L.pcDx].forEach(function(dx,j){ PCS.push({i:s.k*2+j, x:s.x+dx, y:L.pcY, sw:s, k:s.k}); }); });
+
+    var gLinks = el('g',{},svg), gNodes = el('g',{},svg); gPk = el('g',{},svg);
+    SWS.forEach(function(s){
+      var dx=(s.k-1)*22; s.upTop = {x:R.x+dx, y:R.y+Math.sqrt(30*30-dx*dx)};
+      s.up = el('line',{x1:s.x,y1:s.y-16,x2:s.upTop.x,y2:s.upTop.y,'stroke-width':2.5,'stroke-linecap':'round'},gLinks);
+      var left = s.x < s.upTop.x - 4;
+      var mx = (s.x+s.upTop.x)/2 + (left?-10:10);
+      s.port = el('text',{x:mx,y:(s.y+R.y)/2+8,'text-anchor':left?'end':'start','font-size':10.5,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},gLinks);
+      s.port.textContent = 'G0/'+s.k;
+      s.dot = el('circle',{cx:s.upTop.x,cy:s.upTop.y+6,r:4.5},gLinks);
+    });
+    PCS.forEach(function(p){ p.line = el('line',{x1:p.x,y1:p.y-20,x2:p.sw.x+(p.i%2?14:-14),y2:p.sw.y+14,'stroke-width':2.5,'stroke-linecap':'round'},gLinks); });
+
+    var rg = el('g',{},gNodes);
+    rRing = el('circle',{cx:R.x,cy:R.y,r:30,fill:'none','stroke-width':2,'class':'r-ring',style:'stroke:var(--green);transform-origin:'+R.x+'px '+R.y+'px'},rg);
+    rRect = el('circle',{cx:R.x,cy:R.y,r:30,style:'fill:var(--green)'},rg);
+    el('path',{d:'M'+(R.x-16)+' '+(R.y-6)+'h20l-5-5M'+(R.x+16)+' '+(R.y+6)+'h-20l5 5',stroke:'#fff','stroke-width':3,fill:'none','stroke-linecap':'round','stroke-linejoin':'round'},rg);
+    el('text',{x:R.x+44,y:R.y-14,'font-size':13,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--ink)'},rg).textContent='R-IFSC';
+    el('text',{x:R.x+44,y:R.y+1,'font-size':10.5,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},rg).textContent='Cisco 2911';
+    rSub = el('text',{x:R.x+44,y:R.y+16,'font-size':10,'font-weight':600,'font-family':'JetBrains Mono, monospace'},rg);
+
+    SWS.forEach(function(s){
+      var g = el('g',{},gNodes), hw = L.swW/2;
+      s.rect = el('rect',{x:s.x-hw,y:s.y-16,width:L.swW,height:32,rx:9,style:'fill:'+SECT[s.k].c},g);
+      for (var k=0;k<L.ports;k++) el('rect',{x:s.x-hw+12+k*14,y:s.y-4,width:9,height:8,rx:1.5,style:'fill:var(--surface)',opacity:.85},g);
+      el('text',{x:s.x+hw-22,y:s.y+4,'text-anchor':'middle','font-size':10.5,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--surface)'},g).textContent = SECT[s.k].s;
+      s.netLbl = el('text',{x:s.x,y:L.netY,'text-anchor':'middle','font-size':L.netF,'font-weight':600,'font-family':'JetBrains Mono, monospace',style:'fill:'+SECT[s.k].c},gNodes);
+      s.nameLbl = el('text',{x:s.x,y:L.nameY,'text-anchor':'middle','font-size':10.5,'font-weight':700,'letter-spacing':'.06em','font-family':'Figtree, sans-serif',style:'fill:var(--muted)'},gNodes);
+      s.nameLbl.textContent = SECT[s.k][L.name];
+    });
+    PCS.forEach(function(p){
+      var c = SECT[p.k].c;
+      var g = el('g',{transform:'translate('+p.x+','+p.y+')'},gNodes);
+      p.ring = el('circle',{r:cmp?26:30,fill:'none','stroke-width':3,opacity:0,style:'stroke:'+c},g);
+      el('rect',{x:-20,y:-16,width:40,height:28,rx:5,'stroke-width':2.5,style:'fill:var(--surface);stroke:'+c},g);
+      el('rect',{x:-15,y:-11,width:30,height:17,rx:2,opacity:.3,style:'fill:'+c},g);
+      el('rect',{x:-7,y:13,width:14,height:4,rx:2,style:'fill:var(--muted)'},g);
+      el('text',{y:34,'text-anchor':'middle','font-size':11,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--ink)'},g).textContent = 'PC'+p.i;
+      p.ipLbl = el('text',{y:48,'text-anchor':'middle','font-size':9.5,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},g);
+      p.line.style.stroke = c; p.line.style.opacity = .55;
+      p.g = g;
+    });
+    xMark = el('g',{opacity:0},gPk);
+  }
+  var mq = matchMedia('(max-width: 640px)');
+  build(mq.matches);
+  function onMq(){
+    if (running){ setTimeout(onMq, 400); return; }
+    if (mq.matches === compact) return;
+    build(mq.matches); paint(); drawLabels();
+  }
+  if (mq.addEventListener) mq.addEventListener('change', onMq); else if (mq.addListener) mq.addListener(onMq);
+
+  var routing = true, running = false;
+  function paint(){
+    SWS.forEach(function(s){
+      s.up.style.stroke = routing ? SECT[s.k].c : 'var(--bad)';
+      s.up.style.opacity = routing ? .6 : .45;
+      s.up.setAttribute('stroke-dasharray', routing ? '' : '6 6');
+      s.dot.style.fill = routing ? 'var(--ok)' : 'var(--bad)';
+    });
+    PCS.forEach(function(p){ p.ring.setAttribute('opacity',0); p.g.style.opacity = 1; });
+    rRect.style.fill = 'var(--green)';
+    rRing.style.display = routing ? '' : 'none';
+    rSub.textContent = routing ? '3 gateways ativos' : 'interfaces em shutdown';
+    rSub.style.fill = routing ? 'var(--ok)' : 'var(--bad)';
+    xMark.setAttribute('opacity',0);
+    $('m-off').setAttribute('aria-pressed', !routing);
+    $('m-on').setAttribute('aria-pressed', routing);
+  }
+  function drawLabels(){
+    if (!plan) return;
+    SWS.forEach(function(s){ s.netLbl.textContent = toStr(plan.nets[s.k].net)+'/26'; });
+    PCS.forEach(function(p){ p.ipLbl.textContent = '.'+(plan.nets[p.k].pcs[p.i%2] % 256); });
+    ['a-src','a-dst'].forEach(function(id, z){
+      var sel = $(id), v = sel.value;
+      sel.innerHTML = PCS.map(function(p){ return '<option value="'+p.i+'">PC'+p.i+' · '+SECT[p.k].s+' · '+toStr(plan.nets[p.k].pcs[p.i%2])+'</option>'; }).join('');
+      sel.value = v !== '' ? v : (z===0 ? '0' : '4');
+    });
+  }
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function ease(t){ return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  function swTop(s){ return {x:s.x,y:s.y-16}; }
+  function swBot(p){ return {x:p.sw.x+(p.i%2?14:-14), y:p.sw.y+14}; }
+  function pcTop(p){ return {x:p.x,y:p.y-20}; }
+  function polyLen(pts){ var L=0; for(var i=1;i<pts.length;i++) L+=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y); return L; }
+  function at(pts,t){
+    var L=polyLen(pts)*t;
+    for (var i=1;i<pts.length;i++){ var d=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y); if(L<=d||i===pts.length-1){ var u=d?Math.min(L/d,1):1; return {x:lerp(pts[i-1].x,pts[i].x,u),y:lerp(pts[i-1].y,pts[i].y,u)}; } L-=d; }
+  }
+  function animate(paths, color, dur, cb){
+    var dots = paths.map(function(){ return el('circle',{r:7,style:'fill:'+color,stroke:'var(--surface)','stroke-width':2},gPk); });
+    if (reduce){ dots.forEach(function(d){d.remove();}); cb(); return; }
+    var start=null;
+    function f(ts){
+      if(!start) start=ts;
+      var t=Math.min((ts-start)/dur,1), e=ease(t);
+      paths.forEach(function(p,i){ var q=at(p,e); dots[i].setAttribute('cx',q.x); dots[i].setAttribute('cy',q.y); });
+      if (t<1) requestAnimationFrame(f); else { dots.forEach(function(d){d.remove();}); cb(); }
+    }
+    requestAnimationFrame(f);
+  }
+  function showX(x,y){
+    xMark.innerHTML='';
+    el('circle',{cx:x,cy:y,r:14,style:'fill:var(--bad)'},xMark);
+    el('path',{d:'M'+(x-5)+' '+(y-5)+'L'+(x+5)+' '+(y+5)+'M'+(x+5)+' '+(y-5)+'L'+(x-5)+' '+(y+5),stroke:'#fff','stroke-width':3,'stroke-linecap':'round'},xMark);
+    xMark.setAttribute('opacity',1);
+  }
+  function setStatus(kind, txt){ var p=$('a-pill'); p.className='pill'+(kind?' '+kind:''); p.textContent = kind==='ok'?'Sucesso':kind==='bad'?'Falha':'Enviando…'; $('a-desc').textContent = txt; }
+
+  function run(){
+    if (running || !plan) return;
+    var src = PCS[+$('a-src').value], dst = PCS[+$('a-dst').value];
+    if (src===dst){ setStatus('bad','Origem e destino são o mesmo PC. Escolha dois PCs diferentes.'); return; }
+    running = true; paint();
+    src.ring.setAttribute('opacity',1);
+    var c = SECT[src.k].c, ipD = toStr(plan.nets[dst.k].pcs[dst.i%2]), ipS = toStr(plan.nets[src.k].pcs[src.i%2]), gw = toStr(plan.nets[src.k].gw);
+    var end = function(){ running=false; };
+    var go, back;
+
+    if (src.k === dst.k){
+      setStatus('','Mesma sub-rede: PC'+src.i+' manda o ping direto para '+ipD+' pelo switch do setor.');
+      go = [pcTop(src), swBot(src), swBot(dst), pcTop(dst)];
+      animate([go], c, 1200, function(){
+        dst.ring.setAttribute('opacity',1);
+        animate([go.slice().reverse()], c, 1000, function(){
+          setStatus('ok','Reply from '+ipD+' TTL=128. Os dois PCs estão na mesma sub-rede, então o pacote não passa pelo roteador.');
+          end();
+        });
+      });
+      return;
+    }
+    if (!routing){
+      setStatus('','Destino em outra rede. PC'+src.i+' envia ARP perguntando “quem é '+gw+'?”, o seu gateway.');
+      var sib = PCS.filter(function(p){ return p.sw===src.sw && p!==src; })[0];
+      animate([[pcTop(src), swBot(src)]], 'var(--neutral)', 600, function(){
+        animate([[swBot(src), swBot(sib), pcTop(sib)], [swBot(src), swTop(src.sw), src.sw.upTop]], 'var(--neutral)', 1100, function(){
+          PCS.forEach(function(p){ if(p.sw!==src.sw) p.g.style.opacity=.4; });
+          showX(src.sw.upTop.x, src.sw.upTop.y+6);
+          setStatus('bad','Request timed out. O ARP chega à G0/'+src.k+', mas a interface está desligada e sem IP (link vermelho). Ninguém responde por '+gw+' e o pacote para '+ipD+' nunca sai do setor.');
+          end();
+        });
+      });
+      return;
+    }
+    setStatus('','Destino em outra rede: PC'+src.i+' entrega o pacote ao gateway '+gw+' (G0/'+src.k+' do R-IFSC).');
+    go = [pcTop(src), swBot(src), swTop(src.sw), src.sw.upTop, {x:R.x,y:R.y}];
+    animate([go], c, 1200, function(){
+      rRect.style.fill = 'var(--green-strong)';
+      setStatus('','O R-IFSC consulta a tabela de rotas: '+toStr(plan.nets[dst.k].net)+'/26 está conectada na G0/'+dst.k+'. Ele desconta 1 do TTL e reenvia.');
+      setTimeout(function(){
+        rRect.style.fill = 'var(--green)';
+        var go2 = [{x:R.x,y:R.y}, dst.sw.upTop, swTop(dst.sw), swBot(dst), pcTop(dst)];
+        animate([go2], SECT[dst.k].c, 1200, function(){
+          dst.ring.setAttribute('opacity',1);
+          setStatus('','PC'+dst.i+' recebeu e responde para '+ipS+'. A resposta também passa pelo roteador.');
+          back = go2.slice().reverse().concat(go.slice().reverse().slice(1));
+          animate([back], SECT[dst.k].c, 1700, function(){
+            setStatus('ok','Reply from '+ipD+' TTL=127. O pacote saiu do '+SECT[src.k].n+', passou pelo R-IFSC e chegou ao '+SECT[dst.k].n+'. O TTL caiu 1 porque atravessou um roteador.');
+            end();
+          });
+        });
+      }, reduce ? 0 : 600);
+    });
+  }
+  $('play').addEventListener('click', run);
+  $('m-off').addEventListener('click', function(){ if(running) return; routing=false; paint(); setStatus('', 'Roteador recém-colocado: as interfaces estão em shutdown e sem IP. Envie um ping entre setores.'); $('a-pill').textContent='Pronto'; });
+  $('m-on').addEventListener('click', function(){ if(running) return; routing=true; paint(); setStatus('', 'Roteador configurado: cada interface é o gateway de um setor. Envie um ping entre setores.'); $('a-pill').textContent='Pronto'; });
+
+  paint();
+  render();
+})();
+</script>
+
+</body>
+</html>

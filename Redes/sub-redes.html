@@ -1,0 +1,1814 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Sub-redes no Packet Tracer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&display=swap">
+<style>
+/* Layout: barra IFSC fixa, hero com cartão dos 4 setores, seções em coluna de 1080px; o planejador do aluno alimenta tabelas, comandos, testes e animação */
+:root{
+  --bg:#F3F9F4; --surface:#FFFFFF; --surface-2:#E7F5EA; --ink:#0F2417; --muted:#4A6353; --line:#D2E6D7;
+  --green:#2F9E41; --green-strong:#1E7A30; --mint:#C6EECD; --red:#C8191E;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#7FA88B; --code-key:#8BE39B;
+  --s1:#1C7EC0; --s2:#C98204; --s3:#8250C8; --s4:#D1407A; --neutral:#8A9A90; --crust:#E2AE63; --cheese:#F7E7B4; --pep:#B8432F;
+  --ok:#1E7A30; --bad:#C8191E; --warn:#A86A00; --dev:#2F9E41;
+  --f-display:"Sora","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577; --crust:#9A6B2E; --cheese:#4A4126; --pep:#C9583F;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; --dev:#4DC262; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577; --crust:#9A6B2E; --cheese:#4A4126; --pep:#C9583F;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; --dev:#4DC262; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);padding:.1em .4em;border-radius:6px;color:var(--green-strong)}
+a{color:var(--green-strong)}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:6px}
+
+/* barra */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.ifsc-logo{height:40px;width:auto;flex:none;overflow:visible}
+.brand-txt{display:flex;flex-direction:column;line-height:1.05}
+.brand-txt .b1{font-family:"Open Sans",var(--f-body);font-weight:800;font-size:.95rem;letter-spacing:.01em}
+.brand-txt .b2{font-family:"Open Sans",var(--f-body);font-weight:400;font-size:.88rem}
+.brand-sep{width:1px;height:28px;background:var(--line)}
+.brand-course{font-weight:600;color:var(--muted);font-size:.8rem}
+@media (max-width:520px){.brand-sep,.brand-course{display:none}}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{text-decoration:none;color:var(--muted);font-weight:600;font-size:.85rem;padding:6px 10px;border-radius:999px}
+.nav a:hover{background:var(--surface-2);color:var(--green-strong)}
+.back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#C8191E;color:#fff;font-weight:700;font-size:.85rem;padding:7px 14px 7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px #C8191E;transition:background .2s,transform .2s}
+.back:hover{background:#A51318;transform:translateY(-1px)}
+.back svg{width:16px;height:16px}
+.bar{position:sticky}
+.menu-btn{display:none;place-content:center;gap:5px;width:44px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
+.menu-btn span{display:block;width:20px;height:2.5px;border-radius:2px;background:var(--green-strong);transition:transform .2s,opacity .2s}
+.menu-btn[aria-expanded="true"]{background:var(--surface-2);border-color:var(--green)}
+.menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+@keyframes navIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (max-width:860px){.back{margin-left:auto}}
+
+/* hero */
+.hero{background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding-block:56px 48px}
+.hero .wrap > *{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-strong)}
+.eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--green)}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.5rem);font-weight:800;letter-spacing:-.035em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.lead{font-size:1.12rem;color:var(--muted);max-width:56ch;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:600}
+.chip svg{width:16px;height:16px;color:var(--green)}
+.hero-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 40px -24px color-mix(in srgb,var(--green) 55%,transparent)}
+.hero-net{min-width:0;max-width:480px;width:100%;justify-self:center}
+#hero-svg{display:block;width:100%;height:auto}
+#hero-svg .hl{stroke-width:2.5;stroke-dasharray:4 7;animation:flow 1.2s linear infinite;opacity:.75}
+@keyframes flow{to{stroke-dashoffset:-22}}
+#hero-svg .hr-ring{fill:none;stroke:#4DC262;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:rring 2.6s ease-out infinite}
+#hero-svg .hr-ring.b{animation-delay:1.3s}
+@media (prefers-reduced-motion:reduce){#hero-svg .hl,#hero-svg .hr-ring{animation:none}}
+.hero-card h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.hero-card .hint{font-size:.8rem;color:var(--muted);margin-top:12px}
+.vlist{display:grid;gap:8px}
+.vrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--surface-2)}
+.vtag{font-family:var(--f-mono);font-weight:600;font-size:.78rem;color:#fff;background:var(--vc);padding:3px 8px;border-radius:7px;white-space:nowrap}
+:root[data-theme="dark"] .vtag{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
+.vrow b{font-family:var(--f-display);font-size:.9rem;min-width:0;overflow-wrap:anywhere}
+@media (max-width:480px){.vrow{grid-template-columns:auto 1fr;row-gap:2px}.vrow span.net{grid-column:2}}
+.vrow span.net{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* seções */
+section.sec{padding-block:64px;border-bottom:1px solid var(--line);scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
+.sec-head{display:grid;gap:10px;margin-bottom:32px;max-width:70ch}
+.sec-head p{color:var(--muted);font-size:1.05rem}
+.sec-num{font-family:var(--f-mono);font-size:.8rem;color:var(--green-strong);font-weight:600}
+
+.def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+.def > *{min-width:0}
+.def p+p{margin-top:14px}
+.def .big{font-size:1.2rem;line-height:1.55}
+.def .big strong{color:var(--green-strong)}
+.ip-anatomy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:16px}
+.ip-anatomy h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ip-anatomy{container-type:inline-size}
+.ipline{font-family:var(--f-mono);font-size:.85rem;font-size:min(1.3rem,4.5cqi);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:0}
+.ipline .n{color:var(--green-strong)} .ipline .h{color:var(--s3)}
+.binrows{display:grid;gap:10px}
+.binrow{display:grid;gap:2px;min-width:0}
+.binrow + .binrow{padding-top:10px;border-top:1px dashed var(--line)}
+.binlbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.anat-rows{display:grid;gap:8px}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:8px 0;border-top:1px dashed var(--line)}
+.anat b{font-family:var(--f-display);font-size:.88rem}
+.anat span{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--mint);color:var(--green-strong);flex:none}
+.ico svg{width:22px;height:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ben{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:10px;align-content:start;transition:transform .2s,border-color .2s}
+.ben:hover{transform:translateY(-3px);border-color:var(--green)}
+.ben p{color:var(--muted);font-size:.95rem}
+.note{margin-top:20px;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;background:var(--surface-2);border-radius:var(--r);padding:18px 20px}
+.note p{font-size:.98rem}
+
+/* planejador */
+.planner{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+.pform{background:var(--surface);border:2px solid var(--green);border-radius:22px;padding:20px;display:grid;gap:18px}
+.field{display:grid;gap:6px}
+.field > label,.field > .lbl{font-weight:700;font-size:.88rem}
+.field small{color:var(--muted);font-size:.8rem;line-height:1.4}
+.field input[type=text],.field input[type=number],.field select{font:600 1rem var(--f-mono);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);width:100%}
+.field input:focus{border-color:var(--green)}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .78rem var(--f-mono);padding:5px 9px;border-radius:999px;cursor:pointer}
+.presets button:hover{border-color:var(--green);color:var(--green-strong)}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg button{border:0;background:transparent;font:600 .85rem var(--f-body);color:var(--muted);padding:7px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--green);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#08130C}}
+.msg{font-size:.85rem;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:start}
+.msg svg{width:18px;height:18px;margin-top:2px}
+.msg.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok)}
+.msg.warn{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)}
+.msg.bad{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+.msg span{color:var(--ink)}
+
+.pout{display:grid;gap:16px;min-width:0}
+.bits{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:10px}
+.bits-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline}
+.bits-top b{font-family:var(--f-mono);font-size:1rem}
+.bits-top span{font-size:.82rem;color:var(--muted)}
+.bitrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.oct{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:2px}
+.bit{aspect-ratio:1/1.3;max-width:100%;border-radius:4px;display:grid;place-items:center;font:600 .68rem var(--f-mono);background:var(--surface-2);color:var(--muted)}
+.bit.on{background:var(--green);color:#fff}
+:root[data-theme="dark"] .bit.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bit.on{color:#08130C}}
+.bitleg{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);font-weight:600}
+.bitleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.planner .pout{grid-column:1/-1}
+.pizza-wrap{container-type:inline-size;min-width:0;height:100%}
+.pizza-card{display:grid;grid-template-columns:250px minmax(0,1fr);gap:26px;align-items:center;align-content:center;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 24px;height:100%}
+@container (max-width:560px){.pizza-card{grid-template-columns:1fr;gap:18px;padding:18px}.pizza-card #pizza{max-width:230px}}
+.pizza-card > *{min-width:0}
+#pizza{width:100%;max-width:280px;height:auto;display:block;margin-inline:auto}
+#pizza .sl{transform-origin:0 0;animation:sliceIn .45s cubic-bezier(.2,.8,.2,1.2) both}
+@keyframes sliceIn{from{transform:scale(.6) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+.pizza-txt{display:grid;gap:12px}
+.pizza-txt h3{font-size:clamp(1.25rem,2.4vw,1.6rem);font-weight:700;letter-spacing:-.015em}
+.pizza-txt h3 em{font-style:normal;color:var(--green)}
+.pizza-txt p{color:var(--muted)}
+.pz-calc{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 .9rem var(--f-mono)}
+.pz-calc span{background:var(--surface-2);padding:6px 10px;border-radius:10px}
+.pz-calc i{font-style:normal;color:var(--green);font-family:var(--f-body)}
+.pz-calc b{background:var(--green);color:#fff;padding:6px 10px;border-radius:10px}
+:root[data-theme="dark"] .pz-calc b{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pz-calc b{color:#08130C}}
+.pz-steps{display:flex;flex-wrap:wrap;gap:6px}
+.pz-steps button{display:grid;justify-items:center;gap:0;min-width:64px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:12px;padding:6px 10px;cursor:pointer;font:700 .9rem var(--f-mono)}
+.pz-steps button small{font:600 .7rem var(--f-body)}
+.pz-steps button:hover{border-color:var(--green);color:var(--green-strong)}
+.pz-steps button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="dark"] .pz-steps button[aria-pressed="true"]{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pz-steps button[aria-pressed="true"]{color:#08130C}}
+.pz-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.82rem;font-weight:600;color:var(--muted)}
+.pz-leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+@media (prefers-reduced-motion:reduce){#pizza .sl{animation:none}}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.stat b{font-family:var(--f-display);font-size:1.5rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.76rem;color:var(--muted);font-weight:600}
+
+/* tabelas */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:.9rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td{font-variant-numeric:tabular-nums}
+td.mono{font-family:var(--f-mono);font-size:.84rem}
+tr:last-child td{border-bottom:0}
+@media (max-width:640px){
+  .tbl-wrap{border:0;background:transparent;overflow:visible;border-radius:0}
+  .tbl-wrap table{display:block;min-width:0}
+  .tbl-wrap thead{display:none}
+  .tbl-wrap tbody{display:grid;gap:10px}
+  .tbl-wrap tr{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+  .tbl-wrap td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;white-space:normal;text-align:right;border-bottom:1px dashed var(--line);min-width:0;overflow-wrap:anywhere}
+  .tbl-wrap td::before{content:attr(data-label);font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;flex:none}
+  .tbl-wrap tr td:last-child{border-bottom:0}
+}
+
+/* animação */
+.anim{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.anim-ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.anim-ctl .seg{background:var(--surface)}
+.anim-ctl label{font-size:.85rem;font-weight:600;color:var(--muted);display:flex;gap:8px;align-items:center}
+.anim-ctl select{font:600 .85rem var(--f-body);padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn{border:0;background:var(--green);color:#fff;font:700 .9rem var(--f-body);padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.btn:hover{background:var(--green-strong)}
+:root[data-theme="dark"] .btn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#08130C}}
+.btn svg{width:16px;height:16px}
+.stage{overflow-x:auto}
+.stage svg{display:block;width:100%;height:auto;max-width:720px;margin-inline:auto}
+@media (max-width:640px){.stage svg{max-width:420px}}
+.status{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);font-size:.92rem}
+.pill{font:700 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.pill.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.status .desc{color:var(--muted);flex:1;min-width:240px}
+
+/* passos */
+.steps{display:grid;list-style:none;padding:0;margin:0}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;position:relative;padding-bottom:40px}
+.step::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(var(--green),var(--line))}
+.step:last-child::before{display:none}
+.step-n{width:56px;height:56px;border-radius:18px;background:var(--green);color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.3rem;display:grid;place-items:center;box-shadow:0 10px 24px -12px var(--green);position:relative;z-index:1}
+:root[data-theme="dark"] .step-n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .step-n{color:#08130C}}
+.step.test .step-n{background:var(--surface);color:var(--green-strong);border:2px dashed var(--green)}
+.step-body{display:grid;gap:12px;min-width:0;padding-top:4px}
+.step-body h3{font-size:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--mint);color:var(--green-strong)}
+.step-body > p{color:var(--muted);max-width:70ch}
+.step-body ul{margin:0;padding-left:20px;color:var(--muted)}
+.step-body li{margin-block:4px}
+.step-body li b{color:var(--ink)}
+.pt-ui{display:flex;flex-wrap:wrap;gap:8px}
+.pt-ui span{font-size:.82rem;font-weight:600;background:var(--surface);border:1px solid var(--line);padding:5px 10px;border-radius:8px}
+.pt-ui span::after{content:"›";margin-left:8px;color:var(--green)}
+.pt-ui span:last-child::after{content:none}
+
+.code{background:var(--code-bg);color:var(--code-fg);border-radius:14px;overflow:hidden;min-width:0}
+.code-top{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-bottom:1px solid color-mix(in srgb,var(--code-fg) 12%,transparent)}
+.dots{display:flex;gap:7px}
+.dots i{width:13px;height:13px;border-radius:50%;display:grid;place-items:center;font:700 10px/1 var(--f-body);font-style:normal;color:rgba(0,0,0,.6)}
+.dots i:nth-child(1){background:#28C840}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#FF5F57}
+.dots i:nth-child(1)::before{content:"+"}.dots i:nth-child(2)::before{content:"−"}.dots i:nth-child(3)::before{content:"×";font-size:12px}
+.r-ring{transform-box:fill-box;transform-origin:center;animation:rring 2.4s ease-out infinite}
+@keyframes rring{from{transform:scale(1);opacity:.7}to{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion:reduce){.r-ring{animation:none;opacity:0}}
+.code-top span{font:600 .75rem var(--f-mono);color:var(--code-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy{border:1px solid color-mix(in srgb,var(--code-fg) 25%,transparent);background:transparent;color:var(--code-fg);font:600 .75rem var(--f-body);padding:5px 10px;border-radius:8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.copy:hover{background:color-mix(in srgb,var(--code-fg) 10%,transparent)}
+.copy svg{width:14px;height:14px}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font:400 .86rem/1.65 var(--f-mono);white-space:pre}
+@media (max-width:600px){.code pre{font-size:.76rem;padding:12px}.anim-ctl label{width:100%;justify-content:space-between}.anim-ctl select{flex:1;min-width:0;max-width:240px}.anim-ctl .btn{width:100%;justify-content:center}.anim-ctl .seg{width:100%}.anim-ctl .seg button{flex:1}.status{padding:12px 14px}.status .desc{min-width:0;flex-basis:100%}.hero .wrap{padding-block:36px 32px;gap:28px}.hero-card{padding:16px}}
+.code .c{color:var(--code-muted);font-style:italic}
+.code .p{color:var(--code-key);font-weight:600}
+
+/* testes */
+.tests{display:grid;gap:10px}
+.test-row{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:8px}
+.test-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.test-head .kind{font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.kind.same{background:var(--mint);color:var(--green-strong)}
+.kind.cross{background:color-mix(in srgb,var(--s1) 15%,transparent);color:var(--s1)}
+.test-head b{font-family:var(--f-mono);font-size:.88rem}
+.test-head small{color:var(--muted);font-size:.85rem}
+.test-row details{font-size:.88rem;color:var(--muted)}
+.test-row summary{cursor:pointer;font-weight:600;color:var(--green-strong);width:fit-content}
+.test-row details p{margin-top:6px;display:flex;gap:8px;align-items:flex-start}
+.test-row details svg{width:18px;height:18px;flex:none;margin-top:2px}
+.r-ok{color:var(--ok)} .r-bad{color:var(--bad)}
+.observe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.obs{background:var(--surface-2);border-radius:14px;padding:14px;display:grid;grid-template-columns:40px 1fr;gap:12px;font-size:.92rem}
+.obs b{display:block;font-family:var(--f-display)}
+.obs span{color:var(--muted)}
+
+/* entrega */
+.deliver{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
+.deliver > *{min-width:0}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;gap:16px}
+.deliver.solo{grid-template-columns:minmax(0,760px)}
+.ck-group{font:700 .74rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);padding:12px 10px 2px;border-top:1px dashed var(--line);margin-top:4px}
+.ck-group:first-child{border-top:0;margin-top:0;padding-top:4px}
+.ck-n{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-right:8px;padding:0 6px;border-radius:7px;background:var(--mint);color:var(--green-strong);font:700 .72rem var(--f-mono);font-style:normal;vertical-align:1px}
+.check input:checked + span .ck-n{background:var(--green);color:var(--surface)}
+.prog-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+#prog-txt{font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+#prog-txt b{font:800 1.5rem var(--f-display);color:var(--green-strong)}
+#prog-txt.done{color:var(--ok);font-weight:700}
+.dcard.hl{border:2px solid var(--green);background:linear-gradient(180deg,var(--surface-2),var(--surface) 60%)}
+.fname{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--code-bg);color:var(--code-key);font:600 1.15rem var(--f-mono);padding:14px 16px;border-radius:14px;word-break:break-all}
+.fname span{flex:1;min-width:0}
+.check{display:grid;gap:8px}
+.check label{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:.95rem;cursor:pointer;padding:8px 10px;border-radius:10px}
+.check label:hover{background:var(--surface-2)}
+.check input{width:18px;height:18px;accent-color:var(--green);margin-top:3px}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--green-strong));width:0;transition:width .3s}
+.progress{height:12px}
+.qs{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--ink)}
+.qs li::marker{font-family:var(--f-display);font-weight:700;color:var(--green-strong)}
+
+.errs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.err{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:8px}
+.err h3{font-size:1rem;display:flex;gap:10px;align-items:center}
+.err h3 svg{width:20px;height:20px;color:var(--red);flex:none}
+.err p{font-size:.92rem;color:var(--muted)}
+
+footer{padding-block:36px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand svg{height:52px;width:auto}
+
+/* DHCP */
+.sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:40px 0 14px}
+.ports{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.port-card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--vc);border-radius:var(--r);padding:16px 18px;display:grid;gap:6px;align-content:start}
+.port-card b{font:800 1.8rem var(--f-display);color:var(--vc);line-height:1;font-variant-numeric:tabular-nums}
+.port-card strong{font-family:var(--f-display);font-size:.95rem}
+.port-card span{font-size:.88rem;color:var(--muted)}
+.dh-body{display:grid;grid-template-columns:minmax(0,1fr) 300px}
+.dh-body > *{min-width:0}
+.dh-stage svg{display:block;width:100%;height:auto}
+.dh-panel{border-left:1px solid var(--line);padding:16px;display:grid;align-content:center;background:var(--surface)}
+.dh-win{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.dh-win-top{background:var(--code-bg);color:var(--code-fg);font:600 .78rem var(--f-mono);padding:8px 12px}
+.dh-mode{display:flex;gap:6px;padding:10px 12px 0}
+.dh-mode span{font:700 .72rem var(--f-body);padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.dh-mode span.on{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="dark"] .dh-mode span.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .dh-mode span.on{color:#08130C}}
+.dh-win dl{margin:0;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:.8rem}
+.dh-win dt{color:var(--muted);font-weight:600;white-space:nowrap}
+.dh-win dd{margin:0;text-align:right;font:600 .8rem var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted);transition:color .3s,background .3s;border-radius:6px;padding:0 4px}
+.dh-win dd.set{color:var(--green-strong);background:var(--mint)}
+.dh-msg{margin:0 12px 12px;font:600 .78rem var(--f-mono);padding:8px 10px;border-radius:8px;background:var(--surface-2);color:var(--muted)}
+.dh-msg.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+.dh-pkt{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);font-size:.92rem;color:var(--muted)}
+.dh-pkt span:last-child{flex:1;min-width:0}
+.dh-pkt code{white-space:nowrap}
+.dora{list-style:none;margin:0;padding:14px 18px 18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;border-top:1px solid var(--line)}
+.dora li{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:start;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--surface);transition:transform .25s,border-color .25s,box-shadow .25s,background .25s}
+.dora li > b{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:800 1.1rem var(--f-display);background:var(--vc);color:#fff}
+:root[data-theme="dark"] .dora li > b{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .dora li > b{color:#08130C}}
+.dora strong{font-family:var(--f-display);display:block;font-size:.95rem}
+.dora span{display:block;font-size:.8rem;color:var(--muted);line-height:1.4}
+.dora code{display:block;margin-top:6px;font-size:.68rem;overflow-wrap:anywhere;padding:3px 6px}
+.dora li.on{border-color:var(--vc);background:color-mix(in srgb,var(--vc) 9%,var(--surface));box-shadow:0 12px 26px -18px var(--vc);transform:translateY(-3px)}
+.dora li.done{border-color:color-mix(in srgb,var(--vc) 45%,var(--line))}
+.pool-how{margin-top:28px;background:var(--surface-2);border-radius:var(--r);padding:20px 22px;display:grid;gap:14px}
+.pool-how h3{font-size:1.15rem}
+.pool-how > p{color:var(--muted);font-size:.95rem;max-width:80ch}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:fl}
+.flow li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 50px;font-size:.88rem;color:var(--muted);counter-increment:fl;min-width:0}
+.flow li::before{content:counter(fl);position:absolute;left:12px;top:12px;width:28px;height:28px;border-radius:9px;background:var(--green);color:#fff;display:grid;place-items:center;font:800 .9rem var(--f-display)}
+:root[data-theme="dark"] .flow li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .flow li::before{color:#08130C}}
+.flow li:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translate(50%,-50%);color:var(--green);font-weight:800;z-index:1}
+.flow b{display:block;color:var(--ink);font-family:var(--f-display);font-size:.9rem}
+.flow code{font-size:.78rem;overflow-wrap:anywhere}
+@media (max-width:900px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow li::after{display:none}}
+@media (max-width:480px){.flow{grid-template-columns:1fr}.pool-how{padding:16px}}
+@media (max-width:900px){.dh-body{grid-template-columns:1fr}.dh-panel{border-left:0;border-top:1px solid var(--line)}.dora{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.dh-pkt span:last-child{flex-basis:100%}.dh-pkt{padding:12px 14px}}
+@media (max-width:480px){.dora{grid-template-columns:1fr;padding:12px}.ports{grid-template-columns:1fr 1fr}.port-card{padding:14px}.port-card b{font-size:1.4rem}}
+
+/* desenho da topologia */
+.topo-h{font-family:var(--f-display);font-size:1.02rem;font-weight:700;margin:10px 0 0;display:flex;align-items:center;gap:10px}
+.topo-h::before{content:"";width:16px;height:3px;border-radius:3px;background:var(--green)}
+.drawing{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 18px 12px;display:grid;gap:8px;min-width:0}
+.draw-scroll{overflow-x:auto}
+#draw{display:block;width:100%;min-width:680px;height:auto}
+.drawing figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+#draw .grp-l{font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.1em}
+#draw .grp-n{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+#draw .cab{stroke-width:2.2;fill:none}
+#draw .halo{paint-order:stroke;stroke:var(--surface);stroke-width:5px;stroke-linejoin:round}
+#draw .sw-body{fill:var(--code-bg)}
+#draw .sw-top{fill:var(--green)}
+#draw .led{fill:var(--code-key)}
+#draw .sw-t{fill:var(--code-fg);font-family:var(--f-display);font-weight:700;font-size:14px;text-anchor:middle}
+#draw .mon{fill:var(--surface);stroke-width:2}
+#draw .stand{fill:var(--ink)}
+#draw .pc-t{fill:var(--ink);font-family:var(--f-display);font-weight:700;font-size:14px;text-anchor:middle}
+#draw .pc-ip{fill:var(--muted);font-family:var(--f-mono);font-size:11px;text-anchor:middle}
+#draw .port{fill:var(--muted);font-family:var(--f-mono);font-size:10px;text-anchor:middle}
+#draw .rtr{fill:var(--code-bg);stroke:var(--green);stroke-width:3}
+#draw .rtr-i{stroke:var(--code-key);stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.uplink{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px dashed var(--green);border-radius:var(--r);padding:12px 16px;font-size:.9rem;color:var(--muted)}
+.uplink .pill{color:var(--green-strong)}
+@media (max-width:900px){#draw{min-width:0;max-width:420px;margin-inline:auto}.drawing{padding:12px 10px 10px}.uplink{font-size:.84rem}}
+/* responsivo geral */
+@media (max-width:1000px){table{min-width:0}th,td{white-space:normal;padding:10px 10px}td.mono{overflow-wrap:anywhere}}
+@media (max-width:600px){.code pre{white-space:pre-wrap;overflow-wrap:anywhere}}
+@media (max-width:480px){
+  .bitrow{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:6px}
+  .bit{font-size:.62rem}
+  .stat b{font-size:1.2rem}.stat span{font-size:.7rem;line-height:1.3;display:block}
+  .step{grid-template-columns:36px minmax(0,1fr);gap:12px;padding-bottom:32px}
+  .step-n{width:36px;height:36px;border-radius:12px;font-size:1rem}
+  .step::before{left:17px;top:36px}
+  .step-body ul{padding-left:16px}
+  .check label{padding:8px 4px;gap:8px;font-size:.9rem}
+  .dcard{padding:16px}
+  .pizza-txt h3{font-size:1.2rem}
+}
+
+
+/* desafio em vermelho */
+.desafio{--green:var(--red);--green-strong:var(--red);--mint:color-mix(in srgb,var(--red) 16%,var(--surface));--surface-2:color-mix(in srgb,var(--red) 7%,var(--surface));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--red) 6%,var(--bg)),var(--bg) 70%);border-top:4px solid var(--red)}
+.desafio .step-n,.desafio .btn{color:#fff}
+:root[data-theme="dark"] .desafio .step-n,:root[data-theme="dark"] .desafio .btn{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .desafio .step-n,:root:not([data-theme="light"]) .desafio .btn{color:#1A0505}}
+.ch-banner{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;border:2px solid var(--red);border-radius:24px;padding:24px;margin-bottom:28px;
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--red) 18%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--red) 14%,var(--surface)),var(--surface) 70%)}
+.ch-banner .ico{width:60px;height:60px;border-radius:18px;background:var(--red);color:#fff}
+.ch-banner .ico svg{width:32px;height:32px}
+.ch-banner h2{color:var(--red);margin-top:6px}
+.ch-banner p{color:var(--muted);margin-top:8px;max-width:70ch}
+.desafio .tbl-wrap{border-color:color-mix(in srgb,var(--red) 25%,var(--line))}
+.desafio .step-body h3 .tag{background:var(--red);color:#fff}
+.nav a.nav-ch{color:var(--red)}
+.chip-ch{border-color:color-mix(in srgb,var(--red) 40%,var(--line))}
+.chip-ch svg{color:var(--red)}
+.ck-group.ck-ch{color:var(--red)}
+.ck-n.ch{background:color-mix(in srgb,var(--red) 14%,var(--surface));color:var(--red)}
+.check input:checked + span .ck-n.ch{background:var(--red);color:#fff}
+@media (max-width:600px){.ch-banner{grid-template-columns:1fr;padding:18px}}
+.err-g{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.err-g::after{content:"";height:1px;flex:1;background:var(--line)}
+.err-g.ch{color:var(--red);margin-top:28px}
+.err-ch{border-color:color-mix(in srgb,var(--red) 30%,var(--line));background:color-mix(in srgb,var(--red) 4%,var(--surface))}
+@media (max-width:920px){.planner{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .hero .wrap,.def,.deliver{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:2px;margin:0;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px color-mix(in srgb,var(--ink) 40%,transparent);padding-block:8px 14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .nav.open{display:flex;animation:navIn .18s ease-out}
+  .nav a{font-size:1rem;padding:12px 14px;border-radius:12px;display:flex;align-items:center;gap:12px}
+  .nav a::before{content:counter(navi,decimal-leading-zero);counter-increment:navi;font:600 .75rem var(--f-mono);color:var(--green)}
+  .nav{counter-reset:navi}
+  .menu-btn{display:inline-grid}
+  .bar .wrap{flex-wrap:nowrap;gap:10px}
+  .brand{min-width:0}
+  .brand-txt span{white-space:nowrap}
+}
+@media (max-width:400px){
+  .brand{gap:9px}
+  .ifsc-logo{height:34px}
+  .brand-txt .b1{font-size:.76rem}
+  .brand-txt .b2{font-size:.74rem}
+  .back{padding:7px 11px 7px 9px;font-size:.8rem}
+}
+@media (max-width:350px){
+  .back-txt{display:none}
+  .back{padding:9px}
+}
+@media (max-width:600px){
+  .grid3,.errs,.observe,.stats{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .step{grid-template-columns:44px minmax(0,1fr);gap:14px}
+  .step-n{width:44px;height:44px;border-radius:14px;font-size:1.1rem}
+  .step::before{left:21px;top:44px}
+  section.sec{padding-block:48px}
+  .bit{font-size:.55rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ifsc-mark" viewBox="0 0 410 555">
+      <circle cx="60" cy="60" r="66" fill="#CD191E"/>
+      <g fill="#2F9E41">
+        <rect x="145" y="0" width="120" height="120" rx="10"/><rect x="290" y="0" width="120" height="120" rx="10"/>
+        <rect x="0" y="145" width="120" height="120" rx="10"/><rect x="145" y="145" width="120" height="120" rx="10"/>
+        <rect x="0" y="290" width="120" height="120" rx="10"/><rect x="145" y="290" width="120" height="120" rx="10"/><rect x="290" y="290" width="120" height="120" rx="10"/>
+        <rect x="0" y="435" width="120" height="120" rx="10"/><rect x="145" y="435" width="120" height="120" rx="10"/>
+      </g>
+    </symbol>
+    <symbol id="i-split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18M3 12h18"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-4"/><path d="M3.3 19a10 10 0 1 1 17.4 0"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1"/><path d="M16 4a4 4 0 0 1 0 8"/><path d="M22 21v-1a6 6 0 0 0-4-5.6"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></symbol>
+    <symbol id="i-switch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/></symbol>
+    <symbol id="i-pc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4"/><path d="M4 4h12l-2 4 2 4H4"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">
+      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg>
+      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    </div>
+    <nav class="nav" id="menu" aria-label="Seções">
+      <a href="#conceito">Conceito</a><a href="#planejador">Planejador</a><a href="#animacao">Animação</a><a href="#passos">Passo a passo</a><a class="nav-ch" href="#dhcp">Desafio DHCP</a><a href="#checklist-sec">Checklist</a>
+    </nav>
+    <a class="back" aria-label="Voltar para Redes" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span class="back-txt">Voltar</span></a>
+    <button class="menu-btn" type="button" id="menu-btn" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Laboratório · Cisco Packet Tracer</span>
+      <h1>Laboratório de <em>sub-redes</em></h1>
+      <p class="lead">Entenda o que é uma sub-rede, escolha a sua própria faixa de endereços, monte a topologia, descubra no Packet Tracer o que acontece quando um PC tenta falar com outra rede e, no desafio, entregue os endereços automaticamente com DHCP.</p>
+      <div class="chips">
+        <span class="chip"><svg><use href="#i-switch"/></svg>4× Switch 2960 + 1× 3560</span>
+        <span class="chip"><svg><use href="#i-pc"/></svg>8 PCs</span>
+        <span class="chip"><svg><use href="#i-split"/></svg>4 sub-redes</span>
+        <span class="chip chip-ch"><svg><use href="#i-flag"/></svg>Desafio: DHCP</span>
+        <span class="chip"><svg><use href="#i-clock"/></svg>≈ 60 min</span>
+      </div>
+    </div>
+    <div class="hero-net">
+      <svg id="hero-svg" viewBox="0 0 400 300" role="img" aria-label="Animação: pacotes viajando entre as 4 sub-redes pelo L3-IFSC"></svg>
+    </div>
+  </div>
+</div>
+
+<main>
+<section class="sec" id="conceito">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Conceito</span>
+      <h2>O que é uma sub-rede?</h2>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big">Uma <strong>sub-rede</strong> é um pedaço de uma rede IP maior. A <strong>máscara</strong> diz quantos bits do endereço identificam a rede e quantos sobram para os hosts.</p>
+        <p>Todo endereço IPv4 tem 32 bits. Na notação <code>/26</code> (CIDR), os 26 primeiros bits são da rede e os 6 últimos são dos hosts. Dois computadores só se comunicam diretamente se estiverem na mesma sub-rede, ou seja, se a parte de rede dos seus endereços for igual.</p>
+        <p>Quando o destino está em outra sub-rede, o PC entrega o pacote ao seu <strong>gateway padrão</strong> (um roteador ou switch de camada 3), que encaminha para a rede certa. Sem gateway, as sub-redes ficam isoladas, mesmo ligadas ao mesmo cabo.</p>
+        <p>Em cada sub-rede, dois endereços são reservados: o <strong>endereço de rede</strong> (todos os bits de host em 0) e o <strong>broadcast</strong> (todos em 1). Por isso a conta de hosts úteis é <code>2<sup>h</sup> − 2</code>.</p>
+      </div>
+      <div class="ip-anatomy">
+        <h3>Anatomia de 192.168.10.70 /26</h3>
+        <div class="binrows">
+          <div class="binrow">
+            <span class="binlbl">Endereço IP · 192.168.10.70</span>
+            <div class="ipline" aria-label="Endereço em binário">
+              <span class="n">11000000.10101000.00001010.01</span><span class="h">000110</span>
+            </div>
+          </div>
+          <div class="binrow">
+            <span class="binlbl">Máscara /26 · 255.255.255.192</span>
+            <div class="ipline" aria-label="Máscara /26 em binário">
+              <span class="n">11111111.11111111.11111111.11</span><span class="h">000000</span>
+            </div>
+          </div>
+        </div>
+        <div class="bitleg"><span><i style="background:var(--green-strong)"></i>26 bits de rede</span><span><i style="background:var(--s3)"></i>6 bits de host</span></div>
+        <div class="anat-rows">
+          <div class="anat"><b>Máscara</b><span>255.255.255.192</span></div>
+          <div class="anat"><b>Endereço de rede</b><span>192.168.10.64</span></div>
+          <div class="anat"><b>Faixa de hosts</b><span>192.168.10.65 – 192.168.10.126</span></div>
+          <div class="anat"><b>Broadcast</b><span>192.168.10.127</span></div>
+          <div class="anat"><b>Hosts úteis</b><span>2⁶ − 2 = 62</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="beneficios">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Por que usar</span>
+      <h2>Benefícios de dividir em sub-redes</h2>
+      <p>Separar Administrativo, RH, Financeiro e Marketing em redes diferentes deixa a rede do câmpus mais rápida, segura e fácil de manter.</p>
+    </div>
+    <div class="grid3">
+      <article class="ben"><div class="ico"><svg><use href="#i-gauge"/></svg></div><h3>Menos broadcast</h3><p>O broadcast IP de uma sub-rede não passa pelo roteador. ARP e DHCP ficam restritos ao setor e sobra mais banda.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-shield"/></svg></div><h3>Mais segurança</h3><p>O tráfego entre setores precisa passar pelo gateway. É nele que se aplicam ACLs para, por exemplo, proteger o Financeiro.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-users"/></svg></div><h3>Organização por setor</h3><p>Pelo endereço você já sabe de onde vem o tráfego: 192.168.x.70 é do RH, 192.168.x.130 é do Financeiro.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-coin"/></svg></div><h3>Economia de endereços</h3><p>Cada setor recebe só o tamanho de que precisa. Uma /24 dividida em quatro /26 atende 4 setores de até 62 hosts.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-search"/></svg></div><h3>Diagnóstico mais rápido</h3><p>Um problema fica limitado a uma sub-rede. Fica mais fácil achar o setor afetado com <code>ping</code> e <code>tracert</code>.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-route"/></svg></div><h3>Roteamento eficiente</h3><p>Roteadores guardam rotas para redes inteiras, não para cada host. Sub-redes bem planejadas podem ser resumidas em uma só rota.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="planejador">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Planejamento · sua escolha</span>
+      <h2>Escolha sua faixa e seus IPs</h2>
+      <p>Cada aluno deve ter um plano diferente. Sugestão: use o seu <b>número de chamada</b> no terceiro octeto (ex.: aluno 17 → <code>192.168.17.0</code>). Tudo abaixo, incluindo os comandos e os testes, se ajusta às suas escolhas.</p>
+    </div>
+    <div class="planner">
+      <form class="pform" id="pform" autocomplete="off">
+        <div class="field">
+          <label for="base">Rede base (privada)</label>
+          <input type="text" id="base" value="192.168.10.0" inputmode="decimal" spellcheck="false">
+          <div class="presets" aria-label="Exemplos de faixas privadas">
+            <button type="button" data-base="192.168.10.0">192.168.x.0</button>
+            <button type="button" data-base="172.16.10.0">172.16.x.0</button>
+            <button type="button" data-base="10.10.0.0">10.x.0.0</button>
+          </div>
+          <small>Faixas privadas (RFC 1918): 10.0.0.0/8, 172.16.0.0/12 e 192.168.0.0/16.</small>
+        </div>
+        <div class="field">
+          <label for="prefix">Máscara de cada sub-rede</label>
+          <select id="prefix">
+            <option value="24">/24 · 255.255.255.0 · 254 hosts</option>
+            <option value="25">/25 · 255.255.255.128 · 126 hosts</option>
+            <option value="26" selected>/26 · 255.255.255.192 · 62 hosts</option>
+            <option value="27">/27 · 255.255.255.224 · 30 hosts</option>
+            <option value="28">/28 · 255.255.255.240 · 14 hosts</option>
+          </select>
+        </div>
+        <div class="field">
+          <span class="lbl" id="gw-lbl">Gateway de cada sub-rede</span>
+          <div class="seg" role="group" aria-labelledby="gw-lbl">
+            <button type="button" id="gw-first" aria-pressed="true">Primeiro host</button>
+            <button type="button" id="gw-last" aria-pressed="false">Último host</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="pcstart">Número do 1º PC dentro da sub-rede</label>
+          <input type="number" id="pcstart" value="10" min="1" max="253">
+          <small>O 2º PC recebe o número seguinte. Ex.: 10 → PCs nos hosts .10 e .11 de cada sub-rede.</small>
+        </div>
+        <div id="pmsg"></div>
+      </form>
+      <div class="pizza-wrap">
+    <div class="pizza-card">
+      <svg id="pizza" viewBox="-140 -140 280 280" role="img" aria-labelledby="pz-title"></svg>
+      <div class="pizza-txt">
+        <span class="eyebrow">A rede como uma pizza</span>
+        <h3 id="pz-title">/26 corta a /24 em <em>4 fatias</em></h3>
+        <div class="pz-calc" id="pz-calc"></div>
+        <p id="pz-desc"></p>
+        <div class="pz-steps" id="pz-steps" role="group" aria-label="Escolher a máscara">
+          <button type="button" data-p="24">/24<small>1 fatia</small></button>
+          <button type="button" data-p="25">/25<small>2 fatias</small></button>
+          <button type="button" data-p="26">/26<small>4 fatias</small></button>
+          <button type="button" data-p="27">/27<small>8 fatias</small></button>
+          <button type="button" data-p="28">/28<small>16 fatias</small></button>
+        </div>
+        <div class="pz-leg" id="pz-leg"></div>
+      </div>
+    </div>
+      </div>
+      <div class="pout">
+        <div class="bits">
+          <div class="bits-top"><b id="mask-txt">255.255.255.192 · /26</b><span>bits da máscara</span></div>
+          <div class="bitrow" id="bitrow"></div>
+          <div class="bitleg"><span><i style="background:var(--green)"></i>bits de rede (1)</span><span><i style="background:var(--surface-2);border:1px solid var(--line)"></i>bits de host (0)</span></div>
+          <div class="stats">
+            <div class="stat"><b id="st-block">64</b><span>endereços por sub-rede</span></div>
+            <div class="stat"><b id="st-hosts">62</b><span>hosts úteis</span></div>
+            <div class="stat"><b id="st-total">256</b><span>endereços usados</span></div>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Setor</th><th>Rede / CIDR</th><th>Gateway</th><th>Faixa útil</th><th>Broadcast</th></tr></thead>
+            <tbody id="plan-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="animacao">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Animação</span>
+      <h2>Veja o pacote atravessar (ou não) as sub-redes</h2>
+      <p>Escolha origem e destino. Compare a rede sem roteamento com a rede depois de ativar <code>ip routing</code> no switch de camada 3.</p>
+    </div>
+    <div class="anim">
+      <div class="anim-ctl">
+        <div class="seg" role="group" aria-label="Estado do switch de camada 3">
+          <button type="button" id="m-off" aria-pressed="true">Sem roteamento</button>
+          <button type="button" id="m-on" aria-pressed="false">Com ip routing</button>
+        </div>
+        <label for="a-src">Origem <select id="a-src"></select></label>
+        <label for="a-dst">Destino <select id="a-dst"></select></label>
+        <button type="button" class="btn" id="play"><svg><use href="#i-play"/></svg>Enviar ping</button>
+      </div>
+      <div class="stage"><svg id="topo" viewBox="0 0 720 440" role="img" aria-label="Topologia: switch de camada 3 no topo, quatro switches de setor e oito PCs"></svg></div>
+      <div class="status">
+        <span class="pill" id="a-pill">Pronto</span>
+        <div class="desc" id="a-desc">Escolha um PC de origem e um de destino e clique em “Enviar ping”.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="passos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Prática</span>
+      <h2>Passo a passo no Packet Tracer</h2>
+      <p>Siga a ordem. Os passos com número tracejado são <b>testes</b>: execute, observe e anote o que acontece antes de abrir o resultado esperado.</p>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Registre seu plano</h3>
+          <p>Use o <a href="#planejador">planejador</a> para escolher a rede base, a máscara, o gateway e os IPs dos PCs. Anote a tabela no caderno: você vai precisar dela nos próximos passos e nas perguntas da tarefa.</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Monte a topologia</h3>
+          <div class="pt-ui"><span>Network Devices</span><span>Switches</span><span>2960 e 3560-24PS</span></div>
+          <ul>
+            <li><b>1 switch 3560-24PS</b> no centro, renomeado para <code>L3-IFSC</code>. Ele fará o papel de gateway das 4 sub-redes.</li>
+            <li><b>4 switches 2960</b>: <code>SW-ADM</code>, <code>SW-RH</code>, <code>SW-FIN</code> e <code>SW-MKT</code>.</li>
+            <li><b>8 PCs</b> (<i>End Devices › PC-PT</i>), dois por setor, nomeados PC0 a PC7.</li>
+            <li>Cabo <b>Copper Straight-Through</b> de cada PC (<code>FastEthernet0</code>) até <code>Fa0/1</code> e <code>Fa0/2</code> do switch do setor.</li>
+            <li>Cabo <b>Copper Cross-Over</b> da porta <code>Fa0/24</code> de cada 2960 até o L3-IFSC: ADM em <code>Fa0/1</code>, RH em <code>Fa0/2</code>, FIN em <code>Fa0/3</code>, MKT em <code>Fa0/4</code>.</li>
+            <li>Espere todos os indicadores dos links ficarem <b>verdes</b> (cerca de 30 s).</li>
+          </ul>
+          <h4 class="topo-h">A rede que você vai montar</h4>
+          <figure class="drawing">
+            <div class="draw-scroll"><svg id="draw" viewBox="0 0 1000 478" role="img" aria-label="Desenho da topologia: L3-IFSC ligado aos switches SW-ADM, SW-RH, SW-FIN e SW-MKT, cada um com 2 PCs"></svg></div>
+            <figcaption>Desenho da topologia com o seu plano: cada setor em um switch e uma sub-rede, todos ligados ao L3-IFSC.</figcaption>
+          </figure>
+          <div class="uplink"><span class="pill">Straight-Through</span><span>PC FastEthernet0 → Fa0/1 e Fa0/2 do switch do setor</span><span class="pill">Cross-Over</span><span>Fa0/24 de cada switch → L3-IFSC Fa0/1 a Fa0/4</span></div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Configure o IP de cada PC</h3>
+          <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>Static</span></div>
+          <p>Preencha IPv4 Address, Subnet Mask e Default Gateway de acordo com o <b>seu</b> plano:</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>PC</th><th>Conexão</th><th>Setor</th><th>Endereço IP</th><th>Máscara</th><th>Gateway</th></tr></thead>
+              <tbody id="pc-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Teste 1: antes do roteamento <span class="tag">Observe</span></h3>
+          <p>Abra <b>Desktop › Command Prompt</b> no PC de origem e faça os pings abaixo. Depois repita no <b>modo Simulation</b> (canto inferior direito), filtrando por <code>ARP</code> e <code>ICMP</code>, e acompanhe os envelopes passo a passo.</p>
+          <div class="tests" id="tests1"></div>
+          <div class="observe">
+            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>O que observar</b><span>Para qual IP o PC manda o ARP quando o destino é de outra sub-rede? Alguém responde?</span></div></div>
+            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>Todos os cabos estão ligados. Por que, então, alguns pings falham?</span></div></div>
+          </div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Configure o gateway no L3-IFSC</h3>
+          <p>No switch 3560, abra a aba <b>CLI</b>. O comando <code>no switchport</code> transforma a porta em uma porta roteada (como a de um roteador) e <code>ip routing</code> liga o roteamento entre elas. Os IPs abaixo saem do seu plano.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>L3-IFSC · configuração do gateway</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre id="cli-l3"></pre></div>
+          <p>Confira com <code>show ip interface brief</code> (as 4 portas devem estar <i>up/up</i> com o IP certo) e <code>show ip route</code> (devem aparecer 4 redes marcadas com <b>C</b>, de <i>connected</i>).</p>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <h3>Teste 2: depois do roteamento <span class="tag">Observe</span></h3>
+          <p>Repita os testes e acrescente um <code>tracert</code>. O primeiro ping entre redes pode perder 1 pacote enquanto o ARP é resolvido; isso é normal.</p>
+          <div class="tests" id="tests2"></div>
+        </div>
+      </li>
+
+    </ol>
+    <div class="note"><div class="ico"><svg><use href="#i-route"/></svg></div><p>Testes concluídos? Encare o <a href="#dhcp"><b>desafio: servidor DHCP</b></a>, onde o L3-IFSC passa a entregar os endereços automaticamente.</p></div>
+  </div>
+</section>
+
+<section class="sec desafio" id="dhcp">
+  <div class="wrap">
+    <div class="ch-banner">
+      <div class="ico"><svg><use href="#i-flag"/></svg></div>
+      <div>
+        <span class="sec-num">Parte 2 · Desafio · Servidor DHCP</span>
+        <h2>Endereços automáticos com DHCP</h2>
+        <p>Com as 4 sub-redes funcionando, o desafio é fazer o L3-IFSC também distribuir os endereços. Os PCs deixam de ter IP digitado à mão e passam a pedir a configuração ao servidor DHCP.</p>
+      </div>
+    </div>
+
+    <div class="def">
+      <div>
+        <p class="big">O <strong>DHCP</strong> (Dynamic Host Configuration Protocol) entrega automaticamente a cada máquina o <strong>IP</strong>, a <strong>máscara</strong>, o <strong>gateway padrão</strong> e o <strong>DNS</strong>.</p>
+        <p>O servidor guarda um <b>pool</b> (faixa de endereços) para cada sub-rede. Quando um PC liga, ele ainda não tem IP, então grita em <b>broadcast</b> na própria rede pedindo um endereço. O servidor responde com um IP livre e o “empresta” por um tempo, chamado <b>concessão</b> (lease). No Cisco, a concessão padrão é de 1 dia; antes de vencer, o PC pede para renovar.</p>
+        <p>O broadcast do DHCP <b>não atravessa o roteador</b>. No nosso laboratório isso não é problema: o L3-IFSC tem uma porta em cada sub-rede, então recebe o pedido de todos os setores e escolhe o pool pela porta em que o pedido chegou. Se o servidor ficasse em outra rede, seria preciso um <i>relay</i> com <code>ip helper-address</code>.</p>
+      </div>
+      <div class="ports">
+        <div class="port-card" style="--vc:var(--s1)"><b>UDP 67</b><strong>Porta do servidor</strong><span>O L3-IFSC escuta os pedidos nesta porta.</span></div>
+        <div class="port-card" style="--vc:var(--s3)"><b>UDP 68</b><strong>Porta do cliente</strong><span>Os PCs recebem as respostas nesta porta.</span></div>
+        <div class="port-card" style="--vc:var(--dev)"><b>DORA</b><strong>4 mensagens</strong><span>Discover, Offer, Request e Ack.</span></div>
+        <div class="port-card" style="--vc:var(--s2)"><b>1 dia</b><strong>Concessão padrão</strong><span>Tempo do empréstimo do IP no Cisco IOS.</span></div>
+      </div>
+    </div>
+
+    <div class="grid3" style="margin-top:28px">
+      <article class="ben"><div class="ico"><svg><use href="#i-check"/></svg></div><h3>Sem erro de digitação</h3><p>Máscara e gateway chegam sempre certos. Acabam os pings que falham por um número trocado.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-shield"/></svg></div><h3>Sem IP duplicado</h3><p>O servidor controla quem recebeu cada endereço e nunca entrega o mesmo IP para duas máquinas.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-users"/></svg></div><h3>Mobilidade</h3><p>Ligou o notebook no RH, recebe IP do RH. Levou para o Financeiro, recebe IP do Financeiro.</p></article>
+    </div>
+
+    <h3 class="sub-h">Animação · o processo DORA</h3>
+    <div class="anim dh">
+      <div class="anim-ctl">
+        <label for="dh-sec">Setor do PC <select id="dh-sec"></select></label>
+        <button type="button" class="btn" id="dh-play"><svg><use href="#i-play"/></svg>Ligar o PC em DHCP</button>
+      </div>
+      <div class="dh-body">
+        <div class="dh-stage"><svg id="dh-svg" viewBox="0 0 600 260" role="img" aria-label="PC cliente, outro PC, switch do setor e o L3-IFSC como servidor DHCP"></svg></div>
+        <div class="dh-panel">
+          <div class="dh-win">
+            <div class="dh-win-top"><span id="dh-pcname">PC0</span> · IP Configuration</div>
+            <div class="dh-mode"><span class="on">DHCP</span><span>Static</span></div>
+            <dl id="dh-cfg">
+              <dt>IPv4 Address</dt><dd id="dh-ip">0.0.0.0</dd>
+              <dt>Subnet Mask</dt><dd id="dh-mask">0.0.0.0</dd>
+              <dt>Default Gateway</dt><dd id="dh-gw">0.0.0.0</dd>
+              <dt>DNS Server</dt><dd id="dh-dns">0.0.0.0</dd>
+            </dl>
+            <div class="dh-msg" id="dh-msg">Aguardando…</div>
+          </div>
+        </div>
+      </div>
+      <div class="dh-pkt" id="dh-pkt"><span class="pill">Pronto</span><span id="dh-pkt-txt">Escolha o setor e clique em “Ligar o PC em DHCP”.</span></div>
+      <ol class="dora" id="dora">
+        <li style="--vc:var(--s1)"><b>D</b><div><strong>Discover</strong><span>Cliente → todos. “Tem algum servidor DHCP aí?”</span><code>0.0.0.0:68 → 255.255.255.255:67</code></div></li>
+        <li style="--vc:var(--s2)"><b>O</b><div><strong>Offer</strong><span>Servidor → cliente. “Posso te dar este IP.”</span><code id="dora-o">gateway:67 → 255.255.255.255:68</code></div></li>
+        <li style="--vc:var(--s3)"><b>R</b><div><strong>Request</strong><span>Cliente → todos. “Quero esse IP que você ofereceu.”</span><code>0.0.0.0:68 → 255.255.255.255:67</code></div></li>
+        <li style="--vc:var(--dev)"><b>A</b><div><strong>Ack</strong><span>Servidor → cliente. “Confirmado, é seu por 1 dia.”</span><code id="dora-a">gateway:67 → 255.255.255.255:68</code></div></li>
+      </ol>
+    </div>
+
+    <h3 class="sub-h">Passo a passo do desafio</h3>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Configure o servidor DHCP no L3-IFSC</h3>
+          <p>Na aba <b>CLI</b> do switch 3560, crie um pool para cada setor. Os comandos já estão com o seu plano de endereços.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>L3-IFSC · servidor DHCP</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre id="cli-dhcp"></pre></div>
+          <ul>
+            <li><b>ip dhcp excluded-address</b>: reserva os primeiros endereços de cada rede (gateway, servidores, impressoras). O DHCP nunca entrega esses IPs.</li>
+            <li><b>ip dhcp pool</b>: cria o pool com um nome, um por setor.</li>
+            <li><b>network</b>: a rede e a máscara que o pool atende.</li>
+            <li><b>default-router</b>: o gateway que o PC vai receber (a porta do L3-IFSC naquele setor).</li>
+            <li><b>dns-server</b>: o servidor DNS entregue aos PCs.</li>
+          </ul>
+          <p>Confira com <code>show running-config | section dhcp</code>.</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Configure os PCs para receber IP automático</h3>
+          <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>DHCP</span></div>
+          <p>Troque de <b>Static</b> para <b>DHCP</b> nos 8 PCs. Em poucos segundos aparece <b>“DHCP request successful.”</b> e os campos são preenchidos sozinhos. Os endereços esperados, se você ligar os PCs em ordem, são:</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>PC</th><th>Setor</th><th>IP recebido</th><th>Máscara</th><th>Gateway</th><th>DNS</th></tr></thead>
+              <tbody id="dhcp-body"></tbody>
+            </table>
+          </div>
+          <p>O servidor entrega o menor endereço livre do pool. Se você ligar os PCs em outra ordem, os IPs podem trocar entre eles, mas cada PC sempre recebe um IP da rede do próprio setor.</p>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Teste do DHCP <span class="tag">Observe</span></h3>
+          <p>Use o <b>Command Prompt</b> dos PCs e a CLI do L3-IFSC. Depois, no modo <b>Simulation</b>, filtre só por <code>DHCP</code>, mude um PC para Static e de volta para DHCP, e acompanhe os envelopes.</p>
+          <div class="tests" id="tests3"></div>
+          <div class="observe">
+            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>O que observar</b><span>Quantos envelopes DHCP aparecem? Abra cada um e veja as portas UDP de origem e destino.</span></div></div>
+            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>Como o L3-IFSC sabe que um PC do RH deve receber IP do pool do RH, e não do Administrativo?</span></div></div>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <div class="pool-how">
+      <h3>Como o servidor escolhe o pool certo?</h3>
+      <ol class="flow" id="pool-flow"></ol>
+      <p>O servidor não olha o PC, olha a <b>porta</b>. Por isso cada porta do L3-IFSC precisa do IP do seu setor, e cada rede precisa de um pool. Sem pool para aquela rede, o PC fica com 169.254.x.x.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="checklist-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Revisão</span>
+      <h2>Checklist da atividade</h2>
+      <p>Cada item corresponde a uma tarefa do passo a passo; o número indica o passo. Marque conforme concluir. O progresso fica salvo neste navegador.</p>
+    </div>
+    <div class="deliver solo">
+      <div class="dcard">
+        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 17</span></div>
+        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
+        <div class="check" id="checklist">
+          <div class="ck-group">Parte 1 · Sub-redes</div>
+          <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>Plano escolhido no planejador e tabela de endereços anotada</span></label>
+          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 2">2</em>L3-IFSC (3560) e SW-ADM, SW-RH, SW-FIN, SW-MKT (2960) adicionados e renomeados</span></label>
+          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 2">2</em>8 PCs ligados com cabo direto nas portas Fa0/1 e Fa0/2 do switch do setor</span></label>
+          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 2">2</em>Uplinks Fa0/24 → L3-IFSC Fa0/1 a Fa0/4 com cabo cruzado e todos os links verdes</span></label>
+          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 3">3</em>IP, máscara e gateway estáticos nos 8 PCs, conforme a tabela</span></label>
+          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 4">4</em>Teste 1: ping na mesma rede responde e entre redes dá <i>Request timed out</i></span></label>
+          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 4">4</em>No Simulation, ARP do PC perguntando pelo gateway sem resposta</span></label>
+          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 5">5</em><code>ip routing</code> e as 4 portas com <code>no switchport</code> e o IP do gateway</span></label>
+          <label><input type="checkbox" id="ck9"><span><em class="ck-n" title="Passo 5">5</em><code>show ip interface brief</code> com 4 portas up/up e <code>show ip route</code> com 4 redes C</span></label>
+          <label><input type="checkbox" id="ck10"><span><em class="ck-n" title="Passo 6">6</em>Teste 2: pings entre redes e ping ao gateway respondendo</span></label>
+          <label><input type="checkbox" id="ck11"><span><em class="ck-n" title="Passo 6">6</em><code>tracert</code> entre setores mostrando 2 saltos</span></label>
+          <div class="ck-group ck-ch">Parte 2 · Servidor DHCP</div>
+          <label><input type="checkbox" id="ck12"><span><em class="ck-n ch" title="Desafio, passo 1">D1</em><code>ip dhcp excluded-address</code> reservando o início de cada rede</span></label>
+          <label><input type="checkbox" id="ck13"><span><em class="ck-n ch" title="Desafio, passo 1">D1</em>4 pools (ADM, RH, FIN, MKT) com <code>network</code>, <code>default-router</code> e <code>dns-server</code></span></label>
+          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 2">D2</em>8 PCs em DHCP com a mensagem <i>DHCP request successful.</i></span></label>
+          <label><input type="checkbox" id="ck15"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>ipconfig /all</code> mostra IP do próprio setor e o L3-IFSC como DHCP Server</span></label>
+          <label><input type="checkbox" id="ck16"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>show ip dhcp binding</code> lista as 8 concessões</span></label>
+          <label><input type="checkbox" id="ck17"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em>No Simulation, os 4 envelopes DORA com as portas UDP 67 e 68</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="erros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Solução de problemas</span>
+      <h2>Erros comuns</h2>
+      <p>Antes de pedir ajuda, confira estes casos. O comando que mais ajuda no L3-IFSC é <code>show ip interface brief</code>; no PC, é o <code>ipconfig /all</code>.</p>
+    </div>
+    <h3 class="err-g">Parte 1 · Sub-redes</h3>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Link com bolinha vermelha ou laranja</h3><p>Vermelha: cabo errado ou porta desligada. Use <b>Straight-Through</b> do PC ao switch e <b>Cross-Over</b> do switch do setor (Fa0/24) ao L3-IFSC. Laranja: a porta ainda está iniciando; espere cerca de 30 s.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Ping falha dentro da mesma sub-rede</h3><p>Compare IP e máscara dos dois PCs: a máscara precisa ser igual e os IPs precisam estar na faixa útil do setor. Confira também se o cabo está na porta certa do switch.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% IP addresses may not be configured on L2 links”</h3><p>A porta do L3-IFSC ainda é de switch. Entre na interface e rode <code>no switchport</code> antes do <code>ip address</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% Bad mask” ou “overlaps with”</h3><p>O IP digitado é o endereço de rede ou o broadcast, ou duas portas do L3-IFSC estão na mesma sub-rede. Volte ao planejador e use o gateway do setor.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg><code>show ip route</code> sem as 4 redes C</h3><p>Faltou <code>ip routing</code> ou alguma porta está down. Rode <code>show ip interface brief</code>: as 4 portas devem estar <i>up/up</i>; se não, use <code>no shutdown</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Ping entre redes falha mesmo com ip routing</h3><p>O Default Gateway do PC precisa ser exatamente o IP da porta do L3-IFSC do seu setor. Teste primeiro o <code>ping</code> ao próprio gateway.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Configuração sumiu ao reabrir</h3><p>Faltou <code>copy running-config startup-config</code> no L3-IFSC ou salvar o arquivo .pkt (Ctrl+S) antes de fechar o Packet Tracer.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Primeiro ping com “Request timed out”</h3><p>Normal: enquanto o ARP descobre o MAC do gateway, o primeiro pacote se perde. Repita o ping; os seguintes devem responder.</p></article>
+    </div>
+    <h3 class="err-g ch">Parte 2 · Servidor DHCP</h3>
+    <div class="errs">
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu 169.254.x.x</h3><p>É o APIPA: o PC não recebeu resposta do DHCP. Confira se existe pool para a rede do setor, se o <code>network</code> está certo e se a porta do L3-IFSC está <i>up</i>. Depois clique de novo em DHCP no PC.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu IP de outro setor</h3><p>O servidor escolhe o pool pela porta onde o pedido chega. A porta do L3-IFSC daquele setor está com o IP de outra rede, ou o cabo do switch está na porta errada.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu o IP do gateway ou um IP repetido</h3><p>Faltou o <code>ip dhcp excluded-address</code>. Reserve o gateway e os IPs fixos, rode <code>clear ip dhcp binding *</code> e peça o IP de novo nos PCs.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu IP, mas sem gateway ou DNS</h3><p>Faltou <code>default-router</code> ou <code>dns-server</code> no pool. Corrija o pool e troque o PC para Static e de volta para DHCP.</p></article>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Redes de Computadores</span><span>Cisco Packet Tracer · Catalyst 2960 e 3560</span></div>
+</footer>
+
+<script>
+(function(){
+  var SECT = [
+    {n:'ADMINISTRATIVO', s:'ADM', c:'var(--s1)'},
+    {n:'RH', s:'RH', c:'var(--s2)'},
+    {n:'FINANCEIRO', s:'FIN', c:'var(--s3)'},
+    {n:'MARKETING', s:'MKT', c:'var(--s4)'}
+  ];
+  var ICON = function(id){ return '<svg><use href="#'+id+'"/></svg>'; };
+
+  // ---------- IP helpers ----------
+  function toInt(s){
+    var m = String(s).trim().match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+    if(!m) return null;
+    var p = m.slice(1).map(Number);
+    if (p.some(function(x){return x>255;})) return null;
+    return p[0]*16777216 + p[1]*65536 + p[2]*256 + p[3];
+  }
+  function toStr(n){ return [Math.floor(n/16777216)%256, Math.floor(n/65536)%256, Math.floor(n/256)%256, n%256].join('.'); }
+  function maskOf(p){ return toStr(4294967296 - Math.pow(2,32-p)); }
+  function isPrivate(n){
+    var a = Math.floor(n/16777216), b = Math.floor(n/65536)%256;
+    return a===10 || (a===172 && b>=16 && b<=31) || (a===192 && b===168);
+  }
+
+  // ---------- estado ----------
+  var st = {base:'192.168.10.0', prefix:26, gw:'first', start:10};
+  try { var saved = JSON.parse(localStorage.getItem('subredes-plan')||'null'); if(saved && saved.base) st = Object.assign(st, saved); } catch(e){}
+  var plan = null;
+
+  function compute(){
+    var msgs = [], err = false;
+    var b = toInt(st.base);
+    if (b===null){ return {err:true, msgs:[['bad','Digite um endereço IPv4 válido, por exemplo 192.168.17.0.']]}; }
+    var block = Math.pow(2, 32-st.prefix);
+    var net0 = b - (b % block);
+    if (net0 !== b) msgs.push(['warn','A rede base foi ajustada para '+toStr(net0)+', o início de um bloco /'+st.prefix+'.']);
+    var usable = block - 2;
+    var gwOff = st.gw==='first' ? 1 : usable;
+    var s = Math.floor(Number(st.start));
+    var nets = [];
+    for (var k=0;k<4;k++){
+      var net = net0 + k*block;
+      nets.push({k:k, net:net, bc:net+block-1, first:net+1, last:net+block-2, gw:net+gwOff, pcs:[net+s, net+s+1]});
+    }
+    var lastBc = nets[3].bc;
+    if (lastBc > 4294967295){ return {err:true, msgs:[['bad','As 4 sub-redes não cabem a partir desse endereço. Escolha uma rede base menor.']]}; }
+    if (!isPrivate(net0) || !isPrivate(lastBc)){ msgs.push(['bad','Use uma faixa privada: 10.x.x.x, 172.16–31.x.x ou 192.168.x.x.']); err = true; }
+    if (!(s>=1) || s+1>usable){ msgs.push(['bad','Com /'+st.prefix+' os hosts vão de 1 a '+usable+'. Escolha o 1º PC entre 1 e '+(usable-1)+'.']); err = true; }
+    else if (s===gwOff || s+1===gwOff){ msgs.push(['bad','O número escolhido coincide com o gateway (host '+gwOff+'). Escolha outro.']); err = true; }
+    var b24 = nets[0].net - (nets[0].net % 256);
+    var fit = nets.filter(function(n){ return n.bc < b24 + 256; });
+    if (!err && fit.length < 4){
+      msgs.push(['warn','Com /'+st.prefix+' a rede '+toStr(b24)+'/24 comporta só '+fit.length+' setor'+(fit.length>1?'es':'')+' ('+fit.map(function(n){return SECT[n.k].s;}).join(' e ')+'). '+(st.prefix>=26 ? 'Comece a rede base em '+toStr(b24)+' para caberem os 4 setores.' : 'Para os 4 setores do laboratório, escolha /26, /27 ou /28.')]);
+    } else if (!err) msgs.push(['ok','Plano válido: 4 sub-redes /'+st.prefix+' sem sobreposição.']);
+    return {err:err, msgs:msgs, nets:nets, fit:fit, block:block, usable:usable, mask:maskOf(st.prefix), prefix:st.prefix};
+  }
+
+  // ---------- render ----------
+  var $ = function(id){ return document.getElementById(id); };
+  function hlText(txt){
+    return txt.split('\n').map(function(l){
+      var esc = l.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      if (/^\s*!/.test(l)) return '<span class="c">'+esc+'</span>';
+      return esc.replace(/^(\s*)(enable|configure terminal|interface|ip routing|ip address|ip dhcp excluded-address|ip dhcp pool|network|default-router|dns-server|show|no switchport|no shutdown|no ip domain-lookup|description|hostname|exit|end|copy)\b/, '$1<span class="p">$2</span>');
+    }).join('\n');
+  }
+  document.querySelectorAll('pre[data-hl]').forEach(function(pre){ pre.innerHTML = hlText(pre.textContent); });
+
+  function render(){
+    var r = compute();
+    $('pmsg').innerHTML = r.msgs.map(function(m){
+      var ic = m[0]==='ok' ? 'i-check' : (m[0]==='warn' ? 'i-alert' : 'i-x');
+      return '<div class="msg '+m[0]+'">'+ICON(ic)+'<span>'+m[1]+'</span></div>';
+    }).join('');
+    $('gw-first').setAttribute('aria-pressed', st.gw==='first');
+    $('gw-last').setAttribute('aria-pressed', st.gw==='last');
+    if (!r.nets) return;
+    plan = r;
+    try { localStorage.setItem('subredes-plan', JSON.stringify(st)); } catch(e){}
+
+    // bits
+    var html = '';
+    for (var o=0;o<4;o++){
+      html += '<div class="oct">';
+      for (var i=0;i<8;i++){ var idx=o*8+i, on = idx < r.prefix; html += '<span class="bit'+(on?' on':'')+'">'+(on?1:0)+'</span>'; }
+      html += '</div>';
+    }
+    $('bitrow').innerHTML = html;
+    $('mask-txt').textContent = r.mask+' · /'+r.prefix;
+    $('st-block').textContent = r.block;
+    $('st-hosts').textContent = r.usable;
+    $('st-total').textContent = r.block*r.fit.length;
+
+    // hero
+    heroLabels();
+
+    // plano
+    $('plan-body').innerHTML = r.fit.map(function(n){
+      var s = SECT[n.k];
+      return '<tr><td data-label="Setor"><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td data-label="Rede" class="mono">'+toStr(n.net)+'/'+r.prefix+'</td><td data-label="Gateway" class="mono">'+toStr(n.gw)+'</td><td data-label="Faixa útil" class="mono">'+toStr(n.first)+' – '+toStr(n.last)+'</td><td data-label="Broadcast" class="mono">'+toStr(n.bc)+'</td></tr>';
+    }).join('');
+
+    // PCs
+    var rows = '';
+    r.nets.forEach(function(n){
+      var s = SECT[n.k];
+      [0,1].forEach(function(j){
+        var pc = n.k*2+j;
+        rows += '<tr><td data-label="PC"><b>PC'+pc+'</b></td><td data-label="Conexão" class="mono">SW-'+s.s+' Fa0/'+(j+1)+'</td><td data-label="Setor"><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td data-label="Endereço IP" class="mono">'+toStr(n.pcs[j])+'</td><td data-label="Máscara" class="mono">'+r.mask+'</td><td data-label="Gateway" class="mono">'+toStr(n.gw)+'</td></tr>';
+      });
+    });
+    $('pc-body').innerHTML = rows;
+
+    // CLI
+    var cli = 'enable\nconfigure terminal\nhostname L3-IFSC\nno ip domain-lookup\nip routing\n';
+    r.nets.forEach(function(n){
+      cli += '! ---- '+SECT[n.k].n+' · rede '+toStr(n.net)+'/'+r.prefix+' ----\n';
+      cli += 'interface fastEthernet 0/'+(n.k+1)+'\n description '+SECT[n.k].n+'\n no switchport\n ip address '+toStr(n.gw)+' '+r.mask+'\n no shutdown\n exit\n';
+    });
+    cli += 'end\n! ---- salvar a configuração ----\ncopy running-config startup-config';
+    $('cli-l3').innerHTML = hlText(cli);
+
+    // testes
+    var ip = function(pc){ return toStr(r.nets[Math.floor(pc/2)].pcs[pc%2]); };
+    var T1 = [
+      {src:0,dst:1,kind:'same',ok:true,why:'PC0 e PC1 estão na mesma sub-rede do Administrativo. O ARP pergunta direto pelo IP do PC1, o switch entrega e o ping responde.'},
+      {src:4,dst:5,kind:'same',ok:true,why:'PC4 e PC5 estão na sub-rede do RH. Comunicação direta, sem precisar de gateway.'},
+      {src:0,dst:2,kind:'cross',ok:false,why:'O destino é de outra sub-rede, então PC0 manda um ARP perguntando pelo gateway '+toStr(r.nets[0].gw)+'. Ninguém tem esse IP ainda: “Request timed out”.'},
+      {src:6,dst:3,kind:'cross',ok:false,why:'Marketing tentando falar com o RH. Sem roteamento, o pacote nem sai do PC6, porque o gateway '+toStr(r.nets[3].gw)+' não responde ao ARP.'}
+    ];
+    var T2 = [
+      {src:0,dst:1,kind:'same',ok:true,why:'Continua funcionando: o tráfego dentro da sub-rede não passa pelo L3-IFSC.'},
+      {src:0,dst:2,kind:'cross',ok:true,why:'Agora o gateway '+toStr(r.nets[0].gw)+' responde ao ARP. O L3-IFSC recebe o pacote pela Fa0/1 (Administrativo) e entrega pela Fa0/2 (RH).'},
+      {src:6,dst:3,kind:'cross',ok:true,why:'O L3-IFSC recebe pela Fa0/4 (Marketing) e entrega pela Fa0/2 (RH). A resposta faz o caminho inverso.'},
+      {src:0,cmd:'ping '+toStr(r.nets[0].gw),kind:'same',ok:true,why:'O PC alcança o próprio gateway. Este é o primeiro teste a fazer quando algo falha entre redes.'},
+      {src:0,cmd:'tracert '+ip(7),kind:'cross',ok:true,why:'Aparecem 2 saltos: primeiro o gateway '+toStr(r.nets[0].gw)+' e depois o PC7 ('+ip(7)+'). Dentro da mesma sub-rede, o tracert mostra só 1 salto.'}
+    ];
+    function renderTests(list, el){
+      $(el).innerHTML = list.map(function(t){
+        var cmd = t.cmd || ('ping '+ip(t.dst));
+        var sec = t.who ? 'Servidor DHCP' : SECT[Math.floor(t.src/2)].s + (t.dst!==undefined ? ' → '+SECT[Math.floor(t.dst/2)].s : '');
+        var label = t.lab || (t.kind==='same' ? 'Mesma rede' : 'Entre redes');
+        return '<div class="test-row"><div class="test-head"><span class="kind '+t.kind+'">'+label+'</span><b>'+(t.who || 'PC'+t.src)+' › '+cmd+'</b><small>'+sec+'</small></div>'+
+          '<details><summary>Ver resultado esperado</summary><p class="'+(t.ok?'r-ok':'r-bad')+'">'+ICON(t.ok?'i-check':'i-x')+'<span style="color:var(--muted)"><b class="'+(t.ok?'r-ok':'r-bad')+'">'+(t.res || (t.ok?'Responde. ':'Falha. '))+'</b>'+t.why+'</span></p></details></div>';
+      }).join('');
+    }
+    renderTests(T1,'tests1'); renderTests(T2,'tests2');
+
+    // DHCP
+    var DNS = '8.8.8.8';
+    var ex = Math.min(10, r.usable - 4);
+    r.nets.forEach(function(n){
+      n.exA = n.first; n.exB = n.first + ex - 1;
+      n.dh = [];
+      for (var a = n.exB + 1; a <= n.last && n.dh.length < 2; a++){ if (a !== n.gw) n.dh.push(a); }
+    });
+    var dc = 'enable\nconfigure terminal\n! ---- endereços reservados (o DHCP não entrega) ----\n';
+    r.nets.forEach(function(n){
+      dc += 'ip dhcp excluded-address '+toStr(n.exA)+' '+toStr(n.exB)+'\n';
+      if (n.gw > n.exB) dc += 'ip dhcp excluded-address '+toStr(n.gw)+'\n';
+    });
+    r.nets.forEach(function(n){
+      dc += '! ---- pool '+SECT[n.k].n+' ----\n';
+      dc += 'ip dhcp pool '+SECT[n.k].s+'\n network '+toStr(n.net)+' '+r.mask+'\n default-router '+toStr(n.gw)+'\n dns-server '+DNS+'\n exit\n';
+    });
+    dc += 'end\n! ---- conferir as concessões ----\nshow ip dhcp binding\n! ---- salvar a configuração ----\ncopy running-config startup-config';
+    $('cli-dhcp').innerHTML = hlText(dc);
+    var drows = '';
+    r.nets.forEach(function(n){
+      [0,1].forEach(function(j){
+        drows += '<tr><td data-label="PC"><b>PC'+(n.k*2+j)+'</b></td><td data-label="Setor"><span class="vtag" style="--vc:'+SECT[n.k].c+'">'+SECT[n.k].n+'</span></td><td data-label="IP recebido" class="mono">'+toStr(n.dh[j])+'</td><td data-label="Máscara" class="mono">'+r.mask+'</td><td data-label="Gateway" class="mono">'+toStr(n.gw)+'</td><td data-label="DNS" class="mono">'+DNS+'</td></tr>';
+      });
+    });
+    $('dhcp-body').innerHTML = drows;
+    var nr = r.nets[1];
+    $('pool-flow').innerHTML =
+      '<li><b>Pedido chega</b>O Discover do PC2 (RH) entra pela <code>Fa0/2</code>.</li>'+
+      '<li><b>IP da porta</b>A Fa0/2 tem <code>'+toStr(nr.gw)+'</code>.</li>'+
+      '<li><b>Pool que contém</b><code>network '+toStr(nr.net)+'/'+r.prefix+'</code> é o pool <b style="display:inline;color:'+SECT[1].c+'">RH</b>.</li>'+
+      '<li><b>Resposta</b>O Offer com <code>'+toStr(nr.dh[0])+'</code> volta pela mesma Fa0/2.</li>';
+    var dip = function(pc){ return toStr(r.nets[Math.floor(pc/2)].dh[pc%2]); };
+    var T3 = [
+      {src:0,cmd:'ipconfig /all',kind:'same',lab:'No PC',ok:true,res:'Recebeu. ',why:'Aparece IP '+dip(0)+', máscara '+r.mask+', gateway '+toStr(r.nets[0].gw)+' e DNS '+DNS+'. O campo “DHCP Server” mostra '+toStr(r.nets[0].gw)+': quem entregou foi o L3-IFSC.'},
+      {src:2,cmd:'ipconfig',kind:'same',lab:'No PC',ok:true,res:'Recebeu. ',why:'O PC2 é do RH e recebeu '+dip(2)+', da rede '+toStr(r.nets[1].net)+'/'+r.prefix+'. O pedido chegou pela Fa0/2, cuja IP é da rede do RH, então o L3-IFSC usou o pool RH.'},
+      {src:0,dst:6,kind:'cross',ok:true,why:'O ping de '+dip(0)+' para '+dip(6)+' funciona: o DHCP entregou o gateway certo para cada setor, e o roteamento continua igual.'},
+      {who:'L3-IFSC',cmd:'show ip dhcp binding',kind:'same',lab:'No L3',ok:true,res:'Lista. ',why:'Aparecem os 8 endereços emprestados, cada um com o MAC do PC que recebeu e o tempo de concessão.'},
+      {src:1,cmd:'Static → DHCP (Simulation)',kind:'same',lab:'Simulation',ok:true,res:'4 envelopes. ',why:'DHCPDISCOVER e DHCPREQUEST saem do PC da porta UDP 68 para a 67; DHCPOFFER e DHCPACK voltam do L3-IFSC da porta 67 para a 68. É o DORA da animação.'}
+    ];
+    renderTests(T3,'tests3');
+    dhUpdate(r, DNS);
+
+    drawLabels();
+    drawPizza(r);
+    drawTopo();
+  }
+
+  // ---------- pizza ----------
+  var lastPizza = '';
+  function drawPizza(r){
+    var svg = $('pizza'), NSZ = 'http://www.w3.org/2000/svg';
+    var bits = r.prefix - 24, n = Math.pow(2, bits), R = 118;
+    var key = r.prefix + '|' + r.nets[0].net;
+    var base24 = r.nets[0].net - (r.nets[0].net % 256);
+    var used = {}; r.nets.forEach(function(x){ if (x.net - base24 < 256 && x.net >= base24) used[(x.net - base24)/r.block] = x.k; });
+    var mk = function(t,a,p){ var e=document.createElementNS(NSZ,t); for(var k in a) e.setAttribute(k,a[k]); (p||svg).appendChild(e); return e; };
+    var pt = function(ang, rad){ return [Math.cos(ang)*rad, Math.sin(ang)*rad]; };
+    if (key !== lastPizza){
+      svg.innerHTML = '';
+      mk('circle',{r:R+12,style:'fill:var(--crust)'});
+      mk('circle',{r:R+12,fill:'none',style:'stroke:color-mix(in srgb,var(--ink) 18%,transparent)','stroke-width':1});
+      for (var i=0;i<n;i++){
+        var g = mk('g',{'class':'sl',style:'animation-delay:'+(i*35)+'ms'});
+        var a0 = -Math.PI/2 + i*2*Math.PI/n, a1 = a0 + 2*Math.PI/n, mid = (a0+a1)/2;
+        var sec = used[i];
+        var fill = sec!==undefined ? SECT[sec].c : 'var(--cheese)';
+        if (n===1) mk('circle',{r:R,style:'fill:'+fill+';stroke:var(--surface)','stroke-width':3},g);
+        else {
+          var p0 = pt(a0,R), p1 = pt(a1,R);
+          mk('path',{d:'M0 0L'+p0[0].toFixed(2)+' '+p0[1].toFixed(2)+'A'+R+' '+R+' 0 0 1 '+p1[0].toFixed(2)+' '+p1[1].toFixed(2)+'Z',style:'fill:'+fill+';stroke:var(--surface)','stroke-width':3,'stroke-linejoin':'round'},g);
+        }
+        // pepperoni
+        var peps = sec!==undefined || n===1 ? [] : n<=2 ? [[-.45,.35],[.4,.82]] : n<=4 ? [[-.35,.32],[.4,.88]] : n<=8 ? [[0,.38]] : [];
+        peps.forEach(function(q){ var c = pt(mid + q[0]*(a1-a0)/2, R*q[1]); mk('circle',{cx:c[0],cy:c[1],r:n<=4?8:6,style:'fill:var(--pep)',opacity:.85},g); });
+        // rótulo
+        var lr = n===1 ? 0 : (n<=4 ? R*.6 : n<=8 ? R*.74 : R*.8);
+        var lp = n===1 ? [0,-4] : pt(mid, lr);
+        var tcol = sec!==undefined ? '#fff' : 'var(--ink)';
+        if (sec!==undefined) mk('text',{x:lp[0],y:lp[1]-(n<=8?2:-3),'text-anchor':'middle','font-size':n===1?22:n<=4?13:n<=8?11:8.5,'font-weight':800,'font-family':'Sora, sans-serif',style:'fill:'+tcol+';paint-order:stroke;stroke:color-mix(in srgb,#000 22%,transparent);stroke-width:2.5px'},g).textContent = SECT[sec].s;
+        if (n<=8) mk('text',{x:lp[0],y:lp[1]+(n===1?20:sec!==undefined?13:4),'text-anchor':'middle','font-size':n===1?13:n<=4?11.5:10,'font-weight':600,'font-family':'JetBrains Mono, monospace',style:'fill:'+tcol+';opacity:'+(sec!==undefined?.95:.7)+(sec!==undefined?';paint-order:stroke;stroke:color-mix(in srgb,#000 22%,transparent);stroke-width:2px':'')},g).textContent = n===1 ? toStr(base24)+'/24' : '.'+(i*r.block);
+        else if (sec===undefined) mk('text',{x:lp[0],y:lp[1]+3,'text-anchor':'middle','font-size':8,'font-family':'JetBrains Mono, monospace',style:'fill:var(--ink);opacity:.55'},g).textContent = '.'+(i*r.block);
+      }
+      if (n>1) mk('circle',{r:4,style:'fill:var(--surface)'});
+      lastPizza = key;
+    }
+    var inP = Object.keys(used).length, free = n - inP;
+    $('pz-title').innerHTML = bits===0 ? '/24 é a pizza <em>inteira</em>' : '/'+r.prefix+' corta a /24 em <em>'+n+' fatias</em>';
+    $('pz-calc').innerHTML = '<span>/'+r.prefix+' − /24</span><i>=</i><span>'+bits+' bit'+(bits===1?'':'s')+' a mais</span><i>→</i><span>2<sup>'+bits+'</sup></span><i>=</i><b>'+n+' fatia'+(n>1?'s':'')+' de '+r.block+'</b>';
+    var b24 = toStr(base24).replace(/\.0$/,'');
+    $('pz-desc').innerHTML = bits===0
+      ? 'A pizza é a rede <code>'+toStr(base24)+'/24</code> com 256 endereços. Com /24 não há corte: cada setor fica com uma pizza inteira, ou seja, uma /24 diferente para cada um.'
+      : 'A pizza é a rede <code>'+toStr(base24)+'/24</code>, com 256 endereços. Cada bit que a máscara “pega emprestado” da parte de host corta todas as fatias ao meio: /25 dá 2, /26 dá 4, /27 dá 8. Cada fatia tem '+r.block+' endereços ('+r.usable+' hosts úteis).'+(inP<4 ? ' Nesta pizza cabem só '+inP+' setores; os outros '+(4-inP)+' ficam na próxima /24 ('+toStr(base24+256)+').' : free>0?' Os 4 setores usam 4 fatias e sobram <b>'+free+'</b> livres para crescer.':' Os 4 setores ocupam a pizza toda.');
+    var leg = '';
+    r.nets.forEach(function(x){ leg += '<span><i style="background:'+SECT[x.k].c+'"></i>'+SECT[x.k].s+' '+toStr(x.net).split('.').pop().replace(/^/,'.')+'</span>'; });
+    if (bits>0 && free>0) leg += '<span><i style="background:var(--cheese);border:1px solid var(--line)"></i>Fatia livre</span>';
+    $('pz-leg').innerHTML = bits===0 ? '<span><i style="background:'+SECT[0].c+'"></i>Administrativo usa esta pizza; RH, Financeiro e Marketing usam as próximas /24</span>' : leg;
+    document.querySelectorAll('#pz-steps button').forEach(function(b){ b.setAttribute('aria-pressed', +b.dataset.p === r.prefix); });
+  }
+  document.querySelectorAll('#pz-steps button').forEach(function(b){
+    b.addEventListener('click', function(){ st.prefix = +b.dataset.p; $('prefix').value = String(st.prefix); render(); });
+  });
+
+  // ---------- animação DHCP (DORA) ----------
+  var DH = {svg:null, built:false, running:false, k:0};
+  var dhMQ = matchMedia('(max-width: 640px)');
+  function dhBuild(){
+    var svg = $('dh-svg'), N='http://www.w3.org/2000/svg';
+    var mk = function(t,a,p,txt){ var e=document.createElementNS(N,t); for(var k in a) e.setAttribute(k,a[k]); if(txt!=null) e.textContent=txt; (p||svg).appendChild(e); return e; };
+    svg.innerHTML = '';
+    var nar = dhMQ.matches; DH.nar = nar;
+    svg.setAttribute('viewBox', nar ? '0 0 360 290' : '0 0 600 260');
+    var C = nar ? {x:52,y:62} : {x:78,y:82}, O = nar ? {x:52,y:212} : {x:78,y:200}, S = nar ? {x:178,y:137} : {x:290,y:141}, R = nar ? {x:302,y:137} : {x:500,y:141};
+    var sw = nar ? 78 : 104, rr = nar ? 26 : 30;
+    DH.P = {C:C,O:O,S:S,R:R};
+    DH.G = {Cp:{x:C.x+22,y:C.y+4}, Op:{x:O.x+22,y:O.y-4}, Sl:{x:S.x-sw/2+2,y:S.y}, Sr:{x:S.x+sw/2,y:S.y}, Rp:{x:R.x-rr,y:R.y}};
+    var gl = mk('g',{});
+    DH.l1 = mk('line',{x1:DH.G.Cp.x,y1:DH.G.Cp.y,x2:DH.G.Sl.x,y2:S.y-6,'stroke-width':3,'stroke-linecap':'round'},gl);
+    DH.l2 = mk('line',{x1:DH.G.Op.x,y1:DH.G.Op.y,x2:DH.G.Sl.x,y2:S.y+6,'stroke-width':3,'stroke-linecap':'round'},gl);
+    mk('line',{x1:DH.G.Sr.x,y1:S.y,x2:DH.G.Rp.x,y2:R.y,'stroke-width':3,'stroke-linecap':'round',style:'stroke:var(--dev);opacity:.6'},gl);
+    DH.port = mk('text',{x:(DH.G.Sr.x+DH.G.Rp.x)/2,y:S.y-10,'text-anchor':'middle','font-size':11,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},gl,'');
+    if (nar) DH.port.style.display = 'none';
+    function pc(P, name, sub){
+      var g = mk('g',{transform:'translate('+P.x+','+P.y+')'});
+      var ring = mk('circle',{r:26,fill:'none','stroke-width':3,opacity:0},g);
+      var mon = mk('rect',{x:-21,y:-17,width:42,height:29,rx:5,'stroke-width':2.5,style:'fill:var(--surface)'},g);
+      var scr = mk('rect',{x:-16,y:-12,width:32,height:18,rx:2,opacity:.3},g);
+      mk('rect',{x:-7,y:13,width:14,height:4,rx:2,style:'fill:var(--muted)'},g);
+      var t = mk('text',{y:34,'text-anchor':'middle','font-size':13,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--ink)'},g,name);
+      var s = mk('text',{y:49,'text-anchor':'middle','font-size':11,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},g,sub);
+      return {g:g,ring:ring,mon:mon,scr:scr,t:t,s:s};
+    }
+    DH.c = pc(C,'PC0','0.0.0.0');
+    DH.o = pc(O,'PC1','já configurado');
+    var sg = mk('g',{});
+    DH.sw = mk('rect',{x:S.x-sw/2,y:S.y-18,width:sw,height:36,rx:9},sg);
+    if (!nar) for (var k=0;k<4;k++) mk('rect',{x:S.x-40+k*14,y:S.y-4,width:9,height:8,rx:1.5,style:'fill:var(--surface)',opacity:.85},sg);
+    DH.swt = mk('text',{x:nar?S.x:S.x+30,y:S.y+4,'text-anchor':'middle','font-size':11,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--surface)'},sg,'ADM');
+    var rg = mk('g',{});
+    DH.ring = mk('circle',{cx:R.x,cy:R.y,r:rr,fill:'none','stroke-width':3,style:'stroke:var(--dev)',opacity:0},rg);
+    mk('circle',{cx:R.x,cy:R.y,r:rr,'stroke-width':2.5,style:'fill:var(--dev);stroke:var(--ink)'},rg);
+    mk('path',{d:'M-13,-6 H12 M6,-12 L12,-6 L6,0 M13,6 H-12 M-6,0 L-12,6 L-6,12',transform:'translate('+R.x+','+R.y+')',fill:'none','stroke-width':2.6,'stroke-linecap':'round','stroke-linejoin':'round',style:'stroke:var(--surface)'},rg);
+    mk('text',{x:R.x,y:R.y+rr+20,'text-anchor':'middle','font-size':13,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--ink)'},rg,'L3-IFSC');
+    mk('text',{x:R.x,y:R.y+rr+35,'text-anchor':'middle','font-size':11,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},rg,'servidor DHCP');
+    DH.rgw = mk('text',{x:nar?R.x+8:R.x,y:R.y-rr-12,'text-anchor':'middle','font-size':nar?10:11,'font-weight':600,'font-family':'JetBrains Mono, monospace',style:'fill:var(--green-strong)'},rg,'');
+    DH.pk = mk('g',{});
+    DH.built = true;
+  }
+  function dhColor(){
+    var c = SECT[DH.k].c;
+    DH.sw.style.fill = c; DH.swt.textContent = SECT[DH.k].s;
+    [DH.c, DH.o].forEach(function(p){ p.mon.style.stroke = c; p.scr.style.fill = c; p.ring.style.stroke = c; });
+    DH.l1.style.stroke = c; DH.l2.style.stroke = c; DH.l1.style.opacity = .55; DH.l2.style.opacity = .55;
+  }
+  function dhReset(){
+    if (!plan) return;
+    var n = plan.nets[DH.k];
+    dhColor();
+    DH.c.t.textContent = 'PC'+(DH.k*2); DH.o.t.textContent = 'PC'+(DH.k*2+1);
+    DH.c.s.textContent = '0.0.0.0'; DH.c.s.style.fill = 'var(--muted)';
+    DH.o.s.textContent = toStr(n.dh[1]);
+    DH.c.ring.setAttribute('opacity',0); DH.o.g.style.opacity = 1;
+    DH.rgw.textContent = (DH.nar ? '' : 'Fa0/'+(DH.k+1)+' · ')+toStr(n.gw);
+    DH.port.textContent = 'Fa0/'+(DH.k+1);
+    DH.pk.innerHTML = '';
+    $('dh-pcname').textContent = 'PC'+(DH.k*2);
+    ['dh-ip','dh-mask','dh-gw','dh-dns'].forEach(function(id){ $(id).textContent = '0.0.0.0'; $(id).classList.remove('set'); });
+    $('dh-msg').textContent = 'Aguardando…'; $('dh-msg').className = 'dh-msg';
+    document.querySelectorAll('#dora li').forEach(function(li){ li.classList.remove('on','done'); });
+    $('dora-o').textContent = toStr(n.gw)+':67 → 255.255.255.255:68';
+    $('dora-a').textContent = toStr(n.gw)+':67 → 255.255.255.255:68';
+  }
+  function dhUpdate(r, dns){
+    DH.dns = dns;
+    if (!DH.built) dhBuild();
+    var sel = $('dh-sec'), v = sel.value;
+    sel.innerHTML = SECT.map(function(s,k){ return '<option value="'+k+'">'+s.n+' · '+toStr(r.nets[k].net)+'/'+r.prefix+'</option>'; }).join('');
+    sel.value = v !== '' ? v : '0';
+    DH.k = +sel.value;
+    if (!DH.running) dhReset();
+  }
+  function dhPath(a, b){ return [a, b]; }
+  function dhSend(pts, label, color, dur){
+    return new Promise(function(res){
+      var N='http://www.w3.org/2000/svg';
+      var g = document.createElementNS(N,'g'); DH.pk.appendChild(g);
+      var w = label.length*7.4+18;
+      var rc = document.createElementNS(N,'rect'); rc.setAttribute('x',-w/2); rc.setAttribute('y',-11); rc.setAttribute('width',w); rc.setAttribute('height',22); rc.setAttribute('rx',11); rc.style.fill = color; rc.style.stroke='var(--surface)'; rc.setAttribute('stroke-width',2); g.appendChild(rc);
+      var tx = document.createElementNS(N,'text'); tx.setAttribute('text-anchor','middle'); tx.setAttribute('y',4); tx.setAttribute('font-size',11); tx.setAttribute('font-weight',700); tx.setAttribute('font-family','JetBrains Mono, monospace'); tx.style.fill='#fff'; tx.textContent = label; g.appendChild(tx);
+      var place = function(t){ var q = at(pts, ease(t)); g.setAttribute('transform','translate('+q.x+','+q.y+')'); };
+      if (reduce){ place(1); setTimeout(function(){ g.remove(); res(); }, 250); return; }
+      var st = null;
+      function f(ts){ if(!st) st=ts; var t=Math.min((ts-st)/dur,1); place(t); if(t<1) requestAnimationFrame(f); else { g.remove(); res(); } }
+      requestAnimationFrame(f);
+    });
+  }
+  function dhWait(ms){ return new Promise(function(r){ setTimeout(r, reduce ? 0 : ms); }); }
+  function dhStep(i, txt){
+    var lis = document.querySelectorAll('#dora li');
+    lis.forEach(function(li,j){ li.classList.toggle('on', j===i); if (j<i) li.classList.add('done'); });
+    var pill = document.querySelector('#dh-pkt .pill');
+    pill.className = 'pill' + (i===4 ? ' ok' : ''); pill.textContent = i===4 ? 'Concluído' : ['Discover','Offer','Request','Ack'][i];
+    $('dh-pkt-txt').innerHTML = txt;
+  }
+  function dhRun(){
+    if (DH.running || !plan) return;
+    DH.running = true; $('dh-play').disabled = true;
+    dhReset();
+    var n = plan.nets[DH.k], ip = toStr(n.dh[0]), gw = toStr(n.gw);
+    var Cp = DH.G.Cp, Op = DH.G.Op, Sl = DH.G.Sl, Sr = DH.G.Sr, Rp = DH.G.Rp;
+    DH.c.ring.setAttribute('opacity',1);
+    $('dh-msg').textContent = 'Requesting IP Address…';
+    dhStep(0, 'O PC ainda não tem IP. Envia <b>DHCPDISCOVER</b> em broadcast: <code>0.0.0.0:68 → 255.255.255.255:67</code>');
+    dhSend([Cp, Sl], 'DISCOVER', 'var(--s1)', 900)
+    .then(function(){ return Promise.all([ dhSend([Sr, Rp], 'DISCOVER', 'var(--s1)', 800), dhSend([Sl, Op], 'DISCOVER', 'var(--s1)', 800) ]); })
+    .then(function(){ DH.o.g.style.opacity = .45; DH.ring.setAttribute('opacity',1); $('dh-pkt-txt').innerHTML = 'O switch repassa o broadcast para todas as portas. O PC'+(DH.k*2+1)+' descarta (não é servidor). O L3-IFSC escuta na <b>UDP 67</b> e escolhe o pool <b>'+SECT[DH.k].s+'</b> porque o pedido chegou pela Fa0/'+(DH.k+1)+'.'; return dhWait(1300); })
+    .then(function(){ DH.o.g.style.opacity = 1; DH.ring.setAttribute('opacity',0);
+      dhStep(1, 'O servidor oferece <b>'+ip+'</b> com máscara, gateway e DNS: <code>'+gw+':67 → 255.255.255.255:68</code>');
+      return dhSend([Rp, Sr, Sl, Cp], 'OFFER '+ip.split('.').pop(), 'var(--s2)', 1400); })
+    .then(function(){ $('dh-ip').textContent = ip+' ?'; return dhWait(500); })
+    .then(function(){ dhStep(2, 'O PC aceita a oferta e avisa em broadcast com <b>DHCPREQUEST</b>, pedindo o IP '+ip+': <code>0.0.0.0:68 → 255.255.255.255:67</code>');
+      return dhSend([Cp, Sl, Sr, Rp], 'REQUEST', 'var(--s3)', 1400); })
+    .then(function(){ DH.ring.setAttribute('opacity',1); return dhWait(500); })
+    .then(function(){ DH.ring.setAttribute('opacity',0);
+      dhStep(3, 'O servidor confirma com <b>DHCPACK</b> e registra a concessão de 1 dia: <code>'+gw+':67 → 255.255.255.255:68</code>');
+      return dhSend([Rp, Sr, Sl, Cp], 'ACK', 'var(--dev)', 1400); })
+    .then(function(){
+      var vals = {'dh-ip':ip,'dh-mask':plan.mask,'dh-gw':gw,'dh-dns':DH.dns};
+      Object.keys(vals).forEach(function(id){ $(id).textContent = vals[id]; $(id).classList.add('set'); });
+      $('dh-msg').textContent = 'DHCP request successful.'; $('dh-msg').className = 'dh-msg ok';
+      DH.c.s.textContent = ip; DH.c.s.style.fill = 'var(--green-strong)';
+      dhStep(4, 'Pronto: o PC'+(DH.k*2)+' agora tem IP <b>'+ip+'</b>, máscara '+plan.mask+', gateway '+gw+' e DNS '+DH.dns+', sem digitar nada.');
+      document.querySelectorAll('#dora li').forEach(function(li){ li.classList.remove('on'); li.classList.add('done'); });
+      DH.running = false; $('dh-play').disabled = false;
+    });
+  }
+  $('dh-play').addEventListener('click', dhRun);
+  var dhMq = function(){ if (DH.running || !DH.built) return; dhBuild(); dhReset(); };
+  if (dhMQ.addEventListener) dhMQ.addEventListener('change', dhMq); else dhMQ.addListener(dhMq);
+  $('dh-sec').addEventListener('change', function(){ if (DH.running) { this.value = DH.k; return; } DH.k = +this.value; dhReset(); });
+
+  // ---------- checklist ----------
+  var cks = Array.prototype.slice.call(document.querySelectorAll('#checklist input')), ckState = {};
+  try { ckState = JSON.parse(localStorage.getItem('subredes-check3')||'{}') || {}; } catch(e){}
+  function updProg(){ var n = cks.filter(function(c){return c.checked;}).length, pc = Math.round(n/cks.length*100); $('prog').style.width = pc+'%'; $('prog-bar').setAttribute('aria-valuenow', pc); $('prog-txt').innerHTML = '<b>'+pc+'%</b> · '+n+' de '+cks.length+(pc===100?' · concluído':''); $('prog-txt').classList.toggle('done', pc===100); }
+  cks.forEach(function(c){
+    c.checked = !!ckState[c.id];
+    c.addEventListener('change', function(){ ckState[c.id] = c.checked; try{ localStorage.setItem('subredes-check3', JSON.stringify(ckState)); }catch(e){} updProg(); });
+  });
+  updProg();
+
+  // ---------- desenho da topologia ----------
+  var tMQ = matchMedia('(max-width: 900px)');
+  function drawTopo(){
+    if (!plan) return;
+    var d = $('draw'), m = tMQ.matches, h = '', r = plan;
+    function pcSvg(k, j, x, y, port, nogw){
+      var c = SECT[k].c, n = r.nets[k];
+      return '<g transform="translate('+x+','+y+')"><rect class="mon" x="-30" y="-26" width="60" height="40" rx="5" style="stroke:'+c+'"/><rect x="-24" y="-20" width="48" height="28" rx="2" style="fill:'+c+'" opacity=".25"/><rect class="stand" x="-4" y="14" width="8" height="8"/><rect class="stand" x="-14" y="21" width="28" height="4" rx="2"/>'+
+        '<text class="pc-t" y="46">PC'+(k*2+j)+'</text><text class="pc-ip" y="62">'+toStr(n.pcs[j])+'</text>'+(nogw?'':'<text class="pc-ip" y="76">gw '+toStr(n.gw)+'</text>')+(port?'<text class="port" y="-34">Fa0/'+(j+1)+'</text>':'')+'</g>';
+    }
+    function rtr(x, y, rr){ return '<circle class="rtr" cx="'+x+'" cy="'+y+'" r="'+rr+'"/><path class="rtr-i" transform="translate('+x+','+y+')" d="M-12,-6 H11 M6,-11 L11,-6 L6,-1 M12,6 H-11 M-6,1 L-11,6 L-6,11"/>'; }
+    function sw(x, y, w, hh, name, leds){
+      var s = '<g transform="translate('+x+','+y+')"><rect class="sw-body" x="'+(-w/2)+'" y="'+(-hh/2)+'" width="'+w+'" height="'+hh+'" rx="9"/><rect class="sw-top" x="'+(-w/2)+'" y="'+(-hh/2)+'" width="'+w+'" height="8" rx="4"/>';
+      for (var j=0;j<leds;j++) s += '<rect class="led" x="'+(-w/2+12+j*14)+'" y="'+(hh/2-11)+'" width="9" height="5" rx="1.5"/>';
+      return s + '<text class="sw-t" y="4" x="'+(leds?18:0)+'">'+name+'</text></g>';
+    }
+    if (m){
+      // igual à animação: 2 setores em cima, 2 embaixo, L3-IFSC no meio
+      var R = {x:180, y:300}, RR = 26;
+      d.setAttribute('viewBox','0 0 360 606');
+      var G = SECT.map(function(s,k){
+        var top = k < 2, x = k%2 ? 184 : 6, gx = x + 85;
+        return {s:s, k:k, top:top, x:x, gx:gx, y:top?6:352, sy:top?204:398};
+      });
+      G.forEach(function(g){
+        var s = g.s, n = r.nets[g.k];
+        h += '<rect x="'+g.x+'" y="'+g.y+'" width="170" height="246" rx="16" style="fill:color-mix(in srgb,'+s.c+' 10%,var(--surface));stroke:'+s.c+'" stroke-opacity=".45"/>';
+      });
+      G.forEach(function(g){
+        var ey = g.top ? g.sy+15 : g.sy-15, dx = R.x-g.gx, dy = R.y-ey, L = Math.hypot(dx,dy);
+        var ex = R.x - dx/L*RR, eyy = R.y - dy/L*RR;
+        h += '<line class="cab" style="stroke:'+g.s.c+'" x1="'+g.gx+'" y1="'+ey+'" x2="'+ex.toFixed(1)+'" y2="'+eyy.toFixed(1)+'"/>';
+        var t = .3, lx = g.gx + (ex-g.gx)*t + (g.k%2 ? 8 : -8), ly = ey + (eyy-ey)*t + 4;
+        h += '<text class="port halo" x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" style="text-anchor:'+(g.k%2?'start':'end')+'">Fa0/24 ↔ Fa0/'+(g.k+1)+'</text>';
+      });
+      G.forEach(function(g){
+        var s = g.s, n = r.nets[g.k], py = g.top ? 116 : 476;
+        [0,1].forEach(function(j){ var px = g.gx + (j?44:-44);
+          h += '<line class="cab" style="stroke:'+s.c+'" x1="'+(g.gx+(j?16:-16))+'" y1="'+(g.top?g.sy-15:g.sy+15)+'" x2="'+px+'" y2="'+(g.top?py+22:py-26)+'"/>';
+          var c = s.c, ipy = g.top ? -30 : 50, nmy = g.top ? -44 : 36;
+          h += '<g transform="translate('+px+','+py+')"><rect class="mon" x="-26" y="-24" width="52" height="36" rx="5" style="stroke:'+c+'"/><rect x="-21" y="-19" width="42" height="26" rx="2" style="fill:'+c+'" opacity=".25"/><rect class="stand" x="-4" y="12" width="8" height="6"/><rect class="stand" x="-12" y="17" width="24" height="4" rx="2"/>'+
+            '<text class="pc-t" y="'+nmy+'" style="font-size:12px">PC'+(g.k*2+j)+'</text><text class="pc-ip" y="'+ipy+'" style="font-size:9px">'+toStr(n.pcs[j])+'</text></g>';
+        });
+        h += sw(g.gx, g.sy, 120, 30, 'SW-'+s.s, 0);
+        var hy = g.top ? g.y+20 : g.y+212, ny = hy + 15;
+        h += '<text class="grp-l" x="'+(g.x+10)+'" y="'+hy+'" style="fill:'+s.c+';font-size:10.5px">'+s.n+'</text>';
+        h += '<text class="grp-n" x="'+(g.x+10)+'" y="'+ny+'" style="font-size:9.5px">'+toStr(n.net)+'/'+r.prefix+' · gw .'+(n.gw%256)+'</text>';
+      });
+      h += '<rect x="'+(R.x-RR-10-96)+'" y="'+(R.y-18)+'" width="96" height="36" rx="9" style="fill:var(--surface);stroke:var(--line)"/>';
+      h += '<text class="pc-t" x="'+(R.x-RR-10-48)+'" y="'+(R.y-2)+'" style="font-size:12px">L3-IFSC</text><text class="pc-ip" x="'+(R.x-RR-10-48)+'" y="'+(R.y+11)+'" style="font-size:9px">Switch 3560</text>';
+      h += rtr(R.x, R.y, RR);
+    } else {
+      d.setAttribute('viewBox','0 0 1000 456');
+      SECT.forEach(function(s,k){
+        var x = 20+k*245, gx = x+112.5, n = r.nets[k];
+        h += '<rect x="'+x+'" y="132" width="225" height="312" rx="18" style="fill:color-mix(in srgb,'+s.c+' 10%,var(--surface));stroke:'+s.c+'" stroke-opacity=".45"/>';
+      });
+      SECT.forEach(function(s,k){
+        var gx = 20+k*245+112.5, a = Math.atan2(194-58, gx-500), sx = 500+Math.cos(a)*30, sy = 58+Math.sin(a)*30;
+        h += '<line class="cab" style="stroke:'+s.c+'" x1="'+sx.toFixed(1)+'" y1="'+sy.toFixed(1)+'" x2="'+gx+'" y2="196"/>';
+      });
+      SECT.forEach(function(s,k){
+        var x = 20+k*245, gx = x+112.5, n = r.nets[k];
+        [0,1].forEach(function(j){ var px = gx+(j?56:-56); h += '<path class="cab" style="stroke:'+s.c+'" d="M'+(gx+(j?22:-22))+' 242 C '+(gx+(j?22:-22))+' 280, '+px+' 270, '+px+' 316"/>'; });
+        var lx = k<2 ? x+16 : x+209, an = k<2 ? 'start' : 'end';
+        h += '<text class="grp-l halo" x="'+lx+'" y="156" text-anchor="'+an+'" style="fill:'+s.c+'">'+s.n+'</text><text class="grp-n halo" x="'+lx+'" y="172" text-anchor="'+an+'">'+toStr(n.net)+'/'+r.prefix+'</text><text class="grp-n halo" x="'+gx+'" y="432" text-anchor="middle">gateway '+toStr(n.gw)+'</text>';
+        h += '<text class="port halo" x="'+(gx+(k<2?-30:30))+'" y="190">Fa0/24</text>';
+        var a = Math.atan2(194-58, gx-500); h += '<text class="port halo" x="'+(500+Math.cos(a)*62).toFixed(1)+'" y="'+(58+Math.sin(a)*62+4).toFixed(1)+'">Fa0/'+(k+1)+'</text>';
+        h += sw(gx, 220, 176, 46, 'SW-'+s.s, 4);
+        h += pcSvg(k,0,gx-56,342,true,true) + pcSvg(k,1,gx+56,342,true,true);
+      });
+      h += rtr(500,58,30);
+      h += '<text class="pc-t" x="454" y="54" style="text-anchor:end">L3-IFSC</text><text class="pc-ip" x="454" y="70" style="text-anchor:end">Switch 3560 · ip routing</text>';
+    }
+    d.innerHTML = h;
+  }
+  if (tMQ.addEventListener) tMQ.addEventListener('change', drawTopo); else tMQ.addListener(drawTopo);
+
+  // ---------- animação do topo ----------
+  var HN = {nodes:[{x:64,y:58},{x:336,y:58},{x:64,y:214},{x:336,y:214}], R:{x:200,y:152}, pk:[], lbl:[], nm:[], t0:0};
+  (function(){
+    var svg = $('hero-svg'), N='http://www.w3.org/2000/svg';
+    var mk = function(t,a,p,tx){ var e=document.createElementNS(N,t); for(var k in a) e.setAttribute(k,a[k]); if(tx!=null) e.textContent=tx; (p||svg).appendChild(e); return e; };
+    var defs = mk('defs',{});
+    var gr = mk('radialGradient',{id:'hn-glow'},defs); mk('stop',{offset:'0','stop-color':'#4DC262','stop-opacity':'.22'},gr); mk('stop',{offset:'1','stop-color':'#4DC262','stop-opacity':'0'},gr);
+    var pat = mk('pattern',{id:'hn-grid',width:20,height:20,patternUnits:'userSpaceOnUse'},defs); mk('circle',{cx:1,cy:1,r:1,fill:'#4DC262',opacity:.18},pat);
+    mk('circle',{cx:HN.R.x,cy:HN.R.y,r:110,fill:'url(#hn-glow)'});
+    HN.nodes.forEach(function(n,k){ mk('line',{'class':'hl',x1:n.x,y1:n.y,x2:HN.R.x,y2:HN.R.y,style:'stroke:'+SECT[k].c}); });
+    mk('circle',{'class':'hr-ring',cx:HN.R.x,cy:HN.R.y,r:30});
+    mk('circle',{'class':'hr-ring b',cx:HN.R.x,cy:HN.R.y,r:30});
+    HN.gpk = mk('g',{});
+    mk('circle',{cx:HN.R.x,cy:HN.R.y,r:30,fill:'#000',stroke:'#4DC262','stroke-width':3});
+    mk('path',{d:'M-13,-6 H12 M6,-12 L12,-6 L6,0 M13,6 H-12 M-6,0 L-12,6 L-6,12',transform:'translate('+HN.R.x+','+HN.R.y+')',fill:'none',stroke:'#8BE39B','stroke-width':2.6,'stroke-linecap':'round','stroke-linejoin':'round'});
+    mk('text',{x:HN.R.x,y:HN.R.y+50,'text-anchor':'middle','font-size':12,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--ink)'},null,'L3-IFSC');
+    HN.nodes.forEach(function(n,k){
+      var g = mk('g',{transform:'translate('+n.x+','+n.y+')'});
+      HN.nodes[k].halo = mk('circle',{r:34,fill:'none','stroke-width':2.5,opacity:0,style:'stroke:'+SECT[k].c},g);
+      mk('rect',{x:-27,y:-20,width:54,height:36,rx:5,'stroke-width':2.5,style:'fill:var(--surface);stroke:'+SECT[k].c},g);
+      mk('rect',{x:-22,y:-15,width:44,height:25,rx:2,opacity:.28,style:'fill:'+SECT[k].c},g);
+      mk('rect',{x:-4,y:16,width:8,height:6,style:'fill:var(--ink)'},g);
+      mk('rect',{x:-13,y:21,width:26,height:4,rx:2,style:'fill:var(--ink)'},g);
+      HN.nm[k] = mk('text',{y:42,'text-anchor':'middle','font-size':12,'font-weight':800,'font-family':'Sora, sans-serif','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:'+SECT[k].c+';stroke:var(--bg)'},g,'PC'+(k*2)+' · '+SECT[k].s);
+      HN.lbl[k] = mk('text',{y:56,'text-anchor':'middle','font-size':10,'font-weight':600,'font-family':'JetBrains Mono, monospace','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:var(--muted);stroke:var(--bg)'},g,'');
+    });
+  })();
+  function heroLabels(){
+    if (!plan) return;
+    HN.nodes.forEach(function(n,k){ HN.lbl[k].textContent = toStr(plan.nets[k].pcs[0])+'/'+plan.prefix; });
+  }
+  function hnSpawn(){
+    var a = Math.floor(Math.random()*4), b = (a + 1 + Math.floor(Math.random()*3)) % 4;
+    var N='http://www.w3.org/2000/svg', c = document.createElementNS(N,'circle');
+    c.setAttribute('r',5.5); c.style.fill = SECT[a].c; c.style.stroke='var(--surface)'; c.setAttribute('stroke-width',1.5);
+    HN.gpk.appendChild(c);
+    HN.pk.push({a:a,b:b,t:0,el:c,sp:0.0045+Math.random()*0.002});
+  }
+  function hnFrame(ts){
+    if (!HN.last) HN.last = ts; var dt = Math.min(ts-HN.last, 50); HN.last = ts;
+    HN.acc = (HN.acc||0) + dt;
+    if (HN.acc > 1500){ HN.acc = 0; hnSpawn(); }
+    HN.pk = HN.pk.filter(function(p){
+      p.t += p.sp*dt/16;
+      var A = HN.nodes[p.a], B = HN.nodes[p.b], R = HN.R, x, y;
+      if (p.t < .5){ var u = p.t*2; x = A.x+(R.x-A.x)*u; y = A.y+(R.y-A.y)*u; }
+      else { var v = Math.min((p.t-.5)*2,1); x = R.x+(B.x-R.x)*v; y = R.y+(B.y-R.y)*v; }
+      p.el.setAttribute('cx',x); p.el.setAttribute('cy',y);
+      if (p.t >= 1){
+        p.el.remove();
+        var hb = HN.nodes[p.b].halo; hb.setAttribute('opacity',1); setTimeout(function(){ hb.setAttribute('opacity',0); }, 450);
+        return false;
+      }
+      return true;
+    });
+    requestAnimationFrame(hnFrame);
+  }
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(hnFrame);
+
+  // ---------- planejador: eventos ----------
+  $('base').value = st.base; $('prefix').value = String(st.prefix); $('pcstart').value = st.start;
+  $('pform').addEventListener('submit', function(e){ e.preventDefault(); });
+  $('base').addEventListener('input', function(){ st.base = this.value; render(); });
+  $('prefix').addEventListener('change', function(){ st.prefix = +this.value; render(); });
+  $('pcstart').addEventListener('input', function(){ st.start = this.value; render(); });
+  $('gw-first').addEventListener('click', function(){ st.gw='first'; render(); });
+  $('gw-last').addEventListener('click', function(){ st.gw='last'; render(); });
+  document.querySelectorAll('.presets button').forEach(function(b){
+    b.addEventListener('click', function(){ st.base = b.dataset.base; $('base').value = st.base; render(); $('base').focus(); });
+  });
+
+  // ---------- copiar ----------
+  function selectEl(el){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  function copyFrom(btn, el){
+    var label = btn.innerHTML;
+    var done = function(msg){ btn.innerHTML = msg; setTimeout(function(){ btn.innerHTML = label; }, 1600); };
+    try { navigator.clipboard.writeText(el.textContent).then(function(){ done('Copiado'); }, function(){ selectEl(el); done('Selecionado: Ctrl+C'); }); }
+    catch(e){ selectEl(el); done('Selecionado: Ctrl+C'); }
+  }
+  document.querySelectorAll('.code .copy').forEach(function(b){ b.addEventListener('click', function(){ copyFrom(b, b.closest('.code').querySelector('pre')); }); });
+
+  // ---------- animação ----------
+  var NS = 'http://www.w3.org/2000/svg', svg = $('topo');
+  function el(tag, attrs, parent){ var e=document.createElementNS(NS,tag); for(var k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+  var L3, SWS, PCS, l3rect, l3ring, l3sub, xMark, gPk, narrow = null;
+  var mqNarrow = matchMedia('(max-width: 640px)');
+
+  // Duas geometrias: horizontal (tela larga) e em 2 linhas com o L3 no centro (celular)
+  function build(){
+    var nar = mqNarrow.matches;
+    if (nar === narrow) return;
+    narrow = nar;
+    svg.innerHTML = '';
+    if (!narrow){
+      svg.setAttribute('viewBox','0 0 720 440');
+      L3 = {x:360,y:88,w:220};
+      SWS = [105,275,445,615].map(function(x,k){
+        return {x:x,y:205,k:k,w:104,h:32, upA:{x:x,y:189}, l3A:{x:360+(k-1.5)*40,y:82}};
+      });
+      PCS = [];
+      SWS.forEach(function(s){ [-44,44].forEach(function(dx,j){
+        PCS.push({i:s.k*2+j, x:s.x+dx, y:330, sw:s, k:s.k, above:false, a:{x:s.x+dx,y:310}, swA:{x:s.x+(j?14:-14),y:219}});
+      }); });
+    } else {
+      svg.setAttribute('viewBox','0 0 360 560');
+      L3 = {x:180,y:280,w:200};
+      var pos = [[92,170,-1],[268,170,-1],[92,390,1],[268,390,1]];
+      SWS = pos.map(function(q,k){
+        var top = q[2] < 0, lx = 180 + (k%2 ? 55 : -55);
+        return {x:q[0],y:q[1],k:k,w:150,h:40, top:top,
+          upA:{x:q[0],y:top?q[1]+20:q[1]-20}, l3A:{x:lx,y:top?258:302}};
+      });
+      PCS = [];
+      SWS.forEach(function(s){ [-44,44].forEach(function(dx,j){
+        var py = s.top ? 82 : 478;
+        PCS.push({i:s.k*2+j, x:s.x+dx, y:py, sw:s, k:s.k, above:s.top,
+          a:{x:s.x+dx,y:s.top?py+18:py-20}, swA:{x:s.x+(j?22:-22),y:s.top?s.y-20:s.y+20}});
+      }); });
+    }
+    var R3 = 28;
+    SWS.forEach(function(s){ var dx=s.upA.x-L3.x, dy=s.upA.y-L3.y, d=Math.hypot(dx,dy); s.l3A = {x:L3.x+dx/d*R3, y:L3.y+dy/d*R3}; });
+    var gLinks = el('g',{},svg), gNodes = el('g',{},svg); gPk = el('g',{},svg);
+    SWS.forEach(function(s){
+      s.up = el('line',{x1:s.upA.x,y1:s.upA.y,x2:s.l3A.x,y2:s.l3A.y,'stroke-width':2.5,'stroke-linecap':'round'},gLinks);
+      s.upTop = s.l3A;
+      var left = narrow ? s.k%2===0 : s.k<2;
+      var tq = narrow ? 0.3 : 0.5; s.port = el('text',{x:s.upA.x+(s.l3A.x-s.upA.x)*tq + (left?-8:8),y:s.upA.y+(s.l3A.y-s.upA.y)*tq+4,'text-anchor':left?'end':'start','font-size':10.5,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},gLinks);
+      s.port.textContent = 'Fa0/'+(s.k+1);
+    });
+    PCS.forEach(function(p){ p.line = el('line',{x1:p.a.x,y1:p.a.y,x2:p.swA.x,y2:p.swA.y,'stroke-width':2.5,'stroke-linecap':'round'},gLinks); });
+    var l3g = el('g',{},gNodes);
+    l3ring = el('circle',{cx:L3.x,cy:L3.y,r:R3,fill:'none','stroke-width':3,style:'stroke:var(--green)'},l3g);
+    l3rect = el('circle',{cx:L3.x,cy:L3.y,r:R3,'stroke-width':2.5,style:'fill:var(--green);stroke:var(--ink)'},l3g);
+    el('path',{d:'M-13,-6 H12 M6,-12 L12,-6 L6,0 M13,6 H-12 M-6,0 L-12,6 L-6,12',transform:'translate('+L3.x+','+L3.y+')',fill:'none','stroke-width':2.6,'stroke-linecap':'round','stroke-linejoin':'round',style:'stroke:var(--surface)'},l3g);
+    var ly = L3.y - R3 - 10;
+    el('rect',{x:L3.x-78,y:ly-34,width:156,height:38,rx:10,'stroke-width':1,style:'fill:var(--surface);stroke:var(--line)'},l3g);
+    el('text',{x:L3.x,y:ly-17,'text-anchor':'middle','font-size':13,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--ink)'},l3g).textContent='L3-IFSC 3560';
+    l3sub = el('text',{x:L3.x,y:ly-3,'text-anchor':'middle','font-size':9.5,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},l3g);
+    SWS.forEach(function(s){
+      var g = el('g',{},gNodes);
+      s.rect = el('rect',{x:s.x-s.w/2,y:s.y-s.h/2,width:s.w,height:s.h,rx:9},g);
+      if (!narrow){
+        for (var k=0;k<4;k++) el('rect',{x:s.x-40+k*14,y:s.y-4,width:9,height:8,rx:1.5,style:'fill:var(--surface)',opacity:.85},g);
+        el('text',{x:s.x+30,y:s.y+4,'text-anchor':'middle','font-size':10.5,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--surface)'},g).textContent = SECT[s.k].s;
+        s.netLbl = el('text',{x:s.x,y:405,'text-anchor':'middle','font-size':11,'font-weight':600,'font-family':'JetBrains Mono, monospace'},gNodes);
+        s.nameLbl = el('text',{x:s.x,y:422,'text-anchor':'middle','font-size':10.5,'font-weight':700,'letter-spacing':'.06em','font-family':'Figtree, sans-serif'},gNodes);
+      } else {
+        s.nameLbl = el('text',{x:s.x,y:s.y-3,'text-anchor':'middle','font-size':10.5,'font-weight':700,'letter-spacing':'.04em','font-family':'Figtree, sans-serif'},g);
+        s.netLbl = el('text',{x:s.x,y:s.y+12,'text-anchor':'middle','font-size':10.5,'font-weight':600,'font-family':'JetBrains Mono, monospace'},g);
+      }
+      s.nameLbl.textContent = SECT[s.k].n;
+    });
+    PCS.forEach(function(p){
+      var g = el('g',{transform:'translate('+p.x+','+p.y+')'},gNodes);
+      p.ring = el('circle',{r:25,fill:'none','stroke-width':3,opacity:0},g);
+      p.mon = el('rect',{x:-20,y:-16,width:40,height:28,rx:5,'stroke-width':2.5,style:'fill:var(--surface)'},g);
+      p.scr = el('rect',{x:-15,y:-11,width:30,height:17,rx:2,opacity:.3},g);
+      el('rect',{x:-7,y:13,width:14,height:4,rx:2,style:'fill:var(--muted)'},g);
+      var t = el('text',{y:p.above?-38:34,'text-anchor':'middle','font-size':11,'font-weight':700,'font-family':'Sora, sans-serif',style:'fill:var(--ink)'},g);
+      t.textContent = 'PC'+p.i;
+      p.ipLbl = el('text',{y:p.above?-24:48,'text-anchor':'middle','font-size':9.5,'font-family':'JetBrains Mono, monospace',style:'fill:var(--muted)'},g);
+      p.g = g;
+    });
+    xMark = el('g',{opacity:0},gPk);
+    paint();
+    if (plan){ SWS.forEach(function(s){ s.netLbl.textContent = toStr(plan.nets[s.k].net)+'/'+plan.prefix; }); PCS.forEach(function(p){ p.ipLbl.textContent = '.'+ (plan.nets[p.k].pcs[p.i%2] % 256); }); }
+  }
+
+  var routing = false, running = false;
+  function paint(){
+    if (!SWS) return;
+    SWS.forEach(function(s){
+      var c = SECT[s.k].c;
+      s.rect.style.fill = c;
+      s.up.style.stroke = routing ? c : 'var(--neutral)'; s.up.style.opacity = .6;
+      s.netLbl.style.fill = narrow ? 'var(--surface)' : c;
+      s.nameLbl.style.fill = narrow ? 'var(--surface)' : 'var(--muted)';
+    });
+    PCS.forEach(function(p){
+      var c = SECT[p.k].c;
+      p.line.style.stroke = c; p.line.style.opacity = .55;
+      p.mon.style.stroke = c; p.scr.style.fill = c;
+      p.ring.style.stroke = c; p.ring.setAttribute('opacity',0);
+      p.g.style.opacity = 1;
+    });
+    l3rect.style.fill = routing ? 'var(--green)' : 'var(--neutral)';
+    l3sub.textContent = routing ? 'ip routing · 4 gateways' : 'sem ip routing';
+    l3ring.setAttribute('class', routing ? 'r-ring' : ''); l3ring.style.opacity = routing ? '' : '0';
+    xMark.setAttribute('opacity',0);
+    $('m-off').setAttribute('aria-pressed', !routing);
+    $('m-on').setAttribute('aria-pressed', routing);
+  }
+  function drawLabels(){
+    if (!plan || !SWS) return;
+    SWS.forEach(function(s){ s.netLbl.textContent = toStr(plan.nets[s.k].net)+'/'+plan.prefix; });
+    PCS.forEach(function(p){ p.ipLbl.textContent = '.'+ (plan.nets[p.k].pcs[p.i%2] % 256); });
+    fillSelects();
+  }
+  function fillSelects(){
+    ['a-src','a-dst'].forEach(function(id, z){
+      var sel = $(id), v = sel.value;
+      sel.innerHTML = PCS.map(function(p){ return '<option value="'+p.i+'">PC'+p.i+' · '+SECT[p.k].s+' · '+toStr(plan.nets[p.k].pcs[p.i%2])+'</option>'; }).join('');
+      sel.value = v !== '' ? v : (z===0 ? '0' : '2');
+    });
+  }
+  build();
+  var onMq = function(){ if (!running) build(); };
+  if (mqNarrow.addEventListener) mqNarrow.addEventListener('change', onMq); else mqNarrow.addListener(onMq);
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function lerp(a,b,t){ return a+(b-a)*t; }
+  function ease(t){ return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+  function swTop(s){ return s.upA; }
+  function swBot(p){ return p.swA; }
+  function pcTop(p){ return p.a; }
+  function polyLen(pts){ var L=0; for(var i=1;i<pts.length;i++) L+=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y); return L; }
+  function at(pts,t){
+    var L=polyLen(pts)*t;
+    for (var i=1;i<pts.length;i++){ var d=Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y); if(L<=d||i===pts.length-1){ var u=d?Math.min(L/d,1):1; return {x:lerp(pts[i-1].x,pts[i].x,u),y:lerp(pts[i-1].y,pts[i].y,u)}; } L-=d; }
+  }
+  // anima vários caminhos em paralelo
+  function animate(paths, color, dur, cb){
+    var dots = paths.map(function(){ return el('circle',{r:7,style:'fill:'+color,stroke:'var(--surface)','stroke-width':2},gPk); });
+    if (reduce){ dots.forEach(function(d){d.remove();}); cb(); return; }
+    var start=null;
+    function f(ts){
+      if(!start) start=ts;
+      var t=Math.min((ts-start)/dur,1), e=ease(t);
+      paths.forEach(function(p,i){ var q=at(p,e); dots[i].setAttribute('cx',q.x); dots[i].setAttribute('cy',q.y); });
+      if (t<1) requestAnimationFrame(f); else { dots.forEach(function(d){d.remove();}); cb(); }
+    }
+    requestAnimationFrame(f);
+  }
+  function showX(x,y){
+    xMark.innerHTML='';
+    el('circle',{cx:x,cy:y,r:16,style:'fill:var(--bad)'},xMark);
+    el('path',{d:'M'+(x-6)+' '+(y-6)+'L'+(x+6)+' '+(y+6)+'M'+(x+6)+' '+(y-6)+'L'+(x-6)+' '+(y+6),stroke:'#fff','stroke-width':3,'stroke-linecap':'round'},xMark);
+    xMark.setAttribute('opacity',1);
+  }
+  function setStatus(kind, txt){ var p=$('a-pill'); p.className='pill'+(kind?' '+kind:''); p.textContent = kind==='ok'?'Sucesso':kind==='bad'?'Falha':'Enviando…'; $('a-desc').textContent = txt; }
+
+  function run(){
+    if (running || !plan) return;
+    var src = PCS[+$('a-src').value], dst = PCS[+$('a-dst').value];
+    if (src===dst){ setStatus('bad','Origem e destino são o mesmo PC. Escolha dois PCs diferentes.'); return; }
+    running = true; paint();
+    src.ring.setAttribute('opacity',1);
+    var c = SECT[src.k].c, ipD = toStr(plan.nets[dst.k].pcs[dst.i%2]), gw = toStr(plan.nets[src.k].gw);
+    var end = function(){ running=false; };
+
+    if (src.k === dst.k){
+      setStatus('','Mesma sub-rede: PC'+src.i+' manda o ping direto para '+ipD+' pelo switch do setor.');
+      animate([[pcTop(src), swBot(src), swBot(dst), pcTop(dst)]], c, 1300, function(){
+        dst.ring.setAttribute('opacity',1);
+        setStatus('ok','Reply from '+ipD+'. Os dois PCs estão na mesma sub-rede, então o pacote não precisa de gateway.');
+        end();
+      });
+      return;
+    }
+    if (!routing){
+      setStatus('','Destino em outra rede. PC'+src.i+' envia ARP perguntando “quem é '+gw+'?”, o seu gateway.');
+      animate([[pcTop(src), swBot(src), swTop(src.sw), src.sw.upTop]], 'var(--neutral)', 1200, function(){
+        var paths = [];
+        SWS.forEach(function(s){ if (s!==src.sw) PCS.filter(function(p){return p.sw===s;}).forEach(function(p){ paths.push([s.upTop, swTop(s), swBot(p), pcTop(p)]); }); });
+        var sib = PCS.filter(function(p){ return p.sw===src.sw && p!==src; })[0];
+        paths.push([swBot(src), swBot(sib), pcTop(sib)]);
+        animate(paths, 'var(--neutral)', 1200, function(){
+          PCS.forEach(function(p){ if(p!==src) p.g.style.opacity=.45; });
+          showX(src.x+30, src.above ? src.y+26 : src.y-30);
+          setStatus('bad','Request timed out. O ARP chegou a todos, mas nenhum dispositivo tem o IP '+gw+'. Sem gateway funcionando, o pacote para '+ipD+' nunca sai do PC'+src.i+'.');
+          end();
+        });
+      });
+      return;
+    }
+    setStatus('','Destino em outra rede: PC'+src.i+' entrega o pacote ao gateway '+gw+' no L3-IFSC.');
+    animate([[pcTop(src), swBot(src), swTop(src.sw), src.sw.upTop, {x:L3.x,y:L3.y}]], c, 1200, function(){
+      l3rect.style.fill = 'var(--green-strong)';
+      setStatus('','O L3-IFSC consulta a tabela de rotas: '+toStr(plan.nets[dst.k].net)+'/'+plan.prefix+' está conectada na Fa0/'+(dst.k+1)+'.');
+      setTimeout(function(){
+        l3rect.style.fill = 'var(--green)';
+        animate([[{x:L3.x,y:L3.y}, dst.sw.upTop, swTop(dst.sw), swBot(dst), pcTop(dst)]], SECT[dst.k].c, 1200, function(){
+          dst.ring.setAttribute('opacity',1);
+          setStatus('ok','Reply from '+ipD+'. O pacote saiu da rede '+SECT[src.k].n+', passou pelo gateway e chegou à rede '+SECT[dst.k].n+'. A resposta volta pelo mesmo caminho.');
+          end();
+        });
+      }, reduce ? 0 : 500);
+    });
+  }
+  $('play').addEventListener('click', run);
+  $('m-off').addEventListener('click', function(){ if(running) return; routing=false; paint(); setStatus('', 'Sem roteamento: as portas do L3-IFSC ainda são portas de switch comuns. Envie um ping entre setores.'); $('a-pill').textContent='Pronto'; });
+  $('m-on').addEventListener('click', function(){ if(running) return; routing=true; paint(); setStatus('', 'Com ip routing: cada porta do L3-IFSC é o gateway de um setor. Envie um ping entre setores.'); $('a-pill').textContent='Pronto'; });
+
+  paint();
+  render();
+
+  // ---------- menu do celular ----------
+  var menu = $('menu'), mbtn = $('menu-btn');
+  function setMenu(open){ menu.classList.toggle('open', open); mbtn.setAttribute('aria-expanded', open); mbtn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu'); }
+  mbtn.addEventListener('click', function(e){ e.stopPropagation(); setMenu(!menu.classList.contains('open')); });
+  menu.addEventListener('click', function(e){ if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !e.target.closest('.bar')) setMenu(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && menu.classList.contains('open')){ setMenu(false); mbtn.focus(); } });
+})();
+</script>
+</body>
+</html>
