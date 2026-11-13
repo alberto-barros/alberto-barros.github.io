@@ -1,0 +1,845 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Rede Local no Packet Tracer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
+<style>
+/* Layout: barra IFSC fixa (logo, seções, Voltar), hero claro com cartão do caminho do ping, seções em coluna de 1080px separadas por linhas; laboratório animado com pilha OSI */
+:root{
+  --bg:#F3F9F4; --surface:#FFFFFF; --surface-2:#E7F5EA; --ink:#0F2417; --muted:#4A6353; --line:#D2E6D7;
+  --green:#2F9E41; --green-ink:#1E7A30; --green-soft:#E3F5E7; --green-chip:#C6EECD;
+  --red:#C8191E; --red-soft:#FBE3E3;
+  --hero-a:#2F9E41; --hero-b:#1E7A30; --hero-ink:#FFFFFF; --hero-muted:#E2F5E5;
+  --node-pc:#FFFFFF; --node-sw:#E7F5EA; --wire:#9DBBA3;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#7FA88B; --code-key:#8BE39B;
+  --font-display:"Sora","Segoe UI",system-ui,sans-serif;
+  --font-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --radius:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-ink:#86DD94; --green-soft:#173A24; --green-chip:#1C4A2A; --red:#F0585C; --red-soft:#3D1D1F;
+  --hero-a:#237A33; --hero-b:#14501F; --hero-ink:#FFFFFF; --hero-muted:#CDEBD2; --node-pc:#14261C; --node-sw:#1A3326; --wire:#4A6352;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-ink:#86DD94; --green-soft:#173A24; --green-chip:#1C4A2A; --red:#F0585C; --red-soft:#3D1D1F;
+  --hero-a:#237A33; --hero-b:#14501F; --hero-ink:#FFFFFF; --hero-muted:#CDEBD2; --node-pc:#14261C; --node-sw:#1A3326; --wire:#4A6352;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.read{max-width:760px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+code,.mono{font-family:var(--font-mono);font-size:.86em}
+code{background:var(--surface-2);padding:.1em .4em;border-radius:6px;white-space:nowrap;color:var(--green-ink)}
+a{color:var(--green-ink)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-ink)}
+.eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--green)}
+.sec-num{font-family:var(--font-mono);font-size:.8rem;color:var(--green-ink);font-weight:600}
+
+/* Barra */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:12px;padding-block:10px;flex-wrap:nowrap}
+.brand{display:flex;align-items:center;gap:12px;flex:none;text-decoration:none;color:var(--ink)}
+.ifsc-logo{height:40px;width:auto;flex:none;overflow:visible}
+.brand-txt{display:flex;flex-direction:column;line-height:1.05}
+.brand-txt .b1{font-family:"Open Sans",var(--font-body);font-weight:800;font-size:.95rem;letter-spacing:.01em}
+.brand-txt .b2{font-family:"Open Sans",var(--font-body);font-weight:400;font-size:.88rem}
+.nav{display:flex;gap:4px;flex:1 1 auto;min-width:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-block:2px}
+.nav::-webkit-scrollbar{display:none}
+.nav a:first-child{margin-left:auto}
+.nav a{flex:none;white-space:nowrap;text-decoration:none;color:var(--muted);font-weight:600;font-size:.85rem;padding:6px 10px;border-radius:999px}
+.nav a:hover,.nav a.cur{background:var(--surface-2);color:var(--green-ink)}
+.nav a:focus-visible,.back:focus-visible,.burger:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+@media (max-width:1100px){.nav a{background:var(--surface);border:1px solid var(--line)}}
+.back{flex:none;display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#C8191E;color:#fff;font-weight:700;font-size:.85rem;padding:7px 14px 7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px #C8191E;transition:background .2s,transform .2s}
+.back:hover{background:#A51318;transform:translateY(-1px)}
+.back svg{width:16px;height:16px}
+.burger{display:none}
+@media (max-width:700px){
+  .bar .wrap{gap:10px}
+  .brand{margin-right:auto}
+  .burger{order:3;display:inline-grid;place-content:center;gap:4px;width:42px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
+  .burger span{display:block;width:18px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s}
+  .burger[aria-expanded="true"]{background:var(--green);border-color:var(--green)}
+  .burger[aria-expanded="true"] span{background:var(--surface)}
+  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;overflow:visible;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px rgba(0,0,0,.35);padding:10px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
+  .nav.open{display:flex}
+  .nav a:first-child{margin-left:0}
+  .nav a{background:transparent;border:0;border-radius:12px;font-size:1rem;padding:12px 14px;color:var(--ink)}
+  .nav a:hover,.nav a.cur{background:var(--surface-2);color:var(--green-ink)}
+  .back{padding:7px 12px 7px 10px}
+}
+@media (max-width:400px){.brand-txt{display:none}}
+
+/* Hero */
+.hero{background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding-block:56px 48px}
+.hero .wrap > *{min-width:0}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.5rem);font-weight:800;letter-spacing:-.035em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.hero .lead{font-size:1.12rem;color:var(--muted);max-width:56ch;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:600}
+.chip svg{width:16px;height:16px;color:var(--green);stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hero-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 40px -24px color-mix(in srgb,var(--green) 55%,transparent)}
+.hero-card h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.hero-card .hint{font-size:.8rem;color:var(--muted);margin-top:12px}
+.vlist{display:grid;gap:8px}
+.vrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--surface-2)}
+.vtag{font-family:var(--font-mono);font-weight:600;font-size:.78rem;color:#fff;background:var(--vc);padding:3px 8px;border-radius:7px;white-space:nowrap}
+.vrow b{font-family:var(--font-display);font-size:.9rem}
+.vrow .net{font-family:var(--font-mono);font-size:.78rem;color:var(--muted)}
+.vrow.r{--vc:var(--red)}
+:root[data-theme="dark"] .vtag{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
+
+/* Seções */
+section.sec{padding-block:64px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+section.sec:last-of-type{border-bottom:0}
+.sec-head{display:grid;gap:10px;margin-bottom:32px}
+.sec-head p{color:var(--muted);font-size:1.05rem;max-width:70ch}
+
+/* Objetivos */
+.goals{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.goals li{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.goals svg{flex:0 0 22px;margin-top:2px;color:var(--green)}
+
+/* Laboratório */
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.lab-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.88rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.lab-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.stage-col{padding:16px 18px;border-right:1px solid var(--line);min-width:0;display:grid;gap:14px;align-content:start}
+.topo-scroll{overflow-x:auto}
+#topo{display:block;width:100%;min-width:620px;height:auto}
+#topo.tall{min-width:0;max-width:420px;margin:0 auto}
+.wire{stroke:var(--wire);stroke-width:2}
+.wire.hot{stroke:var(--green);stroke-width:3}
+.wire.hot.reply{stroke:var(--red)}
+.trunk{stroke:var(--wire);stroke-width:4}
+.trunk.hot{stroke:var(--green);stroke-width:5}
+.trunk.hot.reply{stroke:var(--red)}
+.dev rect.box{fill:var(--node-pc);stroke:var(--line);stroke-width:1.5;transition:stroke .25s,fill .25s}
+.dev.switch rect.box{fill:var(--node-sw);stroke:var(--wire)}
+.dev text{fill:var(--ink);font-family:var(--font-display);font-weight:700;font-size:15px;text-anchor:middle}
+.dev text.ip{font-family:var(--font-mono);font-weight:400;font-size:10.5px;fill:var(--muted);font-stretch:100%}
+.dev text.lbl{font-size:12px;fill:var(--muted);font-weight:600}
+.dev.endpoint rect.box{stroke:var(--green);stroke-dasharray:4 3}
+.dev.active rect.box{stroke:var(--green);stroke-width:3;stroke-dasharray:none;fill:var(--green-soft)}
+.dev.active.reply rect.box{stroke:var(--red);fill:var(--red-soft)}
+.dev .icon{fill:var(--muted)}
+.dev.active .icon{fill:var(--green)}
+.dev.active.reply .icon{fill:var(--red)}
+#pkt rect{fill:var(--green)}
+#pkt.reply rect{fill:var(--red)}
+#pkt path{stroke:#fff;fill:none;stroke-width:1.6}
+#pktTag rect{fill:var(--surface);stroke:var(--green)}
+#pktTag.reply rect{stroke:var(--red)}
+#pktTag text{fill:var(--ink);font-family:var(--font-mono);font-size:11px;text-anchor:middle}
+.halo{fill:none;stroke:var(--green);stroke-width:2;opacity:0}
+.halo.on{animation:halo 1.4s ease-out infinite}
+.halo.reply{stroke:var(--red)}
+@keyframes halo{0%{opacity:.7;r:16}100%{opacity:0;r:40}}
+
+.caption{background:var(--surface-2);border-radius:var(--radius);padding:14px 16px;display:grid;gap:4px;min-height:96px}
+.caption .kind{font-family:var(--font-mono);font-size:.78rem;color:var(--green-ink);font-weight:600}
+.caption.reply .kind{color:var(--red)}
+.caption h3{font-size:1.05rem}
+.caption p{color:var(--muted);font-size:.98rem}
+
+/* PDU */
+.pdu{display:grid;gap:6px}
+.pdu-label{font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.frame{display:flex;border-radius:8px;overflow:hidden;border:1px solid var(--line);font-family:var(--font-mono);font-size:.72rem;min-width:0}
+.seg{padding:7px 9px;border-right:1px solid var(--line);min-width:0;display:grid;gap:2px;transition:background .25s,opacity .25s;opacity:.5}
+.seg:last-child{border-right:0}
+.seg b{font-family:var(--font-display);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+.seg span{overflow-wrap:anywhere;color:var(--muted)}
+.seg.eth{flex:2.2}.seg.ip{flex:2.4}.seg.icmp{flex:1.4}.seg.fcs{flex:.6}
+.seg.read{opacity:1;background:var(--green-soft)}
+.reply-mode .seg.read{background:var(--red-soft)}
+.seg.read span{color:var(--ink)}
+
+/* Controles */
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:inherit;cursor:pointer}
+.btn{font-family:var(--font-display);font-weight:650;font-size:.92rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 14px;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--green)}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn:focus-visible,.dot:focus-visible,.speed button:focus-visible,input:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.speed{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-left:auto}
+.speed button{border:0;background:var(--surface);color:var(--muted);padding:8px 11px;font-family:var(--font-mono);font-size:.8rem}
+.speed button[aria-pressed="true"]{background:var(--green-soft);color:var(--green-ink);font-weight:600}
+.dots{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.dot{width:24px;height:8px;border-radius:4px;border:0;background:var(--line);padding:0}
+.dot.done{background:var(--green);opacity:.45}
+.dot.done.r{background:var(--red)}
+.dot.cur{background:var(--green);opacity:1}
+.dot.cur.r{background:var(--red)}
+.dots .sep{width:1px;height:16px;background:var(--line);margin:0 4px}
+
+/* OSI */
+.osi-col{padding:16px 18px;display:grid;gap:10px;align-content:start;min-width:0}
+.osi-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.osi-dev{font-family:var(--font-display);font-weight:750;font-size:1.15rem}
+.dir{font-family:var(--font-mono);font-size:.78rem;color:var(--green-ink);display:inline-flex;align-items:center;gap:4px}
+.reply-mode .dir{color:var(--red)}
+.osi{display:grid;gap:5px}
+.layer{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:8px 10px;opacity:.42;transition:opacity .3s,background .3s,border-color .3s}
+.layer .n{font-family:var(--font-display);font-weight:800;font-size:1.05rem;color:var(--muted);text-align:center;line-height:1.3}
+.layer .nm{font-weight:700;font-size:.95rem;display:flex;justify-content:space-between;gap:8px}
+.layer .unit{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);font-weight:400;white-space:nowrap}
+.layer .note{font-size:.86rem;color:var(--muted);line-height:1.4;display:none;margin-top:2px}
+.layer.on{opacity:1;border-color:var(--green);background:var(--green-soft)}
+.layer.on .n{color:var(--green-ink)}
+.layer.on .note{display:block;color:var(--ink)}
+.reply-mode .layer.on{border-color:var(--red);background:var(--red-soft)}
+.reply-mode .layer.on .n{color:var(--red)}
+.layer.flash{animation:flash .6s ease}
+@keyframes flash{0%{transform:translateX(-4px)}100%{transform:none}}
+.osi-foot{font-size:.8rem;color:var(--muted)}
+
+/* Tabela */
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);font-size:.95rem}
+th{font-family:var(--font-display);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td.mono{font-family:var(--font-mono);font-size:.86rem}
+tr:last-child td{border-bottom:0}
+tr.grp td{background:var(--surface-2);font-family:var(--font-display);font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--green-ink)}
+.pill{display:inline-block;font-family:var(--font-mono);font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--green-chip);color:var(--green-ink)}
+
+/* Topologia desenhada + endereçamento */
+.drawing{margin:0 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 18px 12px;display:grid;gap:8px}
+.draw-scroll{overflow-x:auto}
+#draw{display:block;width:100%;min-width:640px;height:auto}
+#draw.tall{min-width:0;max-width:460px;margin:0 auto}
+.drawing figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+#draw .grp{fill:var(--green-soft);stroke:var(--line)}
+#draw .grp-l{fill:var(--green-ink);font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.12em}
+#draw .cab{stroke:var(--green);stroke-width:2.2;fill:none}
+#draw .cab-up{stroke:var(--green);stroke-width:5;stroke-linecap:round}
+#draw .sw-body{fill:var(--hero-b)}
+#draw .sw-top{fill:var(--green)}
+#draw .led{fill:#9BE7A6}
+#draw .sw-t{fill:#fff;font-family:var(--font-display);font-weight:700;font-size:15px;text-anchor:middle}
+#draw .mon{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+#draw .scr{fill:var(--green-chip)}
+#draw .stand{fill:var(--ink)}
+#draw .pc-t{fill:var(--ink);font-family:var(--font-display);font-weight:700;font-size:14px;text-anchor:middle}
+#draw .pc-ip{fill:var(--muted);font-family:var(--font-mono);font-size:11px;text-anchor:middle}
+#draw .port{fill:var(--muted);font-family:var(--font-mono);font-size:10px;text-anchor:middle}
+#draw .up-l{fill:var(--green-ink);font-family:var(--font-mono);font-size:11px;text-anchor:middle}
+.addr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.addr{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;min-width:0}
+.addr-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(90deg,var(--green-soft),var(--surface))}
+.addr-head .ic{width:40px;height:40px;border-radius:11px;background:var(--green);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:.85rem;flex:none}
+.addr-head strong{font-family:var(--font-display);font-size:1.05rem;display:block}
+.addr-head span{font-size:.85rem;color:var(--muted)}
+.addr table{min-width:0}
+.addr td,.addr th{padding:8px 14px}
+.uplink{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px dashed var(--green);border-radius:var(--radius);padding:12px 16px}
+.up-note{font-size:.9rem;color:var(--muted)}
+@media (max-width:700px){.addr-grid{grid-template-columns:1fr}}
+
+/* Roteiro */
+.phases{display:grid}
+.phase{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;position:relative;padding-bottom:40px}
+.phase::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(var(--green),var(--line))}
+.phase:last-child{padding-bottom:0}
+.phase:last-child::before{display:none}
+.phase .num{width:56px;height:56px;border-radius:18px;background:var(--green);color:#fff;font-family:var(--font-display);font-weight:800;font-size:1.3rem;display:grid;place-items:center;box-shadow:0 10px 24px -12px var(--green);position:relative;z-index:1}
+.phase .body{display:grid;gap:12px;min-width:0;padding-top:12px}
+.phase h3{font-size:1.25rem}
+.phase ol{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--muted)}
+.phase ol strong,.phase ol code{color:var(--ink)}
+.phase li::marker{color:var(--green-ink);font-weight:700}
+.tip{background:var(--surface-2);padding:14px 16px;border-radius:var(--radius);font-size:.95rem}
+.tip strong{color:var(--green-ink)}
+.cmd{font-family:var(--font-mono);font-size:.86rem;background:var(--code-bg);color:var(--code-fg);border-radius:14px;padding:40px 16px 14px;overflow-x:auto;line-height:1.65;position:relative;min-width:0}
+.cmd::before{content:"Command Prompt · PC1";position:absolute;left:0;right:0;top:0;padding:8px 14px 8px 46px;font:600 .75rem var(--font-mono);color:var(--code-muted);border-bottom:1px solid color-mix(in srgb,var(--code-fg) 12%,transparent);background:radial-gradient(circle,#5BC46D 5px,transparent 5.5px) 14px 50%/10px 10px no-repeat,radial-gradient(circle,#3b5a46 5px,transparent 5.5px) 30px 50%/10px 10px no-repeat}
+.cmd .p{color:var(--code-key);font-weight:600}
+
+/* Observar */
+.observe{list-style:none;margin:0;padding:0;counter-reset:o;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.obs{counter-increment:o;position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:grid;gap:6px;align-content:start}
+.obs::before{content:counter(o);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--green);color:#fff;font-family:var(--font-display);font-weight:700;font-size:.85rem;margin-bottom:4px}
+.obs .k{font-family:var(--font-mono);font-size:.78rem;color:var(--green-ink)}
+.obs p{color:var(--muted);font-size:.96rem}
+
+/* Reflexão */
+.reflect{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:var(--hero-ink);border-radius:16px;padding:32px clamp(18px,4vw,40px);display:grid;gap:22px}
+.reflect .eyebrow{color:var(--hero-muted)}
+.reflect .sec-num{color:var(--hero-muted)}
+.reflect .sec-head p{color:var(--hero-muted)}
+.reflect h2{color:var(--hero-ink)}
+.reflect .lead{color:var(--hero-muted)}
+.qs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;counter-reset:q}
+.qs li{counter-increment:q;border-radius:12px;padding:16px 18px;display:grid;gap:6px;background:#FFFFFF;color:#17301C;box-shadow:0 10px 24px rgba(0,40,10,.22)}
+.qs code{background:none;border:0;padding:0;color:#1F7A30;font-weight:700}
+.qs li::before{content:"Pergunta " counter(q);font-family:var(--font-display);font-weight:800;color:#2F9E41;font-size:.85rem;letter-spacing:.08em}
+.qs li p{font-size:1.04rem;line-height:1.5}
+.qs li small{color:#C8191E;font-weight:600;font-size:.88rem}
+
+/* Checklist */
+.check{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.check label{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;cursor:pointer}
+.check input{width:20px;height:20px;accent-color:var(--green);margin-top:3px;flex:0 0 auto}
+.check input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--green)}
+.progress{font-family:var(--font-mono);font-size:.85rem;color:var(--green-ink)}
+
+footer{padding-block:36px;color:var(--muted);font-size:.88rem;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.foot-brand{display:flex;align-items:center;gap:12px;color:var(--ink)}
+.foot-brand svg{height:52px;width:auto}
+
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;gap:28px}}
+@media (max-width:640px){
+  .hero .wrap{padding-block:36px 32px}
+  .hero .lead{font-size:1.02rem}
+  section.sec{padding-block:44px}
+  h2{font-size:1.55rem}
+  .lab-top,.stage-col,.osi-col{padding-left:12px;padding-right:12px}
+  .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .controls .btn{justify-content:center}
+  .speed{grid-column:1/-1;justify-self:center}
+  .drawing{padding:12px 10px 10px}
+  .reflect{padding:24px 14px}
+  .qs{grid-template-columns:1fr}
+  .phase{grid-template-columns:44px minmax(0,1fr);gap:14px}
+  .phase .num{width:44px;height:44px;border-radius:14px;font-size:1.1rem}
+  .phase::before{left:21px;top:44px}
+  .phase .body{padding-top:8px}
+  .uplink{padding:10px 12px}
+  th,td{padding:8px 10px}
+}
+@media (max-width:860px){
+  .lab-body{grid-template-columns:1fr}
+  .stage-col{border-right:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:520px){
+  body{font-size:16px}
+  .speed{margin-left:0}
+  .frame{flex-wrap:wrap}
+  .seg{flex:1 1 45%!important;border-bottom:1px solid var(--line)}
+}
+@media (prefers-reduced-motion:reduce){
+  .halo.on{animation:none}
+  .layer.flash{animation:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="ifsc-mark" viewBox="0 0 410 555">
+    <circle cx="60" cy="60" r="66" fill="#CD191E"></circle>
+    <g fill="#2F9E41">
+      <rect x="145" y="0" width="120" height="120" rx="10"></rect><rect x="290" y="0" width="120" height="120" rx="10"></rect>
+      <rect x="0" y="145" width="120" height="120" rx="10"></rect><rect x="145" y="145" width="120" height="120" rx="10"></rect>
+      <rect x="0" y="290" width="120" height="120" rx="10"></rect><rect x="145" y="290" width="120" height="120" rx="10"></rect><rect x="290" y="290" width="120" height="120" rx="10"></rect>
+      <rect x="0" y="435" width="120" height="120" rx="10"></rect><rect x="145" y="435" width="120" height="120" rx="10"></rect>
+    </g>
+  </symbol>
+</defs></svg>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">
+      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg>
+      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    </div>
+    <button type="button" class="burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+    <nav class="nav" id="menu" aria-label="Seções">
+      <a href="#objetivos">Objetivos</a><a href="#simulacao">Simulação</a><a href="#topologia">Topologia</a><a href="#roteiro">Roteiro</a><a href="#observar">Onde olhar</a><a href="#refletir">Para refletir</a><a href="#entrega">Checklist</a>
+    </nav>
+    <a class="back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Voltar</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Redes de Computadores · Cisco Packet Tracer</span>
+      <h1>Uma rede local vista pelas camadas do <em>Modelo OSI</em></h1>
+      <p class="lead">Monte uma LAN com dois switches no Cisco Packet Tracer, configure o endereçamento e acompanhe, camada por camada, o caminho de um ping do PC1 até o PC10.</p>
+      <div class="chips">
+        <span class="chip"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>10 PCs</span>
+        <span class="chip"><svg viewBox="0 0 24 24"><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/></svg>2× Switch 2960</span>
+        <span class="chip"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>10.1.1.0/24</span>
+        <span class="chip"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>ICMP · ping</span>
+        <span class="chip"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="17" width="16" height="4" rx="1"/></svg>Modelo OSI</span>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>Caminho do ping na atividade</h3>
+      <div class="vlist">
+        <div class="vrow" style="--vc:var(--green)"><span class="vtag">ORIGEM</span><b>PC1</b><span class="net">camadas 3 · 2 · 1</span></div>
+        <div class="vrow" style="--vc:var(--green-ink)"><span class="vtag">SWITCH</span><b>SW1</b><span class="net">camadas 2 · 1</span></div>
+        <div class="vrow" style="--vc:var(--green-ink)"><span class="vtag">SWITCH</span><b>SW2</b><span class="net">camadas 2 · 1</span></div>
+        <div class="vrow r"><span class="vtag">DESTINO</span><b>PC10</b><span class="net">camadas 1 · 2 · 3</span></div>
+      </div>
+      <p class="hint">Todos na rede 10.1.1.0/24. Sem roteador e sem gateway.</p>
+    </div>
+  </div>
+</div>
+
+<main>
+  <section class="sec" id="objetivos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Objetivos</span>
+      <h2>Ao final da atividade você terá</h2>
+    </div>
+    <ul class="goals">
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Montado uma LAN com dois switches interligados no Packet Tracer.</span></li>
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Conectado PCs e switches com o cabo adequado.</span></li>
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Configurado IPs estáticos com máscara de sub-rede.</span></li>
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Testado a conectividade com <code>ping</code> e com o Modo Simulação.</span></li>
+      <li><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Relacionado o que acontece em cada dispositivo com as camadas OSI.</span></li>
+    </ul>
+  </div>
+  </section>
+
+  <section class="sec" id="simulacao">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">A comunicação, passo a passo</span>
+      <h2>Acompanhe o ping de PC1 até PC10</h2>
+      <p class="lead">Esta animação mostra o que você vai observar no Modo Simulação do Packet Tracer. Repare em quais camadas cada dispositivo usa e em qual parte do pacote ele lê.</p>
+    </div>
+
+    <div class="lab" id="lab">
+      <div class="lab-top">
+        <div class="legend">
+          <span><i class="sw" style="background:var(--green)"></i>ICMP Echo Request</span>
+          <span><i class="sw" style="background:var(--red)"></i>ICMP Echo Reply</span>
+          <span><i class="sw" style="border:2px dashed var(--green)"></i>Origem e destino</span>
+        </div>
+        <div class="dots" id="dots" aria-label="Etapas da simulação"></div>
+      </div>
+      <div class="lab-body">
+        <div class="stage-col">
+          <div class="topo-scroll">
+            <svg id="topo" viewBox="0 0 1000 330" role="img" aria-label="Topologia: PC1 a PC5 ligados ao SW1, PC6 a PC10 ligados ao SW2, e os dois switches interligados">
+              <g id="wires"></g>
+              <text id="upTxt" x="500" y="88" text-anchor="middle" style="fill:var(--muted);font-family:var(--font-mono);font-size:11px">Gi0/1 ↔ Gi0/1</text>
+              <g id="devs"></g>
+              <circle id="halo" class="halo" cx="0" cy="0" r="16"/>
+              <g id="pktTag" transform="translate(-100,-100)">
+                <rect x="-52" y="-40" width="104" height="20" rx="5" stroke-width="1.4"/>
+                <text id="pktTagText" x="0" y="-26">Echo Request</text>
+              </g>
+              <g id="pkt" transform="translate(-100,-100)">
+                <rect x="-14" y="-10" width="28" height="20" rx="3"/>
+                <path d="M-11 -6 L0 3 L11 -6"/>
+              </g>
+            </svg>
+          </div>
+
+          <div class="caption" id="caption" aria-live="polite">
+            <span class="kind" id="capKind"></span>
+            <h3 id="capTitle"></h3>
+            <p id="capText"></p>
+          </div>
+
+          <div class="pdu" id="pdu">
+            <div class="pdu-label"><span>Conteúdo do quadro · em destaque, o que este dispositivo lê</span><span class="mono">MACs ilustrativos</span></div>
+            <div class="frame">
+              <div class="seg eth" data-seg="eth"><b>Ethernet</b><span id="fEth"></span></div>
+              <div class="seg ip" data-seg="ip"><b>IP</b><span id="fIp"></span></div>
+              <div class="seg icmp" data-seg="icmp"><b>ICMP</b><span id="fIcmp"></span></div>
+              <div class="seg fcs" data-seg="fcs"><b>FCS</b><span>CRC</span></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="btn" id="bPrev" aria-label="Etapa anterior">◀ Voltar</button>
+            <button class="btn primary" id="bPlay">❚❚ Pausar</button>
+            <button class="btn" id="bNext" aria-label="Próxima etapa">Avançar ▶</button>
+            <button class="btn" id="bReset">Reiniciar</button>
+            <div class="speed" role="group" aria-label="Velocidade">
+              <button data-s="0.5" aria-pressed="false">0,5×</button>
+              <button data-s="1" aria-pressed="true">1×</button>
+              <button data-s="2" aria-pressed="false">2×</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="osi-col" aria-label="Camadas do Modelo OSI no dispositivo atual">
+          <div class="osi-head">
+            <span class="osi-dev" id="osiDev">PC1</span>
+            <span class="dir" id="osiDir"></span>
+          </div>
+          <div class="osi" id="osi"></div>
+          <p class="osi-foot">Camadas apagadas não participam do processamento neste dispositivo.</p>
+        </aside>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <section class="sec" id="topologia">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Topologia e endereçamento</span>
+      <h2>A rede que você vai montar</h2>
+      <p class="lead">Todos os PCs ficam na mesma rede <code>10.1.1.0/24</code>, com máscara <code>255.255.255.0</code>. Não há roteador, então o gateway padrão fica em branco.</p>
+    </div>
+    <figure class="drawing">
+      <div class="draw-scroll"><svg id="draw" viewBox="0 0 1000 330" role="img" aria-label="Desenho da topologia: SW1 com PC1 a PC5, SW2 com PC6 a PC10, switches ligados entre si"></svg></div>
+      <figcaption>Desenho da topologia: cinco PCs em cada switch e um cabo direto entre SW1 e SW2.</figcaption>
+    </figure>
+    <div class="addr-grid">
+      <div class="addr" id="addr1"></div>
+      <div class="addr" id="addr2"></div>
+    </div>
+    <div class="uplink"><span class="pill">SW1 Gi0/1</span><svg viewBox="0 0 60 12" width="60" height="12" aria-hidden="true"><path d="M2 6h56" stroke="var(--green)" stroke-width="3" stroke-linecap="round"/></svg><span class="pill">SW2 Gi0/1</span><span class="up-note">Cabo Copper Straight-Through · os switches não recebem IP nesta atividade</span></div>
+  </div>
+  </section>
+
+  <section class="sec" id="roteiro">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Roteiro no Packet Tracer</span>
+      <h2>Construa e teste a rede</h2>
+    </div>
+    <div class="phases">
+      <article class="phase"><div class="num">1</div><div class="body">
+        <h3>Crie o projeto e insira os switches</h3>
+        <ol>
+          <li>Abra o Packet Tracer e crie um arquivo novo em <strong>File › New</strong>.</li>
+          <li>Na categoria <strong>Switches</strong>, arraste dois switches <strong>2960</strong>, um à esquerda e outro à direita.</li>
+          <li>Renomeie-os como <code>SW1</code> e <code>SW2</code> (clique no nome abaixo do ícone ou em <strong>Config › Display Name</strong>).</li>
+        </ol>
+      </div></article>
+
+      <article class="phase"><div class="num">2</div><div class="body">
+        <h3>Insira os 10 computadores</h3>
+        <ol>
+          <li>Em <strong>End Devices</strong>, arraste 10 <strong>PC-PT</strong>: cinco perto do SW1 e cinco perto do SW2.</li>
+          <li>Renomeie-os de <code>PC1</code> a <code>PC10</code>: PC1 a PC5 ao lado do SW1, PC6 a PC10 ao lado do SW2.</li>
+        </ol>
+      </div></article>
+
+      <article class="phase"><div class="num">3</div><div class="body">
+        <h3>Faça o cabeamento</h3>
+        <ol>
+          <li>Em <strong>Connections</strong> (ícone de raio), escolha <strong>Copper Straight-Through</strong>.</li>
+          <li>Ligue a porta <code>FastEthernet0</code> de cada PC a uma porta livre do seu switch (<code>Fa0/1</code>, <code>Fa0/2</code>…).</li>
+          <li>Interligue SW1 e SW2 com o mesmo tipo de cabo, usando uma porta livre de cada um (por exemplo <code>Gi0/1</code>). Os switches Cisco têm Auto-MDIX, então o cabo direto funciona.</li>
+        </ol>
+        <div class="tip"><strong>Indicadores de link:</strong> verde significa porta ativa. Âmbar indica que o Spanning Tree ainda está negociando; aguarde alguns segundos até ficar verde.</div>
+      </div></article>
+
+      <article class="phase"><div class="num">4</div><div class="body">
+        <h3>Configure os endereços IP</h3>
+        <ol>
+          <li>Clique em um PC e abra <strong>Desktop › IP Configuration</strong>.</li>
+          <li>Selecione <strong>Static</strong>, preencha o IP conforme a tabela e a máscara <code>255.255.255.0</code>. Deixe o gateway em branco.</li>
+          <li>Repita para os 10 PCs. Cada um precisa de um IP único.</li>
+        </ol>
+      </div></article>
+
+      <article class="phase"><div class="num">5</div><div class="body">
+        <h3>Teste rápido em modo Realtime</h3>
+        <ol>
+          <li>No PC1, abra <strong>Desktop › Command Prompt</strong> e execute o ping para o PC10:</li>
+        </ol>
+        <div class="cmd"><span class="p">C:\&gt;</span> ping 10.1.1.10<br><br>Reply from 10.1.1.10: bytes=32 time&lt;1ms TTL=128<br>Reply from 10.1.1.10: bytes=32 time&lt;1ms TTL=128<br>…</div>
+        <p>Quatro respostas <em>Reply</em> confirmam que o PC1 alcança o PC10, mesmo estando em switches diferentes.</p>
+      </div></article>
+
+      <article class="phase"><div class="num">6</div><div class="body">
+        <h3>Simule a comunicação e observe as camadas</h3>
+        <ol>
+          <li>No canto inferior direito, mude de <strong>Realtime</strong> para <strong>Simulation</strong>.</li>
+          <li>Em <strong>Edit Filters</strong>, desmarque tudo e deixe visível apenas o protocolo <strong>ICMP</strong>.</li>
+          <li>Clique em <strong>Add Simple PDU</strong> (envelope fechado), depois no PC1 e em seguida no PC10.</li>
+          <li>Use <strong>Capture/Forward</strong> para avançar um evento por vez e compare com a animação acima.</li>
+          <li>Na <strong>Event List</strong>, clique no quadrado colorido de cada evento para abrir a <strong>PDU Information</strong>.</li>
+        </ol>
+        <div class="tip"><strong>Se aparecer falha</strong> na coluna de status da Event List, revise o cabeamento (etapa 3) e os IPs (etapa 4) antes de repetir.</div>
+      </div></article>
+    </div>
+  </div>
+  </section>
+
+  <section class="sec" id="observar">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Na janela PDU Information</span>
+      <h2>Onde olhar no Packet Tracer</h2>
+    </div>
+    <p class="lead" style="margin-bottom:16px">As camadas só aparecem depois que você clica em um pacote da simulação. Siga esta ordem em cada evento.</p>
+    <ol class="observe">
+      <li class="obs"><span class="k">Event List ou topologia</span><h3>Clique no pacote da simulação</h3><p>Na Event List, clique no quadrado colorido da coluna <strong>Info</strong>. Outra opção é clicar no envelope que aparece sobre o dispositivo durante a simulação. Isso abre a janela <strong>PDU Information at Device</strong>.</p></li>
+      <li class="obs"><span class="k">aba OSI Model</span><h3>Abra In Layers e Out Layers</h3><p><strong>In Layers</strong> mostra as camadas que trataram o pacote na chegada ao dispositivo. <strong>Out Layers</strong> mostra as camadas usadas na saída. Clique em cada camada para ler o que ela fez.</p></li>
+      <li class="obs"><span class="k">abas Inbound / Outbound PDU Details</span><h3>Confira os cabeçalhos</h3><p>Veja os campos de Ethernet II, IP e ICMP: endereços MAC, endereços IP, TTL e o tipo da mensagem ICMP.</p></li>
+      <li class="obs"><span class="k">próximo evento</span><h3>Repita em cada dispositivo</h3><p>Avance com <strong>Capture/Forward</strong> e clique no pacote no PC1, no SW1, no SW2 e no PC10. Compare as camadas usadas em cada um.</p></li>
+    </ol>
+  </div>
+  </section>
+
+  <section class="sec" id="refletir">
+  <div class="wrap">
+    <div class="reflect">
+      <div class="sec-head" style="margin:0">
+        <div class="eyebrow">Para refletir</div>
+        <h2>Pense sobre o que você observou</h2>
+        <p class="lead">Estas perguntas não precisam ser entregues. Use-as para interpretar a simulação e discutir com a turma.</p>
+      </div>
+      <ul class="qs">
+        <li><p>Em qual camada do Modelo OSI o ICMP é processado? O que aparece nessa camada na janela do Packet Tracer?</p><small>Observe os PCs na aba OSI Model.</small></li>
+        <li><p>Quais camadas são usadas para o pacote sair do PC1, passar pelo SW1 e pelo SW2 e chegar ao PC10? O que acontece em cada uma?</p><small>Compare a origem, os switches e o destino.</small></li>
+        <li><p>Por que os switches não processam o pacote até a camada de Rede e encaminham os quadros apenas pelo endereço MAC?</p><small>Repare em qual parte do quadro eles leem.</small></li>
+        <li><p>Quantos switches o pacote atravessou entre PC1 e PC10? O que aconteceria com o tempo de resposta se houvesse um terceiro switch no caminho?</p><small>Pense também no TTL: ele mudou?</small></li>
+        <li><p>O quadro do ping leva o MAC do PC10 como destino. Como o PC1 descobriu esse endereço se só conhecia o IP?</p><small>Pesquise sobre o protocolo ARP.</small></li>
+        <li><p>O pedido saiu em um quadro com destino ao MAC do PC10. Como o SW1 sabia por qual porta enviá-lo?</p><small>Tente <code>show mac address-table</code> na CLI do switch.</small></li>
+      </ul>
+    </div>
+  </div>
+  </section>
+
+  <section class="sec" id="entrega">
+  <div class="wrap"><div class="read">
+    <div class="sec-head">
+      <span class="sec-num">Autoavaliação</span>
+      <h2>Checklist da atividade</h2>
+      <p class="lead">Não é preciso enviar nada. Use a lista para conferir se você completou cada etapa.</p>
+      <p class="progress" id="progress"></p>
+    </div>
+    <ul class="check" id="check">
+      <li><label><input type="checkbox" id="c1"><span>Topologia com 10 PCs e 2 switches interligados (5 PCs por switch).</span></label></li>
+      <li><label><input type="checkbox" id="c2"><span>Todos os links com indicador verde.</span></label></li>
+      <li><label><input type="checkbox" id="c3"><span>IPs de 10.1.1.1 a 10.1.1.10, máscara 255.255.255.0.</span></label></li>
+      <li><label><input type="checkbox" id="c4"><span>Ping de PC1 para PC10 com sucesso no Command Prompt.</span></label></li>
+      <li><label><input type="checkbox" id="c5"><span>Simulação (Simple PDU) executada, com In Layers e Out Layers observados em cada dispositivo.</span></label></li>
+    </ul>
+  </div></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Redes de Computadores</span><span>Cisco Packet Tracer · Modelo OSI</span></div>
+</footer>
+
+<script>
+(function(){
+  const NS="http://www.w3.org/2000/svg";
+  const mq=window.matchMedia("(max-width:640px)");
+  let L;
+  const LAYOUTS={
+    wide:{vb:"0 0 1000 330",sw:{sw1:{x:270,y:80},sw2:{x:730,y:80}},pc:i=>({x:60+(i-1)*97.8,y:250}),pw:78,lbl:true,up:{x:500,y:88}},
+    tall:{vb:"0 0 400 480",sw:{sw1:{x:200,y:170},sw2:{x:200,y:310}},pc:i=>i<=5?{x:40+(i-1)*80,y:52}:{x:40+(i-6)*80,y:428},pw:70,lbl:false,up:{x:290,y:244}}
+  };
+  const pos=id=>id.startsWith("sw")?L.sw[id]:L.pc(+id.slice(2));
+  const ip=i=>"10.1.1."+i;
+  const svgTopo=document.getElementById("topo"),upTxt=document.getElementById("upTxt");
+  const wires=document.getElementById("wires"),devs=document.getElementById("devs");
+  const wireEl={},devEl={};
+  function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+  function line(a,b,cls,key){const p=pos(a),q=pos(b);wireEl[key]=el("line",{x1:p.x,y1:p.y,x2:q.x,y2:q.y,class:cls},wires);}
+  function buildTopo(){
+    L=mq.matches?LAYOUTS.tall:LAYOUTS.wide;
+    svgTopo.setAttribute("viewBox",L.vb);
+    svgTopo.classList.toggle("tall",mq.matches);
+    upTxt.setAttribute("x",L.up.x);upTxt.setAttribute("y",L.up.y);
+    upTxt.setAttribute("text-anchor",mq.matches?"start":"middle");
+    wires.innerHTML="";devs.innerHTML="";
+    // Fios
+    for(let i=1;i<=10;i++) line(i<=5?"sw1":"sw2","pc"+i,"wire",(i<=5?"sw1":"sw2")+"-pc"+i);
+    line("sw1","sw2","trunk","sw1-sw2");
+    // Dispositivos
+    ["sw1","sw2"].forEach((id,k)=>{const p=pos(id);const g=el("g",{class:"dev switch",transform:`translate(${p.x},${p.y})`},devs);
+      el("rect",{class:"box",x:-68,y:-26,width:136,height:52,rx:8},g);
+      for(let j=0;j<8;j++) el("rect",{class:"icon",x:-52+j*13,y:8,width:9,height:7,rx:1.5},g);
+      const t=el("text",{y:-1},g);t.textContent=k?"SW2":"SW1";
+      if(L.lbl){const l=el("text",{class:"lbl",y:-34},g);l.textContent="Switch 2960";}
+      devEl[id]=g;});
+    for(let i=1;i<=10;i++){const p=pos("pc"+i);const g=el("g",{class:"dev"+(i===1||i===10?" endpoint":""),transform:`translate(${p.x},${p.y})`},devs);
+      el("rect",{class:"box",x:-L.pw/2,y:-26,width:L.pw,height:52,rx:7},g);
+      const t=el("text",{y:-2},g);t.textContent="PC"+i;
+      const s=el("text",{class:"ip",y:14},g);s.textContent=ip(i);
+      el("rect",{class:"icon",x:-14,y:30,width:28,height:4,rx:2},g);
+      devEl["pc"+i]=g;}
+  }
+  buildTopo();
+
+  // Tabelas lado a lado
+  ["addr1","addr2"].forEach((id,k)=>{let h=`<div class="addr-head"><span class="ic">SW${k+1}</span><div><strong>Grupo SW${k+1}</strong><span>Switch 2960 · PC${k*5+1} a PC${k*5+5}</span></div></div><table><thead><tr><th>PC</th><th>Porta</th><th>Endereço IP</th></tr></thead><tbody>`;
+    for(let j=1;j<=5;j++){const n=k*5+j;h+=`<tr><td><strong>PC${n}</strong></td><td class="mono">Fa0/${j}</td><td class="mono">${ip(n)}</td></tr>`;}
+    document.getElementById(id).innerHTML=h+"</tbody></table>";});
+
+  // Desenho da topologia
+  function buildDraw(){const d=document.getElementById("draw");let h="";const tall=mq.matches;
+    const px=k=>70+(k%5)*90, sx=250, oy=k=>tall&&k>=1?340:0, ox=k=>!tall&&k>=1?500:0;
+    d.setAttribute("viewBox",tall?"0 0 524 670":"0 0 1000 330");d.classList.toggle("tall",tall);
+    for(let g=0;g<2;g++){const X=ox(g),Y=oy(g);
+      h+=`<g transform="translate(${X},${Y})"><rect class="grp" x="16" y="14" width="468" height="302" rx="18"/><text class="grp-l" x="36" y="40">GRUPO SW${g+1}</text>`;
+      for(let k=0;k<5;k++)h+=`<path class="cab" d="M${sx} 112 C ${sx} 160, ${px(k)} 150, ${px(k)} 206"/>`;
+      h+=`</g>`;}
+    if(tall){h+=`<path class="cab-up" fill="none" d="M320 88 H498 V428 H320"/><text class="up-l" x="512" y="258" transform="rotate(-90 512 258)">Gi0/1 ↔ Gi0/1</text>`;}
+    else{h+=`<line class="cab-up" x1="320" y1="88" x2="680" y2="88"/><text class="up-l" x="500" y="78">Gi0/1 ↔ Gi0/1</text>`;}
+    for(let g=0;g<2;g++){const X=ox(g),Y=oy(g);
+      h+=`<g transform="translate(${X+sx},${Y+88})"><rect class="sw-body" x="-70" y="-24" width="140" height="48" rx="8"/><rect class="sw-top" x="-70" y="-24" width="140" height="10" rx="5"/>`;
+      for(let j=0;j<8;j++)h+=`<rect class="led" x="${-54+j*14}" y="10" width="8" height="5" rx="1.5"/>`;
+      h+=`<text class="sw-t" y="4">SW${g+1}</text></g>`;}
+    for(let k=0;k<10;k++){const g=k<5?0:1,x=ox(g)+px(k),y=oy(g)+232;h+=`<g transform="translate(${x},${y})"><rect class="mon" x="-30" y="-26" width="60" height="40" rx="5"/><rect class="scr" x="-24" y="-20" width="48" height="28" rx="2"/><rect class="stand" x="-4" y="14" width="8" height="8"/><rect class="stand" x="-14" y="21" width="28" height="4" rx="2"/>
+      <text class="pc-t" y="46">PC${k+1}</text><text class="pc-ip" y="62">${ip(k+1)}</text><text class="port" y="-34">Fa0/${k%5+1}</text></g>`;}
+    d.innerHTML=h;}
+  buildDraw();
+
+  // Camadas OSI
+  const OSI=[[7,"Aplicação","Dados"],[6,"Apresentação","Dados"],[5,"Sessão","Dados"],[4,"Transporte","Segmento"],[3,"Rede","Pacote"],[2,"Enlace","Quadro"],[1,"Física","Bits"]];
+  const osi=document.getElementById("osi"),layerEl={};
+  OSI.forEach(([n,nm,u])=>{const d=document.createElement("div");d.className="layer";
+    d.innerHTML=`<span class="n">${n}</span><div><div class="nm">${nm}<span class="unit">${u}</span></div><div class="note"></div></div>`;osi.appendChild(d);layerEl[n]=d;});
+
+  const MAC1="0060.2F3A.1101", MAC10="00D0.97B4.110A";
+  const REQ={eth:`dst ${MAC10}<br>src ${MAC1}`,ip:"src 10.1.1.1<br>dst 10.1.1.10 · TTL 128",icmp:"tipo 8<br>Echo Request"};
+  const REP={eth:`dst ${MAC1}<br>src ${MAC10}`,ip:"src 10.1.1.10<br>dst 10.1.1.1 · TTL 128",icmp:"tipo 0<br>Echo Reply"};
+
+  const fwdNotes=(port,who)=>({1:`Recebe os sinais na porta ${port} e reconstrói os bits do quadro.`,2:`Lê o MAC de destino, consulta a tabela de endereços MAC e encaminha o quadro ${who}.`});
+  const S=[
+    {k:"node",dev:"pc1",r:0,dir:"down",title:"PC1 monta o Echo Request",text:"O comando ping gera uma mensagem ICMP. Ela desce pelas camadas e é encapsulada até virar sinal no cabo.",
+      notes:{3:"Cria o pacote IP com origem 10.1.1.1 e destino 10.1.1.10. Dentro dele vai a mensagem ICMP Echo Request.",2:"Coloca o pacote em um quadro Ethernet com o MAC do PC1 como origem e o MAC do PC10 como destino.",1:"Transmite o quadro como sinais elétricos pela porta FastEthernet0."},read:["eth","ip","icmp","fcs"]},
+    {k:"link",from:"pc1",to:"sw1",r:0,title:"Bits no cabo PC1 → SW1",text:"O quadro viaja pelo par trançado até a porta Fa0/1 do SW1."},
+    {k:"node",dev:"sw1",r:0,dir:"fwd",title:"SW1 encaminha o quadro",text:"O switch abre só o cabeçalho Ethernet. O pacote IP e o ICMP passam por ele sem serem lidos.",notes:fwdNotes("Fa0/1","pela porta de interligação com o SW2"),read:["eth"]},
+    {k:"link",from:"sw1",to:"sw2",r:0,title:"Bits no cabo SW1 → SW2",text:"O quadro atravessa o link entre os switches, sem nenhuma alteração."},
+    {k:"node",dev:"sw2",r:0,dir:"fwd",title:"SW2 encaminha o quadro",text:"Mesmo processo do SW1: só o MAC de destino importa para decidir a porta de saída.",notes:fwdNotes("Gi0/1","somente pela porta onde está o PC10"),read:["eth"]},
+    {k:"link",from:"sw2",to:"pc10",r:0,title:"Bits no cabo SW2 → PC10",text:"O quadro chega à placa de rede do PC10."},
+    {k:"node",dev:"pc10",r:0,dir:"up",title:"PC10 recebe o Echo Request",text:"O quadro sobe pelas camadas. Cada uma confere o seu cabeçalho, retira-o e entrega o restante à camada de cima.",
+      notes:{1:"Recebe os sinais e reconstrói o quadro.",2:"O MAC de destino é o seu. Confere o FCS, retira o cabeçalho Ethernet e entrega o pacote à camada 3.",3:"O IP de destino é o seu. Lê a mensagem ICMP Echo Request e prepara a resposta."},read:["eth","ip","icmp","fcs"]},
+    {k:"node",dev:"pc10",r:1,dir:"down",title:"PC10 monta o Echo Reply",text:"A resposta faz o caminho inverso, agora com origem e destino trocados.",
+      notes:{3:"Cria um novo pacote IP com origem 10.1.1.10 e destino 10.1.1.1, contendo o ICMP Echo Reply.",2:"Novo quadro Ethernet: MAC do PC10 como origem, MAC do PC1 como destino.",1:"Transmite o quadro pela porta FastEthernet0."},read:["eth","ip","icmp","fcs"]},
+    {k:"link",from:"pc10",to:"sw2",r:1,title:"Bits no cabo PC10 → SW2",text:"A resposta volta para o switch do PC10."},
+    {k:"node",dev:"sw2",r:1,dir:"fwd",title:"SW2 encaminha a resposta",text:"O switch já aprendeu em qual porta está o MAC do PC1 e envia o quadro pela interligação.",notes:fwdNotes("Fa0/5","pela porta de interligação com o SW1"),read:["eth"]},
+    {k:"link",from:"sw2",to:"sw1",r:1,title:"Bits no cabo SW2 → SW1",text:"O quadro cruza o link entre os switches."},
+    {k:"node",dev:"sw1",r:1,dir:"fwd",title:"SW1 encaminha a resposta",text:"Consulta a tabela MAC e envia o quadro somente para a porta do PC1.",notes:fwdNotes("Gi0/1","pela porta Fa0/1, onde está o PC1"),read:["eth"]},
+    {k:"link",from:"sw1",to:"pc1",r:1,title:"Bits no cabo SW1 → PC1",text:"A resposta chega ao computador de origem."},
+    {k:"node",dev:"pc1",r:1,dir:"up",title:"PC1 recebe o Echo Reply",text:"O ping está completo. O PC1 mostra Reply from 10.1.1.10 com o tempo de ida e volta.",
+      notes:{1:"Recebe os sinais e reconstrói o quadro.",2:"O MAC de destino é o seu. Retira o cabeçalho Ethernet e entrega o pacote à camada 3.",3:"O IP de destino é o seu. Identifica o ICMP Echo Reply e calcula o tempo de resposta."},read:["eth","ip","icmp","fcs"]}
+  ];
+  const DUR={node:3400,link:1500};
+  const DIR={down:"↓ encapsulando",up:"↑ desencapsulando",fwd:"⇄ encaminhando pela camada 2"};
+
+  // Pontos de progresso
+  const dots=document.getElementById("dots");
+  S.forEach((s,i)=>{ if(i===7){const sp=document.createElement("span");sp.className="sep";dots.appendChild(sp);}
+    const b=document.createElement("button");b.className="dot"+(s.r?" r":"");b.setAttribute("aria-label","Etapa "+(i+1)+": "+s.title);
+    b.addEventListener("click",()=>{go(i);});dots.appendChild(b);});
+  const dotEls=[...dots.querySelectorAll(".dot")];
+
+  const pkt=document.getElementById("pkt"),tag=document.getElementById("pktTag"),tagText=document.getElementById("pktTagText"),halo=document.getElementById("halo");
+  const lab=document.getElementById("lab"),cap=document.getElementById("caption");
+  const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let i=0,t=0,playing=!reduce,speed=1,last=null,lastNode=0;
+
+  function wireKey(a,b){return wireEl[a+"-"+b]?a+"-"+b:b+"-"+a;}
+  function place(x,y){pkt.setAttribute("transform",`translate(${x},${y})`);tag.setAttribute("transform",`translate(${x},${y})`);}
+  const ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+
+  function render(){
+    const s=S[i];
+    lab.classList.toggle("reply-mode",!!s.r);
+    cap.classList.toggle("reply",!!s.r);
+    pkt.classList.toggle("reply",!!s.r);tag.classList.toggle("reply",!!s.r);halo.classList.toggle("reply",!!s.r);
+    tagText.textContent=s.r?"Echo Reply":"Echo Request";
+    document.getElementById("capKind").textContent=`Etapa ${i+1} de ${S.length} · ${s.r?"resposta":"pedido"}`;
+    document.getElementById("capTitle").textContent=s.title;
+    document.getElementById("capText").textContent=s.text;
+    Object.values(devEl).forEach(g=>g.classList.remove("active","reply"));
+    Object.values(wireEl).forEach(w=>w.classList.remove("hot","reply"));
+    const F=s.r?REP:REQ;
+    document.getElementById("fEth").innerHTML=F.eth;document.getElementById("fIp").innerHTML=F.ip;document.getElementById("fIcmp").innerHTML=F.icmp;
+    let node=s;
+    if(s.k==="node"){
+      devEl[s.dev].classList.add("active");if(s.r)devEl[s.dev].classList.add("reply");
+      const p=pos(s.dev);place(p.x,p.y);halo.setAttribute("cx",p.x);halo.setAttribute("cy",p.y);halo.classList.add("on");
+    } else {
+      halo.classList.remove("on");
+      const w=wireEl[wireKey(s.from,s.to)];w.classList.add("hot");if(s.r)w.classList.add("reply");
+      node=null;
+    }
+    document.querySelectorAll(".seg").forEach(el=>el.classList.toggle("read",!!node&&node.read.includes(el.dataset.seg)));
+    // OSI
+    if(node){
+      document.getElementById("osiDev").textContent=node.dev.toUpperCase();
+      document.getElementById("osiDir").textContent=DIR[node.dir];
+      OSI.forEach(([n])=>{const L=layerEl[n],on=!!node.notes[n];L.classList.toggle("on",on);L.querySelector(".note").textContent=node.notes[n]||"";
+        L.classList.remove("flash");if(on){void L.offsetWidth;L.classList.add("flash");}});
+    } else {
+      document.getElementById("osiDev").textContent="No cabo";
+      document.getElementById("osiDir").textContent=`${s.from.toUpperCase()} → ${s.to.toUpperCase()}`;
+      OSI.forEach(([n])=>{const L=layerEl[n],on=n===1;L.classList.toggle("on",on);L.querySelector(".note").textContent=on?"O quadro trafega como sinais elétricos no par trançado. Nenhum dispositivo processa o conteúdo aqui.":"";});
+    }
+    dotEls.forEach((d,k)=>{d.classList.toggle("cur",k===i);d.classList.toggle("done",k<i);d.setAttribute("aria-current",k===i?"step":"false");});
+    move();
+  }
+  function move(){
+    const s=S[i];if(s.k!=="link")return;
+    const a=pos(s.from),b=pos(s.to),p=reduce?1:ease(Math.min(1,t/DUR.link));
+    place(a.x+(b.x-a.x)*p,a.y+(b.y-a.y)*p);
+  }
+  function go(k){i=(k+S.length)%S.length;t=0;render();}
+
+  const bPlay=document.getElementById("bPlay");
+  function setPlay(v){playing=v;bPlay.textContent=v?"❚❚ Pausar":"▶ Reproduzir";}
+  bPlay.addEventListener("click",()=>setPlay(!playing));
+  document.getElementById("bNext").addEventListener("click",()=>{setPlay(false);go(i+1);});
+  document.getElementById("bPrev").addEventListener("click",()=>{setPlay(false);go(i-1);});
+  document.getElementById("bReset").addEventListener("click",()=>{go(0);setPlay(true);});
+  document.querySelectorAll(".speed button").forEach(b=>b.addEventListener("click",()=>{speed=+b.dataset.s;
+    document.querySelectorAll(".speed button").forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false"));}));
+
+  function loop(ts){
+    if(last==null)last=ts;const dt=Math.min(100,ts-last);last=ts;
+    if(playing){t+=dt*speed;const d=DUR[S[i].k]+(i===S.length-1?1600:0);
+      if(t>=d){go(i+1);} else if(S[i].k==="link") move();}
+    requestAnimationFrame(loop);
+  }
+  setPlay(playing);render();requestAnimationFrame(loop);
+  const onMq=()=>{buildTopo();buildDraw();render();};
+  if(mq.addEventListener)mq.addEventListener("change",onMq);else if(mq.addListener)mq.addListener(onMq);
+
+  // Menu hambúrguer
+  const menu=document.getElementById("menu"),burger=document.getElementById("burger");
+  function setMenu(o){menu.classList.toggle("open",o);burger.setAttribute("aria-expanded",o?"true":"false");burger.setAttribute("aria-label",o?"Fechar menu das seções":"Abrir menu das seções");}
+  burger.addEventListener("click",e=>{e.stopPropagation();setMenu(!menu.classList.contains("open"));});
+  menu.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")setMenu(false);});
+  document.addEventListener("click",e=>{if(!menu.contains(e.target)&&e.target!==burger)setMenu(false);});
+  const secs=[...menu.querySelectorAll("a")].map(a=>[a,document.querySelector(a.getAttribute("href"))]).filter(x=>x[1]);
+  if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){secs.forEach(x=>x[0].classList.toggle("cur",x[1]===e.target));}});},{rootMargin:"-40% 0px -55% 0px"});secs.forEach(x=>io.observe(x[1]));}
+
+  // Checklist
+  const boxes=[...document.querySelectorAll("#check input")],prog=document.getElementById("progress");
+  function upd(){const n=boxes.filter(b=>b.checked).length;prog.textContent=`${n} de ${boxes.length} itens concluídos`;
+    try{localStorage.setItem("ifsc-lan-check-v2",JSON.stringify(boxes.map(b=>b.checked)));}catch(e){}}
+  try{const v=JSON.parse(localStorage.getItem("ifsc-lan-check-v2")||"[]");boxes.forEach((b,k)=>b.checked=!!v[k]);}catch(e){}
+  boxes.forEach(b=>b.addEventListener("change",upd));upd();
+})();
+</script>
+
+</body>
+</html>

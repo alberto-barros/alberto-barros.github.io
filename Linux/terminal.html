@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Primeiros Passos no Terminal Debian</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
+<style>
+/* Layout: barra IFSC fixa, hero com terminal animado (cenas da aula), seções em coluna de 1080px: prompt, pastas, comandos, atalhos, passo a passo numerado, exercícios com progresso */
+:root{
+  --bg:#F3F9F4; --surface:#FFFFFF; --surface-2:#E7F5EA; --ink:#0F2417; --muted:#4A6353; --line:#D2E6D7;
+  --green:#2F9E41; --green-strong:#1E7A30; --mint:#C6EECD; --red:#C8191E;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#7FA88B; --code-key:#8BE39B;
+  --t-user:#6FE081; --t-path:#6FB8FF; --t-root:#FF6B6B; --t-warn:#FFD36B; --t-vio:#C8A0FF;
+  --s1:#1C7EC0; --s2:#C98204; --s3:#8250C8; --s4:#D1407A;
+  --ok:#1E7A30; --bad:#C8191E; --warn:#A86A00;
+  --f-display:"Sora","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"DejaVu Sans Mono",Consolas,monospace;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+code{font-family:var(--f-mono);font-size:.86em;background:var(--surface-2);padding:.1em .4em;border-radius:6px;color:var(--green-strong);white-space:nowrap}
+code.wrap{white-space:normal;overflow-wrap:anywhere}
+kbd{font-family:var(--f-mono);font-size:.8em;background:var(--surface);border:1px solid var(--line);border-bottom-width:3px;border-radius:7px;padding:.05em .5em;white-space:nowrap;color:var(--ink)}
+a{color:var(--green-strong)}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+
+/* barra */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.ifsc-logo{height:40px;width:auto;flex:none;overflow:visible}
+.brand-txt{display:flex;flex-direction:column;line-height:1.05}
+.brand-txt .b1{font-family:"Open Sans",var(--f-body);font-weight:800;font-size:.95rem;letter-spacing:.01em}
+.brand-txt .b2{font-family:"Open Sans",var(--f-body);font-weight:400;font-size:.88rem}
+.burger{display:none;margin-left:auto;width:42px;height:42px;place-content:center;gap:5px;border:1px solid var(--line);background:var(--surface);border-radius:12px;cursor:pointer;padding:0}
+.burger span{display:block;width:20px;height:2px;border-radius:2px;background:var(--ink);transition:transform .2s,opacity .2s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{text-decoration:none;color:var(--muted);font-weight:600;font-size:.8rem;padding:6px 7px;border-radius:999px;white-space:nowrap}
+.nav{gap:0;flex-wrap:nowrap}
+.bar .wrap{column-gap:12px}
+.back{flex:none}
+.nav a:hover{background:var(--surface-2);color:var(--green-strong)}
+.back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#C8191E;color:#fff;font-weight:700;font-size:.85rem;padding:7px 14px 7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px #C8191E;transition:background .2s,transform .2s}
+.back:hover{background:#A51318;transform:translateY(-1px)}
+.back svg{width:16px;height:16px}
+@media (max-width:1100px){.nav{display:none}}
+
+/* hero */
+.hero{background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:36px;align-items:center;padding-block:48px 44px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-strong)}
+.eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--green)}
+.hero h1{font-size:clamp(2.1rem,5vw,3.3rem);font-weight:800;letter-spacing:-.035em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.lead{font-size:1.1rem;color:var(--muted);max-width:52ch;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:600}
+.chip svg{width:16px;height:16px;color:var(--green)}
+.login{margin-top:20px;display:inline-flex;flex-wrap:wrap;gap:6px 16px;align-items:center;background:var(--surface);border:1px dashed var(--green);border-radius:14px;padding:10px 14px;font-size:.9rem}
+.login b{font-family:var(--f-mono);color:var(--green-strong)}
+
+/* terminal animado */
+.tw{background:var(--code-bg);border-radius:16px;overflow:hidden;box-shadow:0 26px 50px -26px color-mix(in srgb,var(--green) 70%,transparent);min-width:0;border:1px solid #1c2b21}
+.tw-bar{display:flex;align-items:center;gap:7px;padding:10px 12px;background:#141c17}
+.tw-bar .d{width:12px;height:12px;border-radius:50%;background:#FF5F57}.tw-bar .d:nth-child(2){background:#FEBC2E}.tw-bar .d:nth-child(3){background:#28C840}
+.tw-title{margin-left:8px;font:600 .74rem var(--f-mono);color:var(--code-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tw-btn{border:1px solid #2c3d31;background:transparent;color:var(--code-fg);font:600 .72rem var(--f-body);padding:4px 9px;border-radius:7px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.tw-btn:hover{background:#1d2a21}
+.tw-btn svg{width:13px;height:13px}
+.tw-screen{height:360px;overflow:hidden;padding:12px 14px;font:400 .82rem/1.6 var(--f-mono);color:var(--code-fg);position:relative}
+.tw-screen .ln{white-space:pre-wrap;overflow-wrap:anywhere}
+.pu{color:var(--t-user);font-weight:700}.pr{color:var(--t-root);font-weight:700}.pp{color:var(--t-path);font-weight:700}
+.o-dim{color:var(--code-muted)}.o-dir{color:var(--t-path);font-weight:700}.o-ok{color:var(--t-user)}.o-w{color:var(--t-warn)}.o-v{color:var(--t-vio)}.o-r{color:var(--t-root)}
+.cur{display:inline-block;width:8px;height:1.1em;background:var(--t-user);vertical-align:-3px;animation:blink 1.05s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.tabkey{display:inline-block;font:700 .66rem var(--f-body);background:var(--t-warn);color:#000;border-radius:4px;padding:0 5px;margin:0 3px;vertical-align:1px;animation:pop .5s}
+@keyframes pop{from{transform:scale(1.5)}}
+.tw-scenes{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px;background:#0b110d;border-top:1px solid #1c2b21}
+.tw-scenes button{border:1px solid #2c3d31;background:transparent;color:var(--code-muted);font:600 .74rem var(--f-body);padding:5px 10px;border-radius:999px;cursor:pointer}
+.tw-scenes button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#04120a}
+.tw-cap{padding:0 12px 12px;background:#0b110d;color:var(--code-muted);font-size:.8rem;min-height:2.6em}
+
+/* seções */
+section.sec{padding-block:60px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+.sec-head{display:grid;gap:10px;margin-bottom:28px}
+.sec-head p{color:var(--muted);font-size:1.05rem;max-width:70ch}
+.sec-num{font-family:var(--f-mono);font-size:.8rem;color:var(--green-strong);font-weight:600;display:inline-flex;align-items:center;gap:10px}
+.sec-num .sn{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 6px;border-radius:10px;background:var(--green);color:#fff;font:800 .95rem var(--f-display);font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .sec-num .sn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sec-num .sn{color:#08130C}}
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--mint);color:var(--green-strong);flex:none}
+.ico svg{width:22px;height:22px}
+.note{margin-top:18px;display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;align-items:start;background:var(--surface-2);border-radius:var(--r);padding:16px 18px}
+.note p{font-size:.97rem}
+.note.warn{background:color-mix(in srgb,var(--warn) 12%,var(--surface))}
+.note.warn .ico{background:color-mix(in srgb,var(--warn) 22%,transparent);color:var(--warn)}
+
+/* prompt */
+.prompt-wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;align-items:start}
+.anatomy{background:var(--code-bg);border-radius:var(--r);padding:22px 18px 18px;display:grid;gap:18px}
+.bigprompt{font:700 clamp(1.15rem,3.3vw,1.7rem) var(--f-mono);display:flex;flex-wrap:wrap;gap:2px;color:var(--code-fg)}
+.bigprompt span{white-space:nowrap;padding:2px 4px;border-radius:6px;border-bottom:3px solid}
+.bp1{color:var(--t-user);border-color:var(--t-user)!important}
+.bp2{color:var(--code-muted);border-color:transparent!important}
+.bp3{color:var(--t-warn);border-color:var(--t-warn)!important}
+.bp4{color:var(--t-path);border-color:var(--t-path)!important}
+.bp5{color:var(--t-vio);border-color:var(--t-vio)!important}
+.leg{display:grid;gap:8px;font-size:.88rem;color:var(--code-fg)}
+.leg div{display:grid;grid-template-columns:14px minmax(0,1fr);gap:10px;align-items:start}
+.leg i{width:12px;height:12px;border-radius:3px;margin-top:5px}
+.leg b{color:#fff}
+.rootcmp{display:grid;gap:12px}
+.rc{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:8px}
+.rc .p{font:700 1rem var(--f-mono);background:var(--code-bg);color:var(--t-user);padding:8px 12px;border-radius:10px;overflow-x:auto;white-space:nowrap}
+.rc.root .p{color:var(--t-root)}
+.rc p{font-size:.94rem;color:var(--muted)}
+
+/* pastas */
+.tree-wrap{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;align-items:start}
+.tree{background:var(--code-bg);color:var(--code-fg);border-radius:var(--r);padding:16px 18px;font:400 .86rem/1.75 var(--f-mono);overflow-x:auto;white-space:pre;margin:0}
+.tree .o-dir{color:var(--t-path)}
+.dirs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:12px}
+.dir{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:4px;align-content:start}
+.dir b{font:700 1rem var(--f-mono);color:var(--green-strong);display:flex;align-items:center;gap:8px}
+.dir b svg{width:18px;height:18px;color:var(--green)}
+.dir span{font-size:.9rem;color:var(--muted)}
+.dir.home{border:2px solid var(--green);background:linear-gradient(180deg,var(--surface-2),var(--surface) 70%)}
+
+/* comandos */
+.search{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.search input{border:0;background:transparent;font:inherit;color:var(--ink);flex:1;outline:none;min-width:0}
+.search svg{width:20px;height:20px;color:var(--muted)}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.filters button{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .8rem var(--f-body);padding:6px 12px;border-radius:999px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="dark"] .filters button[aria-pressed="true"]{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .filters button[aria-pressed="true"]{color:#08130C}}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.n{font:700 .85rem var(--f-mono);color:var(--muted);width:1%}
+td.c{font:700 .9rem var(--f-mono);color:var(--green-strong);white-space:nowrap}
+td.ex code{white-space:nowrap}
+.cat{display:inline-block;font:700 .66rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;color:#fff;background:var(--vc);white-space:nowrap}
+:root[data-theme="dark"] .cat{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cat{color:#08130C}}
+.empty{padding:18px;color:var(--muted);text-align:center}
+#cmd-table{min-width:640px}
+
+/* atalhos */
+.keys{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.key{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:8px;align-content:start}
+.key .k{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.key kbd{font-size:.9rem}
+.key p{font-size:.92rem;color:var(--muted)}
+.key.hl{border:2px solid var(--green)}
+
+/* passos */
+.steps{display:grid;list-style:none;padding:0;margin:0}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;position:relative;padding-bottom:44px;scroll-margin-top:70px}
+.step::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(var(--green),var(--line))}
+.step:last-child::before{display:none}
+.step-n{width:56px;height:56px;border-radius:18px;background:var(--green);color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.3rem;display:grid;place-items:center;box-shadow:0 10px 24px -12px var(--green);position:relative;z-index:1}
+:root[data-theme="dark"] .step-n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .step-n{color:#08130C}}
+.step.big .step-n{background:var(--red);box-shadow:0 10px 24px -12px var(--red);color:#fff}
+.step-body{display:grid;gap:12px;min-width:0;padding-top:4px}
+.step-body h3{font-size:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--mint);color:var(--green-strong)}
+.tag.root{background:color-mix(in srgb,var(--red) 14%,transparent);color:var(--red)}
+.step-body > p{color:var(--muted);max-width:72ch}
+.step-body ul{margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px}
+.step-body li b{color:var(--ink)}
+.help-wrap{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px;align-items:start;background:var(--surface);border:2px solid var(--green);border-radius:22px;padding:20px}
+.help-txt{display:grid;gap:10px;align-content:start;min-width:0}
+.help-txt h3{font-size:1.15rem}
+.help-txt p,.help-txt li{color:var(--muted);font-size:.95rem}
+.help-txt ul{margin:0;padding-left:20px;display:grid;gap:6px}
+@media (max-width:900px){.help-wrap{grid-template-columns:minmax(0,1fr)}}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.two > *{min-width:0}
+
+.code{background:var(--code-bg);color:var(--code-fg);border-radius:14px;overflow:hidden;min-width:0}
+.code-top{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-bottom:1px solid color-mix(in srgb,var(--code-fg) 12%,transparent)}
+.dots{display:flex;gap:7px}
+.dots i{width:12px;height:12px;border-radius:50%;display:block}
+.dots i:nth-child(1){background:#FF5F57}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#28C840}
+.code-top span{font:600 .74rem var(--f-mono);color:var(--code-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.code-top span.root{color:var(--t-root)}
+.copy{border:1px solid color-mix(in srgb,var(--code-fg) 25%,transparent);background:transparent;color:var(--code-fg);font:600 .74rem var(--f-body);padding:4px 10px;border-radius:8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.copy:hover{background:color-mix(in srgb,var(--code-fg) 10%,transparent)}
+.copy svg{width:14px;height:14px}
+.code pre{margin:0;padding:13px 16px;overflow-x:auto;font:400 .85rem/1.7 var(--f-mono);white-space:pre}
+.code .cm{color:var(--code-muted);font-style:italic}
+.code .kw{color:var(--code-key);font-weight:600}
+.code.out pre{color:var(--code-muted)}
+
+.tasks{display:grid;gap:8px}
+.tasks .t{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:.95rem}
+.tasks .t b.n{font:700 .8rem var(--f-mono);background:var(--green);color:#fff;border-radius:7px;padding:2px 8px}
+:root[data-theme="dark"] .tasks .t b.n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tasks .t b.n{color:#08130C}}
+
+.tui{background:#1a2fa8;color:#e8ecff;border-radius:12px;padding:16px;font:400 .82rem/1.6 var(--f-mono);overflow-x:auto}
+.tui .box{background:#c7c7c7;color:#111;border-radius:4px;padding:12px 14px;min-width:380px;max-width:520px;margin:0 auto;box-shadow:6px 6px 0 #000}
+.tui .ttl{text-align:center;font-weight:700;background:#1a2fa8;color:#fff;margin:-12px -14px 10px;padding:4px}
+.tui .row{white-space:pre}
+.tui .row.sel{background:#b40000;color:#fff}
+.tui .btns{display:flex;justify-content:center;gap:30px;margin-top:10px;font-weight:700}
+.tui .btns span:first-child{background:#b40000;color:#fff;padding:0 6px}
+
+/* exercícios */
+.prog{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin-bottom:20px}
+.prog .info{flex:1;min-width:200px;display:grid;gap:8px}
+.prog strong{font-family:var(--f-display)}
+.pbar{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--green-strong));transition:width .3s}
+#prog-txt{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.9rem}
+#prog-txt b{font:800 1.4rem var(--f-display);color:var(--green-strong)}
+.btn-ghost{font:600 .84rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:8px 14px;border-radius:10px;cursor:pointer}
+.btn-ghost:hover{border-color:var(--green)}
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:14px}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-content:start;transition:border-color .2s,background .2s}
+.ex.done{border-color:var(--green);background:color-mix(in srgb,var(--surface-2) 60%,var(--surface))}
+.ex-num{width:42px;height:42px;border-radius:12px;background:var(--mint);color:var(--green-strong);font:700 1rem var(--f-display);display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.ex.done .ex-num{background:var(--green);color:#fff}
+.ex-body{display:grid;gap:10px;min-width:0}
+.ex-body p{font-size:.96rem}
+.ex-foot{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.ex details{font-size:.9rem;min-width:0;flex:1 1 220px}
+.ex summary{cursor:pointer;font-weight:600;color:var(--green-strong);width:fit-content}
+.ex details .code{margin-top:8px}
+.check{display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;user-select:none}
+.check input{width:18px;height:18px;accent-color:var(--green);cursor:pointer}
+
+/* desafio */
+.challenge{background:var(--surface);border:2px dashed color-mix(in srgb,var(--red) 55%,transparent);border-radius:22px;overflow:hidden}
+.ch-head{display:flex;gap:16px;align-items:center;padding:22px 24px;background:linear-gradient(90deg,color-mix(in srgb,var(--red) 10%,var(--surface)),var(--surface))}
+.ch-head .ico{background:var(--red);color:#fff;width:52px;height:52px;border-radius:16px}
+.ch-head p{color:var(--muted);margin-top:4px}
+.ch-body{padding:8px 24px 24px;display:grid;gap:16px}
+.ch-list{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:c}
+.ch-list li{counter-increment:c;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+.ch-list li::before{content:counter(c);width:34px;height:34px;border-radius:50%;border:2px solid var(--red);color:var(--red);font:700 .9rem var(--f-display);display:grid;place-items:center}
+.ch-list li div{padding-top:5px;min-width:0}
+.goal{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+
+.errs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.err{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:8px;min-width:0}
+.err h3{font-size:.98rem;display:flex;gap:10px;align-items:flex-start;font-family:var(--f-mono)}
+.err h3 svg{width:20px;height:20px;color:var(--red);flex:none;margin-top:2px}
+.err p{font-size:.92rem;color:var(--muted)}
+
+footer{padding-block:34px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand svg{height:52px;width:auto}
+
+@media (max-width:900px){
+  .hero .wrap,.prompt-wrap,.tree-wrap{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:640px){
+  .two,.errs{grid-template-columns:minmax(0,1fr)}
+  .step{grid-template-columns:44px minmax(0,1fr);gap:14px}
+  .step-n{width:44px;height:44px;border-radius:14px;font-size:1.1rem}
+  .step::before{left:21px;top:44px}
+  section.sec{padding-block:44px}
+  .tw-screen{height:330px;font-size:.74rem}
+  .ch-head,.ch-body{padding-left:16px;padding-right:16px}
+}
+
+/* ---- celular ---- */
+@media (max-width:440px){
+  .brand{gap:8px}
+  .ifsc-logo{height:34px}
+  .brand-txt .b1{font-size:.78rem}
+  .brand-txt .b2{font-size:.74rem}
+  .back{font-size:.8rem;padding:7px 11px 7px 9px}
+  .burger{width:40px;height:40px}
+}
+@media (max-width:1100px){
+  .bar .wrap{row-gap:8px}
+  .bar .wrap{gap:8px}
+  .burger{display:inline-grid;order:3;margin-left:0}
+  .back{order:2;margin-left:auto}
+  .nav{display:none;order:4;flex:1 0 100%;flex-direction:column;gap:2px;padding:6px;margin-bottom:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 30px -18px color-mix(in srgb,var(--ink) 40%,transparent)}
+  .nav.open{display:flex!important}
+  .nav a{padding:11px 14px;border-radius:10px;font-size:.95rem}
+  section.sec{scroll-margin-top:70px}
+  .step{scroll-margin-top:76px}
+}
+@media (max-width:640px){
+  body{font-size:15px}
+  .hero .wrap{padding-block:32px 32px;gap:26px}
+  .lead{font-size:1rem}
+  .login{display:flex}
+  .sec-head{margin-bottom:20px}
+  .sec-head p{font-size:.98rem}
+  /* passos: número em cima, conteúdo na largura toda */
+  .step{grid-template-columns:minmax(0,1fr);gap:12px;padding-bottom:34px}
+  .step::before{display:none}
+  .step-n{width:42px;height:42px;border-radius:12px;font-size:1.05rem}
+  .step-body{padding-top:0}
+  .step-body h3{font-size:1.12rem}
+  .steps .step + .step{border-top:1px dashed var(--line);padding-top:26px}
+  .code pre{font-size:.76rem;padding:11px 12px}
+  .code-top span{font-size:.68rem}
+  .tree{font-size:.78rem}
+  .anatomy{padding:18px 14px 14px}
+  .tasks .t{padding:10px 12px}
+  .note{grid-template-columns:minmax(0,1fr);gap:10px;padding:14px}
+  .note .ico{width:34px;height:34px}
+  .help-wrap{padding:14px}
+  .keys,.dirs{grid-template-columns:minmax(0,1fr)}
+  .ex{grid-template-columns:minmax(0,1fr);gap:10px;padding:14px}
+  .ex-num{width:36px;height:36px;font-size:.9rem}
+  .prog{padding:14px}
+  .err{padding:14px}
+  /* tabelas viram cartões */
+  .tbl-wrap:has(table.stack){border:0;background:transparent;overflow:visible}
+  table.stack{min-width:0!important;display:block}
+  table.stack thead{display:none}
+  table.stack tbody{display:grid;gap:10px}
+  table.stack tr{display:grid;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+  table.stack td{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:baseline;padding:0;border:0;white-space:normal}
+  table.stack td::before{content:attr(data-label);font:700 .66rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  table.stack td.n{display:none}
+  table.stack td code{white-space:normal;overflow-wrap:anywhere;justify-self:start}
+  table.stack td > .cat{justify-self:start}
+  .tw-screen{height:300px;font-size:.7rem;padding:10px 12px}
+  .tw-btn span{display:none}
+}
+</style>
+</head>
+<body>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ifsc-mark" viewBox="0 0 410 555">
+      <circle cx="60" cy="60" r="66" fill="#CD191E"></circle>
+      <g fill="#2F9E41">
+        <rect x="145" y="0" width="120" height="120" rx="10"></rect><rect x="290" y="0" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="145" width="120" height="120" rx="10"></rect><rect x="145" y="145" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="290" width="120" height="120" rx="10"></rect><rect x="145" y="290" width="120" height="120" rx="10"></rect><rect x="290" y="290" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="435" width="120" height="120" rx="10"></rect><rect x="145" y="435" width="120" height="120" rx="10"></rect>
+      </g>
+    </symbol>
+    <symbol id="i-term" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3M13 15h4"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 7.5v9L12 21l9-4.5v-9z"/><path d="m3 7.5 9 4.5 9-4.5M12 12v9"/></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 4 12 2-6h6"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 20h8"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></symbol>
+  </defs>
+</svg>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">
+      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg>
+      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    </div>
+    <button type="button" class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
+    <nav class="nav" id="menu" aria-label="Seções">
+      <a href="#prompt">1. Prompt</a><a href="#sintaxe">2. Sintaxe</a><a href="#pastas">3. Pastas</a><a href="#comandos">4. Comandos</a><a href="#atalhos">5. Atalhos</a><a href="#passos">6. Passo a passo</a><a href="#exercicios">7. Exercícios</a><a href="#erros">8. Problemas</a>
+    </nav>
+    <a class="back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Voltar</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Aula prática · Debian GNU/Linux</span>
+      <h1>Primeiros passos no <em>terminal</em> do Debian</h1>
+      <p class="lead">O Debian já está instalado. Agora você vai navegar pelas pastas, criar arquivos, virar administrador com <code>su -</code>, instalar programas com o <code>apt-get</code>, abrir o <code>htop</code> e o <code>fastfetch</code> e, no fim, instalar a interface gráfica KDE Plasma.</p>
+      <div class="chips">
+        <span class="chip"><svg><use href="#i-folder"/></svg>ls · cd · mkdir · touch</span>
+        <span class="chip"><svg><use href="#i-box"/></svg>su - · apt-get</span>
+        <span class="chip"><svg><use href="#i-pulse"/></svg>free · top · htop</span>
+        <span class="chip"><svg><use href="#i-monitor"/></svg>KDE com tasksel</span>
+        <span class="chip"><svg><use href="#i-clock"/></svg>≈ 2 aulas</span>
+      </div>
+      <div class="login"><span>Login da VM:</span><span>usuário <b>ifsc</b></span><span>senha <b>ifsc</b></span></div>
+    </div>
+
+    <div class="tw" id="tw">
+      <div class="tw-bar">
+        <i class="d"></i><i class="d"></i><i class="d"></i>
+        <span class="tw-title" id="tw-title">ifsc@debian: ~</span>
+        <button class="tw-btn" type="button" id="tw-pause" aria-label="Pausar animação"><svg><use href="#i-pause"/></svg><span>Pausar</span></button>
+        <button class="tw-btn" type="button" id="tw-restart" aria-label="Recomeçar cena"><svg><use href="#i-redo"/></svg></button>
+      </div>
+      <div class="tw-screen" id="tw-screen" aria-live="off"></div>
+      <div class="tw-scenes" role="group" aria-label="Cenas da animação" id="tw-scenes"></div>
+      <div class="tw-cap" id="tw-cap"></div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<section class="sec" id="prompt">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num"><b class="sn">01</b>Conceito</span>
+      <h2>Lendo o prompt do terminal</h2>
+      <p>O <b>prompt</b> é o texto que aparece antes do cursor. Ele diz quem você é, em qual máquina está, em qual pasta está e se tem poder de administrador. Leia o prompt antes de cada comando.</p>
+    </div>
+    <div class="prompt-wrap">
+      <div class="anatomy">
+        <div class="bigprompt" aria-label="ifsc@debian:~$"><span class="bp1">ifsc</span><span class="bp2">@</span><span class="bp3">debian</span><span class="bp2">:</span><span class="bp4">~</span><span class="bp5">$</span></div>
+        <div class="leg">
+          <div><i style="background:var(--t-user)"></i><span><b>ifsc</b> · o usuário logado</span></div>
+          <div><i style="background:var(--t-warn)"></i><span><b>debian</b> · o nome da máquina (hostname)</span></div>
+          <div><i style="background:var(--t-path)"></i><span><b>~</b> · a pasta atual. O <b>~</b> é a sua pasta pessoal: <b>/home/ifsc</b></span></div>
+          <div><i style="background:var(--t-vio)"></i><span><b>$</b> · usuário comum. Quando aparece <b>#</b>, você é o <b>root</b></span></div>
+        </div>
+      </div>
+      <div class="rootcmp">
+        <div class="rc"><div class="p">ifsc@debian:~/aula$</div><h3>Usuário comum</h3><p>Pode mexer só nas próprias pastas. Use este usuário no dia a dia. Aqui o prompt mostra que você está em <code>/home/ifsc/aula</code>.</p></div>
+        <div class="rc root"><div class="p">root@debian:~#</div><h3>Root (administrador)</h3><p>Pode tudo: instalar programas, mudar configurações e também apagar o sistema. Entre com <code>su -</code>, faça a tarefa e saia com <code>exit</code>.</p></div>
+      </div>
+    </div>
+    <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>No Linux, <b>maiúsculas e minúsculas são diferentes</b>. <code>Aula</code>, <code>aula</code> e <code>AULA</code> são três pastas diferentes. Comandos também: <code>LS</code> não existe, o certo é <code>ls</code>.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="sintaxe">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num"><b class="sn">02</b>Sintaxe</span>
+      <h2>Como um comando é escrito</h2>
+      <p>Quase todo comando segue a mesma ordem: primeiro o <b>comando</b>, depois as <b>opções</b> que mudam o jeito dele trabalhar e, por último, o <b>caminho</b> ou alvo onde ele vai agir. As partes são separadas por <b>espaço</b>.</p>
+    </div>
+    <div class="prompt-wrap">
+      <div class="anatomy">
+        <div class="bigprompt" aria-label="comando -opção caminho"><span class="bp1">comando</span>&nbsp;<span class="bp3">-opção</span>&nbsp;<span class="bp4">caminho</span></div>
+        <div class="bigprompt" aria-label="ls -la /home/ifsc"><span class="bp1">ls</span>&nbsp;<span class="bp3">-la</span>&nbsp;<span class="bp4">/home/ifsc</span></div>
+        <div class="leg">
+          <div><i style="background:var(--t-user)"></i><span><b>comando</b> · o programa que vai rodar: <b>ls</b> lista arquivos</span></div>
+          <div><i style="background:var(--t-warn)"></i><span><b>-opção</b> · começa com traço e muda o resultado: <b>-l</b> mostra detalhes e <b>-a</b> mostra os ocultos</span></div>
+          <div><i style="background:var(--t-path)"></i><span><b>caminho</b> · onde o comando age: a pasta <b>/home/ifsc</b>. Sem caminho, ele usa a pasta atual</span></div>
+        </div>
+      </div>
+      <div class="rootcmp">
+        <div class="rc"><h3>Opções curtas e longas</h3><p>Opção curta tem <b>um traço</b> e uma letra: <code>-a</code>. Opção longa tem <b>dois traços</b> e uma palavra: <code>--all</code>. As duas fazem o mesmo: <code>ls -a</code> = <code>ls --all</code>.</p></div>
+        <div class="rc"><h3>Juntar opções</h3><p>Opções curtas podem ser escritas juntas: <code>ls -l -a -h</code> é igual a <code>ls -lah</code>. A ordem das letras não importa.</p></div>
+        <div class="rc"><h3>Partes opcionais</h3><p>Opção e caminho nem sempre são obrigatórios: <code>ls</code> sozinho funciona. Alguns comandos pedem mais de um caminho: <code>cp origem destino</code>.</p></div>
+      </div>
+    </div>
+    <p style="margin-top:20px;color:var(--muted)">Rode os exemplos <b>na ordem</b>, de cima para baixo: cada um usa o que o anterior criou. No fim, a pasta de treino é apagada.</p>
+    <div class="tbl-wrap" style="margin-top:10px">
+      <table class="stack" style="min-width:620px">
+        <thead><tr><th>#</th><th>Exemplo</th><th>Comando</th><th>Opção</th><th>Caminho</th><th>O que acontece</th></tr></thead>
+        <tbody>
+          <tr><td class="n" data-label="#">1</td><td data-label="Exemplo"><code>cd ~</code></td><td class="c" data-label="Comando">cd</td><td data-label="Opção">(nenhuma)</td><td data-label="Caminho"><code>~</code></td><td data-label="O que acontece">Vai para a pasta pessoal /home/ifsc</td></tr>
+          <tr><td class="n" data-label="#">2</td><td data-label="Exemplo"><code>mkdir -p treino/lab1</code></td><td class="c" data-label="Comando">mkdir</td><td data-label="Opção"><code>-p</code></td><td data-label="Caminho"><code>treino/lab1</code></td><td data-label="O que acontece">Cria as pastas treino e lab1 de uma vez</td></tr>
+          <tr><td class="n" data-label="#">3</td><td data-label="Exemplo"><code>touch treino/notas.txt</code></td><td class="c" data-label="Comando">touch</td><td data-label="Opção">(nenhuma)</td><td data-label="Caminho"><code>treino/notas.txt</code></td><td data-label="O que acontece">Cria um arquivo vazio dentro de treino</td></tr>
+          <tr><td class="n" data-label="#">4</td><td data-label="Exemplo"><code>cp treino/notas.txt treino/lab1/</code></td><td class="c" data-label="Comando">cp</td><td data-label="Opção">(nenhuma)</td><td data-label="Caminho"><code>treino/notas.txt treino/lab1/</code></td><td data-label="O que acontece">Copia o arquivo para a pasta lab1</td></tr>
+          <tr><td class="n" data-label="#">5</td><td data-label="Exemplo"><code>ls -l treino</code></td><td class="c" data-label="Comando">ls</td><td data-label="Opção"><code>-l</code></td><td data-label="Caminho"><code>treino</code></td><td data-label="O que acontece">Lista treino em detalhes: lab1 e notas.txt</td></tr>
+          <tr><td class="n" data-label="#">6</td><td data-label="Exemplo"><code>rm -r treino</code></td><td class="c" data-label="Comando">rm</td><td data-label="Opção"><code>-r</code></td><td data-label="Caminho"><code>treino</code></td><td data-label="O que acontece">Apaga a pasta treino e tudo dentro dela</td></tr>
+          <tr><td class="n" data-label="#">7</td><td data-label="Exemplo"><code>free -h</code></td><td class="c" data-label="Comando">free</td><td data-label="Opção"><code>-h</code></td><td data-label="Caminho">(nenhum)</td><td data-label="O que acontece">Memória em G e M</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="help-wrap">
+      <div class="help-txt">
+        <h3>Descubra as opções de qualquer comando: <code>comando --help</code></h3>
+        <p>Ninguém decora todas as opções. Escreva o comando seguido de <code>--help</code> e ele mostra a forma de uso e a lista de opções, cada uma com uma explicação curta.</p>
+        <ul>
+          <li>A linha <b>Uso:</b> mostra a sintaxe. O que está entre colchetes <code>[OPÇÃO]</code> é opcional e <code>...</code> indica que pode repetir.</li>
+          <li>Cada opção aparece na forma curta e longa: <code>-a, --all</code>.</li>
+          <li>Se o texto for maior que a tela, use <code>ls --help | less</code>: role com as setas e saia com <kbd>q</kbd>.</li>
+          <li>Para o manual completo, use <code>man ls</code> (também sai com <kbd>q</kbd>).</li>
+        </ul>
+      </div>
+      <div style="display:grid;gap:12px;min-width:0">
+        <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>ifsc@debian:~$</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">ls --help            # opções do ls
+mkdir --help         # opções do mkdir
+cp --help            # opções do cp
+free --help          # opções do free
+apt-get --help       # opções do apt-get
+ls --help | less     # lê com rolagem (q sai)
+man ls               # manual completo</pre></div>
+        <div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>trecho da saída de ls --help</span></div>
+<pre>Uso: ls [OPÇÃO]... [ARQUIVO]...
+Lista informações sobre os ARQUIVOs (o diretório
+atual por padrão).
+
+  -a, --all          não ignora entradas iniciadas por .
+  -h, --human-readable  tamanhos como 1K 234M 2G
+  -l                 usa formato de lista longa
+  -R, --recursive    lista subdiretórios recursivamente</pre></div>
+      </div>
+    </div>
+    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p>O <b>espaço</b> separa as partes. <code>ls-l</code> grudado é tratado como um comando que não existe. E um nome com espaço precisa de aspas: <code>cd "Área de trabalho"</code>, senão o terminal entende três caminhos.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="pastas">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num"><b class="sn">03</b>Sistema de arquivos</span>
+      <h2>As principais pastas do Linux</h2>
+      <p>No Linux não existe <code>C:\</code>. Tudo começa na <b>raiz</b>, escrita como uma barra <code>/</code>. Pendrives, HDs e até dispositivos aparecem como pastas dentro dela.</p>
+    </div>
+    <div class="tree-wrap">
+<pre class="tree" aria-label="Árvore de diretórios"><span class="o-dir">/</span>
+├── <span class="o-dir">bin</span>     programas básicos
+├── <span class="o-dir">boot</span>    kernel e GRUB
+├── <span class="o-dir">dev</span>     dispositivos
+├── <span class="o-dir">etc</span>     configurações
+├── <span class="o-dir">home</span>
+│   └── <span class="o-dir">ifsc</span>  <span class="o-ok">← você (~)</span>
+│       ├── Documentos
+│       ├── Downloads
+│       └── <span class="o-ok">aula</span>
+├── <span class="o-dir">media</span>   pendrives
+├── <span class="o-dir">root</span>    pasta do root
+├── <span class="o-dir">tmp</span>     temporários
+├── <span class="o-dir">usr</span>     programas instalados
+└── <span class="o-dir">var</span>     logs e cache</pre>
+      <div class="dirs">
+        <div class="dir home"><b><svg><use href="#i-folder"/></svg>/home/ifsc</b><span>Sua pasta pessoal, o <code>~</code>. Documentos, downloads e as pastas da aula ficam aqui.</span></div>
+        <div class="dir"><b><svg><use href="#i-folder"/></svg>/</b><span>A raiz. Todas as outras pastas ficam dentro dela.</span></div>
+        <div class="dir"><b><svg><use href="#i-folder"/></svg>/etc</b><span>Arquivos de configuração do sistema, como <code>/etc/hostname</code> e <code>/etc/apt/sources.list</code>.</span></div>
+        <div class="dir"><b><svg><use href="#i-folder"/></svg>/bin e /usr/bin</b><span>Os programas. O <code>ls</code> está em <code>/usr/bin/ls</code>; o <code>htop</code> também vai parar lá.</span></div>
+        <div class="dir"><b><svg><use href="#i-folder"/></svg>/sbin</b><span>Programas de administração, como <code>usermod</code> e <code>reboot</code>. Só o root usa.</span></div>
+        <div class="dir"><b><svg><use href="#i-folder"/></svg>/root</b><span>A pasta pessoal do root. Não confunda com a raiz <code>/</code>.</span></div>
+        <div class="dir"><b><svg><use href="#i-folder"/></svg>/var</b><span>Dados que mudam: logs em <code>/var/log</code> e pacotes baixados em <code>/var/cache/apt</code>.</span></div>
+        <div class="dir"><b><svg><use href="#i-folder"/></svg>/tmp</b><span>Arquivos temporários. São apagados quando o sistema reinicia.</span></div>
+        <div class="dir"><b><svg><use href="#i-folder"/></svg>/dev e /media</b><span>Dispositivos (<code>/dev/sda</code> é o disco) e pendrives montados.</span></div>
+      </div>
+    </div>
+    <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p><b>Caminho absoluto</b> começa com <code>/</code> e funciona de qualquer lugar: <code>cd /home/ifsc/aula</code>. <b>Caminho relativo</b> parte da pasta atual: se você já está em <code>/home/ifsc</code>, basta <code>cd aula</code>. Dois pontos <code>..</code> significam "a pasta de cima" e um ponto <code>.</code> significa "esta pasta".</p></div>
+  </div>
+</section>
+
+<section class="sec" id="comandos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num"><b class="sn">04</b>Referência</span>
+      <h2>Comandos da aula</h2>
+      <p>Procure pelo nome do comando ou pelo que você quer fazer, por exemplo "apagar" ou "memória". O formato é sempre <code>comando opções alvo</code>, separados por espaço.</p>
+    </div>
+    <label class="search" for="q"><svg><use href="#i-search"/></svg><input id="q" type="search" placeholder="Buscar: pasta, instalar, memória, ls…" autocomplete="off"></label>
+    <div class="filters" id="filters" role="group" aria-label="Filtrar por categoria"></div>
+    <p style="color:var(--muted);font-size:.92rem;margin-bottom:10px">Os exemplos da categoria <b>Arquivos</b> funcionam em sequência, de cima para baixo, dentro de <code>~/aula</code>: <code>mkdir</code> cria a pasta <code>teste</code> e o <code>rm -r</code> no fim apaga tudo.</p>
+    <div class="tbl-wrap">
+      <table id="cmd-table" class="stack">
+        <thead><tr><th>Comando</th><th>Categoria</th><th>O que faz</th><th>Exemplo</th></tr></thead>
+        <tbody id="cmd-body"></tbody>
+      </table>
+      <p class="empty" id="cmd-empty" hidden>Nenhum comando encontrado. Tente outra palavra.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="atalhos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num"><b class="sn">05</b>Produtividade</span>
+      <h2>Atalhos que economizam digitação</h2>
+      <p>Quem usa terminal quase não digita o comando inteiro. Aprenda estes atalhos hoje e use em todos os exercícios.</p>
+    </div>
+    <div class="keys">
+      <div class="key hl"><div class="k"><kbd>Tab</kbd></div><h3>Autocompletar</h3><p>Digite o começo e aperte <kbd>Tab</kbd>: <code>cd Doc</code> vira <code>cd Documentos/</code>. Se houver várias opções, aperte <kbd>Tab</kbd> duas vezes para ver a lista.</p></div>
+      <div class="key hl"><div class="k"><kbd>↑</kbd><kbd>↓</kbd></div><h3>Comandos anteriores</h3><p>A seta para cima traz de volta o último comando. Edite e aperte <kbd>Enter</kbd>.</p></div>
+      <div class="key"><div class="k"><code>history</code></div><h3>Histórico</h3><p>Lista tudo o que você digitou, numerado. <code>!25</code> repete o comando 25 e <code>!!</code> repete o último.</p></div>
+      <div class="key"><div class="k"><kbd>Ctrl</kbd>+<kbd>R</kbd></div><h3>Buscar no histórico</h3><p>Digite parte de um comando antigo, como <code>apt</code>, e ele aparece. <kbd>Enter</kbd> executa.</p></div>
+      <div class="key"><div class="k"><kbd>Ctrl</kbd>+<kbd>C</kbd></div><h3>Cancelar</h3><p>Interrompe o programa que está rodando, como um <code>ping</code> sem fim. No terminal <b>não</b> é copiar.</p></div>
+      <div class="key"><div class="k"><kbd>Ctrl</kbd>+<kbd>L</kbd></div><h3>Limpar a tela</h3><p>Igual ao comando <code>clear</code>. O histórico continua guardado.</p></div>
+      <div class="key"><div class="k"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> / <kbd>V</kbd></div><h3>Copiar e colar</h3><p>No terminal gráfico (Konsole, GNOME Terminal), copiar e colar levam o <kbd>Shift</kbd>.</p></div>
+      <div class="key"><div class="k"><kbd>q</kbd> · <kbd>F10</kbd></div><h3>Sair de programas</h3><p><kbd>q</kbd> fecha o <code>top</code>, o <code>htop</code> e o <code>man</code>. No <code>htop</code> também vale <kbd>F10</kbd>.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="passos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num"><b class="sn">06</b>Atividade</span>
+      <h2>Passo a passo no Debian</h2>
+      <p>Siga a ordem. Cada bloco preto tem um botão <b>Copiar</b>, mas o objetivo é digitar: é assim que se aprende. Os blocos com borda vermelha no título rodam como <b>root</b>.</p>
+    </div>
+
+    <ol class="steps">
+      <li class="step" id="p1">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Entre no sistema e abra o terminal</h3>
+          <p>Ligue a VM e faça login com usuário <code>ifsc</code> e senha <code>ifsc</code>. A senha não aparece enquanto você digita, é normal. Se o Debian foi instalado sem interface gráfica, você já cai direto no terminal (tela preta). Confirme quem você é e onde está:</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>ifsc@debian:~$</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">whoami       # mostra o usuário: ifsc
+hostname     # mostra o nome da máquina
+pwd          # mostra a pasta atual: /home/ifsc
+date         # data e hora
+clear        # limpa a tela</pre></div>
+        </div>
+      </li>
+
+      <li class="step" id="p2">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Navegue pelas pastas com ls e cd</h3>
+          <p><code>ls</code> lista o conteúdo da pasta. <code>cd</code> entra em outra pasta. Rode cada linha e observe como o prompt muda.</p>
+          <div class="two">
+            <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>listar</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">ls            # lista a pasta atual
+ls -l         # lista em detalhes
+ls -la        # inclui ocultos (.bashrc)
+ls -lh        # tamanhos em K, M, G
+ls /etc       # lista outra pasta</pre></div>
+            <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>navegar</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">cd /          # vai para a raiz
+cd /etc       # caminho absoluto
+cd ..         # sobe uma pasta
+cd ~          # volta para /home/ifsc
+cd -          # volta à pasta anterior</pre></div>
+          </div>
+          <ul>
+            <li>No <code>ls -l</code>, linhas que começam com <b>d</b> são pastas e com <b>-</b> são arquivos.</li>
+            <li>Escreva <code>cd ..</code> com <b>espaço</b>. <code>cd..</code> grudado não funciona no Debian.</li>
+            <li>Arquivos que começam com ponto, como <code>.bashrc</code>, são <b>ocultos</b>. Só aparecem com <code>ls -a</code>.</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step" id="p3">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Crie pastas e arquivos</h3>
+          <p>Volte para a sua pasta pessoal e monte a estrutura da aula. <code>mkdir</code> cria pastas e <code>touch</code> cria arquivos vazios.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>ifsc@debian:~$</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">cd ~
+mkdir aula                       # cria a pasta aula
+cd aula
+mkdir redes linux                # cria duas pastas de uma vez
+mkdir -p linux/lab1/scripts      # cria a árvore inteira com -p
+touch notas.txt                  # cria um arquivo vazio
+touch linux/lab1/a.txt linux/lab1/b.txt
+echo "Minha primeira aula de Linux" &gt; notas.txt   # escreve no arquivo
+echo "Linha 2" &gt;&gt; notas.txt      # acrescenta no final
+cat notas.txt                    # mostra o conteúdo
+ls -R                            # lista tudo, com as subpastas</pre></div>
+          <p>Agora, ainda dentro de <code>~/aula</code> e usando o que você acabou de criar, copie, renomeie e apague:</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>ifsc@debian:~/aula$</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">cp notas.txt copia.txt           # copia
+mv copia.txt backup.txt          # renomeia
+mv backup.txt redes/             # move para a pasta redes
+nano notas.txt                   # edita (Ctrl+O salva, Ctrl+X sai)
+rm redes/backup.txt              # apaga o arquivo
+rmdir redes                      # apaga pasta vazia
+rm -r linux/lab1                 # apaga lab1 com a.txt, b.txt e scripts
+ls -R                            # confere o que sobrou</pre></div>
+          <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p>O <code>rm</code> <b>não manda para a lixeira</b>. O arquivo some de vez. Confira o caminho com <code>ls</code> antes de apagar e nunca rode <code>rm -r</code> na raiz <code>/</code>.</p></div>
+        </div>
+      </li>
+
+      <li class="step big" id="p4">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Vire superusuário (root) com su - <span class="tag root">root</span></h3>
+          <p>O <b>root</b> é o <b>superusuário</b> do Linux: a conta que administra o sistema e pode instalar programas, mudar configurações e mexer em qualquer pasta. O usuário <code>ifsc</code> não tem esse poder. Para instalar pacotes, você troca temporariamente para o root com o comando <code>su -</code> e volta para o <code>ifsc</code> quando terminar.</p>
+          <div class="tasks">
+            <div class="t"><b class="n">1</b><span>Digite <code>su -</code> e aperte <kbd>Enter</kbd>. O nome vem de <i>switch user</i> (trocar de usuário); sem dizer qual, ele troca para o root.</span></div>
+            <div class="t"><b class="n">2</b><span>Em <code>Senha:</code>, digite a <b>senha do root</b> criada na instalação do Debian (não é a senha do ifsc, a menos que vocês tenham usado a mesma). Nada aparece enquanto você digita.</span></div>
+            <div class="t"><b class="n">3</b><span>Confira o prompt: <code>ifsc@debian:~$</code> virou <code style="color:var(--red)">root@debian:~#</code>. O <b>#</b> avisa que você é o superusuário.</span></div>
+            <div class="t"><b class="n">4</b><span>Faça a tarefa de administrador (instalar, configurar) e saia com <code>exit</code> ou <kbd>Ctrl</kbd>+<kbd>D</kbd>. O prompt volta a terminar em <b>$</b>.</span></div>
+          </div>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>ifsc@debian:~$ → root@debian:~#</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">su -          # pede a senha do root; o prompt muda para #
+whoami        # agora mostra: root
+pwd           # a pasta do root: /root
+exit          # volta a ser ifsc
+whoami        # mostra: ifsc de novo</pre></div>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Comando</th><th>O que acontece</th></tr></thead>
+            <tbody>
+              <tr><td class="c">su -</td><td>Entra como root <b>com o ambiente completo</b> dele: vai para <code>/root</code> e enxerga os programas de administração em <code>/sbin</code>. <b>Use sempre este.</b></td></tr>
+              <tr><td class="c">su</td><td>Vira root, mas continua com o ambiente do ifsc. Comandos como <code>reboot</code> e <code>usermod</code> dão "comando não encontrado".</td></tr>
+              <tr><td class="c">exit</td><td>Sai do root e volta para o usuário anterior.</td></tr>
+            </tbody>
+          </table></div>
+          <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p>Como root nada pede confirmação, e um <code>rm</code> errado pode apagar o sistema. Fique no root só o tempo da tarefa, confira sempre se o prompt termina em <b>#</b> antes de instalar e volte com <code>exit</code>.</p></div>
+        </div>
+      </li>
+
+      <li class="step big" id="p5">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Instale pacotes com apt-get <span class="tag root">root</span></h3>
+          <p>O <code>apt-get</code> baixa programas dos repositórios do Debian já com tudo o que eles precisam. Primeiro atualize a lista de pacotes, depois instale.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span class="root">root@debian:~#</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">apt-get update                       # atualiza a lista de pacotes
+apt-get install -y htop fastfetch    # instala os dois (-y responde sim)
+apt-get install -y tree mc           # mais dois úteis
+apt-cache search monitor             # procura pacotes por palavra
+apt-cache show htop                  # detalhes de um pacote
+apt-get remove mc                    # remove um programa
+apt-get upgrade                      # atualiza tudo que está instalado
+apt-get autoremove                   # limpa dependências sem uso</pre></div>
+          <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>O <code>fastfetch</code> mostra o logo do Debian e um resumo do sistema.</p></div>
+          <p><code>apt</code> e <code>apt-get</code> fazem quase o mesmo. O <code>apt</code> tem barra de progresso e é feito para pessoas; o <code>apt-get</code> é o mais usado em scripts e tutoriais. Nesta aula usamos o <code>apt-get</code>.</p>
+        </div>
+      </li>
+
+      <li class="step" id="p6">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <h3>Chame os programas e veja a memória e os processos</h3>
+          <p>Saia do root com <code>exit</code>. Para abrir um programa, digite o nome dele.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>ifsc@debian:~$</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">exit           # se ainda estiver como root
+fastfetch      # resumo do sistema com o logo do Debian
+free -h        # memória RAM e swap em G/M
+df -h          # espaço em disco
+uname -r       # versão do kernel
+top            # processos em tempo real (q para sair)
+htop           # o top colorido e interativo (F10 ou q)
+tree ~/aula    # desenha a árvore de pastas
+which htop     # mostra onde o programa está: /usr/bin/htop</pre></div>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>No htop</th><th>O que faz</th></tr></thead>
+            <tbody>
+              <tr><td><kbd>F3</kbd> ou <kbd>/</kbd></td><td>Procura um processo pelo nome</td></tr>
+              <tr><td><kbd>F5</kbd></td><td>Mostra os processos em árvore (quem abriu quem)</td></tr>
+              <tr><td><kbd>F6</kbd></td><td>Escolhe a coluna de ordenação (CPU, memória)</td></tr>
+              <tr><td><kbd>F9</kbd></td><td>Encerra o processo selecionado</td></tr>
+              <tr><td><kbd>F10</kbd> ou <kbd>q</kbd></td><td>Sai do htop</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </li>
+
+      <li class="step" id="p7">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <h3>Use o Tab, o histórico e o manual</h3>
+          <p>Treine o <kbd>Tab</kbd> de verdade: digite só o começo e deixe o terminal completar.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>ifsc@debian:~$</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">cd au          # aperte Tab: vira cd aula/
+fast           # aperte Tab: vira fastfetch
+ht             # Tab Tab: lista htop, htpasswd...
+history        # tudo que você digitou, numerado
+history 10     # só os 10 últimos
+!!             # repete o último comando
+man ls         # manual do ls (q para sair)
+ls --help      # ajuda rápida</pre></div>
+        </div>
+      </li>
+
+      <li class="step" id="p8">
+        <div class="step-n">8</div>
+        <div class="step-body">
+          <h3>Faça o fastfetch abrir junto com o terminal</h3>
+          <p>Toda vez que o terminal abre, o Bash lê o arquivo oculto <code>~/.bashrc</code>. Basta acrescentar o <code>fastfetch</code> no final dele. Faça isto como <b>ifsc</b>, não como root: senão só o root vê o fastfetch.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>ifsc@debian:~$</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">whoami                        # precisa mostrar ifsc
+cp ~/.bashrc ~/.bashrc.bkp    # backup antes de mexer
+echo "fastfetch" &gt;&gt; ~/.bashrc   # acrescenta no final (dois &gt;)
+tail -n 3 ~/.bashrc           # confere a última linha
+source ~/.bashrc              # recarrega sem fechar o terminal</pre></div>
+          <ul>
+            <li>Use <b>dois</b> sinais <code>&gt;&gt;</code>. Com um só <code>&gt;</code> você <b>apaga</b> o <code>.bashrc</code> inteiro e deixa só a palavra fastfetch. Se isso acontecer, restaure: <code>cp ~/.bashrc.bkp ~/.bashrc</code>.</li>
+            <li>Também dá para editar com <code>nano ~/.bashrc</code>, ir até o fim com <kbd>Ctrl</kbd>+<kbd>End</kbd>, escrever <code>fastfetch</code>, salvar com <kbd>Ctrl</kbd>+<kbd>O</kbd> e sair com <kbd>Ctrl</kbd>+<kbd>X</kbd>.</li>
+            <li>Para desfazer, apague a linha com <code>nano ~/.bashrc</code>.</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step big" id="p9">
+        <div class="step-n">9</div>
+        <div class="step-body">
+          <h3>Instale a interface gráfica KDE Plasma com o tasksel <span class="tag root">root</span></h3>
+          <p>O <code>tasksel</code> instala "tarefas": grupos prontos de pacotes, como um ambiente de área de trabalho completo. Primeiro instale o próprio tasksel com o <code>apt-get</code>. O KDE baixa mais de 1 GB, então deixe a VM ligada e na tomada.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span class="root">root@debian:~#</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl="">su -                          # se ainda não estiver como root
+apt-get update
+apt-get install -y tasksel    # instala o tasksel
+tasksel                       # abre o menu de tarefas</pre></div>
+          <p>No menu azul, mova com as setas e marque com a <kbd>Barra de espaço</kbd>:</p>
+          <div class="tui" aria-label="Tela do tasksel">
+            <div class="box">
+              <div class="ttl">Seleção de software</div>
+              <div class="row">[*] Ambiente de área de trabalho Debian</div>
+              <div class="row">[ ] ... GNOME</div>
+              <div class="row">[ ] ... Xfce</div>
+              <div class="row sel">[*] ... KDE Plasma</div>
+              <div class="row">[ ] ... Cinnamon</div>
+              <div class="row">[ ] servidor web</div>
+              <div class="row">[ ] servidor SSH</div>
+              <div class="row">[*] utilitários de sistema padrão</div>
+              <div class="btns"><span>&lt;Ok&gt;</span><span>&lt;Cancelar&gt;</span></div>
+            </div>
+          </div>
+          <ul>
+            <li>Marque <b>Ambiente de área de trabalho Debian</b> e <b>KDE Plasma</b>. Desmarque o <b>GNOME</b> e o <b>servidor SSH</b> se vierem marcados.</li>
+            <li>Aperte <kbd>Tab</kbd> para chegar no <b>&lt;Ok&gt;</b> e depois <kbd>Enter</kbd>. Aguarde até voltar ao prompt <code>#</code>.</li>
+          </ul>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec" id="exercicios">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num"><b class="sn">07</b>Prática</span>
+      <h2>Exercícios</h2>
+      <p>Faça no terminal da VM. Tente resolver antes de abrir a resposta e marque como feito para acompanhar o progresso.</p>
+    </div>
+    <div class="prog">
+      <div class="info">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline"><strong>Seu progresso</strong><span id="prog-txt"><b>0%</b> · 0 de 10</span></div>
+        <div class="pbar" role="progressbar" aria-label="Progresso dos exercícios" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="pbar"><i id="pfill"></i></div>
+      </div>
+      <button type="button" class="btn-ghost" id="reset">Limpar marcações</button>
+    </div>
+    <div class="ex-grid" id="ex-grid"></div>
+  </div>
+</section>
+
+
+<section class="sec" id="erros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num"><b class="sn">08</b>Solução de problemas</span>
+      <h2>Mensagens comuns e o que fazer</h2>
+    </div>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Permission denied / Are you root?</h3><p>O comando precisa de administrador. Rode <code>su -</code>, digite a senha do root e repita. O prompt deve terminar em <code>#</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>su: Falha de autenticação</h3><p>A senha do root está errada. Lembre que é a senha do <b>root</b> criada na instalação, não a do ifsc. Confira se o Caps Lock está desligado.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>command not found</h3><p>Erro de digitação, maiúscula trocada ou programa não instalado. Para <code>usermod</code> e <code>reboot</code>, faltou o traço em <code>su -</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Unable to locate package</h3><p>Nome errado ou lista desatualizada. Rode <code>apt-get update</code> e confira com <code>apt-cache search nome</code>. Lembre que o nome é <code>fastfetch</code>, sem hífen.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>No such file or directory</h3><p>O caminho não existe a partir de onde você está. Confira com <code>pwd</code> e <code>ls</code>, e use o <kbd>Tab</kbd> para não errar o nome.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Could not get lock /var/lib/dpkg/lock</h3><p>Outro apt já está rodando, talvez em outro terminal ou atualizando sozinho. Espere alguns minutos e tente de novo. Se continuar, apague a trava como root: <code class="wrap">rm /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock</code></p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>O terminal abre vazio, sem cores</h3><p>Provavelmente o <code>.bashrc</code> foi sobrescrito com <code>&gt;</code>. Restaure o backup: <code>cp ~/.bashrc.bkp ~/.bashrc</code>, ou copie o padrão de <code>/etc/skel/.bashrc</code>.</p></article>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Linux para iniciantes</span><span>Debian GNU/Linux · Bash</span></div>
+</footer>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var ICON = function(id){ return '<svg><use href="#'+id+'"/></svg>'; };
+
+  /* ---------- menu hambúrguer ---------- */
+  var burger=$('burger'), menu=$('menu');
+  function setMenu(open){ menu.classList.toggle('open',open); burger.setAttribute('aria-expanded',open); burger.setAttribute('aria-label',open?'Fechar menu':'Abrir menu'); }
+  burger.addEventListener('click', function(){ setMenu(!menu.classList.contains('open')); });
+  menu.addEventListener('click', function(e){ if(e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') setMenu(false); });
+  document.addEventListener('click', function(e){ if(menu.classList.contains('open') && !e.target.closest('.bar')) setMenu(false); });
+  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- realce dos blocos de código ---------- */
+  var KW = /^(\s*)(su|apt-get|apt-cache|apt|tasksel|systemctl|ls|cd|mkdir|touch|echo|cat|cp|mv|rm|rmdir|nano|pwd|whoami|hostname|date|clear|exit|fastfetch|free|df|uname|top|htop|tree|which|history|man|tail|source|usermod|grep)\b/;
+  document.querySelectorAll('pre[data-hl]').forEach(function(pre){
+    pre.innerHTML = pre.textContent.split('\n').map(function(l){
+      var esc = l.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      if (/^\s*#/.test(l)) return '<span class="cm">'+esc+'</span>';
+      var i = esc.indexOf('  #'), tail = '';
+      if (i > -1){ tail = '<span class="cm">'+esc.slice(i)+'</span>'; esc = esc.slice(0,i); }
+      return esc.replace(KW,'$1<span class="kw">$2</span>') + tail;
+    }).join('\n');
+  });
+
+  /* ---------- copiar ---------- */
+  function selectEl(el){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.copy'); if(!btn) return;
+    var pre = btn.closest('.code').querySelector('pre'), label = btn.innerHTML;
+    var done = function(m){ btn.innerHTML = m; setTimeout(function(){ btn.innerHTML = label; }, 1500); };
+    var txt = pre.textContent.split('\n').map(function(l){ return l.replace(/\s{2,}#.*$/,''); }).join('\n').trim();
+    try { navigator.clipboard.writeText(txt).then(function(){ done(ICON('i-check')+'Copiado'); }, function(){ selectEl(pre); done('Ctrl+C'); }); }
+    catch(err){ selectEl(pre); done('Ctrl+C'); }
+  });
+
+  /* ---------- tabela de comandos ---------- */
+  var CATS = {nav:['Navegar','var(--s1)'],arq:['Arquivos','var(--s3)'],adm:['Admin','var(--red)'],pkg:['Pacotes','var(--s2)'],sis:['Sistema','var(--green-strong)'],term:['Terminal','var(--s4)']};
+  var CMDS = [
+    ['pwd','nav','Mostra a pasta onde você está','pwd'],
+    ['ls','nav','Lista arquivos e pastas','ls -la /etc'],
+    ['cd','nav','Entra em uma pasta','cd /home/ifsc'],
+    ['cd ..','nav','Sobe uma pasta (com espaço)','cd ..'],
+    ['cd ~','nav','Volta para a pasta pessoal','cd ~'],
+    ['tree','nav','Desenha a árvore de pastas','tree ~/aula'],
+    ['mkdir','arq','Cria pasta; com -p cria a árvore','mkdir -p teste/vazia'],
+    ['touch','arq','Cria arquivo vazio','touch notas.txt'],
+    ['echo','arq','Escreve texto; > cria, >> acrescenta','echo oi >> notas.txt'],
+    ['cat','arq','Mostra o conteúdo de um arquivo','cat notas.txt'],
+    ['nano','arq','Editor de texto no terminal','nano notas.txt'],
+    ['cp','arq','Copia arquivo; -r copia pasta','cp notas.txt copia.txt'],
+    ['mv','arq','Move ou renomeia','mv copia.txt teste/'],
+    ['rmdir','arq','Apaga pasta vazia','rmdir teste/vazia'],
+    ['rm','arq','Apaga arquivo; -r apaga pasta','rm -r teste'],
+    ['su -','adm','Vira superusuário (root) com o ambiente completo','su -'],
+    ['exit','adm','Sai do root ou fecha o terminal','exit'],
+    ['whoami','adm','Mostra o usuário atual','whoami'],
+    ['systemctl reboot','adm','Reinicia o computador','systemctl reboot'],
+    ['apt-get update','pkg','Atualiza a lista de pacotes','apt-get update'],
+    ['apt-get install','pkg','Instala programas','apt-get install -y htop'],
+    ['apt-get remove','pkg','Remove programas','apt-get remove mc'],
+    ['apt-get upgrade','pkg','Atualiza tudo que está instalado','apt-get upgrade'],
+    ['apt-cache search','pkg','Procura pacotes por palavra','apt-cache search editor'],
+    ['tasksel','pkg','Instala grupos de pacotes (KDE)','tasksel'],
+    ['free','sis','Memória RAM e swap','free -h'],
+    ['top','sis','Processos em tempo real','top'],
+    ['htop','sis','Processos com cores e menus','htop'],
+    ['df','sis','Espaço em disco','df -h'],
+    ['uname','sis','Versão do kernel e sistema','uname -a'],
+    ['fastfetch','sis','Resumo do sistema com logo','fastfetch'],
+    ['which','sis','Onde o programa está instalado','which htop'],
+    ['history','term','Lista os comandos digitados','history 10'],
+    ['Tab','term','Autocompleta comandos e caminhos','cd Doc + Tab'],
+    ['clear','term','Limpa a tela (Ctrl+L)','clear'],
+    ['--help','term','Mostra as opções de um comando','ls --help'],
+    ['man','term','Manual do comando (q sai)','man mkdir']
+  ];
+  var cat = 'all';
+  var fbox = $('filters');
+  [['all','Todos']].concat(Object.keys(CATS).map(function(k){ return [k,CATS[k][0]]; })).forEach(function(f){
+    var b = document.createElement('button'); b.type='button'; b.textContent=f[1]; b.dataset.cat=f[0];
+    b.setAttribute('aria-pressed', f[0]==='all'); fbox.appendChild(b);
+  });
+  fbox.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return; cat = b.dataset.cat;
+    fbox.querySelectorAll('button').forEach(function(x){ x.setAttribute('aria-pressed', x===b); }); render();
+  });
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function render(){
+    var q = $('q').value.trim().toLowerCase();
+    var rows = CMDS.filter(function(c){
+      return (cat==='all'||c[1]===cat) && (!q || (c[0]+' '+c[2]+' '+c[3]+' '+CATS[c[1]][0]).toLowerCase().indexOf(q)>-1);
+    });
+    $('cmd-body').innerHTML = rows.map(function(c){
+      return '<tr><td class="c" data-label="Comando">'+esc(c[0])+'</td><td data-label="Categoria"><span class="cat" style="--vc:'+CATS[c[1]][1]+'">'+CATS[c[1]][0]+'</span></td><td data-label="O que faz">'+esc(c[2])+'</td><td class="ex" data-label="Exemplo"><code>'+esc(c[3])+'</code></td></tr>';
+    }).join('');
+    $('cmd-empty').hidden = rows.length>0;
+  }
+  $('q').addEventListener('input', render); render();
+
+  /* ---------- exercícios ---------- */
+  var EX = [
+    ['Descubra em qual pasta você está e liste o conteúdo dela em detalhes, incluindo os arquivos ocultos.','pwd\nls -la'],
+    ['Vá até /etc, liste só os arquivos que começam com "host" e mostre o conteúdo de /etc/hostname. Depois volte para a pasta pessoal.','cd /etc\nls host*\ncat hostname\ncd ~'],
+    ['Partindo de /usr/share, chegue em /usr usando apenas "cd ..". Quantas vezes precisou?','cd /usr/share\ncd ..\npwd   # uma vez: /usr'],
+    ['Crie em ~/aula a pasta exercicios com as subpastas semana1 e semana2, usando um só comando.','mkdir -p ~/aula/exercicios/semana1 ~/aula/exercicios/semana2'],
+    ['Crie três arquivos vazios em semana1: a.txt, b.txt e c.txt. Liste para conferir.','cd ~/aula/exercicios/semana1\ntouch a.txt b.txt c.txt\nls'],
+    ['Escreva seu nome em a.txt, acrescente a data na linha de baixo e mostre o arquivo.','cd ~/aula/exercicios/semana1\necho "Seu Nome" > a.txt\ndate >> a.txt\ncat a.txt'],
+    ['Renomeie b.txt para nomes.txt, mova c.txt para semana2 e apague a pasta semana1 inteira.','cd ~/aula/exercicios/semana1\nmv b.txt nomes.txt\nmv c.txt ../semana2/\ncd ..\nrm -r semana1\nls'],
+    ['Como root, atualize a lista de pacotes, instale o tree e saia do root. Mostre a árvore de ~/aula.','su -\napt-get update\napt-get install -y tree\nexit\ntree ~/aula'],
+    ['Quanto de memória RAM a VM tem e quanto está livre? Abra o htop, encontre o processo bash com F3 e saia.','free -h\nhtop   # F3, digite bash, F10 para sair'],
+    ['Mostre os 15 últimos comandos e repita o comando de número 5 da lista usando o "!".','history 15\n!5   # troque 5 pelo número desejado']
+  ];
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem('deb-term-ex')||'{}')||{}; } catch(e){}
+  $('ex-grid').innerHTML = EX.map(function(x,i){
+    var n = ('0'+(i+1)).slice(-2);
+    return '<article class="ex" id="ex'+i+'"><div class="ex-num">'+n+'</div><div class="ex-body"><p>'+esc(x[0]).replace(/&quot;/g,'"')+'</p>'+
+      '<div class="ex-foot"><details><summary>Ver resposta</summary><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>resposta</span><button class="copy" type="button">'+ICON('i-copy')+'Copiar</button></div><pre data-x>'+esc(x[1])+'</pre></div></details>'+
+      '<label class="check"><input type="checkbox" id="ck'+i+'">Feito</label></div></div></article>';
+  }).join('');
+  document.querySelectorAll('pre[data-x]').forEach(function(pre){
+    pre.innerHTML = pre.innerHTML.split('\n').map(function(l){
+      var i = l.indexOf('  #'); return i>-1 ? l.slice(0,i)+'<span class="cm">'+l.slice(i)+'</span>' : l;
+    }).join('\n');
+  });
+  function upd(){
+    var n=0; EX.forEach(function(_,i){ var c=$('ck'+i); if(c.checked) n++; $('ex'+i).classList.toggle('done', c.checked); });
+    var pc = Math.round(n/EX.length*100);
+    $('pfill').style.width = pc+'%'; $('pbar').setAttribute('aria-valuenow',pc);
+    $('prog-txt').innerHTML = '<b>'+pc+'%</b> · '+n+' de '+EX.length+(pc===100?' · tudo feito!':'');
+  }
+  EX.forEach(function(_,i){
+    var c=$('ck'+i); c.checked=!!state[i];
+    c.addEventListener('change', function(){ state[i]=c.checked; try{ localStorage.setItem('deb-term-ex', JSON.stringify(state)); }catch(e){} upd(); });
+  });
+  $('reset').addEventListener('click', function(){ state={}; EX.forEach(function(_,i){ $('ck'+i).checked=false; }); try{ localStorage.removeItem('deb-term-ex'); }catch(e){} upd(); });
+  upd();
+
+  /* ---------- terminal animado ---------- */
+  var LOGO = [
+    '<span class="o-r">       _,met$$$$$gg.   </span>  <span class="pu">ifsc</span>@<span class="pu">debian</span>',
+    '<span class="o-r">    ,g$$$$$$$$$$$$$$$P. </span>  ----------------',
+    '<span class="o-r">  ,g$$P"        """Y$$.</span>   <span class="o-r">OS</span>: Debian GNU/Linux x86_64',
+    '<span class="o-r"> ,$$P\'              `$$$</span>  <span class="o-r">Kernel</span>: 6.12.48-amd64',
+    '<span class="o-r">\',$$P       ,ggs.     `$$b</span> <span class="o-r">Shell</span>: bash 5.2',
+    '<span class="o-r">`d$$\'     ,$P"\'   .    $$$</span> <span class="o-r">CPU</span>: 2 núcleos',
+    '<span class="o-r"> $$P      d$\'     ,    $$P</span> <span class="o-r">Memory</span>: 412MiB / 3912MiB',
+    '<span class="o-r"> $$:      $$.   -    ,d$$\'</span>',
+    '<span class="o-r"> $$;      Y$b._   _,d$P\'</span>   <span class="o-r">███</span><span class="o-ok">███</span><span class="o-w">███</span><span class="pp">███</span><span class="o-v">███</span>'
+  ];
+  var SCENES = [
+    {name:'Navegar', cap:'pwd, ls e cd: observe a pasta mudar no prompt. O Tab completa “Doc” para “Documentos/”.', steps:[
+      {c:'pwd', o:['/home/ifsc']},
+      {c:'ls', o:['<span class="o-dir">Documentos</span>  <span class="o-dir">Downloads</span>  <span class="o-dir">Imagens</span>  <span class="o-dir">Música</span>']},
+      {c:'cd Doc⇥umentos/', cwd:'~/Documentos'},
+      {c:'pwd', o:['/home/ifsc/Documentos']},
+      {c:'cd ..', cwd:'~'},
+      {c:'cd /etc', cwd:'/etc'},
+      {c:'ls host*', o:['host.conf  hostname  hosts']},
+      {c:'cat hostname', o:['debian']},
+      {c:'cd ~', cwd:'~'}
+    ]},
+    {name:'Criar', cap:'mkdir cria pastas, touch cria arquivos, echo escreve e cat mostra o conteúdo.', steps:[
+      {c:'mkdir aula'},
+      {c:'cd aula', cwd:'~/aula'},
+      {c:'mkdir -p linux/lab1'},
+      {c:'touch notas.txt'},
+      {c:'echo "Minha primeira aula" > notas.txt'},
+      {c:'cat notas.txt', o:['Minha primeira aula']},
+      {c:'ls -l', o:['total 8','drwxr-xr-x 3 ifsc ifsc 4096 nov  8 13:40 <span class="o-dir">linux</span>','-rw-r--r-- 1 ifsc ifsc   20 nov  8 13:41 notas.txt']}
+    ]},
+    {name:'Instalar', cap:'su - troca para o root (o $ vira #). apt-get update e install baixam os programas.', steps:[
+      {c:'su -', o:['Senha: <span class="o-dim">(não aparece)</span>'], user:'root', cwd:'~'},
+      {c:'apt-get update', o:['Atingido:1 http://deb.debian.org/debian stable InRelease','Lendo listas de pacotes... <span class="o-ok">Pronto</span>']},
+      {c:'apt-get install -y htop fastfetch', o:['Lendo listas de pacotes... Pronto','Os NOVOS pacotes a seguir serão instalados:','  <span class="o-w">htop fastfetch</span>','Configurando htop (3.3.0-5) ...','Configurando fastfetch (2.40.4-1) ...']},
+      {c:'exit', o:['logout'], user:'ifsc', cwd:'~'}
+    ]},
+    {name:'Monitorar', cap:'fastfetch resume o sistema, free -h mostra a memória e history lista os comandos.', steps:[
+      {c:'fast⇥fetch', o:LOGO},
+      {c:'free -h', o:['               total     usada     livre','Mem.:          3,8Gi     412Mi     3,1Gi','Swap:          975Mi        0B     975Mi']},
+      {c:'history 3', o:['   41  fastfetch','   42  free -h','   43  history 3']}
+    ]},
+    {name:'KDE', cap:'Instale o tasksel com o apt-get e use-o para instalar o KDE Plasma. Depois, reinicie.', steps:[
+      {c:'su -', o:['Senha: <span class="o-dim">(não aparece)</span>'], user:'root', cwd:'~'},
+      {c:'apt-get install -y tasksel', o:['Configurando tasksel (3.73) ...']},
+      {c:'tasksel install desktop kde-desktop', o:['<span class="o-dim">Baixando 1.240 pacotes... aguarde</span>','Configurando sddm (0.21.0) ...','Configurando task-kde-desktop ... <span class="o-ok">Pronto</span>']},
+      {c:'echo "fastfetch" >> /home/ifsc/.bashrc'},
+      {c:'systemctl reboot', o:['<span class="o-w">Reiniciando o sistema...</span>']}
+    ]}
+  ];
+  var scr=$('tw-screen'), title=$('tw-title'), cap=$('tw-cap'), sbox=$('tw-scenes');
+  var cur=0, user='ifsc', cwd='~', paused=false, token=0;
+  SCENES.forEach(function(s,i){
+    var b=document.createElement('button'); b.type='button'; b.textContent=(i+1)+'. '+s.name;
+    b.addEventListener('click', function(){ play(i); }); sbox.appendChild(b);
+  });
+  function prompt(){
+    var r = user==='root';
+    return '<span class="'+(r?'pr':'pu')+'">'+user+'@debian</span>:<span class="pp">'+cwd+'</span>'+(r?'#':'$')+' ';
+  }
+  function line(html){ var d=document.createElement('div'); d.className='ln'; d.innerHTML=html; scr.appendChild(d); scr.scrollTop=scr.scrollHeight; return d; }
+  function wait(ms, t){ return new Promise(function(res){
+    (function tick(){ if(t!==token) return res(false); if(paused) return setTimeout(tick,120); setTimeout(function(){ res(t===token); }, reduced?0:ms); })();
+  }); }
+  async function run(i, t){
+    var s=SCENES[i]; user='ifsc'; cwd='~'; scr.innerHTML=''; cap.textContent=s.cap;
+    sbox.querySelectorAll('button').forEach(function(b,k){ b.setAttribute('aria-pressed', k===i); });
+    for (var k=0;k<s.steps.length;k++){
+      var st=s.steps[k], parts=st.c.split('⇥'), typed=parts[0];
+      title.textContent = user+'@debian: '+cwd;
+      var ln=line(prompt()+'<span class="tx"></span><span class="cur"></span>'), tx=ln.querySelector('.tx');
+      for (var c=0;c<typed.length;c++){ if(!(await wait(42+Math.random()*50, t))) return; tx.textContent+=typed[c]; }
+      if (parts.length>1){
+        if(!(await wait(350,t))) return;
+        var kb=document.createElement('span'); kb.className='tabkey'; kb.textContent='Tab'; ln.insertBefore(kb, ln.querySelector('.cur'));
+        if(!(await wait(420,t))) return; kb.remove(); tx.textContent+=parts[1];
+      }
+      if(!(await wait(380,t))) return;
+      ln.querySelector('.cur').remove();
+      if (st.o) for (var j=0;j<st.o.length;j++){ line(st.o[j]); if(!(await wait(st.o.length>4?90:160,t))) return; }
+      if (st.user) user=st.user; if (st.cwd) cwd=st.cwd;
+      if(!(await wait(500,t))) return;
+    }
+    title.textContent = user+'@debian: '+cwd;
+    line(prompt()+'<span class="cur"></span>');
+    if(!(await wait(2600,t))) return;
+    play((i+1)%SCENES.length);
+  }
+  function play(i){ token++; cur=i; run(i, token); }
+  $('tw-pause').addEventListener('click', function(){
+    paused=!paused; this.innerHTML = paused ? ICON('i-play')+'<span>Continuar</span>' : ICON('i-pause')+'<span>Pausar</span>';
+    this.setAttribute('aria-label', paused?'Continuar animação':'Pausar animação');
+  });
+  $('tw-restart').addEventListener('click', function(){ play(cur); });
+  play(0);
+})();
+</script>
+
+</body>
+</html>

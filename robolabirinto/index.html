@@ -1,0 +1,1162 @@
+<title>Robô no labirinto</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap">
+<style>
+/* Layout: palco 3D à esquerda, painel do fluxograma à direita; no celular empilha. Visual escuro único, como o original. */
+:root {
+  color-scheme: dark;
+  --bg: #0d1018;
+  --surface: #151a28;
+  --surface-2: #1c2335;
+  --line: #2a3247;
+  --fg: #e8ebf3;
+  --muted: #8d96ab;
+  --accent: #4f7bff;
+  --ok: #3ddc97;
+  --erro: #ff6b6b;
+  --aviso: #f5a524;
+  --roxo: #a37bff;
+  --font: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 14px; overflow: hidden; }
+button, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app { height: 100%; display: grid; grid-template-rows: auto 1fr; grid-template-columns: minmax(0, 1fr) var(--painel, 420px); }
+.topo { grid-column: 1 / -1; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid var(--line); background: var(--surface); }
+.marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; }
+.marca svg { color: var(--accent); }
+.marca small { color: var(--muted); font-weight: 500; font-size: 12px; letter-spacing: .02em; }
+.voltar { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 7px;
+  background: var(--erro); color: #fff; font-weight: 600; font-size: 12.5px; text-decoration: none; }
+.voltar:hover { background: color-mix(in srgb, var(--erro) 85%, #000); }
+.fases { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.chip { min-width: 34px; height: 30px; padding: 0 9px; border-radius: 15px; border: 1px solid var(--line); background: var(--surface-2);
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-family: var(--mono); font-size: 13px; }
+.chip:disabled { opacity: .45; cursor: not-allowed; }
+.chip.is-ok { border-color: color-mix(in srgb, var(--ok) 50%, transparent); color: var(--ok); }
+.chip.is-atual { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.palco { position: relative; min-height: 0; min-width: 0; overflow: hidden; background: var(--bg); }
+.cena { position: absolute; inset: 0; }
+.cena canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+.cartao { position: absolute; top: 12px; left: max(12px, env(safe-area-inset-left, 0px)); width: min(270px, calc(100% - 24px));
+  background: color-mix(in srgb, var(--surface) 90%, transparent); backdrop-filter: blur(8px); border: 1px solid var(--line);
+  border-radius: 10px; padding: 9px 12px; display: grid; gap: 4px; cursor: pointer; font-size: 12.5px; }
+.cartao-abrir { display: none; margin: 0; font-size: 11.5px; color: var(--muted); }
+.cartao.is-mini .cartao-abrir { display: block; }
+.cartao.is-mini .cartao-texto, .cartao.is-mini .cartao-desafio, .cartao.is-mini details { display: none; }
+.cartao-kicker { margin: 0; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.cartao-titulo { margin: 0; font-size: 15px; font-weight: 650; text-wrap: balance; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ok-pill { font-size: 11px; font-weight: 600; color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); padding: 2px 8px; border-radius: 10px; }
+.cartao-texto { margin: 0; color: #c6cbd8; line-height: 1.45; }
+.cartao-desafio { margin: 0; font-size: 12px; color: var(--aviso); }
+details.dica summary { cursor: pointer; color: var(--roxo); font-weight: 600; font-size: 13px; }
+details.dica p { margin: 6px 0 0; color: #c6cbd8; line-height: 1.5; }
+.palco-topo { position: absolute; top: 12px; right: max(12px, env(safe-area-inset-right, 0px)); display: flex; gap: 8px; }
+.bt-cena { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 17px;
+  border: 1px solid var(--line); background: color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter: blur(8px); font-size: 13px; }
+.banner { position: absolute; left: 50%; bottom: 14px; transform: translate(-50%, 12px); opacity: 0; pointer-events: none;
+  width: min(520px, calc(100% - 24px)); display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  border-radius: 12px; background: var(--surface); border: 1px solid var(--line); transition: opacity .2s, transform .2s;
+  box-shadow: 0 12px 30px rgba(0,0,0,.45); }
+.banner.is-on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.banner > div { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.banner strong { font-size: 15px; }
+.banner span { color: #c6cbd8; line-height: 1.4; }
+.banner.is-ok { border-color: color-mix(in srgb, var(--ok) 55%, transparent); }
+.banner.is-erro { border-color: color-mix(in srgb, var(--erro) 60%, transparent); }
+.banner.is-aviso { border-color: color-mix(in srgb, var(--aviso) 60%, transparent); }
+.banner.is-andando { border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
+.banner-x { background: none; border: 0; font-size: 20px; color: var(--muted); padding: 0 4px; }
+
+.divisor { position: absolute; top: 0; bottom: 0; left: -6px; width: 12px; cursor: col-resize; z-index: 5; touch-action: none; }
+.divisor::after { content: ""; position: absolute; top: 50%; left: 4px; width: 4px; height: 44px; margin-top: -22px; border-radius: 2px; background: var(--line); transition: background .15s; }
+.divisor:hover::after, .divisor.is-ativo::after, .divisor:focus-visible::after { background: var(--accent); }
+.divisor.is-ativo { left: -40px; width: 80px; }
+.painel { position: relative; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; min-height: 0; border-left: 1px solid var(--line); background: var(--surface); }
+.painel-titulo { display: flex; align-items: center; gap: 8px; padding: 12px 16px 0; font-weight: 600; }
+.painel-titulo svg { color: var(--accent); }
+.barra { display: grid; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.paleta { display: flex; flex-wrap: wrap; gap: 6px; }
+.novo { --c: var(--accent); display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 8px;
+  background: color-mix(in srgb, var(--c) 16%, var(--surface-2)); border: 1px solid color-mix(in srgb, var(--c) 55%, transparent); font-weight: 550; }
+.novo:hover { background: color-mix(in srgb, var(--c) 26%, var(--surface-2)); }
+.acoes { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.acao { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface-2); font-size: 12.5px; color: #c6cbd8; }
+.acao:disabled { opacity: .4; cursor: not-allowed; }
+.acao.is-perigo { border-color: color-mix(in srgb, var(--erro) 60%, transparent); color: var(--erro); }
+.ajuda { margin: 0; font-size: 12px; color: var(--muted); min-height: 1.3em; }
+
+.t-inicio { --c: #3ddc97; } .t-fim { --c: #ff6b6b; } .t-andar { --c: #4f7bff; }
+.t-esquerda, .t-direita { --c: #f5a524; } .t-se { --c: #a37bff; }
+
+.ed-scroll { overflow: auto; min-height: 0; position: relative; background:
+  radial-gradient(circle, #232a3d 1px, transparent 1.2px) 0 0 / 20px 20px, var(--bg); touch-action: pan-x pan-y; }
+.ed-tela { position: relative; }
+.ed-svg { position: absolute; inset: 0; overflow: visible; }
+.seta { fill: none; stroke: #6c7690; stroke-width: 2; stroke-linejoin: round; }
+.seta-hit { fill: none; stroke: transparent; stroke-width: 14; cursor: pointer; pointer-events: stroke; }
+.seta.is-sel { stroke: var(--fg); stroke-width: 3; }
+.seta.is-temp { stroke: var(--accent); stroke-dasharray: 5 5; }
+.ed-no { position: absolute; display: flex; align-items: center; justify-content: center; gap: 6px; user-select: none; touch-action: none;
+  font-weight: 600; cursor: grab; }
+.ed-no .forma { position: absolute; inset: 0; overflow: visible; }
+.ed-no .forma > * { fill: color-mix(in srgb, var(--c) 18%, #151a28); stroke: var(--c); stroke-width: 2; }
+.ed-no.is-sel .forma > * { stroke-width: 3.5; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c) 70%, transparent)); }
+.ed-no.is-ativo .forma > * { fill: color-mix(in srgb, var(--c) 55%, #151a28); filter: drop-shadow(0 0 10px var(--c)); }
+.ed-no.is-erro .forma > * { stroke: var(--erro); fill: color-mix(in srgb, var(--erro) 30%, #151a28); stroke-width: 3.5; }
+.ed-no.is-alvo:hover .forma > * { stroke-dasharray: 5 4; }
+.ed-conteudo { position: relative; display: flex; align-items: center; gap: 6px; pointer-events: none; }
+.ed-conteudo svg { color: var(--c); }
+.t-se .ed-conteudo { flex-direction: column; gap: 3px; font-size: 12px; }
+.ed-sensor { pointer-events: auto; font-size: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 2px 4px; max-width: 132px; }
+.ed-porta { position: absolute; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--c); background: var(--bg); padding: 0;
+  transform: translate(-50%, -50%); cursor: crosshair; touch-action: none; }
+.ed-porta.is-livre { background: var(--c); }
+.ed-porta.is-ligando { box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 45%, transparent); background: var(--fg); }
+.ed-rot { position: absolute; font-size: 11px; font-weight: 600; color: var(--muted); pointer-events: none; }
+
+.rodape { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid var(--line); }
+.contador { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.contador.is-acima { color: var(--erro); }
+.vel { margin-left: auto; }
+.executar { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 20px; border-radius: 10px; border: 0;
+  background: var(--accent); color: #fff; font-weight: 650; font-size: 15px; }
+.executar.is-parar { background: var(--erro); }
+.executar:disabled { opacity: .5; cursor: not-allowed; }
+
+@media (max-width: 860px) {
+  body { overflow: auto; }
+  .app { height: auto; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 56vh auto; }
+  .palco { min-height: 320px; }
+  .painel { border-left: 0; border-top: 1px solid var(--line); grid-template-rows: auto auto 420px auto; }
+  .fases { margin-left: 0; }
+  .divisor { display: none; }
+  .cartao { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .banner { transition: none; } }
+</style>
+
+<div class="app" id="app">
+  <header class="topo">
+    <div class="marca">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+      <div>Robô no labirinto<br><small>Sequência, decisão e repetição</small></div>
+    </div>
+    <nav class="fases" id="fases" aria-label="Fases"></nav>
+    <button class="acao" id="btNovo" type="button" title="Apaga os programas e o progresso desta aba">Nova sessão</button>
+    <a class="voltar" id="btVoltar" href="https://alberto-barros.github.io" title="Voltar para a página inicial">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      Voltar
+    </a>
+  </header>
+
+  <section class="palco" id="palco">
+    <div class="cena" id="cena"></div>
+    <div class="cartao" id="cartao" title="Toque para recolher ou abrir"></div>
+    <div class="palco-topo">
+      <button class="bt-cena" id="btCam" type="button" title="Trocar a câmera (C)"></button>
+    </div>
+    <div class="banner" id="banner" role="status" aria-live="polite"></div>
+  </section>
+
+  <aside class="painel">
+    <div class="divisor" id="divisor" role="separator" aria-orientation="vertical" tabindex="0" title="Arraste para mudar a largura do fluxograma (dois cliques volta ao normal)"></div>
+    <div class="painel-titulo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+      Programa (fluxograma)
+    </div>
+    <div class="barra">
+      <div class="paleta" id="paleta"></div>
+      <div class="acoes">
+        <button class="acao" id="btApagar" type="button" title="Apagar o bloco ou a seta selecionada (Delete)">Apagar</button>
+        <button class="acao" id="btDesfazer" type="button" title="Desfazer (Ctrl+Z)">Desfazer</button>
+        <button class="acao" id="btOrganizar" type="button" title="Arrumar o desenho do fluxograma">Organizar</button>
+        <button class="acao" id="btLimpar" type="button" title="Começar do zero">Limpar</button>
+      </div>
+      <p class="ajuda" id="ajuda" aria-live="polite"></p>
+    </div>
+    <div class="ed-scroll" id="edScroll"><div class="ed-tela" id="edTela"></div></div>
+    <footer class="rodape">
+      <span class="contador" id="contador"></span>
+      <button class="acao vel" id="btVel" type="button" title="Velocidade do robô">Velocidade 1×</button>
+      <button class="executar" id="btExec" type="button"></button>
+    </footer>
+  </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script id="logica">
+/* ---------- Fases (labirintos) ----------
+   #  parede     .  chão     B  bandeira
+   ^ > v <  largada do robô e para onde ele olha */
+const FASES = [
+  { numero: 1, tema: "Sequência", titulo: "Primeiros passos",
+    texto: "O robô só faz o que o programa manda, um bloco de cada vez. Ligue o Início a blocos Andar até o robô pisar na bandeira.",
+    dica: "Toque no Início para selecioná-lo e depois em Andar na paleta: o bloco novo entra embaixo, já ligado. Quando o robô pisa na bandeira, a fase termina.",
+    referencia: 4, limite: 0,
+    labirinto: ["#######", "#>...B#", "#######"] },
+  { numero: 2, tema: "Sequência", titulo: "A primeira curva",
+    texto: "Virar gira o robô 90° sem sair da casa. Conte as casas antes de cada curva.",
+    dica: "Ande 2, vire à direita, ande 2, vire à esquerda, ande 2. A direita é a do robô, não a sua.",
+    referencia: 8, limite: 0,
+    labirinto: ["#######", "#>..###", "###.###", "###..B#", "#######"] },
+  { numero: 3, tema: "Repetição", titulo: "Corredor comprido",
+    texto: "São 13 casas e você só pode usar 4 blocos. Uma seta pode voltar para um bloco anterior: isso cria uma repetição.",
+    dica: "Ligue a saída de um Andar de volta nele mesmo: o robô anda sem parar até pisar na bandeira.",
+    referencia: 1, limite: 4,
+    labirinto: ["################", "#>............B#", "################"] },
+  { numero: 4, tema: "Repetição", titulo: "A escada",
+    texto: "A escada repete o mesmo desenho de passos. Descubra o padrão e repita só ele.",
+    dica: "O padrão é: Andar, Virar →, Andar, Virar ←. Ligue a saída do último Virar de volta ao primeiro Andar.",
+    referencia: 4, limite: 6,
+    labirinto: ["#########", "#>.######", "##..#####", "###..####", "####..###", "#####B###", "#########"] },
+  { numero: 5, tema: "Decisão", titulo: "Siga o corredor",
+    texto: "Agora o caminho faz curvas diferentes. Use os sensores para o robô decidir sozinho quando andar e para que lado virar.",
+    dica: "Na repetição: se a frente está livre, ande. Senão, se a esquerda está livre, vire à esquerda; senão, vire à direita. Ligue as saídas de volta à primeira Decisão.",
+    referencia: 5, limite: 8,
+    labirinto: ["##########", "#>....####", "#####.####", "#####...##", "#######.##", "#..B###.##", "#.#####.##", "#.......##", "##########"] },
+  { numero: 6, tema: "Decisão + repetição", titulo: "O labirinto",
+    texto: "Um labirinto de verdade, com becos sem saída. Uma estratégia clássica: andar sempre com a mão direita encostada na parede.",
+    dica: "Se a direita está livre: vire à direita e ande. Senão, se a frente está livre: ande. Senão: vire à esquerda. Ligue as saídas de volta à primeira Decisão.",
+    referencia: 5, limite: 10,
+    labirinto: ["#########", "#>..#...#", "##.##.#.#", "#...#.#.#", "#.#...#.#", "#.#.###.#", "#.#...#B#", "#...#...#", "#########"] },
+];
+
+const DIRS = [[-1, 0], [0, 1], [1, 0], [0, -1]]; // 0 norte, 1 leste, 2 sul, 3 oeste
+
+function lerLabirinto(rows) {
+  let inicio = null, meta = null;
+  rows.forEach((l, r) => [...l].forEach((ch, c) => {
+    const d = "^>v<".indexOf(ch);
+    if (d >= 0) inicio = { r, c, d };
+    if (ch === "B") meta = { r, c };
+  }));
+  return { rows, H: rows.length, W: rows[0].length, inicio, meta };
+}
+const livre = (lab, r, c) => { const ch = lab.rows[r]?.[c]; return ch !== undefined && ch !== "#"; };
+const naMeta = (lab, st) => st.r === lab.meta.r && st.c === lab.meta.c;
+
+function lerSensor(lab, s, st) {
+  const olha = k => { const [dr, dc] = DIRS[(st.d + k + 4) % 4]; return livre(lab, st.r + dr, st.c + dc); };
+  switch (s) {
+    case "frente": return olha(0);
+    case "esquerda": return olha(-1);
+    case "direita": return olha(1);
+    case "parede": return !olha(0);
+    case "bandeira": return naMeta(lab, st);
+  }
+  return false;
+}
+
+const contarBlocos = p => p.nos.filter(n => n.tipo !== "inicio" && n.tipo !== "fim").length;
+
+/* Roda o fluxograma e devolve a lista de passos para animar.
+   Laço infinito: voltar ao mesmo bloco com o robô na mesma casa e direção
+   garante que o programa nunca termina (o mundo só muda pela posição do robô). */
+function executar(prog, lab) {
+  const nos = new Map(prog.nos.map(n => [n.id, n]));
+  const seta = (id, p) => prog.setas.find(s => s.de === id && s.porta === p);
+  let st = { ...lab.inicio };
+  const passos = [], vistos = new Set();
+  const blocos = contarBlocos(prog);
+  const fim = (resultado, no, msg = "") => ({ resultado, no, msg, passos, blocos });
+  let atual = prog.nos.find(n => n.tipo === "inicio");
+  for (let i = 0; i < 5000; i++) {
+    const n = atual;
+    const chave = `${n.id}|${st.r}|${st.c}|${st.d}`;
+    if (vistos.has(chave)) return fim("laco", n.id, "O programa voltou a este bloco com o robô no mesmo lugar e virado para o mesmo lado: ele repetiria isso para sempre.");
+    vistos.add(chave);
+    let porta = "prox";
+    if (n.tipo === "fim") {
+      passos.push({ n: n.id, acao: "fim", ...st });
+      return naMeta(lab, st) ? fim("chegou", n.id) : fim("fim", n.id, "O programa chegou ao Fim, mas o robô ainda não está na bandeira.");
+    } else if (n.tipo === "andar") {
+      const [dr, dc] = DIRS[st.d];
+      if (!livre(lab, st.r + dr, st.c + dc)) { passos.push({ n: n.id, acao: "batida", ...st }); return fim("parede", n.id); }
+      st = { ...st, r: st.r + dr, c: st.c + dc };
+      passos.push({ n: n.id, acao: "andar", ...st });
+      if (naMeta(lab, st)) return fim("chegou", n.id); // pisou na bandeira: o jogo termina
+    } else if (n.tipo === "esquerda" || n.tipo === "direita") {
+      const giro = n.tipo === "esquerda" ? -1 : 1;
+      st = { ...st, d: (st.d + giro + 4) % 4 };
+      passos.push({ n: n.id, acao: "virar", giro, ...st });
+    } else if (n.tipo === "se") {
+      const v = lerSensor(lab, n.sensor || "frente", st);
+      porta = v ? "sim" : "nao";
+      passos.push({ n: n.id, acao: "sensor", sensor: n.sensor || "frente", valor: v, ...st });
+    } else {
+      passos.push({ n: n.id, acao: "inicio", ...st });
+    }
+    const s = seta(n.id, porta);
+    if (!s || !nos.has(s.para)) {
+      const msg = n.tipo === "se" ? `A saída “${porta === "sim" ? "Sim" : "Não"}” da Decisão não está ligada a nenhum bloco.`
+        : n.tipo === "inicio" ? "O Início não está ligado a nenhum bloco."
+        : "Este bloco não tem seta para o próximo. Ligue-o a outro bloco ou ao Fim.";
+      return fim("solto", n.id, msg);
+    }
+    atual = nos.get(s.para);
+  }
+  return fim("laco", atual.id, "O programa passou de 5000 passos.");
+}
+</script>
+
+<script>
+(() => {
+"use strict";
+const $ = id => document.getElementById(id);
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v; else if (k === "text") e.textContent = v; else e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const k of kids.flat()) if (k != null) e.append(k);
+  return e;
+}
+const SVGNS = "http://www.w3.org/2000/svg";
+function sv(tag, attrs = {}) { const e = document.createElementNS(SVGNS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); return e; }
+function icone(d, size = 18) {
+  const s = sv("svg", { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true" });
+  for (const p of d) s.append(sv("path", { d: p }));
+  return s;
+}
+const IC = {
+  inicio: ["M6 3l14 9-14 9V3z"],
+  fim: ["M4 22V4", "M4 4h13l-2 4 2 4H4"],
+  andar: ["m5 12 7-7 7 7", "M12 19V5"],
+  esquerda: ["M20 20v-7a4 4 0 0 0-4-4H4", "M9 14 4 9l5-5"],
+  direita: ["m15 14 5-5-5-5", "M4 20v-7a4 4 0 0 1 4-4h12"],
+  se: ["M2.7 10.3a2.41 2.41 0 0 0 0 3.41l7.59 7.59a2.41 2.41 0 0 0 3.41 0l7.59-7.59a2.41 2.41 0 0 0 0-3.41L13.7 2.71a2.41 2.41 0 0 0-3.41 0z"],
+  play: ["M6 3l14 9-14 9V3z"],
+  stop: ["M6 6h12v12H6z"],
+  cam: ["M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z", "M12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"],
+  check: ["M20 6 9 17l-5-5"],
+  lock: ["M7 11V7a5 5 0 0 1 10 0v4", "M5 11h14v10H5z"],
+};
+
+/* ---------- Armazenamento local ---------- */
+// sessionStorage: cada aba nova começa limpa; recarregar a página mantém o progresso da aba.
+function ler(k) { try { return JSON.parse(sessionStorage.getItem(k) ?? "null"); } catch { return null; } }
+function gravar(k, v) { try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, JSON.stringify(v)); } catch {} }
+try { for (const k of Object.keys(localStorage)) if (k.startsWith("robo-lab-")) localStorage.removeItem(k); } catch {} // apaga o progresso antigo
+const K_PROG = n => `robo-lab-prog-${n}`;
+let progresso = ler("robo-lab-progresso") || { liberada: 1, fases: {} };
+progresso.liberada = FASES.length; // todas as fases liberadas
+let faseAtual = Math.min(ler("robo-lab-fase") || 1, progresso.liberada);
+
+/* ---------- Editor de fluxograma ---------- */
+const TAM = { inicio: [112, 44], fim: [112, 44], andar: [140, 48], esquerda: [140, 48], direita: [140, 48], se: [184, 96] };
+const PORTAS = { inicio: ["prox"], fim: [], andar: ["prox"], esquerda: ["prox"], direita: ["prox"], se: ["sim", "nao"] };
+const NOME = { inicio: "Início", fim: "Fim", andar: "Andar", esquerda: "Virar ←", direita: "Virar →", se: "Decisão" };
+const PALETA = [
+  { tipo: "andar", titulo: "Anda uma casa para a frente" },
+  { tipo: "esquerda", titulo: "Gira 90° para a esquerda, sem sair da casa" },
+  { tipo: "direita", titulo: "Gira 90° para a direita, sem sair da casa" },
+  { tipo: "se", titulo: "Pergunta ao sensor e segue pelo Sim ou pelo Não" },
+  { tipo: "fim", titulo: "Termina o programa" },
+];
+const SENSORES = [["frente", "Livre à frente?"], ["esquerda", "Livre à esquerda?"], ["direita", "Livre à direita?"], ["parede", "Parede à frente?"], ["bandeira", "Chegou à bandeira?"]];
+const novoPrograma = () => ({ nos: [{ id: "n1", tipo: "inicio", x: 24, y: 20 }], setas: [] });
+
+let prog = novoPrograma();
+let sel = null;        // {tipo:'no'|'seta', id}
+let ligando = null;    // {de, porta}
+let destaque = null;   // {id, tipo:'ativo'|'erro'}
+let historico = [];
+let rodando = false;
+
+const tela = $("edTela"), scroll = $("edScroll"), ajuda = $("ajuda");
+const no = id => prog.nos.find(n => n.id === id);
+const setaDe = (id, p) => prog.setas.find(s => s.de === id && s.porta === p);
+
+function salvarHist() { historico.push(JSON.stringify(prog)); if (historico.length > 60) historico.shift(); }
+function mudou() { gravar(K_PROG(faseAtual), prog); desenhar(); atualizarContador(); limparErro(); }
+function limparErro() { if (destaque?.tipo === "erro") { destaque = null; } }
+
+function pontoPorta(n, p) {
+  const [w, h] = TAM[n.tipo];
+  if (n.tipo === "se") return p === "sim" ? { x: n.x + w / 2, y: n.y + h, dir: "baixo" } : { x: n.x + w, y: n.y + h / 2, dir: "direita" };
+  return { x: n.x + w / 2, y: n.y + h, dir: "baixo" };
+}
+const entrada = n => ({ x: n.x + TAM[n.tipo][0] / 2, y: n.y });
+
+function rota(a, b, xr) {
+  const p1 = a.dir === "baixo" ? { x: a.x, y: a.y + 14 } : { x: a.x + 14, y: a.y };
+  const q1 = { x: b.x, y: b.y - 14 };
+  const pts = [a, p1];
+  if (q1.y >= p1.y) {
+    if (a.dir === "direita" && q1.x >= p1.x) pts.push({ x: q1.x, y: p1.y });
+    else { const ym = a.dir === "baixo" ? Math.round((p1.y + q1.y) / 2) : q1.y; pts.push({ x: p1.x, y: ym }, { x: q1.x, y: ym }); }
+  } else {
+    pts.push({ x: xr, y: p1.y }, { x: xr, y: q1.y }, { x: q1.x, y: q1.y });
+  }
+  pts.push(b);
+  return pts;
+}
+function caminho(pts, r = 8) {
+  // linha com cantos arredondados
+  let d = `M${pts[0].x} ${pts[0].y}`;
+  for (let i = 1; i < pts.length - 1; i++) {
+    const p = pts[i - 1], q = pts[i], s = pts[i + 1];
+    const l1 = Math.hypot(q.x - p.x, q.y - p.y), l2 = Math.hypot(s.x - q.x, s.y - q.y);
+    if (l1 < 1 || l2 < 1) continue;
+    const k = Math.min(r, l1 / 2, l2 / 2);
+    d += ` L${q.x - (q.x - p.x) / l1 * k} ${q.y - (q.y - p.y) / l1 * k} Q${q.x} ${q.y} ${q.x + (s.x - q.x) / l2 * k} ${q.y + (s.y - q.y) / l2 * k}`;
+  }
+  const z = pts[pts.length - 1];
+  return d + ` L${z.x} ${z.y}`;
+}
+
+function formaNo(tipo) {
+  const [w, h] = TAM[tipo];
+  const s = sv("svg", { class: "forma", viewBox: `0 0 ${w} ${h}`, width: w, height: h, "aria-hidden": "true" });
+  if (tipo === "se") s.append(sv("polygon", { points: `${w / 2},2 ${w - 2},${h / 2} ${w / 2},${h - 2} 2,${h / 2}` }));
+  else s.append(sv("rect", { x: 1.5, y: 1.5, width: w - 3, height: h - 3, rx: tipo === "inicio" || tipo === "fim" ? (h - 3) / 2 : 10 }));
+  return s;
+}
+
+function desenhar() {
+  const maxX = Math.max(...prog.nos.map(n => n.x + TAM[n.tipo][0]), 300);
+  const maxY = Math.max(...prog.nos.map(n => n.y + TAM[n.tipo][1]), 200);
+  tela.style.width = maxX + 120 + "px";
+  tela.style.height = maxY + 140 + "px";
+  tela.replaceChildren(construirSvg());
+
+  for (const n of prog.nos) desenharNo(n);
+
+  $("btApagar").disabled = !sel || (sel.tipo === "no" && no(sel.id)?.tipo === "inicio");
+  $("btDesfazer").disabled = !historico.length;
+  ajuda.textContent = ligando ? "Agora toque no bloco de destino da seta."
+    : sel?.tipo === "seta" ? "Seta selecionada: toque em Apagar para removê-la."
+    : sel?.tipo === "no" ? "Toque na paleta: o bloco novo entra embaixo deste, já ligado. Arraste o bloco para mudá-lo de lugar."
+    : "Para ligar: toque na bolinha de saída e depois no destino.";
+}
+
+function construirSvg() {
+  const maxX = Math.max(...prog.nos.map(n => n.x + TAM[n.tipo][0]), 300);
+  const maxY = Math.max(...prog.nos.map(n => n.y + TAM[n.tipo][1]), 200);
+  const svg = sv("svg", { class: "ed-svg", width: maxX + 120, height: maxY + 140 });
+  const defs = sv("defs");
+  for (const [id, cor] of [["ponta", "#6c7690"], ["ponta-sel", "#e8ebf3"]]) {
+    const m = sv("marker", { id, viewBox: "0 0 10 10", refX: 8, refY: 5, markerWidth: 7, markerHeight: 7, orient: "auto-start-reverse" });
+    m.append(sv("path", { d: "M0 0 L10 5 L0 10 z", fill: cor }));
+    defs.append(m);
+  }
+  svg.append(defs);
+  let voltas = 0;
+  for (const s of prog.setas) {
+    const a = no(s.de), b = no(s.para);
+    if (!a || !b) continue;
+    const pa = pontoPorta(a, s.porta), pb = entrada(b);
+    const xr = Math.max(a.x + TAM[a.tipo][0], b.x + TAM[b.tipo][0]) + 22 + (pb.y - 14 < pa.y + 14 ? (voltas++ % 4) * 10 : 0);
+    const d = caminho(rota(pa, pb, xr));
+    const chave = `${s.de}|${s.porta}`;
+    const isSel = sel?.tipo === "seta" && sel.id === chave;
+    svg.append(sv("path", { d, class: "seta" + (isSel ? " is-sel" : ""), "marker-end": `url(#${isSel ? "ponta-sel" : "ponta"})` }));
+    const hit = sv("path", { d, class: "seta-hit", "data-seta": chave });
+    svg.append(hit);
+  }
+  svg.append(sv("path", { id: "setaTemp", class: "seta is-temp", d: "" }));
+  return svg;
+}
+
+function desenharNo(n) {
+  {
+    const [w, h] = TAM[n.tipo];
+    const cls = ["ed-no", `t-${n.tipo}`,
+      sel?.tipo === "no" && sel.id === n.id ? "is-sel" : "",
+      ligando && n.tipo !== "inicio" ? "is-alvo" : "",
+      destaque?.id === n.id ? `is-${destaque.tipo}` : ""].filter(Boolean).join(" ");
+    const div = el("div", { class: cls, "data-id": n.id, style: `left:${n.x}px;top:${n.y}px;width:${w}px;height:${h}px` });
+    div.append(formaNo(n.tipo));
+    const cont = el("div", { class: "ed-conteudo" }, icone(IC[n.tipo], n.tipo === "se" ? 14 : 16), el("span", { text: NOME[n.tipo] }));
+    div.append(cont);
+    if (n.tipo === "se") {
+      const selS = el("select", { class: "ed-sensor", "aria-label": "Sensor da decisão", disabled: rodando });
+      for (const [v, t] of SENSORES) selS.append(el("option", { value: v, selected: (n.sensor || "frente") === v }, t));
+      selS.addEventListener("pointerdown", e => e.stopPropagation());
+      selS.addEventListener("change", () => { salvarHist(); n.sensor = selS.value; mudou(); });
+      cont.append(selS);
+      cont.style.pointerEvents = "none";
+      selS.style.pointerEvents = "auto";
+    }
+    for (const p of PORTAS[n.tipo]) {
+      const pt = pontoPorta(n, p);
+      const ligada = !!setaDe(n.id, p);
+      const b = el("button", { type: "button", class: `ed-porta${ligada ? "" : " is-livre"}${ligando?.de === n.id && ligando.porta === p ? " is-ligando" : ""}`,
+        "data-porta": p, title: "Arraste ou toque para ligar a um bloco", "aria-label": `Saída ${p === "prox" ? "" : p === "sim" ? "Sim" : "Não"} de ${NOME[n.tipo]}`,
+        style: `left:${pt.x - n.x}px;top:${pt.y - n.y}px` });
+      div.append(b);
+      if (p !== "prox") {
+        const rot = el("span", { class: "ed-rot", text: p === "sim" ? "Sim" : "Não" });
+        rot.style.cssText = p === "sim" ? `left:${w / 2 + 12}px;top:${h + 2}px` : `left:${w + 4}px;top:${h / 2 - 22}px`;
+        div.append(rot);
+      }
+    }
+    tela.append(div);
+  }
+}
+
+function novoId() { let i = prog.nos.length + 1; while (no("n" + i)) i++; return "n" + i; }
+
+function adicionar(tipo) {
+  if (rodando) return;
+  salvarHist();
+  const [w, h] = TAM[tipo];
+  const pai = sel?.tipo === "no" ? no(sel.id) : null;
+  const porta = pai ? PORTAS[pai.tipo].find(p => !setaDe(pai.id, p)) : undefined;
+  let x, y;
+  if (pai && porta) {
+    const [pw, ph] = TAM[pai.tipo];
+    if (porta === "nao") { x = pai.x + pw + 44; y = pai.y + ph / 2 + 28; }
+    else { x = pai.x + pw / 2 - w / 2; y = pai.y + ph + 40; }
+  } else { x = 24; y = Math.max(20, ...prog.nos.map(n => n.y + TAM[n.tipo][1] + 40)); }
+  x = Math.max(8, Math.round(x));
+  const bate = yy => prog.nos.some(n => x < n.x + TAM[n.tipo][0] + 8 && x + w + 8 > n.x && yy < n.y + TAM[n.tipo][1] + 12 && yy + h + 12 > n.y);
+  while (bate(y)) y += 24;
+  const n = { id: novoId(), tipo, x, y: Math.round(y) };
+  if (tipo === "se") n.sensor = "bandeira";
+  prog.nos.push(n);
+  if (pai && porta) prog.setas.push({ de: pai.id, porta, para: n.id });
+  sel = tipo === "fim" ? null : { tipo: "no", id: n.id };
+  ligando = null;
+  mudou();
+  requestAnimationFrame(() => tela.querySelector(`[data-id="${n.id}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" }));
+}
+
+function ligar(de, porta, para) {
+  const alvo = no(para);
+  if (!alvo || alvo.tipo === "inicio") return;
+  salvarHist();
+  prog.setas = prog.setas.filter(s => !(s.de === de && s.porta === porta));
+  prog.setas.push({ de, porta, para });
+  ligando = null; sel = null;
+  mudou();
+}
+
+function apagar() {
+  if (!sel || rodando) return;
+  if (sel.tipo === "no") {
+    const n = no(sel.id);
+    if (!n || n.tipo === "inicio") return;
+    salvarHist();
+    prog.nos = prog.nos.filter(x => x.id !== n.id);
+    prog.setas = prog.setas.filter(s => s.de !== n.id && s.para !== n.id);
+  } else {
+    salvarHist();
+    const [de, porta] = sel.id.split("|");
+    prog.setas = prog.setas.filter(s => !(s.de === de && s.porta === porta));
+  }
+  sel = null;
+  mudou();
+}
+
+function organizar(p) {
+  const mapa = new Map(p.nos.map(n => [n.id, n]));
+  const pos = new Map(), ocup = [];
+  let colunas = 0;
+  const visitar = (id, col, lin) => {
+    if (pos.has(id) || !mapa.has(id)) return;
+    while ((ocup[col] ?? -1) >= lin) lin++;
+    pos.set(id, { col, lin }); ocup[col] = lin; colunas = Math.max(colunas, col + 1);
+    const n = mapa.get(id);
+    for (const porta of PORTAS[n.tipo]) {
+      const s = p.setas.find(x => x.de === id && x.porta === porta);
+      if (!s) continue;
+      if (porta === "nao") visitar(s.para, Math.max(col + 1, colunas), lin + 1);
+      else visitar(s.para, col, lin + 1);
+    }
+  };
+  const ini = p.nos.find(n => n.tipo === "inicio");
+  if (ini) visitar(ini.id, 0, 0);
+  for (const n of p.nos) if (!pos.has(n.id)) visitar(n.id, colunas, 0);
+  for (const n of p.nos) {
+    const { col, lin } = pos.get(n.id);
+    n.x = 24 + col * 220 + (184 - TAM[n.tipo][0]) / 2;
+    n.y = 20 + lin * 118 + (96 - TAM[n.tipo][1]) / 2;
+  }
+}
+
+// Paleta
+for (const b of PALETA) {
+  const bt = el("button", { type: "button", class: `novo t-${b.tipo}`, title: b.titulo }, icone(IC[b.tipo], 16), NOME[b.tipo]);
+  bt.addEventListener("click", () => adicionar(b.tipo));
+  $("paleta").append(bt);
+}
+$("btApagar").addEventListener("click", apagar);
+$("btDesfazer").addEventListener("click", () => { const e = historico.pop(); if (e && !rodando) { prog = JSON.parse(e); sel = null; ligando = null; mudou(); } });
+$("btOrganizar").addEventListener("click", () => { if (rodando) return; salvarHist(); organizar(prog); mudou(); });
+let confirmarLimpar = null;
+$("btLimpar").addEventListener("click", () => {
+  if (rodando) return;
+  const bt = $("btLimpar");
+  if (prog.nos.length > 1 && !confirmarLimpar) {
+    bt.textContent = "Apagar tudo?"; bt.classList.add("is-perigo");
+    confirmarLimpar = setTimeout(() => { bt.textContent = "Limpar"; bt.classList.remove("is-perigo"); confirmarLimpar = null; }, 3000);
+    return;
+  }
+  clearTimeout(confirmarLimpar); confirmarLimpar = null; bt.textContent = "Limpar"; bt.classList.remove("is-perigo");
+  salvarHist(); prog = novoPrograma(); sel = { tipo: "no", id: "n1" }; ligando = null; mudou();
+});
+
+// Ponteiro no editor
+function pontoTela(e) { const r = tela.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+tela.addEventListener("pointerdown", e => {
+  if (rodando) return;
+  const t = e.target;
+  if (t.closest("select")) return;
+  const porta = t.closest(".ed-porta"), noEl = t.closest(".ed-no"), setaEl = t.closest("[data-seta]");
+  if (porta && noEl) return arrastarPorta(e, noEl.dataset.id, porta.dataset.porta, porta);
+  if (noEl) return arrastarNo(e, noEl.dataset.id, noEl);
+  if (setaEl) { sel = { tipo: "seta", id: setaEl.getAttribute("data-seta") }; ligando = null; return desenhar(); }
+  if (ligando || sel) { ligando = null; sel = null; desenhar(); }
+});
+
+function arrastarNo(e, id, div) {
+  const n = no(id), p0 = pontoTela(e), orig = { x: n.x, y: n.y };
+  let moveu = false;
+  div.setPointerCapture(e.pointerId);
+  const mover = ev => {
+    const p = pontoTela(ev);
+    if (!moveu && Math.hypot(p.x - p0.x, p.y - p0.y) < 6) return;
+    if (!moveu) { moveu = true; salvarHist(); }
+    n.x = Math.max(0, Math.round(orig.x + p.x - p0.x));
+    n.y = Math.max(0, Math.round(orig.y + p.y - p0.y));
+    div.style.left = n.x + "px"; div.style.top = n.y + "px";
+    redesenharSetas();
+  };
+  const soltar = () => {
+    div.removeEventListener("pointermove", mover); div.removeEventListener("pointerup", soltar); div.removeEventListener("pointercancel", soltar);
+    if (moveu) return mudou();
+    if (ligando) return ligar(ligando.de, ligando.porta, id);
+    sel = { tipo: "no", id }; desenhar();
+  };
+  div.addEventListener("pointermove", mover); div.addEventListener("pointerup", soltar); div.addEventListener("pointercancel", soltar);
+}
+let raf = 0;
+// Durante o arrasto só as setas são refeitas: o bloco arrastado continua o mesmo elemento.
+function redesenharSetas() {
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(() => {
+    const maxX = Math.max(...prog.nos.map(n => n.x + TAM[n.tipo][0]), 300);
+    const maxY = Math.max(...prog.nos.map(n => n.y + TAM[n.tipo][1]), 200);
+    tela.style.width = maxX + 120 + "px"; tela.style.height = maxY + 140 + "px";
+    tela.querySelector(".ed-svg")?.replaceWith(construirSvg());
+  });
+}
+
+function arrastarPorta(e, id, porta, bt) {
+  e.preventDefault();
+  const n = no(id), pa = pontoPorta(n, porta), p0 = pontoTela(e);
+  let moveu = false;
+  bt.setPointerCapture(e.pointerId);
+  const temp = () => $("setaTemp");
+  const mover = ev => {
+    const p = pontoTela(ev);
+    if (!moveu && Math.hypot(p.x - p0.x, p.y - p0.y) < 8) return;
+    moveu = true;
+    temp()?.setAttribute("d", `M${pa.x} ${pa.y} L${p.x} ${p.y}`);
+  };
+  const soltar = ev => {
+    bt.removeEventListener("pointermove", mover); bt.removeEventListener("pointerup", soltar); bt.removeEventListener("pointercancel", soltar);
+    if (moveu) {
+      const alvo = document.elementFromPoint(ev.clientX, ev.clientY)?.closest(".ed-no");
+      if (alvo && tela.contains(alvo)) return ligar(id, porta, alvo.dataset.id);
+      temp()?.setAttribute("d", "");
+      return;
+    }
+    ligando = ligando?.de === id && ligando.porta === porta ? null : { de: id, porta };
+    sel = { tipo: "no", id };
+    desenhar();
+  };
+  bt.addEventListener("pointermove", mover); bt.addEventListener("pointerup", soltar); bt.addEventListener("pointercancel", soltar);
+}
+
+window.addEventListener("keydown", e => {
+  if (e.target.closest?.("input, textarea, select")) return;
+  if (e.key === "Delete" || e.key === "Backspace") { if (sel) { e.preventDefault(); apagar(); } }
+  else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); $("btDesfazer").click(); }
+  else if (e.key === "Escape") { ligando = null; sel = null; desenhar(); }
+  else if ((e.key === "c" || e.key === "C") && !e.ctrlKey && !e.metaKey) trocarCamera();
+});
+
+function destacar(id, tipo = "ativo") {
+  destaque = id ? { id, tipo } : null;
+  for (const d of tela.querySelectorAll(".ed-no")) {
+    d.classList.remove("is-ativo", "is-erro");
+    if (destaque && d.dataset.id === destaque.id) d.classList.add(`is-${tipo}`);
+  }
+}
+
+function atualizarContador() {
+  const t = contarBlocos(prog), lim = fase().limite;
+  const c = $("contador");
+  c.textContent = lim ? `${t}/${lim} blocos` : `${t} ${t === 1 ? "bloco" : "blocos"}`;
+  c.classList.toggle("is-acima", !!(lim && t > lim));
+}
+
+/* ---------- Cena 3D ---------- */
+const T = window.THREE;
+class Cena {
+  constructor(host) {
+    this.host = host;
+    this.renderer = new T.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = T.PCFSoftShadowMap;
+    host.append(this.renderer.domElement);
+    this.scene = new T.Scene();
+    this.scene.background = new T.Color(0x0d1018);
+    this.scene.fog = new T.Fog(0x0d1018, 40, 90);
+    this.camera = new T.PerspectiveCamera(50, 1, 0.1, 100);
+    this.scene.add(new T.HemisphereLight(0xcfd8ff, 0x1a1f2e, 0.55));
+    const sol = new T.DirectionalLight(0xffffff, 0.9);
+    sol.position.set(5, 12, 7); sol.castShadow = true;
+    sol.shadow.mapSize.set(2048, 2048);
+    Object.assign(sol.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12 });
+    this.scene.add(sol);
+    this.mundo = new T.Group(); this.scene.add(this.mundo);
+    this.efeitos = new T.Group(); this.scene.add(this.efeitos);
+    this.particulas = []; this.aneis = [];
+    this.modo = ler("robo-lab-camera2") || "geral";
+    this.robo = this.criarRobo(); this.scene.add(this.robo);
+    this.feixe = new T.Mesh(new T.PlaneGeometry(0.9, 0.9), new T.MeshBasicMaterial({ color: 0x3ddc97, transparent: true, opacity: 0, depthWrite: false }));
+    this.feixe.rotation.x = -Math.PI / 2; this.feixe.position.y = 0.03; this.scene.add(this.feixe);
+    this.camPos = new T.Vector3(0, 8, 8); this.camAlvo = new T.Vector3();
+    this.relogio = new T.Clock();
+    new ResizeObserver(() => this.redimensionar()).observe(host);
+    this.redimensionar();
+    const loop = () => { this.quadro(); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  }
+  redimensionar() {
+    const w = this.host.clientWidth || 1, h = this.host.clientHeight || 1;
+    this.renderer.setSize(w, h, false);
+    this.camera.aspect = w / h; this.camera.updateProjectionMatrix();
+  }
+  pos(r, c) { return new T.Vector3(c - this.lab.W / 2 + 0.5, 0, r - this.lab.H / 2 + 0.5); }
+  angulo(d) { return Math.PI - d * Math.PI / 2; }
+
+  criarRobo() {
+    const g = new T.Group();
+    const mat = (cor, extra = {}) => new T.MeshStandardMaterial({ color: cor, roughness: 0.45, metalness: 0.15, ...extra });
+    const corpo = new T.Mesh(new T.BoxGeometry(0.5, 0.36, 0.46), mat(0xc3c8d4));
+    corpo.position.y = 0.3; corpo.castShadow = true; g.add(corpo);
+    const faixa = new T.Mesh(new T.BoxGeometry(0.52, 0.06, 0.48), mat(0x6b7388));
+    faixa.position.y = 0.2; g.add(faixa);
+    const cabeca = new T.Mesh(new T.BoxGeometry(0.42, 0.28, 0.36), mat(0x5b9bff));
+    cabeca.position.y = 0.63; cabeca.castShadow = true; g.add(cabeca);
+    const visor = new T.Mesh(new T.BoxGeometry(0.34, 0.14, 0.02), mat(0x11141b, { roughness: 0.2 }));
+    visor.position.set(0, 0.64, 0.185); g.add(visor);
+    const olhoMat = new T.MeshStandardMaterial({ color: 0x7ff3ff, emissive: 0x7ff3ff, emissiveIntensity: 1.2 });
+    for (const x of [-0.08, 0.08]) { const o = new T.Mesh(new T.SphereGeometry(0.035, 16, 12), olhoMat); o.position.set(x, 0.645, 0.2); g.add(o); }
+    this.olhoMat = olhoMat;
+    const haste = new T.Mesh(new T.CylinderGeometry(0.012, 0.012, 0.16), mat(0x8d96ab));
+    haste.position.y = 0.85; g.add(haste);
+    this.luz = new T.Mesh(new T.SphereGeometry(0.045, 16, 12), new T.MeshStandardMaterial({ color: 0xf5a524, emissive: 0xf5a524, emissiveIntensity: 1 }));
+    this.luz.position.y = 0.94; g.add(this.luz);
+    const rodaG = new T.CylinderGeometry(0.13, 0.13, 0.08, 20);
+    for (const x of [-0.28, 0.28]) for (const z of [-0.14, 0.14]) {
+      const r = new T.Mesh(rodaG, mat(0x1b1f2a)); r.rotation.z = Math.PI / 2; r.position.set(x, 0.13, z); r.castShadow = true; g.add(r);
+    }
+    const sombra = new T.Mesh(new T.CircleGeometry(0.42, 24), new T.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35, depthWrite: false }));
+    sombra.rotation.x = -Math.PI / 2; sombra.position.y = 0.012; g.add(sombra);
+    const halo = new T.Mesh(new T.RingGeometry(0.4, 0.5, 40), new T.MeshBasicMaterial({ color: 0x8fb4ff, transparent: true, opacity: 0.7, depthWrite: false, side: T.DoubleSide }));
+    halo.rotation.x = -Math.PI / 2; halo.position.y = 0.02; g.add(halo);
+    // etiqueta "Você"
+    const cv = document.createElement("canvas"); cv.width = 200; cv.height = 72;
+    const c = cv.getContext("2d");
+    c.fillStyle = "#4f8bff"; c.strokeStyle = "#f2f4f9"; c.lineWidth = 6;
+    c.beginPath(); c.roundRect ? c.roundRect(4, 4, 192, 64, 32) : c.rect(4, 4, 192, 64); c.fill(); c.stroke();
+    c.fillStyle = "#0d1018"; c.font = "700 40px Geist, system-ui, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
+    c.fillText("Você", 100, 38);
+    const etiqueta = new T.Sprite(new T.SpriteMaterial({ map: new T.CanvasTexture(cv), depthTest: false, transparent: true }));
+    etiqueta.scale.set(0.75, 0.27, 1); etiqueta.position.y = 1.25; etiqueta.renderOrder = 10; g.add(etiqueta);
+    return g;
+  }
+
+  setLabirinto(lab) {
+    this.lab = lab;
+    for (const o of [...this.mundo.children]) { this.mundo.remove(o); o.traverse?.(m => { m.geometry?.dispose(); for (const mt of [].concat(m.material || [])) { mt.map?.dispose(); mt.dispose(); } }); }
+    // chão desenhado num canvas, uma casa por 32px
+    const cv = document.createElement("canvas"); cv.width = lab.W * 64; cv.height = lab.H * 64;
+    const ctx = cv.getContext("2d");
+    ctx.fillStyle = "#0b0e15"; ctx.fillRect(0, 0, cv.width, cv.height);
+    const { inicio, meta } = lab;
+    lab.rows.forEach((l, r) => [...l].forEach((ch, c) => {
+      if (ch === "#") return;
+      ctx.fillStyle = "#0f121a"; ctx.fillRect(c * 64, r * 64, 64, 64);
+      ctx.fillStyle = r === inicio.r && c === inicio.c ? "#3a4fa0" : "#2e3447";
+      ctx.fillRect(c * 64 + 5, r * 64 + 5, 54, 54);
+    }));
+    for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) {
+      ctx.fillStyle = (i + j) % 2 ? "#0f121a" : "#c9cfdd"; ctx.fillRect(meta.c * 64 + 2 + i * 15, meta.r * 64 + 2 + j * 15, 15, 15);
+    }
+    const tex = new T.CanvasTexture(cv); tex.anisotropy = 4;
+    const chao = new T.Mesh(new T.PlaneGeometry(lab.W, lab.H), new T.MeshStandardMaterial({ map: tex, roughness: 0.9 }));
+    chao.rotation.x = -Math.PI / 2; chao.receiveShadow = true; this.mundo.add(chao);
+    const grande = new T.Mesh(new T.PlaneGeometry(80, 80), new T.MeshStandardMaterial({ color: 0x0b0e15, roughness: 1 }));
+    grande.rotation.x = -Math.PI / 2; grande.position.y = -0.01; this.mundo.add(grande);
+    // paredes
+    // paredes baixas: uma mureta em cada borda entre chão e parede
+    const ALT = 0.3, ESP = 0.16;
+    const lado = new T.MeshStandardMaterial({ color: 0x1d2f86, roughness: 0.8 });
+    const topo = new T.MeshStandardMaterial({ color: 0x6f8cff, emissive: 0x2a3fa8, emissiveIntensity: 0.2, roughness: 0.6 });
+    const mats = [lado, lado, topo, lado, lado, lado];
+    const geoH = new T.BoxGeometry(1 + ESP, ALT, ESP), geoV = new T.BoxGeometry(ESP, ALT, 1 + ESP);
+    lab.rows.forEach((l, r) => [...l].forEach((ch, c) => {
+      if (ch === "#") return;
+      const p = this.pos(r, c);
+      for (const [dr, dc] of DIRS) {
+        if (livre(lab, r + dr, c + dc)) continue;
+        const m = new T.Mesh(dr ? geoH : geoV, mats);
+        m.position.set(p.x + dc * 0.5, ALT / 2, p.z + dr * 0.5);
+        m.castShadow = m.receiveShadow = true; this.mundo.add(m);
+      }
+    }));
+    // bandeira
+    const fl = new T.Group();
+    const mastro = new T.Mesh(new T.CylinderGeometry(0.025, 0.025, 1.3), new T.MeshStandardMaterial({ color: 0xd9dde8, metalness: 0.6, roughness: 0.3 }));
+    mastro.position.y = 0.65; mastro.castShadow = true; fl.add(mastro);
+    const pano = new T.PlaneGeometry(0.55, 0.36, 12, 4);
+    const cv2 = document.createElement("canvas"); cv2.width = 88; cv2.height = 56;
+    const c2 = cv2.getContext("2d");
+    for (let i = 0; i < 8; i++) for (let j = 0; j < 5; j++) { c2.fillStyle = (i + j) % 2 ? "#f2f4f9" : "#11141b"; c2.fillRect(i * 11, j * 11.2, 11, 11.2); }
+    const t2 = new T.CanvasTexture(cv2);
+    t2.dispose();
+    this.pano = new T.Mesh(pano, new T.MeshStandardMaterial({ color: 0x3ddc97, emissive: 0x1a7a52, emissiveIntensity: 0.4, side: T.DoubleSide }));
+    this.pano.position.set(0.29, 1.1, 0); this.pano.castShadow = true; fl.add(this.pano);
+    this.panoBase = pano.attributes.position.array.slice();
+    const anel = new T.Mesh(new T.RingGeometry(0.32, 0.42, 40), new T.MeshBasicMaterial({ color: 0xf5a524, transparent: true, opacity: 0.6, side: T.DoubleSide }));
+    anel.rotation.x = -Math.PI / 2; anel.position.y = 0.02; anel.visible = false; fl.add(anel); this.anelMeta = anel;
+    const pm = this.pos(meta.r, meta.c); fl.position.set(pm.x, 0, pm.z);
+    this.mundo.add(fl);
+    this.voltarALargada(true);
+  }
+
+  voltarALargada(instantaneo = false) {
+    const { r, c, d } = this.lab.inicio;
+    this.estado = { r, c, d, ang: this.angulo(d) };
+    const p = this.pos(r, c);
+    this.robo.position.copy(p); this.robo.rotation.set(0, this.estado.ang, 0);
+    this.feixe.material.opacity = 0;
+    if (instantaneo) this.camInstantanea = true;
+  }
+
+  deslocamento() {
+    const w = this.host.clientWidth || 1, h = this.host.clientHeight || 1;
+    const r = this.reserva?.() ?? { x: 0, y: 0 };
+    return { w, h, dx: Math.min(r.x * 0.32, w * 0.16), dy: Math.min(r.y * 0.5, h * 0.14) };
+  }
+
+  setModo(m) { this.modo = m; gravar("robo-lab-camera2", m); }
+
+  alvoCamera() {
+    const p = this.robo.position, a = this.robo.rotation.y;
+    const f = new T.Vector3(Math.sin(a), 0, Math.cos(a));
+    if (this.modo === "geral") {
+      // labirinto inteiro, visto de lado e de cima (cerca de 55°)
+      // a área livre é a tela menos a faixa ocupada pelo cartão (o labirinto é desenhado deslocado para baixo e à direita)
+      const { dx, dy, w: tw, h: th } = this.deslocamento();
+      const vf = 2 * Math.atan(Math.tan(this.camera.fov * Math.PI / 360) * (th - 2 * dy) / th);
+      const hf = 2 * Math.atan(Math.tan(this.camera.fov * Math.PI / 360) * this.camera.aspect * (tw - 2 * dx) / tw);
+      const elev = 55 * Math.PI / 180, w = this.lab.W + 0.4, h = this.lab.H + 0.4;
+      const meio = h * Math.cos(elev) / 2;
+      const d = Math.max(((w / 2) / Math.tan(hf / 2) + meio) * 1.04, ((h * Math.sin(elev) / 2 + 0.5) / Math.tan(vf / 2) + meio) * 0.8);
+      return { pos: new T.Vector3(0, d * Math.sin(elev), d * Math.cos(elev)), olhar: new T.Vector3(0, 0, -h * 0.04) };
+    }
+    if (this.modo === "cima") {
+      const tam = Math.max(this.lab.W, this.lab.H / Math.max(this.camera.aspect, 0.5));
+      return { pos: new T.Vector3(0, tam * 1.15 + 2, this.lab.H * 0.32 + 0.6), olhar: new T.Vector3(0, 0, 0.3) };
+    }
+    if (this.modo === "atras") return { pos: p.clone().addScaledVector(f, -1.5).add(new T.Vector3(0, 1.25, 0)), olhar: p.clone().addScaledVector(f, 2).add(new T.Vector3(0, 0.45, 0)) };
+    return { pos: p.clone().addScaledVector(f, -3.4).add(new T.Vector3(0, 3.6, 0)), olhar: p.clone().addScaledVector(f, 0.8) };
+  }
+
+  quadro() {
+    const dt = Math.min(this.relogio.getDelta(), 0.05), t = this.relogio.elapsedTime;
+    if (this.lab) {
+      const alvo = this.alvoCamera();
+      const k = this.camInstantanea ? 1 : 1 - Math.pow(0.002, dt);
+      this.camPos.lerp(alvo.pos, k); this.camAlvo.lerp(alvo.olhar, k);
+      this.camInstantanea = false;
+      this.camera.position.copy(this.camPos); this.camera.lookAt(this.camAlvo);
+      // bandeira tremulando
+      const arr = this.pano.geometry.attributes.position.array, b = this.panoBase;
+      for (let i = 0; i < arr.length; i += 3) { const x = b[i] + 0.275; arr[i + 2] = Math.sin(x * 9 - t * 5) * 0.05 * x * 2; }
+      this.pano.geometry.attributes.position.needsUpdate = true;
+      this.anelMeta.material.opacity = 0.35 + Math.sin(t * 3) * 0.25;
+    }
+    this.luz.material.emissiveIntensity = 0.6 + Math.sin(t * 4) * 0.4;
+    if (this.feixe.material.opacity > 0) this.feixe.material.opacity = Math.max(0, this.feixe.material.opacity - dt * 0.9);
+    this.animarEfeitos(dt);
+    if (this.lab && this.modo === "geral") {
+      const { dx, dy, w, h } = this.deslocamento();
+      this.camera.setViewOffset(w, h, -dx, -dy, w, h);
+    } else if (this.camera.view?.enabled) this.camera.clearViewOffset();
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  tween(ms, fn, cancel) {
+    return new Promise(res => {
+      const t0 = performance.now();
+      const passo = () => {
+        if (cancel.parar) return res(false);
+        const k = Math.min(1, (performance.now() - t0) / ms);
+        fn(k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2);
+        k < 1 ? requestAnimationFrame(passo) : res(true);
+      };
+      requestAnimationFrame(passo);
+    });
+  }
+
+  async passo(p, vel, cancel) {
+    const ini = this.robo.position.clone(), alvo = this.pos(p.r, p.c);
+    if (p.acao === "andar") {
+      await this.tween(380 / vel, k => { this.robo.position.lerpVectors(ini, alvo, k); this.robo.position.y = Math.sin(k * Math.PI) * 0.06; }, cancel);
+    } else if (p.acao === "virar") {
+      const a0 = this.estado.ang, a1 = a0 - p.giro * Math.PI / 2;
+      this.estado.ang = a1;
+      await this.tween(300 / vel, k => { this.robo.rotation.y = a0 + (a1 - a0) * k; }, cancel);
+    } else if (p.acao === "sensor") {
+      const k = { frente: 0, esquerda: -1, direita: 1, parede: 0, bandeira: null }[p.sensor];
+      const cor = p.valor ? 0x3ddc97 : 0xff6b6b;
+      if (k === null) { this.feixe.position.set(alvo.x, 0.03, alvo.z); }
+      else { const [dr, dc] = DIRS[(p.d + k + 4) % 4]; const q = this.pos(p.r + dr, p.c + dc); this.feixe.position.set(q.x, 0.04, q.z); }
+      this.feixe.material.color.set(cor); this.feixe.material.opacity = 0.75;
+      this.olhoMat.color.set(cor); this.olhoMat.emissive.set(cor);
+      await this.tween(300 / vel, () => {}, cancel);
+      this.olhoMat.color.set(0x7ff3ff); this.olhoMat.emissive.set(0x7ff3ff);
+    } else if (p.acao === "batida") {
+      const [dr, dc] = DIRS[p.d];
+      const frente = this.pos(p.r + dr * 0.3, p.c + dc * 0.3);
+      await this.tween(200 / vel, k => this.robo.position.lerpVectors(ini, frente, k), cancel);
+      this.anelBatida(this.pos(p.r + dr * 0.45, p.c + dc * 0.45));
+      await this.tween(260 / vel, k => { this.robo.position.lerpVectors(frente, ini, k); this.robo.rotation.z = Math.sin(k * Math.PI * 3) * 0.12 * (1 - k); }, cancel);
+      this.robo.rotation.z = 0;
+    } else if (p.acao === "fim" || p.acao === "inicio") {
+      await this.tween(160 / vel, () => {}, cancel);
+    }
+    this.estado.r = p.r; this.estado.c = p.c; this.estado.d = p.d;
+  }
+
+  confete() {
+    const n = 160, pos = new Float32Array(n * 3), cor = new Float32Array(n * 3), vel = new Float32Array(n * 3);
+    const cores = [0x4f7bff, 0x3ddc97, 0xf2f4f9, 0xf5a524, 0xa37bff].map(c => new T.Color(c));
+    const o = this.robo.position;
+    for (let i = 0; i < n; i++) {
+      pos.set([o.x, 0.6, o.z], i * 3);
+      const a = Math.random() * Math.PI * 2, s = 0.8 + Math.random() * 1.8;
+      vel.set([Math.cos(a) * s, 2.5 + Math.random() * 2.5, Math.sin(a) * s], i * 3);
+      const c = cores[i % cores.length]; cor.set([c.r, c.g, c.b], i * 3);
+    }
+    const g = new T.BufferGeometry();
+    g.setAttribute("position", new T.BufferAttribute(pos, 3)); g.setAttribute("color", new T.BufferAttribute(cor, 3));
+    const pts = new T.Points(g, new T.PointsMaterial({ size: 0.09, vertexColors: true, transparent: true }));
+    this.efeitos.add(pts); this.particulas.push({ pts, vel, vida: 1.8 });
+  }
+  anelBatida(p) {
+    const m = new T.Mesh(new T.RingGeometry(0.15, 0.22, 32), new T.MeshBasicMaterial({ color: 0xff6b6b, transparent: true, depthWrite: false, side: T.DoubleSide }));
+    m.rotation.x = -Math.PI / 2; m.position.set(p.x, 0.05, p.z);
+    this.efeitos.add(m); this.aneis.push({ mesh: m, vida: 0.7, max: 0.7 });
+  }
+  animarEfeitos(dt) {
+    this.particulas = this.particulas.filter(p => {
+      p.vida -= dt;
+      const a = p.pts.geometry.attributes.position, r = a.array;
+      for (let i = 0; i < r.length; i += 3) { p.vel[i + 1] -= 6 * dt; r[i] += p.vel[i] * dt; r[i + 1] = Math.max(0.03, r[i + 1] + p.vel[i + 1] * dt); r[i + 2] += p.vel[i + 2] * dt; }
+      a.needsUpdate = true; p.pts.material.opacity = Math.min(1, p.vida / 0.5);
+      if (p.vida > 0) return true;
+      this.efeitos.remove(p.pts); p.pts.geometry.dispose(); p.pts.material.dispose(); return false;
+    });
+    this.aneis = this.aneis.filter(a => {
+      a.vida -= dt; const k = 1 - a.vida / a.max;
+      a.mesh.scale.setScalar(1 + k * 3); a.mesh.material.opacity = Math.max(0, 1 - k);
+      if (a.vida > 0) return true;
+      this.efeitos.remove(a.mesh); a.mesh.geometry.dispose(); a.mesh.material.dispose(); return false;
+    });
+  }
+}
+
+/* ---------- Telas e controle ---------- */
+const fase = () => FASES[faseAtual - 1];
+let cena = null;
+try { cena = new Cena($("cena")); } catch (err) {
+  $("cena").append(el("p", { style: "padding:80px 20px;color:#8d96ab;text-align:center", text: "Não foi possível abrir a cena 3D neste navegador (WebGL desligado)." }));
+}
+let labAtual = lerLabirinto(fase().labirinto);
+if (cena) cena.reserva = () => {
+  const c = $("cartao").getBoundingClientRect(), h = $("cena").getBoundingClientRect();
+  return { x: Math.max(0, c.right - h.left + 8), y: Math.max(0, c.bottom - h.top + 8) };
+};
+
+const CAMS = [["geral", "Visão geral"], ["seguir", "Seguir o robô"], ["atras", "Atrás do robô"], ["cima", "Vista de cima"]];
+function rotuloCamera() { $("btCam").replaceChildren(icone(IC.cam, 16), el("span", { text: CAMS.find(([m]) => m === cena?.modo)?.[1] ?? "Câmera" })); }
+function trocarCamera() { if (!cena) return; const i = CAMS.findIndex(([m]) => m === cena.modo); cena.setModo(CAMS[(i + 1) % CAMS.length][0]); rotuloCamera(); }
+$("btCam").addEventListener("click", trocarCamera);
+
+let velocidade = 1;
+$("btVel").addEventListener("click", () => { velocidade = velocidade === 1 ? 2 : velocidade === 2 ? 4 : 1; $("btVel").textContent = `Velocidade ${velocidade}×`; });
+
+function desenharFases() {
+  $("fases").replaceChildren(...FASES.map(f => {
+    const ok = progresso.fases[f.numero]?.concluida, livreF = f.numero <= progresso.liberada;
+    const b = el("button", { type: "button", class: `chip${f.numero === faseAtual ? " is-atual" : ""}${ok ? " is-ok" : ""}`, disabled: !livreF,
+      title: livreF ? `Fase ${f.numero}: ${f.titulo}` : "Conclua a fase anterior para liberar" },
+      livreF ? (ok ? icone(IC.check, 13) : null) : icone(IC.lock, 12), String(f.numero));
+    b.addEventListener("click", () => irPara(f.numero));
+    return b;
+  }));
+}
+
+function desenharCartao() {
+  const f = fase(), p = progresso.fases[f.numero];
+  const b = n => `${n} ${n === 1 ? "bloco" : "blocos"}`;
+  $("cartao").replaceChildren(
+    el("p", { class: "cartao-kicker", text: `Fase ${f.numero} de ${FASES.length}  ·  ${f.tema}` }),
+    el("h2", { class: "cartao-titulo" }, f.titulo, p?.concluida ? el("span", { class: "ok-pill", text: "✓ concluída" }) : null),
+    el("p", { class: "cartao-texto", text: f.texto + (f.limite ? ` Limite: ${b(f.limite)}.` : "") }),
+    el("p", { class: "cartao-desafio", text: p?.concluida ? `Seu melhor: ${b(p.melhorBlocos)}. Desafio: dá para fazer com ${f.referencia}?` : `Desafio extra: chegar usando só ${b(f.referencia)}.` }),
+    el("details", { class: "dica" }, el("summary", { text: "Dica" }), el("p", { text: f.dica })),
+    el("p", { class: "cartao-abrir", text: "Toque para ver a missão e a dica" }),
+  );
+}
+$("cartao").addEventListener("click", e => { if (!e.target.closest("details")) $("cartao").classList.toggle("is-mini"); });
+
+function banner(tipo, titulo, texto, botao) {
+  const bn = $("banner");
+  bn.className = `banner is-on is-${tipo}`;
+  const x = el("button", { type: "button", class: "banner-x", "aria-label": "Fechar", text: "×" });
+  x.addEventListener("click", () => bn.classList.remove("is-on"));
+  bn.replaceChildren(...[el("div", {}, el("strong", { text: titulo }), el("span", { text: texto })), botao, x].filter(Boolean));
+}
+const fecharBanner = () => $("banner").classList.remove("is-on");
+
+function irPara(n) {
+  if (n > progresso.liberada || rodando) return;
+  faseAtual = n; gravar("robo-lab-fase", n);
+  labAtual = lerLabirinto(fase().labirinto);
+  cena?.setLabirinto(labAtual);
+  prog = ler(K_PROG(n)) || novoPrograma();
+  if (!prog.nos?.some(x => x.tipo === "inicio")) prog = novoPrograma();
+  historico = []; ligando = null; destaque = null;
+  sel = prog.nos.length === 1 ? { tipo: "no", id: prog.nos[0].id } : null;
+  fecharBanner(); desenhar(); atualizarContador(); desenharCartao(); desenharFases();
+  $("cartao").classList.add("is-mini");
+}
+
+function botaoExec() {
+  const b = $("btExec");
+  b.classList.toggle("is-parar", rodando);
+  b.replaceChildren(icone(rodando ? IC.stop : IC.play, 18), rodando ? "Parar" : "Executar");
+}
+
+const MSG = { chegou: ["ok", "🏁 Chegou à bandeira!"], parede: ["erro", "💥 Bateu na parede!"], laco: ["erro", "🔁 Laço infinito"], solto: ["aviso", "🔌 Faltou uma seta"], fim: ["aviso", "🏳️ Fim antes da bandeira"] };
+let cancel = { parar: false }, tentativa = 0;
+
+$("btExec").addEventListener("click", async () => {
+  if (rodando) { cancel.parar = true; return; }
+  const f = fase(), blocos = contarBlocos(prog);
+  if (f.limite && blocos > f.limite) return banner("aviso", "Blocos demais", `Esta fase aceita no máximo ${f.limite} blocos e o programa tem ${blocos}. Use uma repetição para economizar.`);
+  const res = executar(prog, labAtual);
+  rodando = true; cancel = { parar: false }; tentativa++;
+  sel = null; ligando = null; destaque = null; desenhar(); botaoExec();
+  banner("andando", `Tentativa ${tentativa}`, "O bloco aceso no programa é o que o robô está fazendo agora.");
+  if (cena) {
+    cena.voltarALargada();
+    for (const p of res.passos) {
+      destacar(p.n, "ativo");
+      await cena.passo(p, velocidade, cancel);
+      if (cancel.parar) break;
+    }
+  }
+  const parado = cancel.parar;
+  rodando = false; botaoExec(); destacar(null); desenhar();
+  if (parado) { cena?.voltarALargada(); return banner("aviso", "Execução interrompida", "O robô voltou para a largada."); }
+  terminar(res);
+});
+
+function terminar(res) {
+  const [tipo, titulo] = MSG[res.resultado];
+  if (res.resultado !== "chegou") {
+    destacar(res.no, "erro"); destaque = { id: res.no, tipo: "erro" };
+    banner(tipo, titulo, res.resultado === "parede" ? "O robô volta para a largada. O bloco em vermelho foi o da batida." : res.msg);
+    setTimeout(() => { if (!rodando) cena?.voltarALargada(); }, res.resultado === "parede" ? 900 : 1600);
+    return;
+  }
+  cena?.confete();
+  const f = fase(), ant = progresso.fases[f.numero];
+  progresso.fases[f.numero] = { concluida: true, melhorBlocos: Math.min(ant?.melhorBlocos ?? Infinity, res.blocos) };
+  progresso.liberada = Math.max(progresso.liberada, Math.min(FASES.length, f.numero + 1));
+  gravar("robo-lab-progresso", progresso);
+  desenharFases(); desenharCartao();
+  const b = res.blocos;
+  const texto = b <= f.referencia ? `Com ${b} ${b === 1 ? "bloco" : "blocos"}: desafio de economia cumprido!` : `Com ${b} blocos. Desafio: dá para fazer com ${f.referencia}?`;
+  if (f.numero < FASES.length) {
+    const bt = el("button", { type: "button", class: "executar", style: "height:36px;padding:0 14px;font-size:14px" }, `Fase ${f.numero + 1}`, icone(IC.play, 14));
+    bt.addEventListener("click", () => irPara(f.numero + 1));
+    banner("ok", `🏁 Fase ${f.numero} concluída!`, texto, bt);
+  } else {
+    const todas = FASES.every(x => progresso.fases[x.numero]?.concluida);
+    banner("ok", todas ? "🏆 Você concluiu todas as fases!" : titulo, texto);
+  }
+}
+
+let confirmarNovo = null;
+$("btNovo").addEventListener("click", () => {
+  if (rodando) return;
+  const bt = $("btNovo");
+  if (!confirmarNovo) {
+    bt.textContent = "Apagar tudo e recomeçar?"; bt.classList.add("is-perigo");
+    confirmarNovo = setTimeout(() => { bt.textContent = "Nova sessão"; bt.classList.remove("is-perigo"); confirmarNovo = null; }, 3000);
+    return;
+  }
+  clearTimeout(confirmarNovo); confirmarNovo = null; bt.textContent = "Nova sessão"; bt.classList.remove("is-perigo");
+  try { for (const k of Object.keys(sessionStorage)) if (k.startsWith("robo-lab-") && k !== "robo-lab-camera2" && k !== "robo-lab-painel") sessionStorage.removeItem(k); } catch {}
+  progresso = { liberada: FASES.length, fases: {} };
+  tentativa = 0;
+  faseAtual = 0; irPara(1);
+});
+
+// divisor arrastável entre o cenário e o fluxograma
+(() => {
+  const app = $("app"), div = $("divisor");
+  const limitar = w => Math.round(Math.max(300, Math.min(w, app.clientWidth - 280)));
+  const aplicar = w => { app.style.setProperty("--painel", limitar(w) + "px"); };
+  const salva = ler("robo-lab-painel"); if (salva) aplicar(salva);
+  div.addEventListener("pointerdown", e => {
+    e.preventDefault(); div.setPointerCapture(e.pointerId); div.classList.add("is-ativo");
+    const mover = ev => aplicar(app.getBoundingClientRect().right - ev.clientX);
+    const soltar = () => {
+      div.classList.remove("is-ativo");
+      div.removeEventListener("pointermove", mover); div.removeEventListener("pointerup", soltar); div.removeEventListener("pointercancel", soltar);
+      gravar("robo-lab-painel", parseInt(getComputedStyle(app).getPropertyValue("--painel")) || null);
+    };
+    div.addEventListener("pointermove", mover); div.addEventListener("pointerup", soltar); div.addEventListener("pointercancel", soltar);
+  });
+  div.addEventListener("dblclick", () => { app.style.removeProperty("--painel"); gravar("robo-lab-painel", null); });
+  div.addEventListener("keydown", e => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    const atual = document.querySelector(".painel").getBoundingClientRect().width;
+    aplicar(atual + (e.key === "ArrowLeft" ? 30 : -30));
+    gravar("robo-lab-painel", parseInt(getComputedStyle(app).getPropertyValue("--painel")));
+  });
+  window.addEventListener("resize", () => { const v = parseInt(app.style.getPropertyValue("--painel")); if (v) aplicar(v); });
+})();
+
+// início
+rotuloCamera(); botaoExec();
+irPara(faseAtual);
+})();
+</script>
