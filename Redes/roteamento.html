@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Roteamento no Packet Tracer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&display=swap">
+<style>
+/* Layout: barra IFSC fixa, hero com cartão dos 4 setores, seções em coluna de 1080px; o planejador do aluno alimenta tabelas, comandos, testes e animação */
+:root{
+  --bg:#F3F9F4; --surface:#FFFFFF; --surface-2:#E7F5EA; --ink:#0F2417; --muted:#4A6353; --line:#D2E6D7;
+  --green:#2F9E41; --green-strong:#1E7A30; --mint:#C6EECD; --red:#C8191E;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#7FA88B; --code-key:#8BE39B;
+  --s1:#1C7EC0; --s2:#C98204; --s3:#8250C8; --s4:#D1407A; --neutral:#8A9A90; --crust:#E2AE63; --cheese:#F7E7B4; --pep:#B8432F;
+  --ok:#1E7A30; --bad:#C8191E; --warn:#A86A00; --dev:#2F9E41;
+  --f-display:"Sora","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577; --crust:#9A6B2E; --cheese:#4A4126; --pep:#C9583F;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; --dev:#4DC262; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577; --crust:#9A6B2E; --cheese:#4A4126; --pep:#C9583F;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; --dev:#4DC262; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);padding:.1em .4em;border-radius:6px;color:var(--green-strong)}
+a{color:var(--green-strong)}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:6px}
+
+/* barra */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.ifsc-logo{height:40px;width:auto;flex:none;overflow:visible}
+.brand-txt{display:flex;flex-direction:column;line-height:1.05}
+.brand-txt .b1{font-family:"Open Sans",var(--f-body);font-weight:800;font-size:.95rem;letter-spacing:.01em}
+.brand-txt .b2{font-family:"Open Sans",var(--f-body);font-weight:400;font-size:.88rem}
+.brand-sep{width:1px;height:28px;background:var(--line)}
+.brand-course{font-weight:600;color:var(--muted);font-size:.8rem}
+@media (max-width:520px){.brand-sep,.brand-course{display:none}}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{text-decoration:none;color:var(--muted);font-weight:600;font-size:.85rem;padding:6px 10px;border-radius:999px}
+.nav a:hover{background:var(--surface-2);color:var(--green-strong)}
+.back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#C8191E;color:#fff;font-weight:700;font-size:.85rem;padding:7px 14px 7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px #C8191E;transition:background .2s,transform .2s}
+.back:hover{background:#A51318;transform:translateY(-1px)}
+.back svg{width:16px;height:16px}
+.bar{position:sticky}
+.menu-btn{display:none;place-content:center;gap:5px;width:44px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
+.menu-btn span{display:block;width:20px;height:2.5px;border-radius:2px;background:var(--green-strong);transition:transform .2s,opacity .2s}
+.menu-btn[aria-expanded="true"]{background:var(--surface-2);border-color:var(--green)}
+.menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+@keyframes navIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (max-width:860px){.back{margin-left:auto}}
+
+/* hero */
+.hero{background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding-block:56px 48px}
+.hero .wrap > *{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-strong)}
+.eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--green)}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.5rem);font-weight:800;letter-spacing:-.035em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.lead{font-size:1.12rem;color:var(--muted);max-width:56ch;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:600}
+.chip svg{width:16px;height:16px;color:var(--green)}
+.hero-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 40px -24px color-mix(in srgb,var(--green) 55%,transparent)}
+.hero-net{min-width:0;max-width:480px;width:100%;justify-self:center}
+#hero-svg{display:block;width:100%;height:auto}
+#hero-svg .hl{stroke-width:2.5;stroke-dasharray:4 7;animation:flow 1.2s linear infinite;opacity:.75}
+@keyframes flow{to{stroke-dashoffset:-22}}
+#hero-svg .hr-ring{fill:none;stroke:#4DC262;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:rring 2.6s ease-out infinite}
+#hero-svg .hr-ring.b{animation-delay:1.3s}
+@media (prefers-reduced-motion:reduce){#hero-svg .hl,#hero-svg .hr-ring{animation:none}}
+.hero-card h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.hero-card .hint{font-size:.8rem;color:var(--muted);margin-top:12px}
+.vlist{display:grid;gap:8px}
+.vrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--surface-2)}
+.vtag{font-family:var(--f-mono);font-weight:600;font-size:.78rem;color:#fff;background:var(--vc);padding:3px 8px;border-radius:7px;white-space:nowrap}
+:root[data-theme="dark"] .vtag{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
+.vrow b{font-family:var(--f-display);font-size:.9rem;min-width:0;overflow-wrap:anywhere}
+@media (max-width:480px){.vrow{grid-template-columns:auto 1fr;row-gap:2px}.vrow span.net{grid-column:2}}
+.vrow span.net{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* seções */
+section.sec{padding-block:64px;border-bottom:1px solid var(--line);scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
+.sec-head{display:grid;gap:10px;margin-bottom:32px;max-width:70ch}
+.sec-head p{color:var(--muted);font-size:1.05rem}
+.sec-num{font-family:var(--f-mono);font-size:.8rem;color:var(--green-strong);font-weight:600}
+
+.def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+.def > *{min-width:0}
+.def p+p{margin-top:14px}
+.def .big{font-size:1.2rem;line-height:1.55}
+.def .big strong{color:var(--green-strong)}
+.ip-anatomy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:16px}
+.ip-anatomy h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ip-anatomy{container-type:inline-size}
+.ipline{font-family:var(--f-mono);font-size:.85rem;font-size:min(1.3rem,4.5cqi);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:0}
+.ipline .n{color:var(--green-strong)} .ipline .h{color:var(--s3)}
+.binrows{display:grid;gap:10px}
+.binrow{display:grid;gap:2px;min-width:0}
+.binrow + .binrow{padding-top:10px;border-top:1px dashed var(--line)}
+.binlbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.anat-rows{display:grid;gap:8px}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:8px 0;border-top:1px dashed var(--line)}
+.anat b{font-family:var(--f-display);font-size:.88rem}
+.anat span{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--mint);color:var(--green-strong);flex:none}
+.ico svg{width:22px;height:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ben{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:10px;align-content:start;transition:transform .2s,border-color .2s}
+.ben:hover{transform:translateY(-3px);border-color:var(--green)}
+.ben p{color:var(--muted);font-size:.95rem}
+.note{margin-top:20px;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;background:var(--surface-2);border-radius:var(--r);padding:18px 20px}
+.note p{font-size:.98rem}
+
+/* planejador */
+.planner{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+.pform{background:var(--surface);border:2px solid var(--green);border-radius:22px;padding:20px;display:grid;gap:18px}
+.field{display:grid;gap:6px}
+.field > label,.field > .lbl{font-weight:700;font-size:.88rem}
+.field small{color:var(--muted);font-size:.8rem;line-height:1.4}
+.field input[type=text],.field input[type=number],.field select{font:600 1rem var(--f-mono);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);width:100%}
+.field input:focus{border-color:var(--green)}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .78rem var(--f-mono);padding:5px 9px;border-radius:999px;cursor:pointer}
+.presets button:hover{border-color:var(--green);color:var(--green-strong)}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg button{border:0;background:transparent;font:600 .85rem var(--f-body);color:var(--muted);padding:7px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--green);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#08130C}}
+.msg{font-size:.85rem;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:start}
+.msg svg{width:18px;height:18px;margin-top:2px}
+.msg.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok)}
+.msg.warn{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)}
+.msg.bad{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+.msg span{color:var(--ink)}
+
+.pout{display:grid;gap:16px;min-width:0}
+.bits{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:10px}
+.bits-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline}
+.bits-top b{font-family:var(--f-mono);font-size:1rem}
+.bits-top span{font-size:.82rem;color:var(--muted)}
+.bitrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.oct{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:2px}
+.bit{aspect-ratio:1/1.3;max-width:100%;border-radius:4px;display:grid;place-items:center;font:600 .68rem var(--f-mono);background:var(--surface-2);color:var(--muted)}
+.bit.on{background:var(--green);color:#fff}
+:root[data-theme="dark"] .bit.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bit.on{color:#08130C}}
+.bitleg{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);font-weight:600}
+.bitleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.planner .pout{grid-column:1/-1}
+.pizza-wrap{container-type:inline-size;min-width:0;height:100%}
+.pizza-card{display:grid;grid-template-columns:250px minmax(0,1fr);gap:26px;align-items:center;align-content:center;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px 24px;height:100%}
+@container (max-width:560px){.pizza-card{grid-template-columns:1fr;gap:18px;padding:18px}.pizza-card #pizza{max-width:230px}}
+.pizza-card > *{min-width:0}
+#pizza{width:100%;max-width:280px;height:auto;display:block;margin-inline:auto}
+#pizza .sl{transform-origin:0 0;animation:sliceIn .45s cubic-bezier(.2,.8,.2,1.2) both}
+@keyframes sliceIn{from{transform:scale(.6) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+.pizza-txt{display:grid;gap:12px}
+.pizza-txt h3{font-size:clamp(1.25rem,2.4vw,1.6rem);font-weight:700;letter-spacing:-.015em}
+.pizza-txt h3 em{font-style:normal;color:var(--green)}
+.pizza-txt p{color:var(--muted)}
+.pz-calc{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:600 .9rem var(--f-mono)}
+.pz-calc span{background:var(--surface-2);padding:6px 10px;border-radius:10px}
+.pz-calc i{font-style:normal;color:var(--green);font-family:var(--f-body)}
+.pz-calc b{background:var(--green);color:#fff;padding:6px 10px;border-radius:10px}
+:root[data-theme="dark"] .pz-calc b{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pz-calc b{color:#08130C}}
+.pz-steps{display:flex;flex-wrap:wrap;gap:6px}
+.pz-steps button{display:grid;justify-items:center;gap:0;min-width:64px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:12px;padding:6px 10px;cursor:pointer;font:700 .9rem var(--f-mono)}
+.pz-steps button small{font:600 .7rem var(--f-body)}
+.pz-steps button:hover{border-color:var(--green);color:var(--green-strong)}
+.pz-steps button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="dark"] .pz-steps button[aria-pressed="true"]{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pz-steps button[aria-pressed="true"]{color:#08130C}}
+.pz-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.82rem;font-weight:600;color:var(--muted)}
+.pz-leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+@media (prefers-reduced-motion:reduce){#pizza .sl{animation:none}}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.stat b{font-family:var(--f-display);font-size:1.5rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.76rem;color:var(--muted);font-weight:600}
+
+/* tabelas */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:.9rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td{font-variant-numeric:tabular-nums}
+td.mono{font-family:var(--f-mono);font-size:.84rem}
+tr:last-child td{border-bottom:0}
+@media (max-width:640px){
+  .tbl-wrap{border:0;background:transparent;overflow:visible;border-radius:0}
+  .tbl-wrap table{display:block;min-width:0}
+  .tbl-wrap thead{display:none}
+  .tbl-wrap tbody{display:grid;gap:10px}
+  .tbl-wrap tr{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+  .tbl-wrap td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;white-space:normal;text-align:right;border-bottom:1px dashed var(--line);min-width:0;overflow-wrap:anywhere}
+  .tbl-wrap td::before{content:attr(data-label);font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;flex:none}
+  .tbl-wrap tr td:last-child{border-bottom:0}
+}
+
+/* animação */
+.anim{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.anim-ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.anim-ctl .seg{background:var(--surface)}
+.anim-ctl label{font-size:.85rem;font-weight:600;color:var(--muted);display:flex;gap:8px;align-items:center}
+.anim-ctl select{font:600 .85rem var(--f-body);padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn{border:0;background:var(--green);color:#fff;font:700 .9rem var(--f-body);padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.btn:hover{background:var(--green-strong)}
+:root[data-theme="dark"] .btn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#08130C}}
+.btn svg{width:16px;height:16px}
+.stage{overflow-x:auto}
+.stage svg{display:block;width:100%;height:auto;max-width:720px;margin-inline:auto}
+@media (max-width:640px){.stage svg{max-width:420px}}
+.status{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);font-size:.92rem}
+.pill{font:700 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.pill.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.status .desc{color:var(--muted);flex:1;min-width:240px}
+
+/* passos */
+.steps{display:grid;list-style:none;padding:0;margin:0}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;position:relative;padding-bottom:40px}
+.step::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(var(--green),var(--line))}
+.step:last-child::before{display:none}
+.step-n{width:56px;height:56px;border-radius:18px;background:var(--green);color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.3rem;display:grid;place-items:center;box-shadow:0 10px 24px -12px var(--green);position:relative;z-index:1}
+:root[data-theme="dark"] .step-n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .step-n{color:#08130C}}
+.step.test .step-n{background:var(--surface);color:var(--green-strong);border:2px dashed var(--green)}
+.step-body{display:grid;gap:12px;min-width:0;padding-top:4px}
+.step-body h3{font-size:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--mint);color:var(--green-strong)}
+.step-body > p{color:var(--muted);max-width:70ch}
+.step-body ul{margin:0;padding-left:20px;color:var(--muted)}
+.step-body li{margin-block:4px}
+.step-body li b{color:var(--ink)}
+.pt-ui{display:flex;flex-wrap:wrap;gap:8px}
+.pt-ui span{font-size:.82rem;font-weight:600;background:var(--surface);border:1px solid var(--line);padding:5px 10px;border-radius:8px}
+.pt-ui span::after{content:"›";margin-left:8px;color:var(--green)}
+.pt-ui span:last-child::after{content:none}
+
+.code{background:var(--code-bg);color:var(--code-fg);border-radius:14px;overflow:hidden;min-width:0}
+.code-top{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-bottom:1px solid color-mix(in srgb,var(--code-fg) 12%,transparent)}
+.dots{display:flex;gap:7px}
+.dots i{width:13px;height:13px;border-radius:50%;display:grid;place-items:center;font:700 10px/1 var(--f-body);font-style:normal;color:rgba(0,0,0,.6)}
+.dots i:nth-child(1){background:#28C840}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#FF5F57}
+.dots i:nth-child(1)::before{content:"+"}.dots i:nth-child(2)::before{content:"−"}.dots i:nth-child(3)::before{content:"×";font-size:12px}
+.r-ring{transform-box:fill-box;transform-origin:center;animation:rring 2.4s ease-out infinite}
+@keyframes rring{from{transform:scale(1);opacity:.7}to{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion:reduce){.r-ring{animation:none;opacity:0}}
+.code-top span{font:600 .75rem var(--f-mono);color:var(--code-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy{border:1px solid color-mix(in srgb,var(--code-fg) 25%,transparent);background:transparent;color:var(--code-fg);font:600 .75rem var(--f-body);padding:5px 10px;border-radius:8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.copy:hover{background:color-mix(in srgb,var(--code-fg) 10%,transparent)}
+.copy svg{width:14px;height:14px}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font:400 .86rem/1.65 var(--f-mono);white-space:pre}
+@media (max-width:600px){.code pre{font-size:.76rem;padding:12px}.anim-ctl label{width:100%;justify-content:space-between}.anim-ctl select{flex:1;min-width:0;max-width:240px}.anim-ctl .btn{width:100%;justify-content:center}.anim-ctl .seg{width:100%}.anim-ctl .seg button{flex:1}.status{padding:12px 14px}.status .desc{min-width:0;flex-basis:100%}.hero .wrap{padding-block:36px 32px;gap:28px}.hero-card{padding:16px}}
+.code .c{color:var(--code-muted);font-style:italic}
+.code .p{color:var(--code-key);font-weight:600}
+
+/* testes */
+.tests{display:grid;gap:10px}
+.test-row{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:8px}
+.test-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.test-head .kind{font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.kind.same{background:var(--mint);color:var(--green-strong)}
+.kind.cross{background:color-mix(in srgb,var(--s1) 15%,transparent);color:var(--s1)}
+.test-head b{font-family:var(--f-mono);font-size:.88rem}
+.test-head small{color:var(--muted);font-size:.85rem}
+.test-row details{font-size:.88rem;color:var(--muted)}
+.test-row summary{cursor:pointer;font-weight:600;color:var(--green-strong);width:fit-content}
+.test-row details p{margin-top:6px;display:flex;gap:8px;align-items:flex-start}
+.test-row details svg{width:18px;height:18px;flex:none;margin-top:2px}
+.r-ok{color:var(--ok)} .r-bad{color:var(--bad)}
+.observe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.obs{background:var(--surface-2);border-radius:14px;padding:14px;display:grid;grid-template-columns:40px 1fr;gap:12px;font-size:.92rem}
+.obs b{display:block;font-family:var(--f-display)}
+.obs span{color:var(--muted)}
+
+/* entrega */
+.deliver{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
+.deliver > *{min-width:0}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;gap:16px}
+.deliver.solo{grid-template-columns:minmax(0,760px)}
+.ck-group{font:700 .74rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);padding:12px 10px 2px;border-top:1px dashed var(--line);margin-top:4px}
+.ck-group:first-child{border-top:0;margin-top:0;padding-top:4px}
+.ck-n{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-right:8px;padding:0 6px;border-radius:7px;background:var(--mint);color:var(--green-strong);font:700 .72rem var(--f-mono);font-style:normal;vertical-align:1px}
+.check input:checked + span .ck-n{background:var(--green);color:var(--surface)}
+.prog-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+#prog-txt{font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+#prog-txt b{font:800 1.5rem var(--f-display);color:var(--green-strong)}
+#prog-txt.done{color:var(--ok);font-weight:700}
+.dcard.hl{border:2px solid var(--green);background:linear-gradient(180deg,var(--surface-2),var(--surface) 60%)}
+.fname{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--code-bg);color:var(--code-key);font:600 1.15rem var(--f-mono);padding:14px 16px;border-radius:14px;word-break:break-all}
+.fname span{flex:1;min-width:0}
+.check{display:grid;gap:8px}
+.check label{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:.95rem;cursor:pointer;padding:8px 10px;border-radius:10px}
+.check label:hover{background:var(--surface-2)}
+.check input{width:18px;height:18px;accent-color:var(--green);margin-top:3px}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--green),var(--green-strong));width:0;transition:width .3s}
+.progress{height:12px}
+.qs{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--ink)}
+.qs li::marker{font-family:var(--f-display);font-weight:700;color:var(--green-strong)}
+
+.errs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.err{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:8px}
+.err h3{font-size:1rem;display:flex;gap:10px;align-items:center}
+.err h3 svg{width:20px;height:20px;color:var(--red);flex:none}
+.err p{font-size:.92rem;color:var(--muted)}
+
+footer{padding-block:36px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand svg{height:52px;width:auto}
+
+/* DHCP */
+.sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:40px 0 14px}
+.ports{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.port-card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--vc);border-radius:var(--r);padding:16px 18px;display:grid;gap:6px;align-content:start}
+.port-card b{font:800 1.8rem var(--f-display);color:var(--vc);line-height:1;font-variant-numeric:tabular-nums}
+.port-card strong{font-family:var(--f-display);font-size:.95rem}
+.port-card span{font-size:.88rem;color:var(--muted)}
+.dh-body{display:grid;grid-template-columns:minmax(0,1fr) 300px}
+.dh-body > *{min-width:0}
+.dh-stage svg{display:block;width:100%;height:auto}
+.dh-panel{border-left:1px solid var(--line);padding:16px;display:grid;align-content:center;background:var(--surface)}
+.dh-win{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.dh-win-top{background:var(--code-bg);color:var(--code-fg);font:600 .78rem var(--f-mono);padding:8px 12px}
+.dh-mode{display:flex;gap:6px;padding:10px 12px 0}
+.dh-mode span{font:700 .72rem var(--f-body);padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.dh-mode span.on{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="dark"] .dh-mode span.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .dh-mode span.on{color:#08130C}}
+.dh-win dl{margin:0;padding:10px 12px;display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:.8rem}
+.dh-win dt{color:var(--muted);font-weight:600;white-space:nowrap}
+.dh-win dd{margin:0;text-align:right;font:600 .8rem var(--f-mono);font-variant-numeric:tabular-nums;color:var(--muted);transition:color .3s,background .3s;border-radius:6px;padding:0 4px}
+.dh-win dd.set{color:var(--green-strong);background:var(--mint)}
+.dh-msg{margin:0 12px 12px;font:600 .78rem var(--f-mono);padding:8px 10px;border-radius:8px;background:var(--surface-2);color:var(--muted)}
+.dh-msg.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+.dh-pkt{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);font-size:.92rem;color:var(--muted)}
+.dh-pkt span:last-child{flex:1;min-width:0}
+.dh-pkt code{white-space:nowrap}
+.dora{list-style:none;margin:0;padding:14px 18px 18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;border-top:1px solid var(--line)}
+.dora li{display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;align-items:start;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--surface);transition:transform .25s,border-color .25s,box-shadow .25s,background .25s}
+.dora li > b{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font:800 1.1rem var(--f-display);background:var(--vc);color:#fff}
+:root[data-theme="dark"] .dora li > b{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .dora li > b{color:#08130C}}
+.dora strong{font-family:var(--f-display);display:block;font-size:.95rem}
+.dora span{display:block;font-size:.8rem;color:var(--muted);line-height:1.4}
+.dora code{display:block;margin-top:6px;font-size:.68rem;overflow-wrap:anywhere;padding:3px 6px}
+.dora li.on{border-color:var(--vc);background:color-mix(in srgb,var(--vc) 9%,var(--surface));box-shadow:0 12px 26px -18px var(--vc);transform:translateY(-3px)}
+.dora li.done{border-color:color-mix(in srgb,var(--vc) 45%,var(--line))}
+.pool-how{margin-top:28px;background:var(--surface-2);border-radius:var(--r);padding:20px 22px;display:grid;gap:14px}
+.pool-how h3{font-size:1.15rem}
+.pool-how > p{color:var(--muted);font-size:.95rem;max-width:80ch}
+.flow{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:fl}
+.flow li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px 12px 50px;font-size:.88rem;color:var(--muted);counter-increment:fl;min-width:0}
+.flow li::before{content:counter(fl);position:absolute;left:12px;top:12px;width:28px;height:28px;border-radius:9px;background:var(--green);color:#fff;display:grid;place-items:center;font:800 .9rem var(--f-display)}
+:root[data-theme="dark"] .flow li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .flow li::before{color:#08130C}}
+.flow li:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translate(50%,-50%);color:var(--green);font-weight:800;z-index:1}
+.flow b{display:block;color:var(--ink);font-family:var(--f-display);font-size:.9rem}
+.flow code{font-size:.78rem;overflow-wrap:anywhere}
+@media (max-width:900px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow li::after{display:none}}
+@media (max-width:480px){.flow{grid-template-columns:1fr}.pool-how{padding:16px}}
+@media (max-width:900px){.dh-body{grid-template-columns:1fr}.dh-panel{border-left:0;border-top:1px solid var(--line)}.dora{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.dh-pkt span:last-child{flex-basis:100%}.dh-pkt{padding:12px 14px}}
+@media (max-width:480px){.dora{grid-template-columns:1fr;padding:12px}.ports{grid-template-columns:1fr 1fr}.port-card{padding:14px}.port-card b{font-size:1.4rem}}
+
+/* desenho da topologia */
+.topo-h{font-family:var(--f-display);font-size:1.02rem;font-weight:700;margin:10px 0 0;display:flex;align-items:center;gap:10px}
+.topo-h::before{content:"";width:16px;height:3px;border-radius:3px;background:var(--green)}
+.drawing{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 18px 12px;display:grid;gap:8px;min-width:0}
+.draw-scroll{overflow-x:auto}
+#draw{display:block;width:100%;min-width:680px;height:auto}
+.drawing figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+#draw .grp-l{font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.1em}
+#draw .grp-n{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+#draw .cab{stroke-width:2.2;fill:none}
+#draw .halo{paint-order:stroke;stroke:var(--surface);stroke-width:5px;stroke-linejoin:round}
+#draw .sw-body{fill:var(--code-bg)}
+#draw .sw-top{fill:var(--green)}
+#draw .led{fill:var(--code-key)}
+#draw .sw-t{fill:var(--code-fg);font-family:var(--f-display);font-weight:700;font-size:14px;text-anchor:middle}
+#draw .mon{fill:var(--surface);stroke-width:2}
+#draw .stand{fill:var(--ink)}
+#draw .pc-t{fill:var(--ink);font-family:var(--f-display);font-weight:700;font-size:14px;text-anchor:middle}
+#draw .pc-ip{fill:var(--muted);font-family:var(--f-mono);font-size:11px;text-anchor:middle}
+#draw .port{fill:var(--muted);font-family:var(--f-mono);font-size:10px;text-anchor:middle}
+#draw .rtr{fill:var(--code-bg);stroke:var(--green);stroke-width:3}
+#draw .rtr-i{stroke:var(--code-key);stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.uplink{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px dashed var(--green);border-radius:var(--r);padding:12px 16px;font-size:.9rem;color:var(--muted)}
+.uplink .pill{color:var(--green-strong)}
+@media (max-width:900px){#draw{min-width:0;max-width:420px;margin-inline:auto}.drawing{padding:12px 10px 10px}.uplink{font-size:.84rem}}
+/* responsivo geral */
+@media (max-width:1000px){table{min-width:0}th,td{white-space:normal;padding:10px 10px}td.mono{overflow-wrap:anywhere}}
+@media (max-width:600px){.code pre{white-space:pre-wrap;overflow-wrap:anywhere}}
+@media (max-width:480px){
+  .bitrow{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:6px}
+  .bit{font-size:.62rem}
+  .stat b{font-size:1.2rem}.stat span{font-size:.7rem;line-height:1.3;display:block}
+  .step{grid-template-columns:36px minmax(0,1fr);gap:12px;padding-bottom:32px}
+  .step-n{width:36px;height:36px;border-radius:12px;font-size:1rem}
+  .step::before{left:17px;top:36px}
+  .step-body ul{padding-left:16px}
+  .check label{padding:8px 4px;gap:8px;font-size:.9rem}
+  .dcard{padding:16px}
+  .pizza-txt h3{font-size:1.2rem}
+}
+
+
+/* desafio em vermelho */
+.desafio{--green:var(--red);--green-strong:var(--red);--mint:color-mix(in srgb,var(--red) 16%,var(--surface));--surface-2:color-mix(in srgb,var(--red) 7%,var(--surface));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--red) 6%,var(--bg)),var(--bg) 70%);border-top:4px solid var(--red)}
+.desafio .step-n,.desafio .btn{color:#fff}
+:root[data-theme="dark"] .desafio .step-n,:root[data-theme="dark"] .desafio .btn{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .desafio .step-n,:root:not([data-theme="light"]) .desafio .btn{color:#1A0505}}
+.ch-banner{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;border:2px solid var(--red);border-radius:24px;padding:24px;margin-bottom:28px;
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--red) 18%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--red) 14%,var(--surface)),var(--surface) 70%)}
+.ch-banner .ico{width:60px;height:60px;border-radius:18px;background:var(--red);color:#fff}
+.ch-banner .ico svg{width:32px;height:32px}
+.ch-banner h2{color:var(--red);margin-top:6px}
+.ch-banner p{color:var(--muted);margin-top:8px;max-width:70ch}
+.desafio .tbl-wrap{border-color:color-mix(in srgb,var(--red) 25%,var(--line))}
+.desafio .step-body h3 .tag{background:var(--red);color:#fff}
+.nav a.nav-ch{color:var(--red)}
+.chip-ch{border-color:color-mix(in srgb,var(--red) 40%,var(--line))}
+.chip-ch svg{color:var(--red)}
+.ck-group.ck-ch{color:var(--red)}
+.ck-n.ch{background:color-mix(in srgb,var(--red) 14%,var(--surface));color:var(--red)}
+.check input:checked + span .ck-n.ch{background:var(--red);color:#fff}
+@media (max-width:600px){.ch-banner{grid-template-columns:1fr;padding:18px}}
+.err-g{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.err-g::after{content:"";height:1px;flex:1;background:var(--line)}
+.err-g.ch{color:var(--red);margin-top:28px}
+.err-ch{border-color:color-mix(in srgb,var(--red) 30%,var(--line));background:color-mix(in srgb,var(--red) 4%,var(--surface))}
+@media (max-width:920px){.planner{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .hero .wrap,.def,.deliver{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:2px;margin:0;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px color-mix(in srgb,var(--ink) 40%,transparent);padding-block:8px 14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .nav.open{display:flex;animation:navIn .18s ease-out}
+  .nav a{font-size:1rem;padding:12px 14px;border-radius:12px;display:flex;align-items:center;gap:12px}
+  .nav a::before{content:counter(navi,decimal-leading-zero);counter-increment:navi;font:600 .75rem var(--f-mono);color:var(--green)}
+  .nav{counter-reset:navi}
+  .menu-btn{display:inline-grid}
+  .bar .wrap{flex-wrap:nowrap;gap:10px}
+  .brand{min-width:0}
+  .brand-txt span{white-space:nowrap}
+}
+@media (max-width:400px){
+  .brand{gap:9px}
+  .ifsc-logo{height:34px}
+  .brand-txt .b1{font-size:.76rem}
+  .brand-txt .b2{font-size:.74rem}
+  .back{padding:7px 11px 7px 9px;font-size:.8rem}
+}
+@media (max-width:350px){
+  .back-txt{display:none}
+  .back{padding:9px}
+}
+@media (max-width:600px){
+  .grid3,.errs,.observe,.stats{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .step{grid-template-columns:44px minmax(0,1fr);gap:14px}
+  .step-n{width:44px;height:44px;border-radius:14px;font-size:1.1rem}
+  .step::before{left:21px;top:44px}
+  section.sec{padding-block:48px}
+  .bit{font-size:.55rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+/* complementos desta aula: rede em anel, tabela de rotas, comparativo e navegador */
+.vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.vs-card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--vc);border-radius:var(--r);padding:22px;display:grid;gap:12px;align-content:start}
+.vs-card h3{display:flex;align-items:center;gap:12px;font-size:1.2rem}
+.vs-card p{color:var(--muted);font-size:.96rem}
+.vs-card ul{margin:0;padding-left:20px;color:var(--muted);font-size:.94rem}
+.vs-card li{margin-block:4px}
+.vs-card li b{color:var(--ink)}
+.vs-card .code pre{font-size:.8rem}
+.rt-line{font-family:var(--f-mono);font-size:.85rem;font-size:min(.95rem,3.1cqi);font-weight:600;line-height:1.7;overflow-wrap:anywhere}
+.rt-line .k1{color:var(--s1)}.rt-line .k2{color:var(--green-strong)}.rt-line .k3{color:var(--s2)}.rt-line .k4{color:var(--s3)}.rt-line .k5{color:var(--s4)}
+.anat i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;vertical-align:0}
+.rsel{margin-bottom:-2px;width:fit-content}
+.nt text{font-family:var(--f-body)}
+.nt .lk{stroke:var(--neutral);stroke-width:3;fill:none;stroke-linecap:round}
+.nt .lan{stroke:var(--neutral);stroke-width:2.2;fill:none}
+.nt .lk.cut{stroke:var(--red);stroke-dasharray:3 9;opacity:.75}
+.nt .trail{stroke-width:6;fill:none;stroke-linecap:round;opacity:.55}
+.nt .rtr{fill:var(--code-bg);stroke:var(--green);stroke-width:3}
+.nt .rtr.src{stroke:var(--s2)}
+.nt .rtr-i{stroke:var(--code-key);stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.nt .mon{fill:var(--surface);stroke-width:2.4}
+.nt .stand{fill:var(--ink)}
+.nt .t-name{fill:var(--ink);font-family:var(--f-display);font-weight:700;font-size:14px;text-anchor:middle}
+.nt .t-ip{fill:var(--muted);font-family:var(--f-mono);font-size:11.5px;text-anchor:middle}
+.nt .t-net{fill:var(--muted);font-family:var(--f-mono);font-size:11.5px;font-weight:600}
+.nt .t-port{fill:var(--green-strong);font-family:var(--f-mono);font-size:10.5px;font-weight:600;text-anchor:middle}
+.nt .halo{paint-order:stroke;stroke:var(--surface);stroke-width:5px;stroke-linejoin:round}
+.nt .cutx{stroke:var(--red);stroke-width:3.5;stroke-linecap:round}
+.nt .pk rect{stroke:var(--surface);stroke-width:2}
+.nt .pk path{stroke:var(--surface);stroke-width:1.6;fill:none}
+#net{max-width:none}
+.rt-win{display:grid;gap:0}
+.rt-rows{padding:10px 12px;display:grid;gap:5px;font:600 .76rem/1.45 var(--f-mono);font-variant-numeric:tabular-nums}
+.rt-rows div{display:grid;grid-template-columns:18px minmax(0,1fr);gap:6px;color:var(--muted);overflow-wrap:anywhere}
+.rt-rows b{font-weight:700}
+.rt-rows .c b{color:var(--neutral)}
+.rt-rows .s{color:var(--ink)}.rt-rows .s b{color:var(--s1)}
+.rt-rows .r{color:var(--ink)}.rt-rows .r b{color:var(--s3)}
+.rt-rows .off{text-decoration:line-through;opacity:.55}
+.rt-leg{padding:0 12px 12px;font-size:.74rem;color:var(--muted);line-height:1.5}
+.dh-panel{align-content:start}
+.web{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);max-width:560px}
+.web-top{background:var(--code-bg);color:var(--code-fg);font:600 .78rem var(--f-mono);padding:8px 12px}
+.web-url{display:flex;gap:8px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.web-url span{flex:1;min-width:0;font:600 .85rem var(--f-mono);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;overflow-wrap:anywhere}
+.web-url b{font:700 .8rem var(--f-body);background:var(--green);color:#fff;border-radius:8px;padding:6px 12px}
+.web-page{padding:18px 16px;display:grid;gap:6px}
+.web-page strong{font-family:var(--f-display);font-size:1.15rem}
+.web-page span{color:var(--muted);font-size:.9rem}
+.final{background:linear-gradient(180deg,var(--surface-2),var(--bg) 60%)}
+#hero-svg .hn{fill:var(--code-bg);stroke:var(--green);stroke-width:3}
+#hero-svg .hp{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+#hero-svg .ht{font-family:var(--f-display);font-weight:700;font-size:13px;fill:var(--code-fg);text-anchor:middle}
+#hero-svg .hs{font-family:var(--f-mono);font-size:10.5px;fill:var(--muted);text-anchor:middle}
+@media (max-width:900px){.rt-rows{font-size:.8rem}}
+@media (max-width:700px){.vs{grid-template-columns:1fr}}
+.nt .t-rn{fill:var(--code-fg);font-family:var(--f-display);font-weight:700;font-size:14px;text-anchor:middle}
+.nt .sw{fill:var(--code-bg);stroke:var(--green);stroke-width:2}
+.nt .srv{fill:var(--surface);stroke:var(--green-strong);stroke-width:2.4}
+.nt .srv-l{stroke:var(--green-strong);stroke-width:2.2;stroke-linecap:round}
+.nt .srv-d{fill:var(--green)}
+.draw2{display:block;width:100%;height:auto;max-width:720px;margin-inline:auto}
+@media (min-width:641px) and (max-width:900px){#draw{max-width:none}}
+@media (max-width:640px){.nt .t-name{font-size:15px}.nt .t-ip,.nt .t-net{font-size:13.5px}.nt .t-port{font-size:12.5px}.draw2{max-width:420px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ifsc-mark" viewBox="0 0 410 555">
+      <circle cx="60" cy="60" r="66" fill="#CD191E"/>
+      <g fill="#2F9E41">
+        <rect x="145" y="0" width="120" height="120" rx="10"/><rect x="290" y="0" width="120" height="120" rx="10"/>
+        <rect x="0" y="145" width="120" height="120" rx="10"/><rect x="145" y="145" width="120" height="120" rx="10"/>
+        <rect x="0" y="290" width="120" height="120" rx="10"/><rect x="145" y="290" width="120" height="120" rx="10"/><rect x="290" y="290" width="120" height="120" rx="10"/>
+        <rect x="0" y="435" width="120" height="120" rx="10"/><rect x="145" y="435" width="120" height="120" rx="10"/>
+      </g>
+    </symbol>
+    <symbol id="i-split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 3v18M3 12h18"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-4"/><path d="M3.3 19a10 10 0 1 1 17.4 0"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 12 0v1"/><path d="M16 4a4 4 0 0 1 0 8"/><path d="M22 21v-1a6 6 0 0 0-4-5.6"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/></symbol>
+    <symbol id="i-switch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/></symbol>
+    <symbol id="i-pc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4"/><path d="M4 4h12l-2 4 2 4H4"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5M3 21v-5h5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 10 5-10 5L2 7l10-5Z"/><path d="m2 12 10 5 10-5M2 17l10 5 10-5"/></symbol>
+</defs></svg>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand">
+      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg>
+      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    </div>
+    <nav class="nav" id="menu" aria-label="Seções">
+      <a href="#conceito">Conceito</a><a href="#tipos">Estático × dinâmico</a><a href="#animacao">Animação</a><a href="#passos">Passo a passo</a><a href="#servidor">Servidor web</a><a class="nav-ch" href="#rip">Desafio RIP</a><a href="#checklist-sec">Checklist</a>
+    </nav>
+    <a class="back" aria-label="Voltar para Redes" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span class="back-txt">Voltar</span></a>
+    <button class="menu-btn" type="button" id="menu-btn" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Laboratório · Cisco Packet Tracer</span>
+      <h1>Laboratório de <em>roteamento</em></h1>
+      <p class="lead">Entenda como um roteador escolhe o caminho de um pacote, ligue 4 roteadores em anel, escreva as tabelas de roteamento à mão com rotas estáticas e publique um site em <code>cisco.com.br</code> para acessar de um PC remoto. No desafio, deixe o RIP descobrir os caminhos sozinho.</p>
+      <div class="chips">
+        <span class="chip"><svg><use href="#i-route"/></svg>4× Roteador 2911</span>
+        <span class="chip"><svg><use href="#i-pc"/></svg>4 PCs · 1 por rede</span>
+        <span class="chip"><svg><use href="#i-pin"/></svg>Rotas estáticas</span>
+        <span class="chip"><svg><use href="#i-globe"/></svg>Servidor web + DNS</span>
+        <span class="chip chip-ch"><svg><use href="#i-flag"/></svg>Desafio: RIP v2</span>
+        <span class="chip"><svg><use href="#i-clock"/></svg>≈ 90 min</span>
+      </div>
+    </div>
+    <div class="hero-net">
+      <svg id="hero-svg" viewBox="0 0 400 300" role="img" aria-label="Animação: pacotes circulando pelo anel de 4 roteadores, com um servidor ao lado do PC2">
+        <path class="hl" d="M110 80H290V220H110Z" fill="none" style="stroke:var(--green)"/>
+        <g style="stroke:var(--neutral);stroke-width:2"><path d="M110 80 52 40M290 80l58-40M290 220l58 40M110 220l-58 40M319 240l51-36"/></g>
+        <g id="hero-pk">
+          <circle r="7" style="fill:var(--s1);stroke:var(--surface);stroke-width:2"><animateMotion dur="7s" repeatCount="indefinite" path="M52 40 110 80H290V220l58 40"/></circle>
+          <circle r="7" style="fill:var(--s2);stroke:var(--surface);stroke-width:2"><animateMotion dur="7s" begin="-3.5s" repeatCount="indefinite" path="M348 260 290 220H110V80L52 40"/></circle>
+          <circle r="7" style="fill:var(--s4);stroke:var(--surface);stroke-width:2"><animateMotion dur="5s" begin="-1s" repeatCount="indefinite" path="M52 260 110 220V80H290l58-40"/></circle>
+        </g>
+        <g><circle class="hr-ring" cx="110" cy="80" r="24"/><circle class="hr-ring b" cx="290" cy="220" r="24"/></g>
+        <g><circle class="hn" cx="110" cy="80" r="24"/><circle class="hn" cx="290" cy="80" r="24"/><circle class="hn" cx="290" cy="220" r="24"/><circle class="hn" cx="110" cy="220" r="24"/></g>
+        <g class="ht"><text x="110" y="85">R1</text><text x="290" y="85">R2</text><text x="290" y="225">R3</text><text x="110" y="225">R4</text></g>
+        <g><rect class="hp" x="36" y="28" width="32" height="22" rx="4" style="stroke:var(--s1)"/><rect class="hp" x="332" y="28" width="32" height="22" rx="4" style="stroke:var(--s2)"/><rect class="hp" x="332" y="250" width="32" height="22" rx="4" style="stroke:var(--s3)"/><rect class="hp" x="36" y="250" width="32" height="22" rx="4" style="stroke:var(--s4)"/><rect class="hp" x="358" y="178" width="24" height="30" rx="4" style="stroke:var(--green)"/><path d="M364 187h12M364 194h12" style="stroke:var(--green);stroke-width:2;stroke-linecap:round"/></g>
+        <g class="hs"><text x="52" y="20">PC0</text><text x="348" y="20">PC1</text><text x="348" y="288">PC2</text><text x="52" y="288">PC3</text><text x="370" y="170">SRV</text><text x="200" y="70">10.0.12.0/30</text><text x="200" y="240">10.0.34.0/30</text></g>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<main>
+<section class="sec" id="conceito">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Conceito</span>
+      <h2>O que é roteamento?</h2>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big"><strong>Roteamento</strong> é o processo de escolher por onde um pacote IP deve seguir para sair de uma rede e chegar a outra. Quem faz essa escolha é o <strong>roteador</strong>, consultando a sua <strong>tabela de roteamento</strong>.</p>
+        <p>O switch entrega quadros dentro de <b>uma</b> rede, olhando o endereço MAC. O roteador liga redes <b>diferentes</b> e trabalha na camada 3, olhando o <b>IP de destino</b>. Cada porta do roteador pertence a uma rede e serve de gateway para ela.</p>
+        <p>Quando o pacote chega, o roteador procura na tabela a rota que combina com o IP de destino. Se achar, envia o pacote para o <b>próximo salto</b> (o roteador vizinho) ou direto ao destino, se a rede estiver ligada nele. Se não achar, o pacote é descartado e a origem recebe <i>Destination host unreachable</i>.</p>
+        <p>Nenhum roteador conhece o caminho inteiro. Cada um decide só o próximo salto, e o pacote avança de roteador em roteador até a rede de destino. Por isso <b>todos</b> os roteadores do caminho precisam ter a rota, na ida e na volta.</p>
+      </div>
+      <div class="ip-anatomy">
+        <h3>Anatomia de uma linha do <span style="text-transform:none">show ip route</span></h3>
+        <div class="rt-line" aria-label="Exemplo de rota"><span class="k1">R</span> <span class="k2">192.168.3.0/24</span> <span class="k3">[120/2]</span> via <span class="k4">10.0.12.2</span>, 00:00:12, <span class="k5">GigabitEthernet0/1</span></div>
+        <div class="anat-rows">
+          <div class="anat"><b><i style="background:var(--s1)"></i>Origem da rota</b><span>C conectada · L local · S estática · R aprendida por RIP</span></div>
+          <div class="anat"><b><i style="background:var(--green-strong)"></i>Rede de destino</b><span>192.168.3.0 com máscara /24</span></div>
+          <div class="anat"><b><i style="background:var(--s2)"></i>[distância/métrica]</b><span>120 = confiança no RIP · 2 = saltos até a rede</span></div>
+          <div class="anat"><b><i style="background:var(--s3)"></i>Próximo salto</b><span>IP do roteador vizinho que recebe o pacote</span></div>
+          <div class="anat"><b><i style="background:var(--s4)"></i>Interface de saída</b><span>porta por onde o pacote sai</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="beneficios">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Por que usar</span>
+      <h2>Vantagens e benefícios do roteamento</h2>
+      <p>É o roteamento que permite juntar redes pequenas em redes grandes. A própria Internet é um conjunto de redes ligadas por roteadores.</p>
+    </div>
+    <div class="grid3">
+      <article class="ben"><div class="ico"><svg><use href="#i-globe"/></svg></div><h3>Liga redes diferentes</h3><p>PCs em redes IP distintas, em salas, câmpus ou cidades diferentes, passam a se comunicar pelo roteador.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-route"/></svg></div><h3>Caminhos redundantes</h3><p>Com mais de um caminho, a queda de um enlace não derruba a rede: o tráfego segue pelo outro lado.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-gauge"/></svg></div><h3>Melhor caminho</h3><p>O roteador compara as rotas pela métrica e usa a melhor. Com custos iguais, pode dividir o tráfego entre elas.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-split"/></svg></div><h3>Contém o broadcast</h3><p>O broadcast de uma rede não atravessa o roteador. Cada rede fica com o seu próprio tráfego de ARP e DHCP.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-shield"/></svg></div><h3>Controle e segurança</h3><p>Todo tráfego entre redes passa pelo roteador. É nele que se aplicam filtros (ACLs) e se registra quem fala com quem.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-layers"/></svg></div><h3>Escala</h3><p>A tabela guarda uma linha por rede, não por computador. Uma rota pode representar milhares de hosts.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="tipos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Tipos de rota</span>
+      <h2>Roteamento estático × dinâmico</h2>
+      <p>A tabela de roteamento pode ser preenchida de duas formas: pelo administrador, linha por linha, ou pelos próprios roteadores, conversando entre si com um protocolo de roteamento.</p>
+    </div>
+    <div class="vs">
+      <article class="vs-card" style="--vc:var(--s1)">
+        <h3><span class="ico"><svg><use href="#i-pin"/></svg></span>Estático</h3>
+        <p>O administrador digita cada rota com o comando <code>ip route</code>. A rota fica na tabela até alguém apagar.</p>
+        <ul>
+          <li><b>Simples e previsível</b>: o caminho é sempre o que foi digitado.</li>
+          <li><b>Leve</b>: não gasta CPU nem banda com mensagens entre roteadores.</li>
+          <li><b>Não se adapta</b>: se um enlace cai, a rota não muda sozinha, mesmo existindo outro caminho.</li>
+          <li><b>Trabalhoso</b>: cada rede nova exige mexer em vários roteadores.</li>
+        </ul>
+        <p>Indicado para redes pequenas, redes com uma única saída e para a <b>rota padrão</b> (<code>0.0.0.0 0.0.0.0</code>).</p>
+      </article>
+      <article class="vs-card" style="--vc:var(--s3)">
+        <h3><span class="ico"><svg><use href="#i-refresh"/></svg></span>Dinâmico</h3>
+        <p>Os roteadores anunciam as redes que conhecem aos vizinhos e montam a tabela sozinhos.</p>
+        <ul>
+          <li><b>Aprende sozinho</b>: basta dizer quais redes cada roteador anuncia.</li>
+          <li><b>Adapta-se</b>: se um enlace cai, os roteadores recalculam e usam outro caminho.</li>
+          <li><b>Escala melhor</b>: uma rede nova é anunciada para todos automaticamente.</li>
+          <li><b>Custa mais</b>: usa CPU, memória e banda, e leva um tempo para convergir.</li>
+        </ul>
+        <p>Indicado para redes médias e grandes e sempre que houver caminhos redundantes.</p>
+      </article>
+    </div>
+
+    <h3 class="sub-h">Protocolos de roteamento dinâmico</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Protocolo</th><th>Tipo</th><th>Métrica</th><th>Distância adm.</th><th>Onde se usa</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Protocolo"><span class="vtag" style="--vc:var(--red)">RIP v2</span></td><td data-label="Tipo">Vetor de distância</td><td data-label="Métrica">Saltos (máx. 15)</td><td data-label="Distância adm." class="mono">120</td><td data-label="Onde se usa">Redes pequenas e ensino</td></tr>
+          <tr><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s1)">OSPF</span></td><td data-label="Tipo">Estado de enlace</td><td data-label="Métrica">Custo (largura de banda)</td><td data-label="Distância adm." class="mono">110</td><td data-label="Onde se usa">Redes corporativas</td></tr>
+          <tr><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s3)">EIGRP</span></td><td data-label="Tipo">Vetor de distância avançado</td><td data-label="Métrica">Banda e atraso</td><td data-label="Distância adm." class="mono">90</td><td data-label="Onde se usa">Redes com equipamentos Cisco</td></tr>
+          <tr><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s2)">BGP</span></td><td data-label="Tipo">Vetor de caminho</td><td data-label="Métrica">Atributos de caminho</td><td data-label="Distância adm." class="mono">20 / 200</td><td data-label="Onde se usa">Entre provedores, na Internet</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>A <b>distância administrativa</b> mede a confiança na origem da rota: conectada = 0, estática = 1, RIP = 120. Se o roteador conhece duas rotas para a mesma rede, entra na tabela a de <b>menor</b> distância. Por isso uma rota estática sempre vence uma rota RIP para o mesmo destino.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="animacao">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Animação</span>
+      <h2>Veja o pacote escolher o caminho</h2>
+      <p>Escolha o tipo de roteamento, a origem e o destino, que pode ser um PC ou o servidor web ligado ao R3, ao lado do PC2. Depois corte um enlace e compare: a rota estática continua apontando para o enlace caído, e o RIP encontra o outro lado do anel.</p>
+    </div>
+    <div class="anim">
+      <div class="anim-ctl">
+        <div class="seg" role="group" aria-label="Tipo de roteamento">
+          <button type="button" id="m-none" aria-pressed="false">Sem rotas</button>
+          <button type="button" id="m-static" aria-pressed="true">Estático</button>
+          <button type="button" id="m-rip" aria-pressed="false">RIP</button>
+        </div>
+        <label for="a-src">Origem <select id="a-src"></select></label>
+        <label for="a-dst">Destino <select id="a-dst"></select></label>
+        <label for="a-cut">Enlace cortado <select id="a-cut"><option value="-1">Nenhum</option><option value="0">R1–R2</option><option value="1">R2–R3</option><option value="2">R3–R4</option><option value="3">R4–R1</option></select></label>
+        <button type="button" class="btn" id="play"><svg><use href="#i-play"/></svg>Enviar pacote</button>
+      </div>
+      <div class="dh-body">
+        <div class="stage"><svg id="net" class="nt" viewBox="0 0 760 440" role="img" aria-label="Topologia: quatro roteadores em anel, cada um com um PC, e o servidor SRV-WEB ligado ao R3 junto com o PC2"></svg></div>
+        <div class="dh-panel">
+          <div class="dh-win rt-win">
+            <div class="dh-win-top"><span id="rt-name">R1</span># show ip route</div>
+            <div class="rt-rows" id="rt-rows"></div>
+            <div class="rt-leg">C = conectada · S = estática · R = RIP. É a tabela do roteador do PC de origem.</div>
+          </div>
+        </div>
+      </div>
+      <div class="status">
+        <span class="pill" id="a-pill">Pronto</span>
+        <div class="desc" id="a-desc">Escolha a origem e o destino e clique em “Enviar pacote”.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="passos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Prática</span>
+      <h2>Passo a passo no Packet Tracer</h2>
+      <p>Siga a ordem. Os passos com número tracejado são <b>testes</b>: execute, observe e anote o que acontece antes de abrir o resultado esperado.</p>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Monte a topologia</h3>
+          <div class="pt-ui"><span>Network Devices</span><span>Routers</span><span>2911</span></div>
+          <ul>
+            <li><b>4 roteadores 2911</b> formando um quadrado: <code>R1</code> e <code>R2</code> em cima, <code>R3</code> e <code>R4</code> embaixo, no sentido horário. O 2911 já vem com 3 portas Gigabit, o suficiente para este laboratório.</li>
+            <li><b>4 PCs</b> (<i>End Devices › PC-PT</i>), um ao lado de cada roteador: PC0 em R1, PC1 em R2, PC2 em R3 e PC3 em R4.</li>
+            <li>Use cabo <b>Copper Cross-Over</b> em todas as ligações (roteador com roteador e roteador com PC).</li>
+            <li>Em cada roteador, a porta <code>G0/0</code> vai para o PC, a <code>G0/1</code> vai para o <b>próximo</b> roteador e a <code>G0/2</code> recebe o cabo do roteador <b>anterior</b>.</li>
+            <li>Os links ficam <b>vermelhos</b> por enquanto: as portas de um roteador vêm desligadas de fábrica. Elas serão ligadas no passo 4.</li>
+          </ul>
+          <h4 class="topo-h">A rede que você vai montar</h4>
+          <figure class="drawing">
+            <div class="draw-scroll"><svg id="draw" class="nt" viewBox="0 0 760 440" role="img" aria-label="Desenho da topologia: R1, R2, R3 e R4 em anel, com as portas G0/1 e G0/2 nos enlaces e a G0/0 ligada ao PC de cada roteador"></svg></div>
+            <figcaption>Quatro redes locais (uma por PC) e quatro enlaces entre roteadores. Há sempre dois caminhos entre quaisquer dois PCs.</figcaption>
+          </figure>
+          <div class="uplink"><span class="pill">Cross-Over</span><span>R1 G0/1 → R2 G0/2 · R2 G0/1 → R3 G0/2 · R3 G0/1 → R4 G0/2 · R4 G0/1 → R1 G0/2</span><span class="pill">Cross-Over</span><span>G0/0 de cada roteador → FastEthernet0 do PC</span></div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Confira o plano de endereços</h3>
+          <p>São 8 redes: 4 redes locais <code>/24</code> e 4 enlaces ponto a ponto <code>/30</code> (cada <code>/30</code> tem exatamente 2 endereços úteis, um para cada ponta do cabo).</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Roteador</th><th>G0/0 · rede local</th><th>G0/1 · próximo</th><th>G0/2 · anterior</th></tr></thead>
+              <tbody id="addr-body"></tbody>
+            </table>
+          </div>
+          <p>Máscaras: <code>255.255.255.0</code> nas redes locais e <code>255.255.255.252</code> nos enlaces.</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Configure o IP de cada PC</h3>
+          <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>Static</span></div>
+          <p>O gateway de cada PC é a porta <code>G0/0</code> do seu roteador.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>PC</th><th>Ligado em</th><th>Endereço IP</th><th>Máscara</th><th>Gateway</th></tr></thead>
+              <tbody id="pc-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Configure as interfaces dos roteadores</h3>
+          <p>Clique no roteador e abra a aba <b>CLI</b>. Se aparecer <i>Would you like to enter the initial configuration dialog?</i>, responda <code>no</code>. Escolha o roteador abaixo para ver os comandos dele; o <code>no shutdown</code> é o que liga a porta.</p>
+          <div class="seg rsel" role="group" aria-label="Roteador" data-for="cli-if"></div>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span id="cli-if-t">R1 · interfaces</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre id="cli-if"></pre></div>
+          <p>Repita nos 4 roteadores. Ao terminar, todos os links ficam <b>verdes</b>. Confira com <code>show ip interface brief</code>: as 3 portas devem estar <i>up/up</i> com o IP certo.</p>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Teste 1: antes das rotas <span class="tag">Observe</span></h3>
+          <p>Abra <b>Desktop › Command Prompt</b> no PC0 e a aba <b>CLI</b> do R1. Todos os cabos estão ligados e todas as portas têm IP.</p>
+          <div class="tests" id="tests1"></div>
+          <div class="observe">
+            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>O que observar</b><span>Quem responde ao ping que falha: o PC de destino ou o seu gateway? O que a mensagem diz?</span></div></div>
+            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>O R1 está a um cabo de distância do R2. Por que ele não sabe chegar à rede do PC1?</span></div></div>
+          </div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <h3>Escreva as tabelas de roteamento (rotas estáticas)</h3>
+          <p>Cada roteador conhece só as 3 redes ligadas nele. Faltam as 3 redes locais dos outros roteadores. A sintaxe é <code>ip route &lt;rede de destino&gt; &lt;máscara&gt; &lt;próximo salto&gt;</code>, em que o próximo salto é o IP do roteador <b>vizinho</b> que fica no caminho.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Roteador</th><th>Para 192.168.1.0</th><th>Para 192.168.2.0</th><th>Para 192.168.3.0</th><th>Para 192.168.4.0</th></tr></thead>
+              <tbody id="st-body"></tbody>
+            </table>
+          </div>
+          <p>Regra usada neste plano: para a rede do roteador <b>oposto</b> no quadrado, o pacote segue pelo <b>próximo</b> roteador (G0/1).</p>
+          <div class="seg rsel" role="group" aria-label="Roteador" data-for="cli-st"></div>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span id="cli-st-t">R1 · rotas estáticas</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre id="cli-st"></pre></div>
+          <p>No <code>show ip route</code> de cada roteador devem aparecer 3 linhas com <b>S</b> (<i>static</i>), além das redes <b>C</b> e <b>L</b>.</p>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <h3>Teste 2: com rotas estáticas <span class="tag">Observe</span></h3>
+          <p>Repita os pings e use o <code>tracert</code> para ver por quais roteadores o pacote passa. O primeiro ping pode perder 1 ou 2 pacotes enquanto o ARP é resolvido em cada salto; isso é normal.</p>
+          <div class="tests" id="tests2"></div>
+          <div class="observe">
+            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>O que observar</b><span>Compare o <code>tracert</code> do PC0 para o PC2 com o do PC2 para o PC0. A ida e a volta passam pelos mesmos roteadores?</span></div></div>
+            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>No modo <b>Simulation</b>, filtre por <code>ICMP</code> e acompanhe o envelope. Em que momento cada roteador consulta a tabela?</span></div></div>
+          </div>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">8</div>
+        <div class="step-body">
+          <h3>Teste 3: derrube um enlace <span class="tag">Observe</span></h3>
+          <p>Simule a queda do cabo entre R1 e R2 desligando a porta no R1. Depois dos testes, <b>religue</b> a porta.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R1 · derrubar e religar o enlace R1–R2</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl>enable
+configure terminal
+interface gigabitEthernet 0/1
+ shutdown
+ end
+! ---- faça os testes e depois religue ----
+configure terminal
+interface gigabitEthernet 0/1
+ no shutdown
+ end</pre></div>
+          <div class="tests" id="tests3"></div>
+        </div>
+      </li>
+    </ol>
+    <div class="note"><div class="ico"><svg><use href="#i-route"/></svg></div><p>Rotas funcionando e porta religada? Antes do desafio, <a href="#servidor"><b>ligue um servidor web ao R3</b></a> e acesse o site <code>cisco.com.br</code> a partir do PC0.</p></div>
+  </div>
+</section>
+
+<section class="sec final" id="servidor">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 2 · Servidor web e DNS</span>
+      <h2>Publique o site cisco.com.br</h2>
+      <p>Com as rotas estáticas funcionando, coloque um servidor na rede do R3, ao lado do PC2, com os serviços HTTP e DNS e acesse a página pelo nome a partir do PC0, que está do outro lado do anel.</p>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big">O <strong>DNS</strong> (Domain Name System) traduz nomes em endereços IP. O navegador não sabe onde fica <code>cisco.com.br</code>; ele pergunta ao servidor DNS e recebe o IP do servidor web.</p>
+        <p>O roteamento não conhece nomes: os roteadores só encaminham pacotes para o IP <code>192.168.3.100</code>. Por isso o site só abre se as tabelas de roteamento da Parte 1 estiverem certas.</p>
+      </div>
+      <div class="web" aria-label="Resultado esperado no navegador do PC0">
+        <div class="web-top">PC0 · Web Browser</div>
+        <div class="web-url"><span>http://cisco.com.br</span><b>Go</b></div>
+        <div class="web-page"><strong>Cisco Packet Tracer</strong><span>Welcome to Cisco Packet Tracer. Opening doors to new opportunities. Mind Wide Open.</span></div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">Passo a passo do servidor</h3>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Ligue o servidor ao R3</h3>
+          <div class="pt-ui"><span>End Devices</span><span>Server-PT</span></div>
+          <p>A porta <code>G0/0</code> do R3 já está ocupada pelo PC2. Para ligar dois equipamentos na mesma rede, coloque um switch entre eles.</p>
+          <ul>
+            <li>Apague o cabo entre o R3 e o PC2.</li>
+            <li>Adicione <b>1 switch 2960</b> e <b>1 Server-PT</b>, renomeado para <code>SRV-WEB</code>.</li>
+            <li>Com cabo <b>Copper Straight-Through</b>: R3 <code>G0/0</code> → switch <code>G0/1</code>, PC2 → switch <code>Fa0/1</code>, SRV-WEB → switch <code>Fa0/2</code>.</li>
+            <li>Espere os links ficarem verdes (cerca de 30 s). Nada muda na configuração do R3.</li>
+          </ul>
+          <h4 class="topo-h">A rede com o servidor</h4>
+          <figure class="drawing">
+            <svg id="draw2" class="nt draw2" viewBox="0 0 760 440" role="img" aria-label="Desenho da topologia com o switch ligado ao R3, o PC2 e o servidor SRV-WEB 192.168.3.100"></svg>
+            <figcaption>O PC2 e o SRV-WEB ficam na mesma rede, <code>192.168.3.0/24</code>, atrás do switch ligado à G0/0 do R3.</figcaption>
+          </figure>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Configure o IP do servidor</h3>
+          <div class="pt-ui"><span>SRV-WEB</span><span>Desktop</span><span>IP Configuration</span><span>Static</span></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Campo</th><th>Valor</th><th>Por quê</th></tr></thead>
+              <tbody>
+                <tr><td data-label="Campo"><b>IPv4 Address</b></td><td data-label="Valor" class="mono">192.168.3.100</td><td data-label="Por quê">Endereço fixo na rede do R3</td></tr>
+                <tr><td data-label="Campo"><b>Subnet Mask</b></td><td data-label="Valor" class="mono">255.255.255.0</td><td data-label="Por quê">Mesma máscara da rede local</td></tr>
+                <tr><td data-label="Campo"><b>Default Gateway</b></td><td data-label="Valor" class="mono">192.168.3.1</td><td data-label="Por quê">Porta G0/0 do R3</td></tr>
+                <tr><td data-label="Campo"><b>DNS Server</b></td><td data-label="Valor" class="mono">192.168.3.100</td><td data-label="Por quê">O próprio servidor responde pelo DNS</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Ative o serviço web (HTTP)</h3>
+          <div class="pt-ui"><span>SRV-WEB</span><span>Services</span><span>HTTP</span></div>
+          <p>Confira se <b>HTTP</b> e <b>HTTPS</b> estão em <b>On</b>. O servidor já traz uma página <code>index.html</code>. Se quiser, clique em <b>(edit)</b>, coloque o seu nome no texto e salve: assim você prova que a página aberta é a do seu servidor.</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Crie o registro DNS de cisco.com.br</h3>
+          <div class="pt-ui"><span>SRV-WEB</span><span>Services</span><span>DNS</span></div>
+          <ul>
+            <li>Marque <b>DNS Service</b> em <b>On</b>.</li>
+            <li>Em <b>Name</b>, digite <code>cisco.com.br</code>.</li>
+            <li>Em <b>Type</b>, deixe <b>A Record</b> (o registro que liga um nome a um IPv4).</li>
+            <li>Em <b>Address</b>, digite <code>192.168.3.100</code>.</li>
+            <li>Clique em <b>Add</b>. O registro aparece na lista abaixo do formulário.</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Aponte o DNS nos PCs</h3>
+          <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>DNS Server</span></div>
+          <p>Nos 4 PCs, preencha o campo <b>DNS Server</b> com <code>192.168.3.100</code>. IP, máscara e gateway continuam os mesmos.</p>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <h3>Acesse a página a partir do PC remoto <span class="tag">Observe</span></h3>
+          <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>Web Browser</span></div>
+          <p>No PC0, digite <code>http://cisco.com.br</code> na barra de endereço e clique em <b>Go</b>. Depois faça os testes no <b>Command Prompt</b>.</p>
+          <div class="tests" id="tests6"></div>
+          <div class="observe">
+            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>No modo Simulation</b><span>Filtre por <code>DNS</code>, <code>TCP</code> e <code>HTTP</code> e abra a página de novo. Qual envelope sai primeiro do PC0?</span></div></div>
+            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>Desligue de novo a <code>G0/1</code> do R1 e recarregue a página. Ela ainda abre? Religue a porta e guarde a resposta para o desafio.</span></div></div>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <div class="pool-how">
+      <h3>O que acontece quando você clica em Go?</h3>
+      <ol class="flow">
+        <li><b>Pergunta DNS</b>PC0 → <code>192.168.3.100</code>, UDP 53: “qual é o IP de cisco.com.br?”</li>
+        <li><b>Resposta DNS</b>O servidor consulta o registro A e devolve <code>192.168.3.100</code>.</li>
+        <li><b>Conexão TCP</b>PC0 abre uma conexão na porta 80 do servidor.</li>
+        <li><b>Página</b>O navegador pede <code>index.html</code> por HTTP e mostra a página.</li>
+      </ol>
+      <p>Cada um desses pacotes atravessa o anel de roteadores, na ida e na volta, seguindo as tabelas de roteamento que você escreveu.</p>
+    </div>
+    <div class="note"><div class="ico"><svg><use href="#i-route"/></svg></div><p>Viu a rede e o site pararem com um enlace caído, mesmo havendo caminho livre pelo outro lado? Encare o <a href="#rip"><b>desafio: roteamento dinâmico com RIP</b></a>, em que os roteadores encontram esse caminho sozinhos.</p></div>
+  </div>
+</section>
+
+<section class="sec desafio" id="rip">
+  <div class="wrap">
+    <div class="ch-banner">
+      <div class="ico"><svg><use href="#i-flag"/></svg></div>
+      <div>
+        <span class="sec-num">Parte 3 · Desafio · Roteamento dinâmico</span>
+        <h2>Troque as rotas estáticas por RIP</h2>
+        <p>Seu desafio: apagar as rotas estáticas dos 4 roteadores, ativar o RIP versão 2 e provar, com testes, que o pacote muda de caminho sozinho quando um enlace cai e que o site <code>cisco.com.br</code> continua abrindo.</p>
+      </div>
+    </div>
+
+    <div class="def">
+      <div>
+        <p class="big">O <strong>RIP</strong> (Routing Information Protocol) é um protocolo de <strong>vetor de distância</strong>: cada roteador conta aos vizinhos quais redes conhece e a quantos <strong>saltos</strong> elas estão.</p>
+        <p>A cada 30 segundos o roteador envia a sua tabela aos vizinhos. Quem recebe soma 1 salto e guarda a rota se ela for nova ou melhor que a que já tinha. Depois de algumas trocas, todos conhecem todas as redes: a rede <b>convergiu</b>.</p>
+        <p>A métrica é a contagem de saltos, e o melhor caminho é o que passa por menos roteadores. O limite é 15; uma rede a 16 saltos é considerada inalcançável. Quando um enlace cai, o roteador avisa os vizinhos e todos recalculam.</p>
+        <p>Use sempre a <b>versão 2</b>: ela envia a máscara junto com a rede, o que é obrigatório aqui porque os enlaces usam <code>/30</code>. O comando <code>no auto-summary</code> impede o RIP de resumir tudo em <code>10.0.0.0/8</code>.</p>
+      </div>
+      <div class="ports">
+        <div class="port-card" style="--vc:var(--s1)"><b>UDP 520</b><strong>Porta do RIP</strong><span>As atualizações vão para o endereço multicast 224.0.0.9.</span></div>
+        <div class="port-card" style="--vc:var(--s3)"><b>30 s</b><strong>Atualização</strong><span>Intervalo entre os anúncios da tabela.</span></div>
+        <div class="port-card" style="--vc:var(--s2)"><b>15</b><strong>Máximo de saltos</strong><span>16 saltos significa rede inalcançável.</span></div>
+        <div class="port-card" style="--vc:var(--s4)"><b>120</b><strong>Distância adm.</strong><span>Perde para a rota estática, que tem distância 1.</span></div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">Passo a passo do desafio</h3>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Apague as rotas estáticas</h3>
+          <p>Enquanto existir uma rota estática para uma rede, a rota RIP para a mesma rede não entra na tabela. Repita cada <code>ip route</code> do passo 6 com <code>no</code> na frente, nos 4 roteadores.</p>
+          <div class="seg rsel" role="group" aria-label="Roteador" data-for="cli-rm"></div>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span id="cli-rm-t">R1 · remover rotas estáticas</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre id="cli-rm"></pre></div>
+          <p>Confira com <code>show ip route</code>: nenhuma linha <b>S</b> pode sobrar. Os pings entre PCs voltam a falhar, como no Teste 1, e o site deixa de abrir no PC0.</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Ative o RIP v2 nos 4 roteadores</h3>
+          <p>Em cada roteador, o comando <code>network</code> faz duas coisas: liga o RIP nas portas que pertencem àquela rede e anuncia a rede aos vizinhos. Este é o modelo do R1. <b>A sua tarefa é escrever a configuração de R2, R3 e R4</b> usando a tabela.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R1 · modelo de configuração do RIP</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl>enable
+configure terminal
+router rip
+ version 2
+ no auto-summary
+ ! ---- rede local do R1 ----
+ network 192.168.1.0
+ ! ---- enlaces entre roteadores (todos começam com 10) ----
+ network 10.0.0.0
+ ! ---- não enviar anúncios RIP para o lado do PC ----
+ passive-interface gigabitEthernet 0/0
+ end
+copy running-config startup-config</pre></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Roteador</th><th>Rede local a anunciar</th><th>Enlaces a anunciar</th><th>Interface passiva</th></tr></thead>
+              <tbody>
+                <tr><td data-label="Roteador"><b>R1</b></td><td data-label="Rede local" class="mono">network 192.168.1.0</td><td data-label="Enlaces" class="mono">network 10.0.0.0</td><td data-label="Passiva" class="mono">G0/0</td></tr>
+                <tr><td data-label="Roteador"><b>R2</b></td><td data-label="Rede local" class="mono">network 192.168.2.0</td><td data-label="Enlaces" class="mono">network 10.0.0.0</td><td data-label="Passiva" class="mono">G0/0</td></tr>
+                <tr><td data-label="Roteador"><b>R3</b></td><td data-label="Rede local" class="mono">network 192.168.3.0</td><td data-label="Enlaces" class="mono">network 10.0.0.0</td><td data-label="Passiva" class="mono">G0/0</td></tr>
+                <tr><td data-label="Roteador"><b>R4</b></td><td data-label="Rede local" class="mono">network 192.168.4.0</td><td data-label="Enlaces" class="mono">network 10.0.0.0</td><td data-label="Passiva" class="mono">G0/0</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul>
+            <li><b>router rip</b>: entra na configuração do protocolo.</li>
+            <li><b>version 2</b>: envia a máscara junto com cada rede.</li>
+            <li><b>no auto-summary</b>: anuncia as sub-redes <code>/30</code> como elas são.</li>
+            <li><b>network</b>: digite só o endereço da rede, sem máscara. As redes <code>10.0.12.0</code>, <code>10.0.41.0</code> e as demais cabem todas em <code>10.0.0.0</code>.</li>
+            <li><b>passive-interface</b>: o PC não fala RIP, então não há por que enviar anúncios para ele.</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Teste do RIP: a tabela se monta sozinha <span class="tag">Observe</span></h3>
+          <p>Espere cerca de 30 segundos depois de configurar o último roteador (ou use o botão <b>Fast Forward Time</b> do Packet Tracer) e confira.</p>
+          <div class="tests" id="tests4"></div>
+        </div>
+      </li>
+
+      <li class="step test">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Teste dos caminhos: derrube um enlace e veja o pacote mudar de rota <span class="tag">Observe</span></h3>
+          <p>Faça o <code>tracert</code> antes, desligue a porta <code>G0/1</code> do R1 (os mesmos comandos do Teste 3), espere alguns segundos e faça o <code>tracert</code> de novo. Depois religue a porta e repita. Anote os três resultados.</p>
+          <div class="tests" id="tests5"></div>
+          <div class="observe">
+            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>No modo Simulation</b><span>Filtre por <code>ICMP</code> e <code>RIPv2</code>. Envie um ping do PC0 ao PC1 com o enlace ligado e depois com ele desligado, e siga o envelope pelos roteadores.</span></div></div>
+            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>Com o enlace caído, quantos saltos o R1 passa a mostrar para <code>192.168.2.0</code>? Por que esse número mudou?</span></div></div>
+          </div>
+          <p>Para ver os anúncios chegando, rode <code>debug ip rip</code> no R1 e aguarde. Para parar, use <code>undebug all</code>.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="pool-how">
+      <h3>Como o R1 aprende a rede do PC2?</h3>
+      <ol class="flow">
+        <li><b>R3 anuncia</b>“Tenho <code>192.168.3.0/24</code> ligada em mim.”</li>
+        <li><b>R2 e R4 recebem</b>Somam 1 salto e guardam a rota <code>[120/1]</code>.</li>
+        <li><b>R2 e R4 repassam</b>Anunciam ao R1: “chego lá com 1 salto”.</li>
+        <li><b>R1 guarda as duas</b>Dois caminhos com <code>[120/2]</code>: por R2 e por R4.</li>
+      </ol>
+      <p>Se um dos caminhos cai, o R1 fica com o outro. Nas rotas estáticas, essa troca só aconteceria se alguém digitasse a nova rota.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="checklist-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Revisão</span>
+      <h2>Checklist da atividade</h2>
+      <p>Cada item corresponde a uma tarefa do passo a passo; o número indica o passo. Marque conforme concluir. O progresso fica salvo neste navegador.</p>
+    </div>
+    <div class="deliver solo">
+      <div class="dcard">
+        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 21</span></div>
+        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
+        <div class="check" id="checklist">
+          <div class="ck-group">Parte 1 · Rotas estáticas</div>
+          <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>4 roteadores 2911 e 4 PCs ligados com cabo cruzado, nas portas do desenho</span></label>
+          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 3">3</em>IP, máscara e gateway configurados nos 4 PCs</span></label>
+          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 4">4</em>3 interfaces de cada roteador com IP e <code>no shutdown</code>; todos os links verdes</span></label>
+          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 5">5</em>Teste 1: ping ao gateway responde e ping a outro PC dá <i>Destination host unreachable</i></span></label>
+          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 6">6</em>3 rotas estáticas em cada roteador; <code>show ip route</code> com 3 linhas S</span></label>
+          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 7">7</em>Teste 2: pings entre os 4 PCs respondendo</span></label>
+          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 7">7</em><code>tracert</code> de ida e de volta entre PC0 e PC2 anotados e comparados</span></label>
+          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 8">8</em>Teste 3: com o enlace R1–R2 desligado, o ping ao PC1 falha; porta religada depois</span></label>
+          <div class="ck-group">Parte 2 · Servidor web e DNS</div>
+          <label><input type="checkbox" id="ck15"><span><em class="ck-n" title="Servidor, passo 1">S1</em>Switch e SRV-WEB ligados ao R3, com o PC2 de volta à rede</span></label>
+          <label><input type="checkbox" id="ck16"><span><em class="ck-n" title="Servidor, passo 2">S2</em>SRV-WEB com IP 192.168.3.100, máscara, gateway e DNS</span></label>
+          <label><input type="checkbox" id="ck17"><span><em class="ck-n" title="Servidor, passo 4">S4</em>DNS Service ligado com o registro A <code>cisco.com.br</code> → 192.168.3.100</span></label>
+          <label><input type="checkbox" id="ck18"><span><em class="ck-n" title="Servidor, passo 5">S5</em>DNS Server 192.168.3.100 nos 4 PCs</span></label>
+          <label><input type="checkbox" id="ck19"><span><em class="ck-n" title="Servidor, passo 6">S6</em>Página <code>http://cisco.com.br</code> aberta no Web Browser do PC0</span></label>
+          <label><input type="checkbox" id="ck20"><span><em class="ck-n" title="Servidor, passo 6">S6</em><code>nslookup cisco.com.br</code> respondendo 192.168.3.100; arquivo .pkt salvo</span></label>
+          <div class="ck-group ck-ch">Parte 3 · Desafio RIP</div>
+          <label><input type="checkbox" id="ck9"><span><em class="ck-n ch" title="Desafio, passo 1">D1</em>Rotas estáticas removidas dos 4 roteadores (nenhuma linha S)</span></label>
+          <label><input type="checkbox" id="ck10"><span><em class="ck-n ch" title="Desafio, passo 2">D2</em>RIP v2 com <code>no auto-summary</code> e os dois <code>network</code> em R1, R2, R3 e R4</span></label>
+          <label><input type="checkbox" id="ck11"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>show ip route</code> com rotas R para as 3 redes locais remotas</span></label>
+          <label><input type="checkbox" id="ck12"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em>Pings entre os 4 PCs respondendo com RIP</span></label>
+          <label><input type="checkbox" id="ck13"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em><code>tracert</code> do PC0 ao PC1 anotado antes, durante e depois da queda do enlace</span></label>
+          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em>No Simulation, envelope ICMP seguindo pelo caminho alternativo</span></label>
+          <label><input type="checkbox" id="ck21"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em>Com o enlace desligado, <code>http://cisco.com.br</code> continua abrindo no PC0</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="erros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Solução de problemas</span>
+      <h2>Erros comuns</h2>
+      <p>Antes de pedir ajuda, confira estes casos. Os comandos que mais ajudam no roteador são <code>show ip interface brief</code> e <code>show ip route</code>; no PC, o <code>ipconfig</code>.</p>
+    </div>
+    <h3 class="err-g">Parte 1 · Interfaces e rotas estáticas</h3>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Link vermelho</h3><p>Faltou <code>no shutdown</code> em uma das pontas, ou o cabo não é <b>Cross-Over</b>. Rode <code>show ip interface brief</code>: a porta deve estar <i>up/up</i>, não <i>administratively down</i>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“Destination host unreachable”</h3><p>Quem responde é um roteador avisando que não tem rota para o destino. Veja o IP de quem respondeu e confira o <code>show ip route</code> desse roteador.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“Request timed out”</h3><p>O pacote foi, mas a resposta não voltou. Normalmente falta a rota de <b>volta</b> em algum roteador do caminho, ou o gateway do PC de destino está errado.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% Invalid next hop address”</h3><p>O próximo salto digitado é um IP do próprio roteador. O próximo salto é sempre o IP do <b>vizinho</b>, na outra ponta do cabo.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% overlaps with GigabitEthernet”</h3><p>Duas portas do mesmo roteador receberam IPs da mesma rede. Confira a tabela do passo 2: cada porta fica em uma rede diferente.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Rota S não aparece no show ip route</h3><p>A rota estática só entra na tabela se o próximo salto for alcançável. Confira se a porta que leva a ele está <i>up/up</i> e se o IP foi digitado certo.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Ping ao próprio gateway falha</h3><p>IP, máscara ou gateway do PC estão errados, ou o PC foi ligado em outra porta que não a <code>G0/0</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Configuração sumiu ao reabrir</h3><p>Faltou <code>copy running-config startup-config</code> em cada roteador ou salvar o arquivo .pkt (Ctrl+S) antes de fechar.</p></article>
+    </div>
+    <h3 class="err-g" style="margin-top:28px">Parte 2 · Servidor web e DNS</h3>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“Host Name Unresolved”</h3><p>O PC não conseguiu traduzir o nome. Confira o campo <b>DNS Server</b> do PC, se o <b>DNS Service</b> está em On e se o nome do registro é exatamente <code>cisco.com.br</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“Request Timeout” no navegador</h3><p>O nome foi resolvido, mas a página não veio. Teste <code>ping 192.168.3.100</code>: se falhar, o problema é de roteamento ou o gateway do servidor; se responder, veja se o HTTP está em On.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Abre pelo IP, mas não pelo nome</h3><p>O roteamento e o HTTP estão certos; o defeito é só no DNS. Rode <code>nslookup cisco.com.br</code> no PC e veja qual servidor responde.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>PC2 ou servidor sem comunicação</h3><p>Entre o R3 e o switch o cabo é <b>Straight-Through</b>. Confira também se o PC2 e o SRV-WEB estão na rede <code>192.168.3.0/24</code> com gateway <code>192.168.3.1</code>.</p></article>
+    </div>
+    <h3 class="err-g ch">Parte 3 · Desafio RIP</h3>
+    <div class="errs">
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Nenhuma rota R na tabela</h3><p>Faltou o <code>network 10.0.0.0</code> (sem ele o RIP não fala pelos enlaces), o vizinho ainda não foi configurado, ou não passaram 30 s. Confira com <code>show ip protocols</code>.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Continua aparecendo S em vez de R</h3><p>Sobrou rota estática. Ela tem distância 1 e vence o RIP (120). Apague com <code>no ip route …</code> e olhe a tabela de novo.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Aparece 10.0.0.0/8 em vez das redes /30</h3><p>Faltou <code>version 2</code> ou <code>no auto-summary</code> em algum roteador. Corrija nos 4 e aguarde uma nova atualização.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Vizinhos não trocam rotas</h3><p>O <code>passive-interface</code> foi aplicado na porta errada. Só a <code>G0/0</code> é passiva; <code>G0/1</code> e <code>G0/2</code> precisam enviar anúncios.</p></article>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Redes de Computadores</span><span>Cisco Packet Tracer · Roteador 2911</span></div>
+</footer>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs, parent, txt){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (txt !== undefined) e.textContent = txt; if (parent) parent.appendChild(e); return e; }
+  var ICON = function(id){ return '<svg><use href="#'+id+'"/></svg>'; };
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mqN = matchMedia('(max-width: 640px)');
+
+  // ---------- plano de endereços ----------
+  // roteador i (0..3) = R1..R4 em anel horário; enlace i liga R(i) G0/1 a R(i+1) G0/2
+  var COL = ['var(--s1)','var(--s2)','var(--s3)','var(--s4)'];
+  var LN = ['12','23','34','41'];
+  var M24 = '255.255.255.0', M30 = '255.255.255.252';
+  function nx(i){ return (i+1)%4; }
+  function pv(i){ return (i+3)%4; }
+  function lan(i){ return '192.168.'+(i+1)+'.0'; }
+  function gw(i){ return '192.168.'+(i+1)+'.1'; }
+  function pc(i){ return '192.168.'+(i+1)+'.10'; }
+  function lnet(i){ return '10.0.'+LN[i]+'.0'; }
+  function la(i){ return '10.0.'+LN[i]+'.1'; }   // ponta G0/1 de R(i)
+  function lb(i){ return '10.0.'+LN[i]+'.2'; }   // ponta G0/2 de R(i+1)
+  function R(i){ return 'R'+(i+1); }
+  // rota estática de r para a rede local de d: sentido horário para o próximo e o oposto, anti-horário para o anterior
+  function stat(r, d){ var k = (d-r+4)%4, cw = k !== 3; return {cw:cw, link: cw ? r : pv(r), nh: cw ? lb(r) : la(pv(r)), via: cw ? nx(r) : pv(r)}; }
+
+  // ---------- realce de comandos ----------
+  function hlText(txt){
+    return txt.split('\n').map(function(l){
+      var esc = l.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      if (/^\s*!/.test(l)) return '<span class="c">'+esc+'</span>';
+      return esc.replace(/^(\s*)(enable|configure terminal|hostname|no ip domain-lookup|interface|description|ip address|no shutdown|shutdown|exit|end|show|copy|no ip route|ip route|router rip|version|no auto-summary|network|passive-interface)\b/, '$1<span class="p">$2</span>');
+    }).join('\n');
+  }
+  document.querySelectorAll('pre[data-hl]').forEach(function(pre){ pre.innerHTML = hlText(pre.textContent); });
+
+  // ---------- comandos por roteador ----------
+  function genIf(r){
+    return 'enable\nconfigure terminal\nhostname '+R(r)+'\nno ip domain-lookup\n'+
+      '! ---- rede local do PC'+r+' · '+lan(r)+'/24 ----\ninterface gigabitEthernet 0/0\n description LAN-PC'+r+'\n ip address '+gw(r)+' '+M24+'\n no shutdown\n exit\n'+
+      '! ---- enlace para '+R(nx(r))+' · '+lnet(r)+'/30 ----\ninterface gigabitEthernet 0/1\n description PARA-'+R(nx(r))+'\n ip address '+la(r)+' '+M30+'\n no shutdown\n exit\n'+
+      '! ---- enlace para '+R(pv(r))+' · '+lnet(pv(r))+'/30 ----\ninterface gigabitEthernet 0/2\n description PARA-'+R(pv(r))+'\n ip address '+lb(pv(r))+' '+M30+'\n no shutdown\n end\n'+
+      '! ---- conferir e salvar ----\nshow ip interface brief\ncopy running-config startup-config';
+  }
+  function genSt(r, no){
+    var t = 'enable\nconfigure terminal\n';
+    for (var d=0; d<4; d++){ if (d === r) continue; var s = stat(r, d);
+      t += '! ---- rede do PC'+d+' · próximo salto '+R(s.via)+' ----\n'+(no?'no ':'')+'ip route '+lan(d)+' '+M24+' '+s.nh+'\n'; }
+    return t + 'end\n! ---- conferir e salvar ----\nshow ip route\ncopy running-config startup-config';
+  }
+  var GEN = {
+    'cli-if': [genIf, ' · interfaces'],
+    'cli-st': [function(r){ return genSt(r, false); }, ' · rotas estáticas'],
+    'cli-rm': [function(r){ return genSt(r, true); }, ' · remover rotas estáticas']
+  };
+  document.querySelectorAll('.rsel').forEach(function(seg){
+    var id = seg.dataset.for, g = GEN[id];
+    function set(r){
+      $(id).innerHTML = hlText(g[0](r)); $(id+'-t').textContent = R(r)+g[1];
+      seg.querySelectorAll('button').forEach(function(b, i){ b.setAttribute('aria-pressed', i === r); });
+    }
+    for (var r=0; r<4; r++){ (function(r){ var b = document.createElement('button'); b.type = 'button'; b.textContent = R(r); b.addEventListener('click', function(){ set(r); }); seg.appendChild(b); })(r); }
+    set(0);
+  });
+
+  // ---------- tabelas ----------
+  var h = '', i;
+  for (i=0; i<4; i++) h += '<tr><td data-label="Roteador"><span class="vtag" style="--vc:'+COL[i]+'">'+R(i)+'</span></td><td data-label="G0/0 · rede local" class="mono">'+gw(i)+' /24</td><td data-label="G0/1 · próximo" class="mono">'+la(i)+' /30 → '+R(nx(i))+'</td><td data-label="G0/2 · anterior" class="mono">'+lb(pv(i))+' /30 → '+R(pv(i))+'</td></tr>';
+  $('addr-body').innerHTML = h; h = '';
+  for (i=0; i<4; i++) h += '<tr><td data-label="PC"><span class="vtag" style="--vc:'+COL[i]+'">PC'+i+'</span></td><td data-label="Ligado em" class="mono">'+R(i)+' G0/0</td><td data-label="Endereço IP" class="mono">'+pc(i)+'</td><td data-label="Máscara" class="mono">'+M24+'</td><td data-label="Gateway" class="mono">'+gw(i)+'</td></tr>';
+  $('pc-body').innerHTML = h; h = '';
+  for (i=0; i<4; i++){
+    h += '<tr><td data-label="Roteador"><span class="vtag" style="--vc:'+COL[i]+'">'+R(i)+'</span></td>';
+    for (var d=0; d<4; d++){ var s = stat(i, d); h += '<td data-label="Para '+lan(d)+'" class="mono">'+(d === i ? 'conectada' : s.nh+' ('+R(s.via)+')')+'</td>'; }
+    h += '</tr>';
+  }
+  $('st-body').innerHTML = h;
+
+  // ---------- testes ----------
+  function renderTests(id, list){
+    $(id).innerHTML = list.map(function(t){
+      return '<div class="test-row"><div class="test-head"><span class="kind '+(t.k||'same')+'">'+t.lab+'</span><b>'+t.who+' › '+t.cmd+'</b>'+(t.sm?'<small>'+t.sm+'</small>':'')+'</div>'+
+        '<details><summary>Ver resultado esperado</summary><p class="'+(t.ok?'r-ok':'r-bad')+'">'+ICON(t.ok?'i-check':'i-x')+'<span style="color:var(--muted)"><b class="'+(t.ok?'r-ok':'r-bad')+'">'+t.res+' </b>'+t.why+'</span></p></details></div>';
+    }).join('');
+  }
+  renderTests('tests1', [
+    {who:'PC0', cmd:'ping 192.168.1.1', lab:'Gateway', ok:true, res:'Responde.', why:'O PC0 e a porta G0/0 do R1 estão na mesma rede. O primeiro pacote pode se perder enquanto o ARP é resolvido.'},
+    {who:'PC0', cmd:'ping 192.168.2.10', lab:'Outra rede', k:'cross', sm:'PC0 → PC1', ok:false, res:'Falha.', why:'Aparece “Reply from 192.168.1.1: Destination host unreachable”. Quem responde é o R1: ele não tem rota para 192.168.2.0/24 e descarta o pacote.'},
+    {who:'R1', cmd:'show ip route', lab:'No roteador', ok:true, res:'Só redes C e L.', why:'A tabela mostra 192.168.1.0/24, 10.0.12.0/30 e 10.0.41.0/30 como C (conectadas) e os IPs do próprio roteador como L (local). Nenhuma rede dos outros roteadores aparece.'},
+    {who:'R1', cmd:'ping 10.0.12.2', lab:'Vizinho', ok:true, res:'Responde.', why:'O R2 está na outra ponta do cabo, na mesma rede /30. O R1 alcança o vizinho, mas não o que existe atrás dele.'}
+  ]);
+  renderTests('tests2', [
+    {who:'PC0', cmd:'ping 192.168.2.10', lab:'1 enlace', k:'cross', sm:'PC0 → PC1', ok:true, res:'Responde.', why:'O R1 encontra a rota S para 192.168.2.0/24 e entrega ao R2, que tem a rede ligada nele.'},
+    {who:'PC0', cmd:'ping 192.168.3.10', lab:'2 enlaces', k:'cross', sm:'PC0 → PC2', ok:true, res:'Responde.', why:'O pacote atravessa dois enlaces. Só funciona porque todos os roteadores do caminho de ida e de volta têm a rota.'},
+    {who:'PC0', cmd:'tracert 192.168.3.10', lab:'Caminho', k:'cross', sm:'ida', ok:true, res:'4 linhas.', why:'192.168.1.1 (R1), 10.0.12.2 (R2), 10.0.23.2 (R3) e 192.168.3.10 (PC2). A ida passa por R2.'},
+    {who:'PC2', cmd:'tracert 192.168.1.10', lab:'Caminho', k:'cross', sm:'volta', ok:true, res:'4 linhas.', why:'192.168.3.1 (R3), 10.0.34.2 (R4), 10.0.41.2 (R1) e 192.168.1.10 (PC0). A volta passa por R4, não por R2: cada roteador segue a sua própria tabela.'},
+    {who:'R1', cmd:'show ip route', lab:'No roteador', ok:true, res:'3 rotas S.', why:'192.168.2.0/24 e 192.168.3.0/24 via 10.0.12.2, e 192.168.4.0/24 via 10.0.41.1, todas com [1/0].'}
+  ]);
+  renderTests('tests3', [
+    {who:'PC0', cmd:'ping 192.168.2.10', lab:'Enlace caído', k:'cross', sm:'PC0 → PC1', ok:false, res:'Falha.', why:'“Destination host unreachable”. A rota apontava para 10.0.12.2, que ficou inalcançável, e o R1 a retirou da tabela. O caminho R1 → R4 → R3 → R2 está livre, mas ninguém digitou essa rota.'},
+    {who:'PC0', cmd:'ping 192.168.3.10', lab:'Enlace caído', k:'cross', sm:'PC0 → PC2', ok:false, res:'Falha.', why:'A rota do R1 para a rede do PC2 também passava pelo R2.'},
+    {who:'PC0', cmd:'ping 192.168.4.10', lab:'Outro enlace', k:'cross', sm:'PC0 → PC3', ok:true, res:'Responde.', why:'A ida e a volta entre R1 e R4 usam o enlace 10.0.41.0/30, que continua ligado.'},
+    {who:'R1', cmd:'show ip route', lab:'No roteador', ok:true, res:'Sobra 1 rota S.', why:'Só a rota para 192.168.4.0/24 continua na tabela. Depois do no shutdown, as outras duas voltam.'}
+  ]);
+  renderTests('tests4', [
+    {who:'R1', cmd:'show ip route', lab:'No roteador', ok:true, res:'Rotas R.', why:'192.168.2.0/24 [120/1] via 10.0.12.2, 192.168.4.0/24 [120/1] via 10.0.41.1 e 192.168.3.0/24 [120/2] com dois próximos saltos (10.0.12.2 e 10.0.41.1): há dois caminhos de mesmo custo até o roteador oposto. Os enlaces 10.0.23.0/30 e 10.0.34.0/30 também aparecem como R.'},
+    {who:'R1', cmd:'show ip protocols', lab:'No roteador', ok:true, res:'RIP ativo.', why:'Mostra “Routing Protocol is rip”, versão 2, as redes 10.0.0.0 e 192.168.1.0, a G0/0 como interface passiva e os vizinhos 10.0.12.2 e 10.0.41.1 como fontes de rotas.'},
+    {who:'PC0', cmd:'ping 192.168.3.10', lab:'Entre redes', k:'cross', sm:'PC0 → PC2', ok:true, res:'Responde.', why:'Nenhuma rota foi digitada: os roteadores aprenderam os caminhos uns com os outros.'},
+    {who:'PC0', cmd:'tracert 192.168.3.10', lab:'Caminho', k:'cross', sm:'PC0 → PC2', ok:true, res:'4 linhas.', why:'O segundo salto pode ser 10.0.12.2 (R2) ou 10.0.41.1 (R4). Como os dois caminhos têm 2 saltos, o R1 pode alternar entre eles. Repita o comando e compare.'}
+  ]);
+  renderTests('tests5', [
+    {who:'PC0', cmd:'tracert 192.168.2.10', lab:'Antes', k:'cross', sm:'enlace ligado', ok:true, res:'3 linhas.', why:'192.168.1.1 (R1), 10.0.12.2 (R2) e 192.168.2.10 (PC1). O caminho direto tem 1 salto entre roteadores.'},
+    {who:'PC0', cmd:'tracert 192.168.2.10', lab:'Durante', k:'cross', sm:'enlace desligado', ok:true, res:'5 linhas.', why:'192.168.1.1 (R1), 10.0.41.1 (R4), 10.0.34.1 (R3), 10.0.23.1 (R2) e 192.168.2.10 (PC1). O pacote deu a volta pelo outro lado do anel, sem ninguém digitar rota alguma.'},
+    {who:'R1', cmd:'show ip route', lab:'Durante', sm:'enlace desligado', ok:true, res:'Rotas pelo R4.', why:'192.168.2.0/24 passa a [120/3] via 10.0.41.1, e 192.168.3.0/24 fica com um único próximo salto. A rede 10.0.12.0/30 some da tabela.'},
+    {who:'PC0', cmd:'Web Browser › http://cisco.com.br', lab:'Durante', k:'cross', sm:'enlace desligado', ok:true, res:'Abre a página.', why:'Com rotas estáticas, o site parava de abrir no PC0 quando esse enlace caía. Com RIP, o pedido segue por R4 até o R3 e o site continua no ar.'},
+    {who:'PC0', cmd:'tracert 192.168.2.10', lab:'Depois', k:'cross', sm:'enlace religado', ok:true, res:'3 linhas.', why:'Em até 30 segundos o R1 volta a aprender a rota de 1 salto pelo R2 e o caminho curto é retomado.'}
+  ]);
+  renderTests('tests6', [
+    {who:'PC0', cmd:'Web Browser › http://cisco.com.br', lab:'Navegador', k:'cross', ok:true, res:'Abre a página.', why:'O PC0 pergunta o IP ao DNS, recebe 192.168.3.100 e busca a página no servidor. Tudo isso atravessando o anel até o R3.'},
+    {who:'PC0', cmd:'nslookup cisco.com.br', lab:'DNS', k:'cross', ok:true, res:'Resolve.', why:'Mostra Server: 192.168.3.100 e, abaixo, Name: cisco.com.br com Address: 192.168.3.100.'},
+    {who:'PC0', cmd:'ping cisco.com.br', lab:'DNS + ICMP', k:'cross', ok:true, res:'Responde.', why:'A primeira linha mostra “Pinging 192.168.3.100”: o nome foi traduzido antes de o ping sair.'},
+    {who:'PC3', cmd:'Web Browser › http://192.168.3.100', lab:'Sem DNS', k:'cross', ok:true, res:'Abre a página.', why:'Pelo IP a página abre mesmo sem DNS. Se abrir pelo IP e não pelo nome, o defeito está no DNS, não no roteamento.'}
+  ]);
+
+  // ---------- desenho da rede ----------
+  function geo(){
+    return mqN.matches
+      ? {W:440, H:520, R:[{x:130,y:180},{x:310,y:180},{x:310,y:340},{x:130,y:340}], P:[{x:62,y:62},{x:378,y:62},{x:378,y:446},{x:62,y:446}], SW:{x:342,y:390}, SV:{x:232,y:440}}
+      : {W:760, H:440, R:[{x:250,y:140},{x:510,y:140},{x:510,y:300},{x:250,y:300}], P:[{x:92,y:66},{x:668,y:66},{x:668,y:374},{x:92,y:374}], SW:{x:592,y:338}, SV:{x:694,y:250}};
+  }
+  function toward(a, b, d){ var L = Math.hypot(b.x-a.x, b.y-a.y); return {x: a.x+(b.x-a.x)/L*d, y: a.y+(b.y-a.y)/L*d}; }
+  function drawNet(svg, detail, srv){
+    var g = geo(), o = {g:g, lk:[], rt:[]}, i;
+    svg.setAttribute('viewBox', '0 0 '+g.W+' '+g.H); svg.innerHTML = '';
+    for (i=0; i<4; i++) el('line', {'class':'lan', x1:g.P[i].x, y1:g.P[i].y, x2:g.R[i].x, y2:g.R[i].y}, svg);
+    if (srv) el('line', {'class':'lan', x1:g.SW.x, y1:g.SW.y, x2:g.SV.x, y2:g.SV.y}, svg);
+    for (i=0; i<4; i++){ var a = g.R[i], b = g.R[nx(i)]; o.lk.push(el('line', {'class':'lk', x1:a.x, y1:a.y, x2:b.x, y2:b.y}, svg)); }
+    o.trail = el('g', {}, svg);
+    var inOff = [[0,19,'middle'],[-12,18,'end'],[0,-10,'middle'],[12,-10,'start']];
+    var outOff = [[0,-9],[27,4],[0,17],[-27,4]];
+    for (i=0; i<4; i++){
+      var A = g.R[i], B = g.R[nx(i)], mx = (A.x+B.x)/2, my = (A.y+B.y)/2;
+      el('text', {'class':'t-net halo', x:mx+inOff[i][0], y:my+inOff[i][1], 'text-anchor':inOff[i][2]}, svg, lnet(i)+'/30');
+      if (detail){
+        var p1 = toward(A, B, 44), p2 = toward(B, A, 44), p0 = toward(A, g.P[i], 46);
+        el('text', {'class':'t-port halo', x:p1.x+outOff[i][0], y:p1.y+outOff[i][1]}, svg, 'G0/1');
+        el('text', {'class':'t-port halo', x:p2.x+outOff[i][0], y:p2.y+outOff[i][1]}, svg, 'G0/2');
+        el('text', {'class':'t-port halo', x:p0.x, y:p0.y+4}, svg, 'G0/0');
+      }
+    }
+    for (i=0; i<4; i++){
+      o.rt.push(el('circle', {'class':'rtr', cx:g.R[i].x, cy:g.R[i].y, r:24}, svg));
+      el('text', {'class':'t-rn', x:g.R[i].x, y:g.R[i].y+5}, svg, R(i));
+      var p = g.P[i];
+      el('rect', {'class':'mon', x:p.x-22, y:p.y-16, width:44, height:30, rx:4, style:'stroke:'+COL[i]}, svg);
+      el('rect', {'class':'stand', x:p.x-10, y:p.y+17, width:20, height:3, rx:1.5}, svg);
+      el('text', {'class':'t-name halo', x:p.x, y:p.y+38}, svg, 'PC'+i);
+      el('text', {'class':'t-ip halo', x:p.x, y:p.y+53}, svg, pc(i));
+    }
+    if (srv){
+      el('rect', {'class':'sw', x:g.SW.x-17, y:g.SW.y-8, width:34, height:16, rx:4}, svg);
+      el('path', {'class':'rtr-i', d:'M'+(g.SW.x-9)+' '+g.SW.y+'h.01M'+(g.SW.x-3)+' '+g.SW.y+'h.01M'+(g.SW.x+3)+' '+g.SW.y+'h.01M'+(g.SW.x+9)+' '+g.SW.y+'h.01'}, svg);
+      var v = g.SV;
+      el('rect', {'class':'srv', x:v.x-15, y:v.y-19, width:30, height:38, rx:4}, svg);
+      el('path', {'class':'srv-l', d:'M'+(v.x-8)+' '+(v.y-10)+'h16M'+(v.x-8)+' '+(v.y-2)+'h16'}, svg);
+      el('circle', {'class':'srv-d', cx:v.x, cy:v.y+10, r:2.6}, svg);
+      el('text', {'class':'t-name halo', x:v.x, y:v.y+36}, svg, 'SRV-WEB');
+      el('text', {'class':'t-ip halo', x:v.x, y:v.y+51}, svg, '192.168.3.100');
+    }
+    o.over = el('g', {}, svg);
+    return o;
+  }
+  var D = null;
+  function drawStatic(){ D = drawNet($('draw'), true, false); drawNet($('draw2'), true, true); }
+  drawStatic();
+
+  // ---------- animação ----------
+  var A = null, mode = 'static', cut = -1, busy = false;
+  var srcSel = $('a-src'), dstSel = $('a-dst'), cutSel = $('a-cut');
+  for (i=0; i<4; i++){ srcSel.add(new Option('PC'+i+' · '+R(i), i)); dstSel.add(new Option('PC'+i+' · '+R(i), i)); }
+  dstSel.add(new Option('SRV-WEB · '+R(2), 4));
+  srcSel.value = 0; dstSel.value = 4;
+
+  function pathStatic(a, b){
+    var p = [a], cur = a, n = 0;
+    while (cur !== b && n++ < 6){ var s = stat(cur, b); if (s.link === cut) return {p:p, ok:false, want:s.via}; cur = s.via; p.push(cur); }
+    return {p:p, ok:true};
+  }
+  function ripCands(a, b, c){
+    var k = (b-a+4)%4, cwOk = true, ccOk = true, j;
+    for (j=0; j<k; j++) if ((a+j)%4 === c) cwOk = false;
+    for (j=0; j<4-k; j++) if ((a-1-j+8)%4 === c) ccOk = false;
+    var all = [{len:k, dir:1, nh:lb(a), ok:cwOk}, {len:4-k, dir:3, nh:la(pv(a)), ok:ccOk}].filter(function(x){ return x.ok; });
+    var min = Math.min.apply(null, all.map(function(x){ return x.len; }));
+    return all.filter(function(x){ return x.len === min; });
+  }
+  function pathRip(a, b, c){
+    var cs = ripCands(a, b, c), p = [a], cur = a;
+    for (var j=0; j<cs[0].len; j++){ cur = (cur+cs[0].dir)%4; p.push(cur); }
+    return {p:p, ok:true, tie: cs.length > 1};
+  }
+  function names(p){ return p.map(R).join(' → '); }
+
+  function paint(){
+    if (!A) return;
+    A.lk.forEach(function(l, i){ l.setAttribute('class', 'lk'+(i === cut ? ' cut' : '')); });
+    A.over.innerHTML = ''; A.trail.innerHTML = '';
+    if (cut >= 0){
+      var a = A.g.R[cut], b = A.g.R[nx(cut)], x = (a.x+b.x)/2, y = (a.y+b.y)/2;
+      el('circle', {cx:x, cy:y, r:13, style:'fill:var(--surface);stroke:var(--red);stroke-width:2'}, A.over);
+      el('path', {'class':'cutx', d:'M'+(x-5)+' '+(y-5)+'l10 10M'+(x+5)+' '+(y-5)+'l-10 10'}, A.over);
+    }
+    var s = +srcSel.value;
+    A.rt.forEach(function(c, i){ c.setAttribute('class', 'rtr'+(i === s ? ' src' : '')); });
+    $('m-none').setAttribute('aria-pressed', mode === 'none');
+    $('m-static').setAttribute('aria-pressed', mode === 'static');
+    $('m-rip').setAttribute('aria-pressed', mode === 'rip');
+    // tabela do roteador de origem
+    var rows = [['c', 'C', lan(s)+'/24 · G0/0', false], ['c', 'C', lnet(s)+'/30 · G0/1', cut === s], ['c', 'C', lnet(pv(s))+'/30 · G0/2', cut === pv(s)]];
+    for (var k=1; k<4; k++){
+      var d = (s+k)%4;
+      if (mode === 'static'){ var st = stat(s, d); rows.push(['s', 'S', lan(d)+'/24 [1/0] via '+st.nh, st.link === cut]); }
+      if (mode === 'rip'){ var cs = ripCands(s, d, cut); rows.push(['r', 'R', lan(d)+'/24 '+cs.map(function(c){ return '['+120+'/'+c.len+'] via '+c.nh; }).join(' e '), false]); }
+    }
+    $('rt-name').textContent = R(s);
+    $('rt-rows').innerHTML = rows.map(function(r){ return '<div class="'+r[0]+(r[3]?' off':'')+'"><b>'+r[1]+'</b><span>'+r[2]+'</span></div>'; }).join('');
+  }
+  function build(){ A = drawNet($('net'), false, true); paint(); }
+  function setStatus(kind, txt){
+    var p = $('a-pill'); p.className = 'pill'+(kind === 'ok' || kind === 'bad' ? ' '+kind : '');
+    p.textContent = kind === 'ok' ? 'Sucesso' : kind === 'bad' ? 'Falha' : kind === 'run' ? 'Enviando…' : 'Pronto';
+    $('a-desc').textContent = txt;
+  }
+  var HINT = {
+    none: 'Sem rotas: cada roteador conhece só as redes ligadas nele. Envie um pacote e veja onde ele para.',
+    'static': 'Estático: as rotas foram digitadas à mão. Envie um pacote, depois corte um enlace e envie de novo.',
+    rip: 'RIP: os roteadores trocam as tabelas entre si. Corte um enlace e veja a tabela e o caminho mudarem.'
+  };
+  function idle(){ setStatus('', HINT[mode]); }
+  function lock(v){ busy = v; [srcSel, dstSel, cutSel, $('play'), $('m-none'), $('m-static'), $('m-rip')].forEach(function(e){ e.disabled = v; }); }
+
+  function hop(a, b, color, back, pk){
+    return new Promise(function(res){
+      var fin = function(){
+        el('line', {'class':'trail', x1:a.x, y1:a.y, x2:b.x, y2:b.y, style:'stroke:'+color+(back?';stroke-dasharray:2 9;opacity:1;stroke-width:5':'')}, A.trail);
+        pk.setAttribute('transform', 'translate('+b.x+' '+b.y+')'); res();
+      };
+      if (reduce) return fin();
+      var L = Math.hypot(b.x-a.x, b.y-a.y), dur = Math.max(420, L*4.4), t0 = null;
+      requestAnimationFrame(function f(ts){
+        if (t0 === null) t0 = ts;
+        var t = Math.min(1, (ts-t0)/dur), e = t < .5 ? 2*t*t : 1-Math.pow(-2*t+2, 2)/2;
+        pk.setAttribute('transform', 'translate('+(a.x+(b.x-a.x)*e)+' '+(a.y+(b.y-a.y)*e)+')');
+        if (t < 1) requestAnimationFrame(f); else fin();
+      });
+    });
+  }
+  function packet(color, at){
+    var g = el('g', {'class':'pk', transform:'translate('+at.x+' '+at.y+')'}, A.over);
+    el('rect', {x:-11, y:-8, width:22, height:16, rx:3, style:'fill:'+color}, g);
+    el('path', {d:'M-9 -6 0 1 9 -6'}, g);
+    return g;
+  }
+  function showX(at){
+    el('circle', {cx:at.x, cy:at.y-34, r:13, style:'fill:var(--red);stroke:var(--surface);stroke-width:2'}, A.over);
+    el('path', {d:'M'+(at.x-5)+' '+(at.y-39)+'l10 10M'+(at.x+5)+' '+(at.y-39)+'l-10 10', style:'stroke:#fff;stroke-width:2.6;stroke-linecap:round'}, A.over);
+  }
+  // pontos entre um equipamento e o seu roteador (PC2 e servidor passam pelo switch)
+  function legs(hst){ var g = A.g; return hst === 4 ? [g.SV, g.SW, g.R[2]] : hst === 2 ? [g.P[2], g.SW, g.R[2]] : [g.P[hst], g.R[hst]]; }
+  function hname(hst){ return hst === 4 ? 'SRV-WEB' : 'PC'+hst; }
+  async function walk(p, from, to, color, back){
+    var g = A.g, a = legs(from), b = legs(to).slice().reverse(), pk = packet(color, a[0]), j;
+    for (j=1; j<a.length; j++) await hop(a[j-1], a[j], color, back, pk);
+    for (j=1; j<p.p.length; j++) await hop(g.R[p.p[j-1]], g.R[p.p[j]], color, back, pk);
+    if (!p.ok){ showX(g.R[p.p[p.p.length-1]]); return false; }
+    for (j=1; j<b.length; j++) await hop(b[j-1], b[j], color, back, pk);
+    pk.remove(); return true;
+  }
+  async function local(from, to, color, back){
+    var g = A.g, pts = [legs(from)[0], g.SW, legs(to)[0]], pk = packet(color, pts[0]);
+    await hop(pts[0], pts[1], color, back, pk); await hop(pts[1], pts[2], color, back, pk); pk.remove();
+  }
+  async function run(){
+    if (busy) return;
+    var s = +srcSel.value, dh = +dstSel.value, d = dh === 4 ? 2 : dh, web = dh === 4;
+    var what = web ? 'o pedido da página cisco.com.br' : 'o ping', dn = hname(dh), dnet = lan(d)+'/24';
+    if (s === dh){ setStatus('', 'Origem e destino são o mesmo PC. Escolha equipamentos diferentes.'); return; }
+    lock(true); paint();
+    if (s === d){
+      setStatus('run', 'PC2 e SRV-WEB estão na mesma rede, '+dnet+'. O PC2 envia direto, pelo switch.');
+      await local(s, dh, 'var(--s1)', false); await local(dh, s, 'var(--s2)', true);
+      setStatus('ok', 'Dentro da mesma rede o switch entrega direto: o pacote não passa pelo roteador e nenhuma rota é consultada.'+(web ? ' A página cisco.com.br abre no PC2 com qualquer tipo de roteamento.' : ''));
+      lock(false); return;
+    }
+    var f = mode === 'none' ? {p:[s], ok:false} : mode === 'static' ? pathStatic(s, d) : pathRip(s, d, cut);
+    setStatus('run', 'PC'+s+' envia '+what+' ao seu gateway, o '+R(s)+' ('+gw(s)+'), que consulta a tabela de roteamento.');
+    var ok = await walk(f, s, dh, 'var(--s1)', false);
+    if (!ok){
+      var x = f.p[f.p.length-1];
+      setStatus('bad', (mode === 'none'
+        ? 'O '+R(x)+' só conhece as redes ligadas nele (rotas C). Sem rota para '+dnet+', ele descarta o pacote e avisa o PC'+s+': Destination host unreachable.'
+        : 'O '+R(x)+' enviaria pelo '+R(f.want)+', mas o enlace caiu e a rota estática saiu da tabela. Existe caminho pelo outro lado do anel, só que ninguém digitou essa rota: Destination host unreachable.')+(web ? ' A página não abre.' : ''));
+      lock(false); return;
+    }
+    var b = mode === 'static' ? pathStatic(d, s) : {p:f.p.slice().reverse(), ok:true};
+    setStatus('run', 'O pacote chegou. '+dn+' envia a resposta ao seu gateway, o '+R(d)+'.');
+    ok = await walk(b, dh, s, 'var(--s2)', true);
+    if (!ok){
+      setStatus('bad', 'O pacote chegou ao '+dn+' por '+names(f.p)+', mas a resposta parou no '+R(b.p[b.p.length-1])+': a rota estática de volta usava o enlace caído. No PC'+s+' aparece Request timed out'+(web ? ' e a página não abre.' : '.'));
+      lock(false); return;
+    }
+    var msg;
+    if (mode === 'static'){
+      var asym = f.p.join() !== b.p.slice().reverse().join();
+      msg = 'Ida: '+names(f.p)+'. Volta: '+names(b.p)+'.'+(asym ? ' Ida e volta seguiram caminhos diferentes, porque cada roteador consulta só a sua própria tabela.' : ' O caminho é sempre o que foi digitado nas rotas.');
+    } else {
+      var n = f.p.length-1, detour = cut >= 0 && pathRip(s, d, -1).p.join() !== f.p.join();
+      msg = 'Ida e volta por '+names(f.p)+', com '+n+' salto'+(n > 1 ? 's' : '')+' entre roteadores.'+
+        (detour ? ' Com o enlace caído, o RIP recalculou a rota pelo outro lado do anel.' : f.tie ? ' Havia dois caminhos de mesmo custo; o RIP guarda os dois na tabela.' : ' É o caminho com menos saltos.');
+    }
+    setStatus('ok', msg+(web ? ' A página cisco.com.br abre no PC'+s+'.' : '')); lock(false);
+  }
+  $('play').addEventListener('click', run);
+  [['m-none','none'],['m-static','static'],['m-rip','rip']].forEach(function(m){ $(m[0]).addEventListener('click', function(){ if (busy) return; mode = m[1]; paint(); idle(); }); });
+  srcSel.addEventListener('change', function(){ paint(); idle(); });
+  dstSel.addEventListener('change', function(){ paint(); idle(); });
+  cutSel.addEventListener('change', function(){
+    cut = +cutSel.value; paint();
+    setStatus('', cut < 0 ? HINT[mode] : mode === 'rip' ? 'Enlace '+R(cut)+'–'+R(nx(cut))+' cortado. Os roteadores avisam os vizinhos e a tabela já mostra as rotas pelo outro lado.' : mode === 'static' ? 'Enlace '+R(cut)+'–'+R(nx(cut))+' cortado. As rotas estáticas que usavam esse enlace saíram da tabela (riscadas) e nada entra no lugar.' : 'Enlace '+R(cut)+'–'+R(nx(cut))+' cortado.');
+  });
+  build(); idle();
+  var onMq = function(){ drawStatic(); if (!busy) build(); };
+  if (mqN.addEventListener) mqN.addEventListener('change', onMq); else mqN.addListener(onMq);
+  if (reduce){ var hp = $('hero-pk'); if (hp) hp.remove(); }
+
+  // ---------- checklist ----------
+  var cks = Array.prototype.slice.call(document.querySelectorAll('#checklist input')), ckState = {};
+  try { ckState = JSON.parse(localStorage.getItem('roteamento-check1')||'{}') || {}; } catch(e){}
+  function updProg(){ var n = cks.filter(function(c){return c.checked;}).length, pc = Math.round(n/cks.length*100); $('prog').style.width = pc+'%'; $('prog-bar').setAttribute('aria-valuenow', pc); $('prog-txt').innerHTML = '<b>'+pc+'%</b> · '+n+' de '+cks.length+(pc===100?' · concluído':''); $('prog-txt').classList.toggle('done', pc===100); }
+  cks.forEach(function(c){
+    c.checked = !!ckState[c.id];
+    c.addEventListener('change', function(){ ckState[c.id] = c.checked; try{ localStorage.setItem('roteamento-check1', JSON.stringify(ckState)); }catch(e){} updProg(); });
+  });
+  updProg();
+
+  // ---------- copiar ----------
+  function selectEl(el){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  function copyFrom(btn, el){
+    var label = btn.innerHTML;
+    var done = function(msg){ btn.innerHTML = msg; setTimeout(function(){ btn.innerHTML = label; }, 1600); };
+    try { navigator.clipboard.writeText(el.textContent).then(function(){ done('Copiado'); }, function(){ selectEl(el); done('Selecionado: Ctrl+C'); }); }
+    catch(e){ selectEl(el); done('Selecionado: Ctrl+C'); }
+  }
+  document.querySelectorAll('.code .copy').forEach(function(b){ b.addEventListener('click', function(){ copyFrom(b, b.closest('.code').querySelector('pre')); }); });
+
+  // ---------- menu do celular ----------
+  var menu = $('menu'), mbtn = $('menu-btn');
+  function setMenu(open){ menu.classList.toggle('open', open); mbtn.setAttribute('aria-expanded', open); mbtn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu'); }
+  mbtn.addEventListener('click', function(e){ e.stopPropagation(); setMenu(!menu.classList.contains('open')); });
+  menu.addEventListener('click', function(e){ if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !e.target.closest('.bar')) setMenu(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && menu.classList.contains('open')){ setMenu(false); mbtn.focus(); } });
+})();
+
+</script>
+</body>
+</html>
