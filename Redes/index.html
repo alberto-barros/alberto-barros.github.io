@@ -46,9 +46,12 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .topnav .ghost:hover{background:var(--surface-2)}
 .topnav .solid{background:var(--green);color:#fff;box-shadow:0 4px 12px rgba(50,160,65,.28)}
 .topnav .solid:hover{background:#247A30}
+.topnav .back{background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
+.topnav .back:hover{background:#A51418}
 .topnav .i{width:15px;height:15px}
 @media (max-width:760px){.brand .div,.brand .site{display:none}}
-@media (max-width:460px){.topnav .ghost{display:none}}
+@media (max-width:560px){.topnav .ghost{display:none}.brand .inst span{display:none}}
+@media (max-width:420px){.brand .inst{display:none}.topnav a{padding:8px 11px}}
 
 /* HERO */
 .hero{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(180deg,var(--h-top) 0%,var(--bg) 100%);color:var(--ink);border-bottom:1px solid var(--line)}
@@ -222,6 +225,7 @@ footer .fb svg{height:26px;width:auto}
     </a>
     <div class="topnav">
       <a class="ghost" href="#capitulos">Temas</a>
+      <a class="back" href="https://alberto-barros.github.io/"><svg class="i"><use href="#i-back"/></svg>Voltar</a>
       <a class="solid" href="https://alberto-barros.github.io/Redes/Guia.html"><svg class="i"><use href="#i-book"/></svg>Guia de Estudo</a>
     </div>
   </div>
@@ -235,14 +239,6 @@ footer .fb svg{height:26px;width:auto}
       <h1>Redes de <span class="hl">Computadores</span></h1>
       <div class="term" aria-hidden="true"><span class="pr">$</span><span>estudar</span><span class="type" id="type"></span></div>
       <p>Uma trilha com teoria e laboratórios no Packet Tracer para entender, na prática, como os dados viajam de um computador a outro.</p>
-      <div class="cta">
-        <a class="btn back" href="https://alberto-barros.github.io/"><svg class="i"><use href="#i-back"/></svg>Voltar</a>
-        <a class="btn pri" href="#capitulos">Ver temas<svg class="i"><use href="#i-down"/></svg></a>
-        <a class="btn sec" href="https://alberto-barros.github.io/Redes/Guia.html"><svg class="i"><use href="#i-book"/></svg>Guia de Estudo</a>
-      </div>
-      <div class="stats">
-        <div class="stat"><b data-n="3">0</b><span>temas</span></div><span class="sep"></span><div class="stat"><b data-n="4">0</b><span>laboratórios</span></div>
-      </div>
     </div>
     <figure class="lan" aria-label="Animação: três computadores trocando quadros por um switch">
       <svg viewBox="0 0 420 270" class="lan-svg" aria-hidden="true">
