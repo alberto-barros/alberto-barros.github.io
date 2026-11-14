@@ -516,7 +516,7 @@ section.sec{scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
     </div>
     <div class="grid3">
       <article class="ben"><div class="ico"><svg><use href="#i-gauge"/></svg></div><h3>Menos broadcast</h3><p>Cada VLAN é um domínio de broadcast separado. Mensagens como ARP e DHCP Discover ficam restritas ao grupo, liberando banda.</p></article>
-      <article class="ben"><div class="ico"><svg><use href="#i-shield"/></svg></div><h3>Mais segurança</h3><p>A rede dos alunos não enxerga o financeiro nem o RH. O tráfego entre VLANs só passa pelo roteador, onde é possível aplicar ACLs.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-shield"/></svg></div><h3>Mais segurança</h3><p>O RH não enxerga o financeiro nem o administrativo. O tráfego entre VLANs só passa pelo roteador, onde ACLs decidem quem fala com quem.</p></article>
       <article class="ben"><div class="ico"><svg><use href="#i-users"/></svg></div><h3>Organização por função</h3><p>Agrupe usuários por setor, não por localização física. Um funcionário do RH em outro bloco continua na VLAN 30.</p></article>
       <article class="ben"><div class="ico"><svg><use href="#i-coin"/></svg></div><h3>Economia</h3><p>Um único switch atende vários setores isolados, sem a necessidade de um equipamento físico para cada rede.</p></article>
       <article class="ben"><div class="ico"><svg><use href="#i-wrench"/></svg></div><h3>Gestão simples</h3><p>Mudar um usuário de setor é trocar a VLAN da porta com um comando, sem mexer no cabeamento.</p></article>
@@ -706,7 +706,7 @@ section.sec{scroll-margin-top:calc(64px + env(safe-area-inset-top,0px))}
         </div>
         <div class="cs-callout"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><p><b>Na prática, as duas andam juntas.</b> Cria-se uma VLAN para isolar o tráfego na camada 2 e atribui-se a ela uma sub-rede para endereçar a camada 3. No nosso laboratório:</p>
           <div class="cs-vmap">
-            <span style="--vc:var(--v10)">VLAN 10 ALUNOS ↔ 192.168.10.0/24</span>
+            <span style="--vc:var(--v10)">VLAN 10 T.I ↔ 192.168.10.0/24</span>
             <span style="--vc:var(--v20)">VLAN 20 ADMINISTRATIVO ↔ 192.168.20.0/24</span>
             <span style="--vc:var(--v30)">VLAN 30 RH ↔ 192.168.30.0/24</span>
             <span style="--vc:var(--v40)">VLAN 40 FINANCEIRO ↔ 192.168.40.0/24</span>
@@ -819,15 +819,15 @@ const SCENES=[
   nodes:vlanNodes,
   links:[['R','S','trunk'],...'ABCDEFGH'.split('').map((id,i)=>[id,'S',VK[i]])],
   trunkLabel:'trunk 802.1Q',
-  domains:[{r:[48,160,164,276],k:'v10',l:'VLAN 10',l2:'ALUNOS'},{r:[228,160,164,276],k:'v20',l:'VLAN 20',l2:'ADMINISTRATIVO'},
+  domains:[{r:[48,160,164,276],k:'v10',l:'VLAN 10',l2:'T.I'},{r:[228,160,164,276],k:'v20',l:'VLAN 20',l2:'ADMINISTRATIVO'},
            {r:[408,160,164,276],k:'v30',l:'VLAN 30',l2:'RH'},{r:[588,160,164,276],k:'v40',l:'VLAN 40',l2:'FINANCEIRO'}],
   packets:[...fan(0.6,'A','S',['B'],{k:'bc',lb:'BC'}),{t:0.6,r:['A','S','R'],k:'bc',lb:'10',end:'block'},
            ...fan(3.8,'E','S',['F'],{k:'bc',lb:'BC'}),{t:3.8,r:['E','S','R'],k:'bc',lb:'30',end:'block'},
            {t:7.2,r:['A','S','R','S','G'],ks:['v10','v10','v40','v40'],lbs:['→PC6','10','40','→PC6']}],
-  caps:[[0,'Um único switch físico dividido nas 4 VLANs do laboratório: ALUNOS, ADMINISTRATIVO, RH e FINANCEIRO. Cada cor é uma VLAN.'],
+  caps:[[0,'Um único switch físico dividido nas 4 VLANs do laboratório: T.I, ADMINISTRATIVO, RH e FINANCEIRO. Cada cor é uma VLAN.'],
         [1.6,'O broadcast do PC0 chega só ao PC1, que também está na VLAN 10. Os outros 6 PCs nem recebem o quadro.'],
         [3.8,'O mesmo vale para a VLAN 30 (RH): o broadcast do PC4 fica restrito ao PC5. 4 VLANs = 4 domínios de broadcast.'],
-        [7.0,'Para o PC0 (ALUNOS) falar com o PC6 (FINANCEIRO) é preciso rotear. No trunk, o quadro sobe com a etiqueta 802.1Q da VLAN 10 e desce com a da VLAN 40.']]},
+        [7.0,'Para o PC0 (T.I) falar com o PC6 (FINANCEIRO) é preciso rotear. No trunk, o quadro sobe com a etiqueta 802.1Q da VLAN 10 e desce com a da VLAN 40.']]},
 
 { name:'Resumo', title:'VLAN × sub-rede, lado a lado', summary:true, stats:[],
   caps:[[0,'VLAN separa na camada 2 (switch); sub-rede separa na camada 3 (endereçamento IP). Uma não substitui a outra: normalmente 1 VLAN corresponde a 1 sub-rede.']]}
@@ -1065,8 +1065,8 @@ requestAnimationFrame(frame);
       <table class="stack">
         <thead><tr><th>Dispositivo</th><th>Porta do switch</th><th>VLAN</th><th>Endereço IP</th><th>Máscara</th><th>Gateway</th></tr></thead>
         <tbody>
-          <tr><td>PC0</td><td class="mono">Fa0/1</td><td><span class="vtag" style="--vc:var(--v10)">10 ALUNOS</span></td><td class="mono">192.168.10.10</td><td class="mono">255.255.255.0</td><td class="mono">192.168.10.1</td></tr>
-          <tr><td>PC1</td><td class="mono">Fa0/2</td><td><span class="vtag" style="--vc:var(--v10)">10 ALUNOS</span></td><td class="mono">192.168.10.11</td><td class="mono">255.255.255.0</td><td class="mono">192.168.10.1</td></tr>
+          <tr><td>PC0</td><td class="mono">Fa0/1</td><td><span class="vtag" style="--vc:var(--v10)">10 T.I</span></td><td class="mono">192.168.10.10</td><td class="mono">255.255.255.0</td><td class="mono">192.168.10.1</td></tr>
+          <tr><td>PC1</td><td class="mono">Fa0/2</td><td><span class="vtag" style="--vc:var(--v10)">10 T.I</span></td><td class="mono">192.168.10.11</td><td class="mono">255.255.255.0</td><td class="mono">192.168.10.1</td></tr>
           <tr><td>PC2</td><td class="mono">Fa0/3</td><td><span class="vtag" style="--vc:var(--v20)">20 ADMINISTRATIVO</span></td><td class="mono">192.168.20.10</td><td class="mono">255.255.255.0</td><td class="mono">192.168.20.1</td></tr>
           <tr><td>PC3</td><td class="mono">Fa0/4</td><td><span class="vtag" style="--vc:var(--v20)">20 ADMINISTRATIVO</span></td><td class="mono">192.168.20.11</td><td class="mono">255.255.255.0</td><td class="mono">192.168.20.1</td></tr>
           <tr><td>PC4</td><td class="mono">Fa0/5</td><td><span class="vtag" style="--vc:var(--v30)">30 RH</span></td><td class="mono">192.168.30.10</td><td class="mono">255.255.255.0</td><td class="mono">192.168.30.1</td></tr>
@@ -1145,7 +1145,7 @@ no ip domain-lookup
           <p>O comando <code>vlan</code> cria a VLAN no banco de dados do switch e <code>name</code> dá um nome legível a ela.</p>
           <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>SW-IFSC(config)#</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
 <pre data-hl>vlan 10
- name ALUNOS
+ name TI
 vlan 20
  name ADMINISTRATIVO
 vlan 30
@@ -1229,7 +1229,7 @@ copy running-config startup-config
 <pre>VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
 1    default                          active    Gig0/1, Gig0/2
-10   ALUNOS                           active    Fa0/1, Fa0/2
+10   TI                               active    Fa0/1, Fa0/2
 20   ADMINISTRATIVO                   active    Fa0/3, Fa0/4
 30   RH                               active    Fa0/5, Fa0/6
 40   FINANCEIRO                       active    Fa0/7, Fa0/8
@@ -1264,7 +1264,7 @@ hostname SW-IFSC
 no ip domain-lookup
 ! ---- criação das VLANs ----
 vlan 10
- name ALUNOS
+ name TI
 vlan 20
  name ADMINISTRATIVO
 vlan 30
@@ -1372,15 +1372,15 @@ copy running-config startup-config</pre></div>
       <div class="ico"><svg><use href="#i-flag"/></svg></div>
       <div>
         <span class="sec-num">Parte 2 · Desafio · Roteamento entre VLANs</span>
-        <h2>Faça as 4 VLANs se comunicarem</h2>
-        <p>Até aqui, cada VLAN ficou isolada: o PC0 (ALUNOS) não alcança o PC6 (FINANCEIRO). Para que redes diferentes conversem, é preciso um equipamento de <b>camada 3</b>. Neste desafio você vai incluir um roteador e configurar o <b>router-on-a-stick</b>: um único cabo trunk entre switch e roteador, com uma subinterface para cada VLAN.</p>
+        <h2>Só a T.I fala com todas as VLANs</h2>
+        <p>Até aqui, cada VLAN ficou isolada: o PC0 (T.I) não alcança o PC6 (FINANCEIRO). Para que redes diferentes conversem, é preciso um equipamento de <b>camada 3</b>. Neste desafio você vai incluir um roteador, configurar o <b>router-on-a-stick</b> (um único cabo trunk com uma subinterface para cada VLAN) e aplicar uma <b>ACL</b> para que <b>somente a T.I</b> se comunique com as demais VLANs.</p>
       </div>
     </div>
 
     <div class="ch-keys">
       <div class="err"><h3><svg><use href="#i-net"/></svg>1 cabo, 4 redes</h3><p>O link <code>Gi0/0 ↔ Gi0/1</code> é <b>trunk 802.1Q</b> e leva as 4 VLANs etiquetadas até o roteador.</p></div>
       <div class="err"><h3><svg><use href="#i-layers"/></svg>1 subinterface por VLAN</h3><p><code>G0/0.10</code> a <code>G0/0.40</code>, cada uma com o gateway <code>.1</code> da sua VLAN.</p></div>
-      <div class="err"><h3><svg><use href="#i-check"/></svg>Resultado esperado</h3><p>Ping do PC0 (<code>192.168.10.10</code>) para o PC6 (<code>192.168.40.10</code>) com sucesso.</p></div>
+      <div class="err"><h3><svg><use href="#i-shield"/></svg>ACL SO-TI</h3><p>Nas subinterfaces <code>.20</code>, <code>.30</code> e <code>.40</code>, só passa o tráfego que vai para a T.I (<code>192.168.10.0/24</code>).</p></div>
     </div>
 
     <h3 class="topo-h" style="margin-top:0">Nova topologia</h3>
@@ -1428,7 +1428,7 @@ configure terminal
 hostname R-IFSC
 interface gigabitEthernet 0/0
  no shutdown
-! subinterface da VLAN 10 · ALUNOS
+! subinterface da VLAN 10 · TI
 interface gigabitEthernet 0/0.10
  encapsulation dot1Q 10
  ip address 192.168.10.1 255.255.255.0
@@ -1468,21 +1468,50 @@ GigabitEthernet0/2     unassigned      YES unset  administratively down down</pr
       <li class="step" id="d5">
         <div class="step-n">5</div>
         <div class="step-body">
+          <h3>Libere somente a T.I com uma ACL <span class="tag">Roteador</span></h3>
+          <p>Sem filtro, o roteador liga todas as VLANs entre si. A ACL estendida <code>SO-TI</code> é aplicada na <b>entrada</b> das subinterfaces 20, 30 e 40: deixa passar o que vai para a rede da T.I e o ping ao próprio gateway, e descarta o resto. A subinterface <code>.10</code> fica sem ACL, então a T.I alcança todo mundo.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R-IFSC(config)#</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
+<pre data-hl>ip access-list extended SO-TI
+ permit ip any 192.168.10.0 0.0.0.255
+ permit icmp any host 192.168.20.1
+ permit icmp any host 192.168.30.1
+ permit icmp any host 192.168.40.1
+ deny ip any any
+exit
+interface gigabitEthernet 0/0.20
+ ip access-group SO-TI in
+interface gigabitEthernet 0/0.30
+ ip access-group SO-TI in
+interface gigabitEthernet 0/0.40
+ ip access-group SO-TI in
+end
+copy running-config startup-config</pre></div>
+          <p>A resposta de um ping que a T.I envia ao RH volta com destino <code>192.168.10.x</code>, por isso é permitida pela primeira linha. Confira com <code>show access-lists</code>: os contadores de <i>matches</i> sobem a cada teste.</p>
+        </div>
+      </li>
+      <li class="step" id="d6">
+        <div class="step-n">6</div>
+        <div class="step-body">
           <h3>Teste a comunicação entre VLANs <span class="tag">PC</span></h3>
-          <p>No PC0, abra <b>Desktop › Command Prompt</b>. O primeiro pacote pode dar <i>Request timed out</i> enquanto o ARP é resolvido; os seguintes respondem.</p>
+          <p>No PC0 (T.I), abra <b>Desktop › Command Prompt</b>. O primeiro pacote pode dar <i>Request timed out</i> enquanto o ARP é resolvido; os seguintes respondem. Depois repita a partir do PC2 (ADMINISTRATIVO).</p>
           <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>PC0 · C:\&gt;</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
 <pre data-hl>ping 192.168.10.1
 ping 192.168.40.10
 tracert 192.168.40.10
-! o tracert mostra 2 saltos: o gateway 192.168.10.1 e depois o PC6</pre></div>
+! o tracert mostra 2 saltos: o gateway 192.168.10.1 e depois o PC6
+! agora no PC2 (ADMINISTRATIVO):
+ping 192.168.10.10
+ping 192.168.30.10</pre></div>
           <div class="result">
-            <div class="res ok"><svg><use href="#i-check"/></svg><div><b>PC0 › ping 192.168.40.10</b><span>Agora responde: o roteador encaminha da VLAN 10 para a VLAN 40.</span></div></div>
-            <div class="res ok"><svg><use href="#i-check"/></svg><div><b>PC2 › ping 192.168.30.11</b><span>ADMINISTRATIVO alcança o RH pelo mesmo trunk.</span></div></div>
+            <div class="res ok"><svg><use href="#i-check"/></svg><div><b>PC0 › ping 192.168.40.10</b><span>Responde: a T.I alcança o FINANCEIRO.</span></div></div>
+            <div class="res ok"><svg><use href="#i-check"/></svg><div><b>PC2 › ping 192.168.10.10</b><span>Responde: o ADMINISTRATIVO fala com a T.I.</span></div></div>
+            <div class="res bad"><svg><use href="#i-x"/></svg><div><b>PC2 › ping 192.168.30.10</b><span>Falha com <i>Destination host unreachable</i>: a ACL bloqueia ADMINISTRATIVO → RH.</span></div></div>
+            <div class="res bad"><svg><use href="#i-x"/></svg><div><b>PC4 › ping 192.168.40.11</b><span>Falha: RH → FINANCEIRO também é bloqueado.</span></div></div>
           </div>
         </div>
       </li>
     </ol>
-    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Se o ping entre VLANs falhar:</b> confira se o PC tem o gateway <code>.1</code> da sua VLAN, se a <code>G0/0</code> do roteador está <i>up</i> (<code>no shutdown</code>), se o número em <code>encapsulation dot1Q</code> é o mesmo da VLAN e se a VLAN aparece em <code>show interfaces trunk</code> no switch.</p></div>
+    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Se o ping envolvendo a T.I falhar:</b> confira se o PC tem o gateway <code>.1</code> da sua VLAN, se a ACL não foi aplicada por engano na <code>G0/0.10</code>, se a <code>G0/0</code> do roteador está <i>up</i> (<code>no shutdown</code>), se o número em <code>encapsulation dot1Q</code> é o mesmo da VLAN e se a VLAN aparece em <code>show interfaces trunk</code> no switch.</p></div>
 
     <h3 class="topo-h">Animação: o pacote atravessando as VLANs</h3>
     <div class="rt-wrap">
@@ -1505,7 +1534,7 @@ tracert 192.168.40.10
 <script>
 (function(){
   var NS='http://www.w3.org/2000/svg';
-  var VL=[{id:10,n:'ALUNOS',c:'var(--v10)'},{id:20,n:'ADMINISTRATIVO',c:'var(--v20)'},{id:30,n:'RH',c:'var(--v30)'},{id:40,n:'FINANCEIRO',c:'var(--v40)'}];
+  var VL=[{id:10,n:'T.I',c:'var(--v10)'},{id:20,n:'ADMINISTRATIVO',c:'var(--v20)'},{id:30,n:'RH',c:'var(--v30)'},{id:40,n:'FINANCEIRO',c:'var(--v40)'}];
   var PCS=[]; for(var i=0;i<8;i++){ var v=VL[Math.floor(i/2)]; PCS.push({i:i,name:'PC'+i,port:'Fa0/'+(i+1),v:v,ip:'192.168.'+v.id+'.'+(10+i%2)}); }
   var mq=window.matchMedia?matchMedia('(max-width: 600px)'):null;
 
@@ -1620,32 +1649,39 @@ tracert 192.168.40.10
   var steps=[];
   function setLog(items){ steps=items; logEl.innerHTML=items.map(function(t){return '<li><span>'+t+'</span></li>';}).join(''); }
   function mark(k){ [].forEach.call(logEl.children,function(li,j){ li.className=j<k?'done':(j===k?'on':''); }); }
+  function isBlocked(a,b){ return a.v!==b.v && a.v.id!==10 && b.v.id!==10; }
   function plan(){
     var a=PCS[+src.value], b=PCS[+dst.value];
     if(a===b){ setLog(['Escolha um destino diferente da origem.']); return null; }
+    if(isBlocked(a,b)){ setLog(['<b>'+a.name+'</b> vê que <b>'+b.ip+'</b> é de outra rede e envia o quadro ao gateway <b>192.168.'+a.v.id+'.1</b>.',
+      'O switch recebe na <b>'+a.port+'</b> e sobe pelo trunk <b>Gi0/1</b> com a etiqueta 802.1Q da <b>VLAN '+a.v.id+'</b>.',
+      'O roteador recebe na <b>G0/0.'+a.v.id+'</b>. A ACL <b>SO-TI</b> só permite destino na rede da T.I, então o pacote é <b>descartado</b>.',
+      'O roteador devolve ao <b>'+a.name+'</b> um ICMP <b>Destination host unreachable</b>.']); return [a,b]; }
     if(a.v===b.v) setLog(['<b>'+a.name+'</b> compara a máscara: <b>'+b.ip+'</b> está na mesma rede. Não precisa de gateway.',
       'O switch recebe na <b>'+a.port+'</b> (VLAN '+a.v.id+') e entrega direto na <b>'+b.port+'</b>.',
       '<b>'+b.name+'</b> responde com o Echo Reply pelo mesmo caminho.']);
     else setLog(['<b>'+a.name+'</b> vê que <b>'+b.ip+'</b> é de outra rede e envia o quadro ao gateway <b>192.168.'+a.v.id+'.1</b>.',
       'O switch recebe na <b>'+a.port+'</b> e sobe pelo trunk <b>Gi0/1</b> com a etiqueta 802.1Q da <b>VLAN '+a.v.id+'</b>.',
-      'O roteador recebe na <b>G0/0.'+a.v.id+'</b>, consulta a tabela de rotas e encaminha pela <b>G0/0.'+b.v.id+'</b>.',
+      'O roteador recebe na <b>G0/0.'+a.v.id+'</b>'+(a.v.id===10?' (sem ACL)':', a ACL <b>SO-TI</b> permite porque o destino é a T.I')+' e encaminha pela <b>G0/0.'+b.v.id+'</b>.',
       'O quadro desce pelo trunk com a etiqueta da <b>VLAN '+b.v.id+'</b>.',
       'O switch retira a etiqueta e entrega na <b>'+b.port+'</b> ao <b>'+b.name+'</b>.',
       '<b>'+b.name+'</b> responde com o Echo Reply pelo caminho inverso. Ping com sucesso!']);
     return [a,b];
   }
   function build(a,b){
-    var segs=[], same=a.v===b.v;
+    var segs=[], same=a.v===b.v, blk=isBlocked(a,b);
     function add(p1,p2,c,l,s){ segs.push({a:p1,b:p2,c:c,l:l,s:s}); }
     var A=L.anchor(a.i), Ap=L.port(a.i), As=L.sw(a.i), B=L.anchor(b.i), Bp=L.port(b.i), Bs=L.sw(b.i), T=L.trunkSw, Rc={x:R.x,y:R.y};
     if(same){ add(A,Ap,a.v.c,'ICMP',0); add(Ap,As,a.v.c,'ICMP',1); add(As,Bs,a.v.c,'ICMP',1); add(Bs,Bp,a.v.c,'ICMP',1); add(Bp,B,a.v.c,'ICMP',1); }
+    else if(blk){ add(A,Ap,a.v.c,'ICMP',0); add(Ap,As,a.v.c,'ICMP',0); add(As,T,a.v.c,'tag '+a.v.id,1); add(T,Rc,a.v.c,'tag '+a.v.id,1); }
     else { add(A,Ap,a.v.c,'ICMP',0); add(Ap,As,a.v.c,'ICMP',0); add(As,T,a.v.c,'tag '+a.v.id,1); add(T,Rc,a.v.c,'tag '+a.v.id,1);
       add(Rc,T,b.v.c,'tag '+b.v.id,3); add(T,Bs,b.v.c,'tag '+b.v.id,3); add(Bs,Bp,b.v.c,'ICMP',4); add(Bp,B,b.v.c,'ICMP',4); }
     var L0=0; segs.forEach(function(s){ s.len=Math.hypot(s.b.x-s.a.x,s.b.y-s.a.y)||1; s.st=L0; L0+=s.len; });
-    return {segs:segs,len:L0,same:same};
+    return {segs:segs,len:L0,same:same,blk:blk};
   }
   var running=false, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function reset(){ PCS.forEach(function(p){ p.ring.setAttribute('opacity',0); }); rring.setAttribute('opacity',0); gP.innerHTML=''; }
+  var aclTx=el('text',{x:R.x,y:R.y-R.r-10,'text-anchor':'middle','font-size':12,'font-weight':800,'font-family':'Sora, sans-serif',style:'fill:var(--red)',opacity:0},rg,'✕ ACL SO-TI');
+  function reset(){ PCS.forEach(function(p){ p.ring.setAttribute('opacity',0); }); rring.setAttribute('opacity',0); aclTx.setAttribute('opacity',0); gP.innerHTML=''; }
   function animate(path,lblBase,cb){
     var g=el('g',{class:'pkt'},gP), r=el('rect',{x:-30,y:-11,width:60,height:22,rx:6},g), t=el('text',{},g,'');
     if(MOB) g.setAttribute('data-s','1');
@@ -1671,6 +1707,19 @@ tracert 192.168.40.10
       pill.className='pill ok'; pill.textContent='Reply recebido';
       desc.textContent=path.same?'Mesma VLAN: o switch entregou direto, sem passar pelo roteador.':'Reply from '+b.ip+': o roteador ligou a VLAN '+a.v.id+' à VLAN '+b.v.id+'.';
       running=false; }
+    if(path.blk){
+      var back={segs:path.segs.slice().reverse().map(function(s){ return {a:s.b,b:s.a,c:'var(--red)',l:s.l.indexOf('tag')===0?s.l:'ICMP',s:-1}; })};
+      var L1=0; back.segs.forEach(function(s){ s.len=Math.hypot(s.b.x-s.a.x,s.b.y-s.a.y)||1; s.st=L1; L1+=s.len; }); back.len=L1;
+      var blockEnd=function(){ mark(steps.length); var last=logEl.lastElementChild; if(last) last.className='done';
+        aclTx.setAttribute('opacity',0); rring.setAttribute('opacity',0);
+        pill.className='pill bad'; pill.textContent='Bloqueado pela ACL';
+        desc.textContent='Reply from 192.168.'+a.v.id+'.1: Destination host unreachable. Só a T.I fala com as outras VLANs.'; running=false; };
+      if(reduce){ blockEnd(); return; }
+      animate(path,'',function(){ aclTx.setAttribute('opacity',1); mark(2); pill.textContent='Descartado';
+        desc.textContent='A ACL SO-TI na G0/0.'+a.v.id+' descartou o pacote para '+b.ip+'.';
+        setTimeout(function(){ mark(3); animate(back,'unreach',blockEnd); },900); });
+      return;
+    }
     if(reduce){ finish(); return; }
     animate(path,'',function(){
       b.ring.setAttribute('opacity',1); mark(steps.length-1);
@@ -1696,13 +1745,13 @@ tracert 192.168.40.10
     </div>
     <div class="deliver solo">
       <div class="dcard">
-        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 14</span></div>
+        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 15</span></div>
         <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
         <div class="check" id="checklist">
           <div class="ck-group">Parte 1 · VLANs</div>
           <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>Topologia com 1 switch 2960 e 8 PCs nas portas Fa0/1 a Fa0/8</span></label>
           <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 2">2</em>PC0 a PC7 com IP, máscara e gateway do plano de endereçamento</span></label>
-          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 4">4</em>VLANs 10 ALUNOS, 20 ADMINISTRATIVO, 30 RH e 40 FINANCEIRO criadas</span></label>
+          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 4">4</em>VLANs 10 T.I, 20 ADMINISTRATIVO, 30 RH e 40 FINANCEIRO criadas</span></label>
           <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 5">5</em>Portas Fa0/1 a Fa0/8 em modo access na VLAN correta</span></label>
           <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 6">6</em>Portas Fa0/9 a Fa0/24 na VLAN 999 e desligadas</span></label>
           <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 8">8</em>Configuração salva com <code>copy running-config startup-config</code></span></label>
@@ -1713,8 +1762,9 @@ tracert 192.168.40.10
           <label><input type="checkbox" id="ck11"><span><em class="ck-n ch" title="Desafio, passo 2">D2</em>Porta <code>Gi0/1</code> do switch em modo trunk com as VLANs 10, 20, 30 e 40</span></label>
           <label><input type="checkbox" id="ck12"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>G0/0</code> ligada e subinterfaces <code>G0/0.10</code> a <code>G0/0.40</code> com <code>encapsulation dot1Q</code> e o IP .1</span></label>
           <label><input type="checkbox" id="ck13"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em><code>show ip interface brief</code> com as 4 subinterfaces <i>up/up</i></span></label>
-          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 5">D5</em>Ping e <code>tracert</code> do PC0 para o PC6 funcionando entre VLANs</span></label>
-          <label><input type="checkbox" id="ck15"><span><em class="ck-n ch" title="Desafio, passo 5">D5</em>Arquivo .pkt do desafio salvo</span></label>
+          <label><input type="checkbox" id="ck16"><span><em class="ck-n ch" title="Desafio, passo 5">D5</em>ACL <code>SO-TI</code> criada e aplicada na entrada de <code>G0/0.20</code>, <code>.30</code> e <code>.40</code></span></label>
+          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 6">D6</em>Ping e <code>tracert</code> da T.I (PC0) para o PC6 funcionando</span></label>
+          <label><input type="checkbox" id="ck17"><span><em class="ck-n ch" title="Desafio, passo 6">D6</em>PC2 (ADMINISTRATIVO) pinga a T.I, mas não alcança o RH</span></label>
         </div>
       </div>
     </div>
@@ -1729,17 +1779,21 @@ tracert 192.168.40.10
     </div>
     <h3 class="err-g">Parte 1 · VLANs</h3>
     <div class="errs">
-      <article class="err"><h3><svg><use href="#i-alert"/></svg>Ping falha dentro da mesma VLAN</h3><p>Confira o IP e a máscara no PC e se o cabo está na porta certa. Rode <code>show vlan brief</code> e veja se a porta aparece na VLAN esperada.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Link com bolinha vermelha ou laranja</h3><p>Vermelha: cabo errado ou porta desligada (portas Fa0/9 a Fa0/24 ficam desligadas de propósito). Use <b>Copper Straight-Through</b> do PC ao switch. Laranja: a porta ainda está iniciando; espere cerca de 30 s.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Ping falha dentro da mesma VLAN</h3><p>Confira o IP e a máscara nos dois PCs e se o cabo está na porta certa. Rode <code>show vlan brief</code> e veja se as duas portas aparecem na mesma VLAN.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Porta continua na VLAN 1</h3><p>Faltou o <code>switchport access vlan</code> ou ele foi digitado fora da interface. Entre em <code>interface range fastEthernet 0/1 - 2</code> e repita o comando.</p></article>
       <article class="err"><h3><svg><use href="#i-alert"/></svg>Porta não aparece em nenhuma VLAN</h3><p>Portas configuradas como trunk não aparecem no <code>show vlan brief</code>. Use <code>show interfaces trunk</code> para vê-las.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% Invalid input detected”</h3><p>Verifique o modo da CLI no prompt. VLANs e interfaces se configuram em <code>(config)#</code>, e comandos <code>show</code> em <code>#</code> (ou com <code>do</code> na frente).</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"/></svg>Configuração sumiu ao reabrir</h3><p>Faltou <code>copy running-config startup-config</code> e salvar o arquivo .pkt (Ctrl+S) antes de fechar o Packet Tracer.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% Invalid input detected”</h3><p>Verifique o modo da CLI no prompt. VLANs e interfaces se configuram em <code>(config)#</code>, e comandos <code>show</code> em <code>#</code> (ou com <code>do</code> na frente). O nome da VLAN 10 é <code>TI</code>, sem ponto.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>Configuração sumiu ao reabrir</h3><p>Faltou <code>copy running-config startup-config</code> no switch e no roteador, ou salvar o arquivo .pkt (Ctrl+S) antes de fechar o Packet Tracer.</p></article>
     </div>
-    <h3 class="err-g ch">Parte 2 · Roteamento entre VLANs</h3>
+    <h3 class="err-g ch">Parte 2 · Roteamento entre VLANs e ACL</h3>
     <div class="errs">
-      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Ping entre VLANs ainda falha</h3><p>Teste primeiro o <code>ping</code> ao gateway (<code>.1</code>) da própria VLAN. Se falhar, confira o Default Gateway no PC e se a subinterface da VLAN existe no roteador.</p></article>
       <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Subinterfaces aparecem <i>down</i></h3><p>A interface física <code>G0/0</code> está desligada. Entre em <code>interface gigabitEthernet 0/0</code> e rode <code>no shutdown</code>; as subinterfaces sobem junto.</p></article>
-      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Uma VLAN não alcança as outras</h3><p>O número em <code>encapsulation dot1Q</code> não bate com a VLAN, ou a VLAN ficou fora de <code>switchport trunk allowed vlan</code> na <code>Gi0/1</code> do switch.</p></article>
       <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>“% Configuring IP routing on a LAN subinterface…”</h3><p>Faltou o <code>encapsulation dot1Q</code> antes do <code>ip address</code>. Na subinterface, a etiqueta da VLAN vem sempre primeiro.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Nem a T.I alcança as outras VLANs</h3><p>Teste o <code>ping</code> ao gateway <code>192.168.10.1</code>. Confira o Default Gateway no PC e se a ACL não foi aplicada por engano na <code>G0/0.10</code> (<code>show ip interface g0/0.10</code>).</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>A T.I não alcança uma das VLANs</h3><p>O número em <code>encapsulation dot1Q</code> não bate com a VLAN, ou ela ficou fora de <code>switchport trunk allowed vlan</code> na <code>Gi0/1</code> do switch.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>ADMINISTRATIVO ainda alcança o RH</h3><p>A ACL não está aplicada, foi aplicada como <code>out</code> ou o nome no <code>ip access-group</code> está diferente de <code>SO-TI</code>. Confira em <code>show access-lists</code> e <code>show running-config</code>.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>RH não pinga o próprio gateway</h3><p>Faltou a linha <code>permit icmp any host 192.168.30.1</code> antes do <code>deny ip any any</code>. Na ACL a ordem importa: a primeira linha que combina decide.</p></article>
     </div>
   </div>
 </section>
@@ -1763,7 +1817,7 @@ tracert 192.168.40.10
 </script>
 <script>
 (function(){
-  var G=[{t:'VLAN 10 · ALUNOS',n:'192.168.10.0/24',c:'var(--v10)'},{t:'VLAN 20 · ADMINISTRATIVO',n:'192.168.20.0/24',c:'var(--v20)'},
+  var G=[{t:'VLAN 10 · T.I',n:'192.168.10.0/24',c:'var(--v10)'},{t:'VLAN 20 · ADMINISTRATIVO',n:'192.168.20.0/24',c:'var(--v20)'},
          {t:'VLAN 30 · RH',n:'192.168.30.0/24',c:'var(--v30)'},{t:'VLAN 40 · FINANCEIRO',n:'192.168.40.0/24',c:'var(--v40)'}];
   var PCS=[]; for(var i=0;i<8;i++){ var v=(Math.floor(i/2)+1)*10; PCS.push({name:'PC'+i,port:'Fa0/'+(i+1),ip:'192.168.'+v+'.'+(10+i%2),m:'gw 192.168.'+v+'.1',g:Math.floor(i/2)}); }
   var mq=window.matchMedia?matchMedia('(max-width: 600px)'):null, d=document.getElementById('draw');
@@ -1821,7 +1875,7 @@ document.querySelectorAll('table.stack').forEach(function(t){
 </script>
 <script>
 (function(){
-  var V=[{c:'#2F9E41',f:'ALUNOS',id:10},{c:'#1C7EC0',f:'ADMINISTRATIVO',id:20},{c:'#C98204',f:'RH',id:30},{c:'#8250C8',f:'FINANCEIRO',id:40}];
+  var V=[{c:'#2F9E41',f:'T.I',id:10},{c:'#1C7EC0',f:'ADMINISTRATIVO',id:20},{c:'#C98204',f:'RH',id:30},{c:'#8250C8',f:'FINANCEIRO',id:40}];
   var HN={nodes:[{x:64,y:46},{x:336,y:46},{x:64,y:208},{x:336,y:208}], R:{x:200,y:150}, pk:[]};
   var svg=document.getElementById('hero-svg'), N='http://www.w3.org/2000/svg';
   function mk(t,a,p,tx){ var e=document.createElementNS(N,t); for(var k in a) e.setAttribute(k,a[k]); if(tx!=null) e.textContent=tx; (p||svg).appendChild(e); return e; }
@@ -1848,7 +1902,7 @@ document.querySelectorAll('table.stack').forEach(function(t){
     mk('text',{y:55,'text-anchor':'middle','font-size':10,'font-weight':700,'font-family':'JetBrains Mono, monospace','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:'+V[k].c+';stroke:var(--bg)'},g,V[k].f);
     mk('text',{y:68,'text-anchor':'middle','font-size':10,'font-weight':600,'font-family':'JetBrains Mono, monospace','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:var(--muted);stroke:var(--bg)'},g,'192.168.'+V[k].id+'.0/24');
   });
-  function spawn(){ var a=Math.floor(Math.random()*4), b=(a+1+Math.floor(Math.random()*3))%4, c=document.createElementNS(N,'circle');
+  function spawn(){ var o=1+Math.floor(Math.random()*3), toTI=Math.random()<.5, a=toTI?o:0, b=toTI?0:o, c=document.createElementNS(N,'circle');
     c.setAttribute('r',5.5); c.style.fill=V[a].c; c.style.stroke='var(--surface)'; c.setAttribute('stroke-width',1.5); HN.gpk.appendChild(c);
     HN.pk.push({a:a,b:b,t:0,el:c,sp:0.0035+Math.random()*0.0015}); }
   function frame(ts){
@@ -1900,7 +1954,7 @@ document.querySelectorAll('table.stack').forEach(function(t){
   var NS = 'http://www.w3.org/2000/svg';
   var svg = document.getElementById('topo');
   var VL = [
-    {id:10,name:'ALUNOS',c:'var(--v10)'},
+    {id:10,name:'T.I',c:'var(--v10)'},
     {id:20,name:'ADMINISTRATIVO',c:'var(--v20)'},
     {id:30,name:'RH',c:'var(--v30)'},
     {id:40,name:'FINANCEIRO',c:'var(--v40)'}
