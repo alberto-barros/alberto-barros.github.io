@@ -13,14 +13,14 @@
   --bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;--ink:#0F172A;--muted:#64748B;--line:#E2E8F0;
   --green:#32A041;--green-ink:#247A30;--green-soft:#E9F7EC;--green-chip:#BFE5C6;
   --red:#C8191E;--red-ink:#B0151A;--red-soft:#FDECEC;--red-chip:#F6C5C7;
-  --h-top:#E8F3FF;--h-mesh:.42;--h-dot:rgba(15,23,42,.13);--m1:#7CC4FF;--m2:#8FE3D0;--m3:#C7B8FF;
+  --h-top:#F1FAF2;--h-mesh:.34;--h-dot:rgba(15,23,42,.13);--h-ink:#000;--m1:#F0535A;--m2:#57D06B;--m3:#A8E6B2;
   --font-display:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--font-mono:"JetBrains Mono",ui-monospace,monospace;
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#0B0F17;--surface:#121824;--surface-2:#1A2233;--ink:#F8FAFC;--muted:#94A3B8;--line:#1E293B;
   --green:#3DBE50;--green-ink:#5ADB6E;--green-soft:#12301A;--green-chip:#1F4A29;
   --red:#FF5C61;--red-ink:#FF7A7E;--red-soft:#3A1517;--red-chip:#5C2226;
-  --h-top:#0C1420;--h-mesh:.2;--h-dot:rgba(248,250,252,.1);--m1:#3B8FE0;--m2:#2FBFA0;--m3:#7C6AE0;color-scheme:dark}}
+  --h-top:#0E1611;--h-mesh:.2;--h-dot:rgba(248,250,252,.1);--h-ink:#fff;--m1:#E0444A;--m2:#3DBE50;--m3:#2E9A52;color-scheme:dark}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -57,7 +57,7 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .hero{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(180deg,var(--h-top) 0%,var(--bg) 100%);color:var(--ink);border-bottom:1px solid var(--line)}
 .mesh{position:absolute;inset:0;z-index:-2;filter:blur(70px);opacity:var(--h-mesh)}
 .mesh i{position:absolute;border-radius:50%}
-.mesh i:nth-child(1){width:46vmax;height:46vmax;left:-14vmax;top:-22vmax;background:var(--m1);animation:m1 24s ease-in-out infinite alternate}
+.mesh i:nth-child(1){width:34vmax;height:34vmax;left:-12vmax;top:-18vmax;background:var(--m1);animation:m1 24s ease-in-out infinite alternate}
 .mesh i:nth-child(2){width:40vmax;height:40vmax;right:-12vmax;top:-10vmax;background:var(--m2);animation:m2 28s ease-in-out infinite alternate}
 .mesh i:nth-child(3){width:34vmax;height:34vmax;left:38%;bottom:-24vmax;background:var(--m3);animation:m1 32s ease-in-out infinite alternate-reverse}
 @keyframes m1{to{transform:translate(10%,8%) scale(1.1)}}
@@ -65,12 +65,12 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .dots{position:absolute;inset:0;z-index:-1;background-image:radial-gradient(var(--h-dot) 1.1px,transparent 1.3px);background-size:24px 24px;-webkit-mask-image:radial-gradient(ellipse 75% 80% at 70% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 75% 80% at 70% 40%,#000 20%,transparent 75%)}
 .hero .wrap{position:relative;padding-block:clamp(44px,7vw,88px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
 .hero-text{display:grid;gap:20px;justify-items:start;min-width:0}
-.hero h1{font-size:clamp(3.2rem,7vw,5.6rem);font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--ink)}
-.typebar{display:inline-flex;align-items:center;gap:.6ch;max-width:100%;height:2.5em;padding:0 16px;border-radius:12px;background:#0F172A;color:#E2E8F0;font-family:var(--font-mono);font-size:.92rem;box-shadow:0 10px 26px rgba(15,23,42,.2);white-space:nowrap;overflow:hidden}
+.hero h1{font-size:clamp(3.2rem,7vw,5.6rem);font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--h-ink)}
+.typebar{display:inline-flex;align-items:center;gap:.6ch;max-width:100%;height:2.5em;padding:0 16px;border-radius:12px;background:#000;color:#fff;font-family:var(--font-mono);font-size:.92rem;box-shadow:0 10px 26px rgba(15,23,42,.2);white-space:nowrap;overflow:hidden}
 .typebar .pr{color:#4ADE80}
 .typebar .type{color:#BBF7D0;min-width:22ch}
 .typebar .type::after{content:"▌";animation:blink 1s steps(1) infinite;color:#4ADE80}
-.hero p{max-width:48ch;font-size:1.1rem;color:var(--muted);margin:0}
+.hero p{max-width:48ch;font-size:1.1rem;color:var(--h-ink);margin:0}
 .hero p code{font-family:var(--font-mono);font-size:.88em;background:var(--surface);border:1px solid var(--line);padding:1px 6px;border-radius:6px;color:var(--ink)}
 
 /* Terminal moderno */
