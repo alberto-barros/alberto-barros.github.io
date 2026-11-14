@@ -166,9 +166,9 @@ section{padding-block:72px 16px}
 @keyframes arry{0%{transform:translateY(0);opacity:0}15%,85%{opacity:1}100%{transform:translateY(32px);opacity:0}}
 @keyframes arrx{0%{transform:translateX(0);opacity:0}15%,85%{opacity:1}100%{transform:translateX(48px);opacity:0}}
 @media (max-width:760px){.cards{grid-template-columns:1fr;row-gap:60px}.node,.node.lab{grid-column:auto}.arr.right,.arr.elbow{display:none}.arr.m-only{display:block}.node:has(+ .node.lab)>.arr.down .ln{stroke:var(--red)}.node:has(+ .node.lab)>.arr.down .hd,.node:has(+ .node.lab)>.arr.down .pk{fill:var(--red)}}
-.chap{position:relative;display:grid;gap:10px;align-content:start;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:transform .2s cubic-bezier(.4,0,.2,1),border-color .2s,box-shadow .2s}
-.chap:hover{transform:translateY(-2px);border-color:var(--green);box-shadow:0 12px 28px rgba(15,23,42,.09)}
-.chap.lab:hover{border-color:var(--red)}
+.chap{position:relative;display:grid;gap:10px;align-content:start;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s ease}
+.chap:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--green) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--green) 25%,transparent),0 14px 30px -6px color-mix(in srgb,var(--green) 45%,transparent),0 0 46px -4px color-mix(in srgb,var(--green) 40%,transparent)}
+.chap.lab:hover{border-color:color-mix(in srgb,var(--red) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--red) 25%,transparent),0 14px 30px -6px color-mix(in srgb,var(--red) 40%,transparent),0 0 46px -4px color-mix(in srgb,var(--red) 35%,transparent)}
 .chap .top{display:flex;align-items:center;gap:10px}
 .chap .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);flex:none}
 .chap.lab .ic{background:var(--red)}
