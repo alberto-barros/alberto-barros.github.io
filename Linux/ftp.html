@@ -899,6 +899,101 @@ details.src pre{max-height:360px;overflow:auto}
 .tmenu a:hover,.tmenu a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
 @media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
 @media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
+/* quiz: uma pergunta por vez */
+.deliver{grid-template-columns:1fr}
+.quiz{border-radius:26px;overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--green) 80%,transparent)}
+.qz-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:18px 22px;background:var(--code-bg);color:var(--code-fg)}
+.qz-brand{display:flex;align-items:center;gap:12px}
+.qz-ico{width:42px;height:42px;border-radius:13px;background:var(--green);display:grid;place-items:center;color:#fff;flex:none}
+.qz-ico svg{width:22px;height:22px}
+.qz-brand b{font:700 1.08rem var(--f-display);display:block}
+.qz-brand small{color:var(--code-muted);font-size:.8rem}
+.qz-chips{display:flex;gap:8px}
+.qz-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font:700 .95rem var(--f-display);font-variant-numeric:tabular-nums}
+.qz-chip svg{width:16px;height:16px}
+.qz-chip.ok{background:color-mix(in srgb,#6FD982 18%,transparent);color:#8BE39B}
+.qz-chip.bad{background:color-mix(in srgb,#FF6B6B 18%,transparent);color:#FF8A8A}
+.qz-steps{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;padding:16px 22px 0}
+.qz-steps i{height:7px;border-radius:99px;background:var(--surface-2);transition:background .3s,transform .3s}
+.qz-steps i.cur{background:var(--green);transform:scaleY(1.5)}
+.qz-steps i.ok{background:var(--ok)}
+.qz-steps i.bad{background:var(--bad)}
+.qz-stage{padding:22px;min-height:420px;display:grid}
+.qz-card{display:grid;gap:18px;align-content:start;animation:qzIn .45s cubic-bezier(.2,.8,.2,1)}
+.qz-card.out{animation:qzOut .3s ease-in forwards}
+@keyframes qzIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes qzOut{to{opacity:0;transform:translateX(-40px)}}
+.qz-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qz-num{font:800 .8rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:5px 10px;border-radius:999px}
+.qz-tag{font:700 .72rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.qz-q{font:700 clamp(1.2rem,2.6vw,1.6rem)/1.35 var(--f-display);letter-spacing:-.01em;text-wrap:pretty;max-width:none}
+.qz-q code{font-size:.85em}
+.qz-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.qz-opt{position:relative;text-align:left;border:2px solid var(--line);background:var(--surface);color:var(--ink);font:600 1rem var(--f-body);padding:16px 16px;border-radius:16px;cursor:pointer;display:grid;grid-template-columns:38px minmax(0,1fr) 22px;gap:12px;align-items:center;transition:transform .15s,border-color .15s,background .15s,box-shadow .15s}
+.qz-opt .L{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);font:800 .95rem var(--f-display);color:var(--muted);transition:background .15s,color .15s}
+.qz-opt .st{display:grid;place-items:center;width:22px;height:22px}
+.qz-opt .st svg{width:22px;height:22px}
+.qz-opt:hover:not([disabled]){border-color:var(--green);transform:translateY(-2px);box-shadow:0 10px 22px -16px var(--green)}
+.qz-opt:hover:not([disabled]) .L{background:var(--green);color:#fff}
+.qz-opt[disabled]{cursor:default}
+.qz-opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.qz-opt.right .L{background:var(--ok);color:var(--surface)}
+.qz-opt.right .st{color:var(--ok)}
+.qz-opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface));animation:shake .4s}
+.qz-opt.wrong .L{background:var(--bad);color:var(--surface)}
+.qz-opt.wrong .st{color:var(--bad)}
+.qz-opt.dim{opacity:.45}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.qz-fb{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;border-radius:18px;padding:16px 18px;background:color-mix(in srgb,var(--fc) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--fc) 40%,transparent);animation:qzIn .35s ease-out}
+.qz-fb .fi{width:44px;height:44px;border-radius:13px;background:var(--fc);color:var(--surface);display:grid;place-items:center}
+.qz-fb .fi svg{width:24px;height:24px}
+.qz-fb h4{margin:0;font:700 1.05rem var(--f-display);color:var(--fc)}
+.qz-fb p{color:var(--muted);font-size:.95rem;margin-top:2px}
+.qz-fb p b{color:var(--ink)}
+.qz-next{display:flex;justify-content:flex-end;align-items:center;gap:14px;flex-wrap:wrap}
+.qz-timer{flex:1;min-width:120px;height:4px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.qz-timer i{display:block;height:100%;width:0;background:var(--green);animation:qzT var(--dur,4s) linear forwards}
+@keyframes qzT{to{width:100%}}
+.qz-end{display:grid;gap:22px;justify-items:center;text-align:center;align-content:center;animation:qzIn .5s cubic-bezier(.2,.8,.2,1)}
+.qz-ring{width:170px;height:170px;border-radius:50%;display:grid;place-content:center;justify-items:center;position:relative;background:conic-gradient(var(--gc) calc(var(--p)*1%),var(--surface-2) 0)}
+.qz-ring::before{content:"";position:absolute;inset:13px;border-radius:50%;background:var(--surface)}
+.qz-ring > *{position:relative}
+.qz-ring span{font:700 .72rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.qz-ring b{font:800 3.2rem/1 var(--f-display);color:var(--gc);font-variant-numeric:tabular-nums}
+.qz-ring small{color:var(--muted);font-size:.85rem}
+.qz-end h3{font-size:1.6rem}
+.qz-end > p{color:var(--muted);max-width:52ch}
+.qz-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;max-width:560px}
+.qz-sum span{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:12px;font:700 .82rem var(--f-display);background:color-mix(in srgb,var(--sc) 12%,var(--surface));color:var(--sc);border:1px solid color-mix(in srgb,var(--sc) 35%,transparent)}
+.qz-sum span small{font:600 .66rem var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+@media (prefers-reduced-motion: reduce){.qz-card,.qz-card.out,.qz-fb,.qz-end,.qz-opt.wrong{animation:none}.qz-timer{display:none}}
+@media (max-width:600px){.qz-stage{padding:16px;min-height:0}.qz-steps{padding:14px 16px 0;gap:4px}.qz-bar{padding:14px 16px}.qz-opts{grid-template-columns:1fr}.qz-opt{padding:12px;grid-template-columns:32px minmax(0,1fr) 20px}.qz-opt .L{width:32px;height:32px}.qz-sum{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.qz-sum span{padding:8px 2px}.qz-next .btn{flex:1 1 100%;justify-content:center}}
+/* revisão das respostas */
+.qz-sumwrap{display:grid;gap:12px;justify-items:center;width:100%}
+.qz-hint{font-size:.88rem;color:var(--muted)}
+.qz-sum button{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:12px;font:700 .82rem var(--f-display);background:color-mix(in srgb,var(--sc) 12%,var(--surface));color:var(--sc);border:1.5px solid color-mix(in srgb,var(--sc) 35%,transparent);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.qz-sum button small{font:600 .66rem var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.qz-sum button:hover{transform:translateY(-2px);box-shadow:0 8px 18px -12px var(--sc)}
+.qz-sum button[aria-pressed="true"]{border-color:var(--sc);border-width:2.5px;background:color-mix(in srgb,var(--sc) 22%,var(--surface))}
+.qz-review{width:100%;max-width:720px;text-align:left;display:grid;gap:12px;border-radius:18px;padding:18px;border:2px solid color-mix(in srgb,var(--fc) 45%,transparent);background:color-mix(in srgb,var(--fc) 6%,var(--surface));animation:qzIn .35s ease-out}
+.qz-review[hidden]{display:none}
+.qz-res{margin-left:auto;font:700 .78rem var(--f-body);color:var(--fc)}
+.qz-rq{font:700 1.15rem/1.4 var(--f-display)}
+.qz-rl{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.qz-rl li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-size:.95rem;color:var(--muted)}
+.qz-rl .L{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--surface-2);font:800 .85rem var(--f-display)}
+.qz-rl em{font:700 .72rem var(--f-body);font-style:normal;letter-spacing:.04em;text-transform:uppercase}
+.qz-rl li.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface));color:var(--ink);font-weight:600}
+.qz-rl li.right .L{background:var(--ok);color:var(--surface)}
+.qz-rl li.right em{color:var(--ok)}
+.qz-rl li.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface));color:var(--ink)}
+.qz-rl li.wrong .L{background:var(--bad);color:var(--surface)}
+.qz-rl li.wrong em{color:var(--bad)}
+.qz-rexp{font-size:.93rem;color:var(--muted);background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.qz-rexp b{color:var(--ink)}
+@media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
+@media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
+html{scroll-padding-top:84px}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -932,6 +1027,7 @@ details.src pre{max-height:360px;overflow:auto}
     <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
     <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6M9 9l6 6"></path></symbol><symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></symbol>
   </defs>
 </svg>
 
@@ -944,10 +1040,10 @@ details.src pre{max-height:360px;overflow:auto}
     </a>
     <div class="topnav">
       <button type="button" class="ghost" id="tb-topics" aria-expanded="false" aria-controls="tmenu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span class="tb-lbl">Tópicos</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      <a class="solid" href="#checklist-sec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Checklist</a>
+      <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#m1"><b>03</b>Instalar o vsftpd</a><a href="#m2"><b>04</b>Configurar</a><a href="#m3"><b>05</b>Permissões</a><a href="#m4"><b>06</b>IP e teste</a><a href="#m5"><b>07</b>FileZilla</a><a href="#m6"><b>08</b>Backup</a><a href="#m7"><b>09</b>Nova página</a><a href="#m8"><b>10</b>Conferir</a><a href="#m9"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#desafio"><b>13</b>Desafio</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#m1"><b>03</b>Instalar o vsftpd</a><a href="#m2"><b>04</b>Configurar</a><a href="#m3"><b>05</b>Permissões</a><a href="#m4"><b>06</b>IP e teste</a><a href="#m5"><b>07</b>FileZilla</a><a href="#m6"><b>08</b>Backup</a><a href="#m7"><b>09</b>Nova página</a><a href="#m8"><b>10</b>Conferir</a><a href="#m9"><b>11</b>Exercícios</a><a href="#entrega"><b>12</b>Quiz</a><a href="#checklist-sec"><b>13</b>Checklist</a><a href="#desafio"><b>14</b>Desafio</a></div>
   </div>
 </nav>
 
@@ -1579,6 +1675,24 @@ Mon Nov  9 10:38:15 2026 [pid 2312] [aluno] <span class="ok">OK UPLOAD</span>: C
     <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>Depois de cada exercício, confira o resultado no <code>/var/log/vsftpd.log</code> e no navegador da hospedeira.</p></div>
   </div>
 </section>
+<section class="sec" id="entrega">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Quiz: teste seu conhecimento</span>
+    </div>
+    <div class="deliver">
+      <div class="quiz" id="quiz">
+        <div class="qz-bar">
+          <div class="qz-brand"><span class="qz-ico"><svg><use href="#i-bulb"></use></svg></span><div><b>Quiz · Servidor FTP</b><small>10 perguntas · nota de 0 a 10</small></div></div>
+          <div class="qz-chips"><span class="qz-chip ok"><svg><use href="#i-check"></use></svg><b id="q-ok">0</b></span><span class="qz-chip bad"><svg><use href="#i-x"></use></svg><b id="q-bad">0</b></span></div>
+        </div>
+        <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
+        <div class="qz-stage" id="q-stage" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="checklist-sec">
   <div class="wrap">
     <div class="sec-head">
@@ -1914,6 +2028,91 @@ systemctl is-active vsftpd     <span class="c"># active</span></pre></div>
     }
     function start(){ clearTimeout(timer); done=''; login(function(){ run(0); }); }
     wait(900,start);
+  })();
+  // ---------- quiz ----------
+  (function(){
+    var $ = function(id){ return document.getElementById(id); };
+    var BANK = [{"t": "Conceito", "q": "O que significa a sigla <b>FTP</b>?", "o": ["File Transfer Protocol", "Fast Transmission Port", "File Text Program", "Free Transfer Platform"], "e": "FTP é o <b>File Transfer Protocol</b>, o protocolo de transferência de arquivos."}, {"t": "Conceito", "q": "Em qual modelo o FTP funciona?", "o": ["Cliente e servidor", "Ponto a ponto, sem servidor", "Somente difusão (broadcast)", "Mestre e escravo pelo cabo serial"], "e": "O FTP é <b>cliente e servidor</b>: o servidor guarda os arquivos e o cliente se conecta para enviar ou baixar."}, {"t": "Conceito", "q": "Qual destas tarefas é um uso típico do FTP?", "o": ["Enviar os arquivos de um site para o servidor web", "Resolver nomes de sites em endereços IP", "Distribuir IPs automaticamente na rede", "Enviar e-mails entre servidores"], "e": "O FTP é muito usado para <b>publicar sites</b>, enviando HTML, CSS e imagens para o servidor."}, {"t": "Conceito", "q": "Nesta aula, qual máquina é o <b>cliente</b> FTP?", "o": ["A máquina hospedeira, com o FileZilla", "A VM Linux Mint, com o vsftpd", "O roteador da sala", "O servidor Apache"], "e": "O <b>FileZilla na hospedeira</b> é o cliente. A VM com o vsftpd é o servidor."}, {"t": "Conceito", "q": "Nesta aula, qual máquina é o <b>servidor</b> FTP?", "o": ["A VM Linux Mint com o vsftpd", "A máquina hospedeira com o FileZilla", "O navegador da hospedeira", "O VirtualBox"], "e": "O servidor é a <b>VM Linux Mint</b>, onde o vsftpd espera conexões na porta 21."}, {"t": "Portas", "q": "Em qual porta o servidor FTP espera a conexão de controle?", "o": ["21", "22", "80", "443"], "e": "A porta <b>21</b> é a de controle: por ela passam o login e os comandos."}, {"t": "Portas", "q": "Para que serve a porta de controle (21) do FTP?", "o": ["Login e comandos como listar, enviar e baixar", "Transferir somente imagens", "Mostrar a página do site no navegador", "Criptografar os arquivos"], "e": "Pela porta 21 passam o <b>usuário, a senha e os comandos</b>. Os arquivos vão por uma conexão de dados separada."}, {"t": "Portas", "q": "Qual porta o servidor usa para a conexão de dados no modo <b>ativo</b>?", "o": ["20", "21", "22", "8080"], "e": "No modo ativo, o servidor abre a conexão de dados a partir da porta <b>20</b>."}, {"t": "Portas", "q": "No modo <b>passivo</b>, o padrão do FileZilla, como é feita a conexão de dados?", "o": ["O servidor abre uma porta alta e o cliente se conecta nela", "O servidor usa sempre a porta 80", "O cliente abre a porta 20 para o servidor", "Os dados vão pela mesma porta 21"], "e": "No modo passivo o <b>servidor abre uma porta alta</b> (acima de 1023) e o <b>cliente se conecta</b> nela."}, {"t": "Portas", "q": "Qual porta é usada pelo <b>SFTP</b>?", "o": ["22", "21", "20", "25"], "e": "O SFTP funciona pelo <b>SSH</b>, na porta <b>22</b>."}, {"t": "Portas", "q": "Qual comando mostra se o vsftpd está escutando na porta 21?", "o": ["sudo ss -tlnp | grep :21", "sudo ping 21", "hostname -I", "sudo apt update"], "e": "O <b>ss -tlnp</b> lista as portas TCP abertas, e o grep filtra a linha da porta 21."}, {"t": "Instalação", "q": "Qual comando instala o servidor FTP usado nesta aula?", "o": ["sudo apt install -y vsftpd", "sudo apt install -y filezilla", "sudo apt install -y apache2", "sudo apt install -y ftp-server"], "e": "O servidor é o <b>vsftpd</b>, instalado com <b>sudo apt install -y vsftpd</b>."}, {"t": "Instalação", "q": "O que significa <b>vsftpd</b>?", "o": ["Very Secure FTP Daemon", "Virtual Server FTP Device", "Visual Studio FTP Download", "Very Simple FTP Directory"], "e": "vsftpd é o <b>Very Secure FTP Daemon</b>, o servidor FTP mais usado no Linux."}, {"t": "Instalação", "q": "Qual comando mostra se o vsftpd está rodando?", "o": ["systemctl status vsftpd", "vsftpd --help", "ls /etc/vsftpd", "sudo nano vsftpd"], "e": "O <b>systemctl status vsftpd</b> mostra <b>active (running)</b> quando o serviço está no ar."}, {"t": "Instalação", "q": "Depois de mudar o vsftpd.conf, o que é preciso fazer para valer a nova configuração?", "o": ["sudo systemctl restart vsftpd", "Desligar a máquina hospedeira", "Reinstalar o FileZilla", "Apagar o arquivo de log"], "e": "O serviço só lê a configuração ao iniciar: use <b>sudo systemctl restart vsftpd</b>."}, {"t": "Configuração", "q": "Qual é o arquivo de configuração do vsftpd?", "o": ["/etc/vsftpd.conf", "/var/www/html/index.html", "/etc/hosts", "/var/log/vsftpd.log"], "e": "A configuração fica em <b>/etc/vsftpd.conf</b>."}, {"t": "Configuração", "q": "Qual linha libera o envio, a exclusão e a renomeação de arquivos?", "o": ["write_enable=YES", "anonymous_enable=YES", "listen=NO", "local_umask=077"], "e": "Por padrão o vsftpd só deixa baixar. <b>write_enable=YES</b> libera gravar no servidor."}, {"t": "Configuração", "q": "O que faz a linha <code>anonymous_enable=NO</code>?", "o": ["Bloqueia o acesso sem senha", "Bloqueia todos os usuários", "Permite entrar sem senha", "Desliga o servidor FTP"], "e": "Com <b>NO</b>, ninguém entra como anônimo. Só usuários do Linux, com senha."}, {"t": "Configuração", "q": "O que faz a linha <code>local_enable=YES</code>?", "o": ["Permite entrar com os usuários do Linux", "Permite somente o usuário anônimo", "Libera o FTP só no localhost", "Ativa a criptografia TLS"], "e": "<b>local_enable=YES</b> deixa os <b>usuários do sistema</b> fazerem login no FTP."}, {"t": "Configuração", "q": "Com <code>local_umask=022</code>, qual permissão ficam os arquivos enviados?", "o": ["644, que o Apache consegue ler", "777, que todos podem alterar", "600, que só o dono lê", "000, sem permissão nenhuma"], "e": "666 menos 022 dá <b>644</b>: o dono grava e todos leem, inclusive o Apache."}, {"t": "Configuração", "q": "Para que serve a linha <code>local_root=/var/www/html</code>?", "o": ["Fazer o FTP abrir direto na pasta do site após o login", "Mudar a pasta de instalação do vsftpd", "Trocar a senha do usuário", "Mudar a porta do FTP para 80"], "e": "<b>local_root</b> define a pasta inicial após o login: aqui, a <b>pasta do site</b>."}, {"t": "Configuração", "q": "No nano, qual atalho salva o arquivo?", "o": ["Ctrl + O", "Ctrl + X", "Ctrl + W", "Ctrl + K"], "e": "<b>Ctrl+O</b> grava o arquivo. Ctrl+X sai e Ctrl+W procura texto."}, {"t": "Configuração", "q": "Por que fazemos <code>sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.original</code>?", "o": ["Para guardar a configuração original e poder voltar", "Para instalar o vsftpd de novo", "Para enviar o arquivo à hospedeira", "Para ativar o modo passivo"], "e": "É uma <b>cópia de segurança</b>: se algo der errado, basta restaurar o original."}, {"t": "Permissões", "q": "Por que rodamos <code>sudo chown -R $USER:$USER /var/www/html</code>?", "o": ["Para o seu usuário ser dono da pasta e gravar por FTP", "Para apagar o site antigo", "Para o Apache parar de ler a pasta", "Para dar permissão 777 a todos"], "e": "A pasta era do <b>root</b>. Pelo FTP você entra com o seu usuário, que precisa ser o <b>dono</b> para gravar."}, {"t": "Permissões", "q": "O que a opção <code>-R</code> faz no comando chown?", "o": ["Aplica a mudança em todas as subpastas e arquivos", "Remove a pasta", "Mostra o resultado em vermelho", "Reinicia o serviço"], "e": "<b>-R</b> é recursivo: muda o dono da pasta e de <b>tudo que está dentro</b>."}, {"t": "Permissões", "q": "Qual erro aparece ao enviar um arquivo para uma pasta sem permissão de escrita?", "o": ["553 Could not create file", "530 Login incorrect", "404 Not Found", "200 OK"], "e": "<b>553 Could not create file</b> indica falta de permissão ou write_enable desligado."}, {"t": "Rede", "q": "Qual modo de rede do VirtualBox usamos para a hospedeira falar com a VM?", "o": ["Placa de rede exclusiva de hospedeiro (host-only)", "Rede desconectada", "Somente USB", "Rede interna sem adaptador"], "e": "O <b>host-only</b> cria uma rede só entre a hospedeira e a VM, em geral 192.168.56.0/24."}, {"t": "Rede", "q": "Por que deixamos também um adaptador em <b>NAT</b> na VM?", "o": ["Para a VM ter internet e instalar pacotes", "Para o FileZilla funcionar sem IP", "Para trocar a porta 21 pela 22", "Para criptografar o FTP"], "e": "A rede host-only não tem internet. O <b>NAT</b> dá acesso à internet para o <b>apt install</b>."}, {"t": "Rede", "q": "Qual comando mostra o IP da VM?", "o": ["hostname -I", "whoami", "systemctl status", "ls -l"], "e": "<b>hostname -I</b> mostra os endereços IP da máquina."}, {"t": "Rede", "q": "O <code>hostname -I</code> mostrou <code>10.0.2.15</code> e <code>192.168.56.101</code>. Qual IP vai no FileZilla?", "o": ["192.168.56.101", "10.0.2.15", "127.0.0.1", "0.0.0.0"], "e": "O <b>192.168.56.101</b> é o da rede host-only. O 10.0.2.15 é do NAT e a hospedeira não alcança."}, {"t": "Rede", "q": "Qual comando, na hospedeira, testa se ela enxerga a VM?", "o": ["ping 192.168.56.101", "ftp localhost", "hostname -I", "sudo ufw status"], "e": "O <b>ping</b> para o IP da VM mostra se as duas máquinas se comunicam."}, {"t": "Rede", "q": "Qual comando desabilita o firewall do Linux Mint para a aula?", "o": ["sudo ufw disable", "sudo ufw allow", "sudo systemctl stop vsftpd", "sudo ufw status"], "e": "<b>sudo ufw disable</b> desliga o firewall. O <b>ufw status</b> confirma com Status: inactive."}, {"t": "FileZilla", "q": "Quais campos preenchemos na Conexão rápida do FileZilla?", "o": ["Host, Nome de usuário, Senha e Porta", "Só o nome do site", "Endereço MAC e máscara", "Gateway e DNS"], "e": "Na barra do topo vão o <b>Host</b> (IP da VM), o <b>usuário</b>, a <b>senha</b> e a <b>porta 21</b>."}, {"t": "FileZilla", "q": "No FileZilla, o que mostra o painel da <b>esquerda</b>?", "o": ["Os arquivos da máquina hospedeira (site local)", "Os arquivos da VM (site remoto)", "O log do Apache", "A fila de impressão"], "e": "A esquerda é o <b>site local</b>, a hospedeira. A direita é o <b>site remoto</b>, a VM."}, {"t": "FileZilla", "q": "Por que o FileZilla avisa que o servidor é inseguro?", "o": ["Porque o FTP comum não usa TLS e a senha vai sem criptografia", "Porque o IP da VM está errado", "Porque a porta 21 está fechada", "Porque o Apache está desligado"], "e": "Sem TLS, <b>usuário, senha e arquivos</b> passam pela rede em texto puro."}, {"t": "FileZilla", "q": "O que significa o erro <code>530 Login incorrect</code>?", "o": ["Usuário ou senha errados", "Falta de espaço no disco", "Arquivo enviado com sucesso", "Porta 21 aberta"], "e": "<b>530</b> é falha de login: confira o usuário do Linux Mint e a senha dele."}, {"t": "FileZilla", "q": "Ao enviar um index.html que já existe na VM, qual opção escolhemos?", "o": ["Sobrescrever", "Ignorar", "Renomear para index2.html", "Cancelar a conexão"], "e": "Escolhemos <b>Sobrescrever</b>, porque a cópia antiga já está no backup."}, {"t": "Backup", "q": "Antes de trocar a página, o que fazemos com o site antigo?", "o": ["Baixamos uma cópia para a hospedeira (backup)", "Apagamos a pasta /var/www/html", "Renomeamos o Apache", "Desligamos o vsftpd"], "e": "Fazemos o <b>backup</b>: baixamos os arquivos da VM para a hospedeira antes de qualquer mudança."}, {"t": "Backup", "q": "No backup, os arquivos vão em qual sentido?", "o": ["Da VM para a hospedeira (download)", "Da hospedeira para a VM (upload)", "Do Apache para o navegador", "Da internet para a VM"], "e": "Backup é um <b>download</b>: VM → hospedeira."}, {"t": "Backup", "q": "Ao publicar a nova página, o arquivo vai em qual sentido?", "o": ["Da hospedeira para a VM (upload)", "Da VM para a hospedeira (download)", "Do navegador para o FileZilla", "Da VM para o roteador"], "e": "Publicar é um <b>upload</b>: hospedeira → VM, para a pasta /var/www/html."}, {"t": "Log", "q": "Em qual arquivo o vsftpd registra logins e transferências?", "o": ["/var/log/vsftpd.log", "/etc/vsftpd.conf", "/var/www/html/log.txt", "/home/ifsc/ftp.log"], "e": "O registro fica em <b>/var/log/vsftpd.log</b>."}, {"t": "Log", "q": "No vsftpd.log, qual linha indica que um arquivo foi enviado ao servidor?", "o": ["OK UPLOAD", "OK DOWNLOAD", "OK LOGIN", "FAIL LOGIN"], "e": "<b>OK UPLOAD</b> é envio para o servidor. <b>OK DOWNLOAD</b> é o backup baixado."}, {"t": "Log", "q": "Qual comando mostra as últimas 20 linhas do log do FTP?", "o": ["sudo tail -n 20 /var/log/vsftpd.log", "sudo head /etc/vsftpd.conf", "cat /var/www/html/index.html", "sudo ufw status"], "e": "O <b>tail -n 20</b> mostra o <b>final</b> do arquivo, onde estão os registros mais novos."}, {"t": "Segurança", "q": "Qual é o principal risco do FTP comum?", "o": ["Usuário, senha e arquivos passam sem criptografia", "Ele só funciona com Windows", "Ele apaga arquivos sozinho", "Ele não permite senhas"], "e": "No FTP comum tudo vai em <b>texto puro</b>: quem capturar o tráfego lê a senha."}, {"t": "Segurança", "q": "Qual opção é mais segura para transferir arquivos pela internet?", "o": ["SFTP ou FTPS", "FTP anônimo", "Telnet", "HTTP sem S"], "e": "<b>SFTP</b> (pelo SSH) e <b>FTPS</b> (FTP com TLS) criptografam a conexão."}, {"t": "Segurança", "q": "O que faz o <code>chroot_local_user=YES</code>?", "o": ["Prende cada usuário na sua pasta inicial", "Libera o usuário root no FTP", "Desliga o login local", "Muda a porta para 22"], "e": "O <b>chroot</b> impede o usuário de navegar fora da sua pasta."}, {"t": "Segurança", "q": "Qual usuário nunca deve ser liberado no FTP?", "o": ["root", "ifsc", "aluno", "www-data com senha forte"], "e": "O <b>root</b> tem poder total. Ele está em <b>/etc/ftpusers</b>, a lista de usuários proibidos."}, {"t": "TLS", "q": "No desafio, qual programa cria a chave e o certificado?", "o": ["openssl", "filezilla", "nano", "ufw"], "e": "O <b>openssl req -x509</b> gera a chave privada e o certificado autoassinado."}, {"t": "TLS", "q": "Por que o FileZilla pergunta se confia no certificado do desafio?", "o": ["Porque ele é autoassinado e nenhuma autoridade o confirmou", "Porque a senha está errada", "Porque a porta 21 está fechada", "Porque o certificado expirou ontem"], "e": "O certificado foi <b>assinado por nós mesmos</b>. Em produção usa-se uma autoridade, como o Let's Encrypt."}, {"t": "TLS", "q": "Qual permissão protege a chave privada do vsftpd?", "o": ["chmod 600, só o root lê", "chmod 777, todos leem", "chmod 644, todos leem", "chmod 000, ninguém lê, nem o vsftpd"], "e": "Com <b>600</b>, só o dono (root) lê e grava a chave privada."}, {"t": "TLS", "q": "Qual linha do vsftpd.conf obriga o login a ir criptografado?", "o": ["force_local_logins_ssl=YES", "anonymous_enable=NO", "write_enable=YES", "local_umask=022"], "e": "<b>force_local_logins_ssl=YES</b> recusa logins sem TLS."}];
+    var Q = [];
+    var stage = $('q-stage'), steps = $('q-steps'), cur = 0, ans = [], picks = [], timer = null, lastSet = [];
+    function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+    function draw(){
+      var seen = [];
+      try { seen = JSON.parse(localStorage.getItem('ftp-quiz-seen')||'[]') || []; } catch(e){}
+      var fresh = BANK.map(function(_,i){return i;}).filter(function(i){ return seen.indexOf(i)<0 && lastSet.indexOf(i)<0; });
+      if (fresh.length < 10){ seen = []; fresh = BANK.map(function(_,i){return i;}).filter(function(i){ return lastSet.indexOf(i)<0; }); }
+      var pick = shuffle(fresh).slice(0,10);
+      lastSet = pick; seen = seen.concat(pick);
+      try { localStorage.setItem('ftp-quiz-seen', JSON.stringify(seen)); } catch(e){}
+      return pick.map(function(i){
+        var x = BANK[i], ord = shuffle([0,1,2,3]);
+        return {t:x.t, q:x.q, e:x.e, o:ord.map(function(k){return x.o[k];}), c:ord.indexOf(0)};
+      });
+    }
+    var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var SVG = function(id){ return '<svg><use href="#'+id+'"/></svg>'; };
+    function chips(){ var ok = ans.filter(function(a){return a===true;}).length, bad = ans.filter(function(a){return a===false;}).length; $('q-ok').textContent = ok; $('q-bad').textContent = bad; }
+    function drawSteps(){ steps.innerHTML = Q.map(function(_,i){ return '<i class="'+(ans[i]===true?'ok':ans[i]===false?'bad':i===cur?'cur':'')+'"></i>'; }).join(''); }
+    function swap(html){
+      var old = stage.firstElementChild;
+      var put = function(){ stage.innerHTML = html; };
+      if (old && !reduced){ old.classList.add('out'); setTimeout(put, 280); } else put();
+    }
+    function show(i){
+      clearTimeout(timer); cur = i; drawSteps();
+      var x = Q[i];
+      swap('<div class="qz-card"><div class="qz-meta"><span class="qz-num">Pergunta '+(i+1)+' de '+Q.length+'</span><span class="qz-tag">'+x.t+'</span></div>'+
+        '<p class="qz-q">'+x.q+'</p><div class="qz-opts" role="group" aria-label="Alternativas">'+
+        x.o.map(function(o,j){ return '<button type="button" class="qz-opt" data-o="'+j+'"><span class="L">'+'ABCD'[j]+'</span><span>'+o+'</span><span class="st"></span></button>'; }).join('')+
+        '</div><div class="qz-after"></div></div>');
+    }
+    function answer(j){
+      var x = Q[cur], right = j===x.c, card = stage.querySelector('.qz-card');
+      ans[cur] = right; picks[cur] = j; chips(); drawSteps();
+      card.querySelectorAll('.qz-opt').forEach(function(b,k){
+        b.disabled = true;
+        if (k===x.c){ b.classList.add('right'); b.querySelector('.st').innerHTML = SVG('i-check'); }
+        else if (k===j){ b.classList.add('wrong'); b.querySelector('.st').innerHTML = SVG('i-x'); }
+        else b.classList.add('dim');
+      });
+      var last = cur===Q.length-1, dur = right ? 3500 : 7000;
+      card.querySelector('.qz-after').outerHTML =
+        '<div class="qz-fb" style="--fc:'+(right?'var(--ok)':'var(--bad)')+'"><span class="fi">'+SVG(right?'i-check':'i-x')+'</span><div><h4>'+(right?'Resposta certa!':'Não foi dessa vez. A resposta é a letra '+'ABCD'[x.c]+'.')+'</h4><p>'+x.e+'</p></div></div>'+
+        '<div class="qz-next"><button type="button" class="btn" id="q-go">'+(last?'Ver minha nota':'Próxima pergunta')+' <span aria-hidden="true">→</span></button></div>';
+      $('q-go').focus({preventScroll:true});
+    }
+    function review(i){
+      var x = Q[i], p = picks[i], box = $('q-review'), ok = ans[i];
+      stage.querySelectorAll('[data-r]').forEach(function(b){ b.setAttribute('aria-pressed', +b.dataset.r===i); });
+      box.style.setProperty('--fc', ok ? 'var(--ok)' : 'var(--bad)');
+      box.innerHTML = '<div class="qz-meta"><span class="qz-num">Pergunta '+(i+1)+' de '+Q.length+'</span><span class="qz-tag">'+x.t+'</span><span class="qz-res">'+(ok?'Você acertou':'Você errou')+'</span></div>'+
+        '<p class="qz-rq">'+x.q+'</p><ul class="qz-rl">'+x.o.map(function(o,k){
+          var cls = k===x.c ? 'right' : (k===p ? 'wrong' : ''), note = k===x.c ? (k===p?'Sua resposta · correta':'Resposta correta') : (k===p ? 'Sua resposta' : '');
+          return '<li class="'+cls+'"><span class="L">'+'ABCD'[k]+'</span><span>'+o+'</span>'+(note?'<em>'+note+'</em>':'')+'</li>'; }).join('')+'</ul>'+
+        '<p class="qz-rexp"><b>Explicação: </b>'+x.e+'</p>';
+      box.hidden = false;
+      box.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'nearest'});
+    }
+    function next(){ clearTimeout(timer); if (cur < Q.length-1) show(cur+1); else end(); }
+    function end(){
+      cur = Q.length; drawSteps();
+      var ok = ans.filter(function(a){return a;}).length, nota = ok/Q.length*10, c, t, m;
+      if (nota>=9){ c='var(--ok)'; t='Excelente!'; m='Você domina o FTP, o vsftpd e o FileZilla.'; }
+      else if (nota>=7){ c='var(--green)'; t='Muito bem!'; m='Bom resultado. Revise as perguntas marcadas em vermelho.'; }
+      else if (nota>=5){ c='var(--warn)'; t='Quase lá'; m='Releia as seções O que é FTP e Configurar o vsftpd e tente de novo.'; }
+      else { c='var(--bad)'; t='Vamos revisar'; m='Volte ao início da aula, refaça os passos com calma e tente o quiz de novo.'; }
+      swap('<div class="qz-end"><div class="qz-ring" style="--gc:'+c+';--p:'+(nota*10)+'"><span>Sua nota</span><b>'+nota.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'</b><small>de 10</small></div>'+
+        '<div><h3>'+t+'</h3><p style="color:var(--muted);margin-top:6px">'+ok+' de '+Q.length+' acertos. '+m+'</p></div>'+
+        '<div class="qz-sumwrap"><p class="qz-hint">Clique em um card para rever a pergunta e a resposta.</p><div class="qz-sum">'+Q.map(function(x,i){ return '<button type="button" data-r="'+i+'" aria-pressed="false" style="--sc:'+(ans[i]?'var(--ok)':'var(--bad)')+'">'+(ans[i]?'✓':'✗')+' '+(i+1)+'<small>'+x.t+'</small></button>'; }).join('')+'</div><div class="qz-review" id="q-review" hidden></div></div>'+
+        '<button type="button" class="btn" id="q-redo">'+SVG('i-play')+'Tentar novamente com novas perguntas</button></div>');
+    }
+    stage.addEventListener('click', function(e){
+      var b = e.target.closest('.qz-opt'); if (b && !b.disabled){ answer(+b.dataset.o); return; }
+      var r = e.target.closest('[data-r]'); if (r){ review(+r.dataset.r); return; }
+      if (e.target.closest('#q-go')) next();
+      if (e.target.closest('#q-redo')){ ans = []; picks = []; Q = draw(); chips(); show(0); $('quiz').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'}); }
+    });
+    Q = draw(); chips(); show(0);
   })();
   (function(){
     var btn = document.getElementById('tb-topics'), menu = document.getElementById('tmenu');
