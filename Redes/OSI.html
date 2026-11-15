@@ -143,10 +143,10 @@ a{color:var(--green-ink)}
 .sheet b{display:block;font:800 .5rem var(--font-mono);color:#fff;background:var(--l7);padding:2px 5px;letter-spacing:.06em;transition:background .35s}
 .sheet-l{display:block;margin:6px 6px 0;height:34px;background:repeating-linear-gradient(to bottom,#B8C2BB 0 2px,transparent 2px 7px);animation:wr 1.2s .3s steps(8) both}
 @keyframes wr{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
-.sheet.zip{--sx:.62;--sk:.86}
-.sheet.zip b{background:var(--l6)}
-.sheet.zip::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:5px;transform:translateX(-50%);background:repeating-linear-gradient(to bottom,#3A3020 0 2px,#fff 2px 4px);opacity:.85}
-.sheet.in{--ty:24px}
+.sheet.doc b{background:var(--l6);animation:docFlip .6s both}
+.sheet.doc .sheet-l{background:repeating-linear-gradient(to bottom,#3A3020 0 2px,transparent 2px 7px);animation:docFlip .6s both}
+@keyframes docFlip{0%{transform:rotateX(90deg)}100%{transform:none}}
+.sheet.in{--ty:24px;--sx:.75;--sk:.8}
 .env.split{opacity:0}
 .env.split .env-box{transform:scale(.5);transition:transform .45s}
 .envs{position:absolute;right:10px;top:0;width:150px;height:64px;display:flex;justify-content:space-between;opacity:0;transition:transform .6s cubic-bezier(.5,0,.25,1),opacity .3s;will-change:transform;pointer-events:none}
@@ -953,7 +953,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
           nameEl=document.getElementById("envName"),chips=document.getElementById("envChips"),cap=document.getElementById("encCap");
     const S={
       7:{cap:"<b>Aplicação:</b> cria o <b>arquivo</b>: uma folha com a informação escrita."},
-      6:{cap:"<b>Apresentação:</b> <b>compacta</b> o arquivo (e, se preciso, criptografa) para ocupar menos espaço."},
+      6:{cap:"<b>Apresentação:</b> converte o arquivo em um <b>DOC</b>, um arquivo de texto em formato que os dois lados entendem."},
       5:{cap:"<b>Sessão:</b> abre o diálogo e <b>coloca o arquivo dentro do envelope</b> que será enviado."},
       4:{cap:"<b>Transporte:</b> <b>divide</b> os dados vindos das camadas de cima em vários <b>segmentos</b> e coloca em cada um a etiqueta <b>TCP</b> ou <b>UDP</b>."},
       3:{cap:"<b>Rede:</b> coloca cada segmento dentro de uma <b>caixa</b>, fecha a caixa e cola o rótulo <b>IP</b> (origem e destino). A caixa é o <b>pacote</b>."},
@@ -973,7 +973,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if(reduce){rows.forEach(r=>r.classList.add("done"));rows[5].classList.add("cur");env.classList.add("split");envs.classList.add("show");mheld=["DADOS","TCP"];renderMini();pks.forEach(p=>p.classList.add("boxed","in","shut","framed"));label("Quadros","l2");place(rows[5]);cap.innerHTML=S[2].cap;return;}
     let k=0;
-    function reset(){env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur"));held=[];mheld=[];renderChips();renderMini();pks.forEach(p=>p.classList.remove("boxed","in","shut","framed","bits"));minis.forEach(m=>m.classList.remove("open"));env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("zip","in");sheetT.textContent="ARQ";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
+    function reset(){env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur"));held=[];mheld=[];renderChips();renderMini();pks.forEach(p=>p.classList.remove("boxed","in","shut","framed","bits"));minis.forEach(m=>m.classList.remove("open"));env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("doc","in");sheetT.textContent="ARQ";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
     function grow(add,name,c){minis.forEach(m=>m.classList.add("open"));setTimeout(()=>{mheld.push(...add);renderMini();label(name,c);},380);setTimeout(()=>minis.forEach(m=>m.classList.remove("open")),900);}
     function step(){
       if(k===rows.length){setTimeout(reset,2600);return;}
@@ -982,7 +982,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       r.classList.add("cur");place(r);cap.innerHTML=st.cap;
       setTimeout(()=>{
         if(n==="7"){k++;setTimeout(step,2000);return;}
-        if(n==="6"){sheet.classList.add("zip");sheetT.textContent="ZIP";k++;setTimeout(step,2000);return;}
+        if(n==="6"){sheet.classList.add("doc");sheetT.textContent="DOC";k++;setTimeout(step,2000);return;}
         if(n==="5"){env.classList.remove("noenv");env.classList.add("open");setTimeout(()=>sheet.classList.add("in"),650);setTimeout(()=>{env.classList.remove("open");nameEl.textContent="Dados";},1500);k++;setTimeout(step,2500);return;}
         if(n==="4"){
           env.classList.add("split");mheld=["DADOS"];renderMini();label("Segmentos","l4");envs.classList.add("show");
