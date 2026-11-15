@@ -793,8 +793,8 @@ html{scroll-padding-top:84px}
       </div>
     </div>
     <figure class="hero-net">
-      <svg id="hero-svg" viewBox="0 0 400 330" role="img" aria-label="Animação: 6 PCs de classes A, B e C ligados ao switch SW1. Pings entre PCs da mesma classe chegam; entre classes diferentes o PC nem envia."></svg>
-      <figcaption class="hn-leg"><span><i class="ok"></i>Mesma rede: o ping chega</span><span><i class="no"></i>Outra rede: o PC nem envia</span></figcaption>
+      <svg id="hero-svg" viewBox="0 0 400 330" role="img" aria-label="Animação: 6 PCs de classes A, B e C ligados ao switch SW1. Pings entre PCs da mesma classe são aceitos; entre classes diferentes não há comunicação."></svg>
+      <figcaption class="hn-leg"><span><i class="ok"></i>Mesma classe: o ping é aceito</span><span><i class="no"></i>Outra classe: não há comunicação</span></figcaption>
     </figure>
   </div>
 </div>
@@ -1832,33 +1832,29 @@ show mac address-table
   });
   var pk=[], last=0, acc=0;
   function blink(p){ p.led.setAttribute('opacity',1); setTimeout(function(){ p.led.setAttribute('opacity',.35); },350); }
-  var pendingCross=false;
-  function cross(){
-    var a=Math.floor(Math.random()*6), src=P[a];
-    var x=mk('g',{'class':'xmark',transform:'translate('+(src.x+22)+','+(src.y-16)+')'}); src.xm=x;
+  function xAt(pc){
+    if(pc.xm) pc.xm.remove();
+    var x=mk('g',{'class':'xmark',transform:'translate('+(pc.x+22)+','+(pc.y-16)+')'}); pc.xm=x;
     mk('circle',{r:9,style:'fill:var(--bad)'},x); mk('path',{d:'M-3.5 -3.5l7 7M3.5 -3.5l-7 7',stroke:'#fff','stroke-width':2.2,'stroke-linecap':'round'},x);
-    setTimeout(function(){ x.setAttribute('opacity',0); },1100); setTimeout(function(){ x.remove(); if(src.xm===x) src.xm=null; },1500);
+    setTimeout(function(){ x.setAttribute('opacity',0); },1000); setTimeout(function(){ x.remove(); if(pc.xm===x) pc.xm=null; },1400);
   }
   function spawn(){
-    if(P.some(function(q){ return q.xm; })) return;          // espera o ✗ sumir
-    if(pendingCross || Math.random()<.35){                   // tentativa entre classes
-      if(pk.length){ pendingCross=true; return; }            // espera os pacotes chegarem
-      pendingCross=false; cross(); return;
-    }
-    var a=Math.floor(Math.random()*6), b=P.findIndex(function(q,i){ return i!==a && q.k===P[a].k; });
+    var a=Math.floor(Math.random()*6), same=Math.random()<.6, b;
+    if(same) b=P.findIndex(function(q,i){ return i!==a && q.k===P[a].k; });
+    else { var o=P.map(function(_,i){return i;}).filter(function(i){ return P[i].k!==P[a].k; }); b=o[Math.floor(Math.random()*o.length)]; }
     var c=mk('circle',{r:5.5,'stroke-width':1.5,style:'fill:'+C[P[a].k]+';stroke:var(--surface)'},gpk);
-    pk.push({a:P[a],b:P[b],t:0,el:c,sp:.0042+Math.random()*.0012,hit:false});
+    pk.push({a:P[a],b:P[b],t:0,el:c,sp:.0042+Math.random()*.0012,hit:false,cross:!same});
   }
   function frame(ts){
     if(!last) last=ts; var dt=Math.min(ts-last,50); last=ts; acc+=dt;
-    if(acc>(pendingCross?200:1300)){ acc=0; spawn(); }
+    if(acc>1300){ acc=0; spawn(); }
     pk=pk.filter(function(p){
       p.t+=p.sp*dt/16; var A=p.a, B=p.b, t=p.t, x, y;
       if(t<.4){ var u=t/.4; x=A.x+(A.port.x-A.x)*u; y=A.y+(A.port.y-A.y)*u; }
       else if(t<.6){ if(!p.hit){ p.hit=true; blink(A); } var v=(t-.4)/.2; x=A.port.x+(B.port.x-A.port.x)*v; y=A.port.y+(B.port.y-A.port.y)*v; }
       else { if(!p.out){ p.out=true; blink(B); } var w=Math.min((t-.6)/.4,1); x=B.port.x+(B.x-B.port.x)*w; y=B.port.y+(B.y-B.port.y)*w; }
       p.el.setAttribute('cx',x); p.el.setAttribute('cy',y);
-      if(p.t>=1){ p.el.remove(); if(B.xm){ B.xm.remove(); B.xm=null; } var h=B.halo; h.setAttribute('opacity',1); setTimeout(function(){ h.setAttribute('opacity',0); },450); return false; }
+      if(p.t>=1){ p.el.remove(); if(p.cross){ xAt(B); return false; } if(B.xm){ B.xm.remove(); B.xm=null; } var h=B.halo; h.setAttribute('opacity',1); setTimeout(function(){ h.setAttribute('opacity',0); },450); return false; }
       return true; });
     requestAnimationFrame(frame);
   }
