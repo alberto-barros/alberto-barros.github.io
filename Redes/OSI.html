@@ -140,14 +140,14 @@ a{color:var(--green-ink)}
 @keyframes tagDrop{0%{opacity:0;transform:translate(-50%,-40px) rotate(-5deg)}20%{opacity:1;transform:translate(-50%,-30px) rotate(2deg)}75%{opacity:1;transform:translate(-50%,10px)}100%{opacity:0;transform:translate(-50%,16px)}}
 .env.noenv .env-back,.env.noenv .env-front,.env.noenv .env-flap,.env.noenv .env-name{opacity:0}
 .env-back,.env-front,.env-flap,.env-name{transition:opacity .45s,transform .35s}
-.sheet{position:absolute;left:30px;top:-14px;width:58px;height:58px;z-index:2;border-radius:4px 14px 4px 4px;background:transparent;border:1.5px solid transparent;box-shadow:none;overflow:hidden;transform:translateY(var(--ty,0px)) scale(var(--sx,1),var(--sk,1));transition:transform .55s cubic-bezier(.5,0,.25,1),background .4s,border-color .4s,box-shadow .4s}
+.sheet{position:absolute;left:30px;top:-14px;width:58px;height:58px;z-index:2;border-radius:4px 14px 4px 4px;background:transparent;border:1.5px solid transparent;box-shadow:none;transform:translateY(var(--ty,0px)) scale(var(--sx,1),var(--sk,1));transition:transform .55s cubic-bezier(.5,0,.25,1),background .4s,border-color .4s,box-shadow .4s}
 .sheet b{display:block;font:800 .5rem var(--font-mono);color:#fff;background:#2F6FD0;padding:2px 5px;letter-spacing:.06em;opacity:0}
 .sheet-l{display:block;margin:6px 6px 0;height:34px;background:repeating-linear-gradient(to bottom,#B8C2BB 0 2px,transparent 2px 7px);opacity:0}
 @keyframes wr{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
-.sheet-ch{position:absolute;inset:23px 4px 0;font:700 .62rem/1.15 var(--font-mono);color:var(--l7);transition:opacity .35s}
+.sheet-ch{position:absolute;left:-46px;top:31px;width:150px;text-align:center;font:700 .7rem/1.25 var(--font-mono);color:var(--l7);transition:opacity .35s}
 .sheet-ch::after{content:"▍";animation:blink .6s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
-.sheet.doc{background:#fff;border-color:#9AA39C;box-shadow:0 8px 16px -10px rgba(0,0,0,.5)}
+.sheet.doc{overflow:hidden;background:#fff;border-color:#9AA39C;box-shadow:0 8px 16px -10px rgba(0,0,0,.5)}
 .sheet.doc .sheet-ch{opacity:0}
 .sheet.doc b{opacity:1;animation:docFlip .6s both}
 .sheet.doc .sheet-l{opacity:1;background:repeating-linear-gradient(to bottom,#3A3020 0 2px,transparent 2px 7px);animation:wr 1s .2s steps(8) both}
@@ -971,7 +971,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     const rows=[...document.querySelectorAll("#enc .enc-row")],env=document.getElementById("env"),tag=document.getElementById("envTag"),
           nameEl=document.getElementById("envName"),chips=document.getElementById("envChips"),cap=document.getElementById("encCap");
     const S={
-      7:{cap:"<b>Aplicação:</b> o usuário digita o texto: são os <b>caracteres</b> que o programa vai enviar."},
+      7:{cap:"<b>Aplicação:</b> o dado é um <b>texto</b> digitado pelo usuário: “Modelo OSI entendendo as camadas”."},
       6:{cap:"<b>Apresentação:</b> transforma os caracteres em um arquivo <b>DOC</b> (texto), em formato que os dois lados entendem."},
       5:{cap:"<b>Sessão:</b> abre o diálogo e <b>coloca o arquivo dentro do envelope</b> que será enviado."},
       4:{cap:"<b>Transporte:</b> <b>divide</b> os dados vindos das camadas de cima em <b>4 envelopes</b> menores (segmentos) e coloca em cada um o cabeçalho <b>TCP</b> (ou UDP)."},
@@ -980,7 +980,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       1:{cap:"<b>Física:</b> <b>converte</b> os quadros em <b>bits</b>, sinais que seguem pelo cabo."}
     };
     const sheet=document.getElementById("sheet"),sheetT=document.getElementById("sheetT"),sheetCh=document.getElementById("sheetCh");
-    let typer=null;function typeText(){clearInterval(typer);const T="Oi, tudo bem? Aula de redes!";let i=0;sheetCh.textContent="";typer=setInterval(()=>{sheetCh.textContent=T.slice(0,++i);if(i>=T.length)clearInterval(typer);},65);}
+    let typer=null;function typeText(){clearInterval(typer);const T="Modelo OSI entendendo as camadas";let i=0;sheetCh.textContent="";typer=setInterval(()=>{sheetCh.textContent=T.slice(0,++i);if(i>=T.length)clearInterval(typer);},55);}
     const envs=document.getElementById("envs"),grid=document.getElementById("envsGrid"),envsName=document.getElementById("envsName");
     let minis=[],pks=[];
     const MC={DADOS:"l7",TCP:"l4",IP:"l3",MAC:"l2",FCS:"l2"};
@@ -1000,7 +1000,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     let k=0;
     const dirEl=document.querySelector("#enc .enc-dir");
     function setDir(rx){dirEl.textContent=rx?"↑ recebimento":"↓ envio";dirEl.classList.toggle("rx",rx);}
-    const R=["<b>Aplicação:</b> o programa mostra o texto ao usuário. Mensagem recebida!","<b>Apresentação:</b> abre o DOC e o converte de volta em caracteres.","<b>Sessão:</b> abre o envelope e tira o arquivo.","<b>Transporte:</b> retira o cabeçalho TCP e junta os 4 segmentos, na ordem, em um só envelope.","<b>Rede:</b> confere o IP, abre as caixas e tira os segmentos.","<b>Enlace:</b> junta os bits em quadros, confere o FCS, retira o cabeçalho MAC e entrega os pacotes para cima.","<b>Física:</b> recebe os bits que chegam pelo cabo e os entrega à camada de Enlace."];
+    const R=["<b>Aplicação:</b> o programa mostra o texto “Modelo OSI entendendo as camadas” ao usuário. Mensagem recebida!","<b>Apresentação:</b> abre o DOC e o converte de volta em caracteres.","<b>Sessão:</b> abre o envelope e tira o arquivo.","<b>Transporte:</b> retira o cabeçalho TCP e junta os 4 segmentos, na ordem, em um só envelope.","<b>Rede:</b> confere o IP, abre as caixas e tira os segmentos.","<b>Enlace:</b> junta os bits em quadros, confere o FCS, retira o cabeçalho MAC e entrega os pacotes para cima.","<b>Física:</b> recebe os bits que chegam pelo cabo e os entrega à camada de Enlace."];
     function startRecv(){setDir(true);stepUp(6);}
     function stepUp(j){
       if(j<0){setTimeout(reset,2800);return;}
@@ -1027,7 +1027,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       rows.forEach(x=>x.classList.remove("cur"));if(k>0)rows[k-1].classList.add("done");
       r.classList.add("cur");place(r);cap.innerHTML=st.cap;
       setTimeout(()=>{
-        if(n==="7"){typeText();k++;setTimeout(step,2400);return;}
+        if(n==="7"){typeText();k++;setTimeout(step,2900);return;}
         if(n==="6"){sheet.classList.add("doc");k++;setTimeout(step,2000);return;}
         if(n==="5"){env.classList.remove("noenv");env.classList.add("open");setTimeout(()=>sheet.classList.add("in"),650);setTimeout(()=>{env.classList.remove("open");nameEl.textContent="Dados";},1500);k++;setTimeout(step,2500);return;}
         if(n==="4"){
