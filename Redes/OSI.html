@@ -147,6 +147,13 @@ a{color:var(--green-ink)}
 .sheet.doc .sheet-l{background:repeating-linear-gradient(to bottom,#3A3020 0 2px,transparent 2px 7px);animation:docFlip .6s both}
 @keyframes docFlip{0%{transform:rotateX(90deg)}100%{transform:none}}
 .sheet.in{--ty:24px;--sx:.75;--sk:.8}
+.enc-row.L1{position:relative;overflow:hidden}
+.enc-n,.enc-nm{position:relative;z-index:1}
+.bitsrow{-webkit-mask-image:linear-gradient(to right,rgba(0,0,0,.18) 0 110px,#000 170px);mask-image:linear-gradient(to right,rgba(0,0,0,.18) 0 110px,#000 170px);position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:1px;opacity:0;transition:opacity .6s;pointer-events:none;font:700 .72rem/1.15 var(--font-mono);color:var(--l1);white-space:nowrap;overflow:hidden;letter-spacing:.3em}
+.bitsrow span{display:block;width:max-content;animation:bitsFlow 7s linear infinite}
+.bitsrow span+span{animation-duration:5s;opacity:.7}
+@keyframes bitsFlow{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.enc-row.bitson .bitsrow{opacity:.9}
 .env.split{opacity:0}
 .env.split .env-box{transform:scale(.5);transition:transform .45s}
 .envs{position:absolute;right:10px;top:0;width:150px;height:64px;display:flex;justify-content:space-between;opacity:0;transition:transform .6s cubic-bezier(.5,0,.25,1),opacity .3s;will-change:transform;pointer-events:none}
@@ -192,7 +199,7 @@ a{color:var(--green-ink)}
 .enc-cap{font-size:.82rem;color:var(--muted);margin-top:12px;min-height:2.6em}
 .enc-cap b{color:var(--ink)}
 @media (max-width:420px){.enc-row{padding-right:146px;gap:8px}.env{width:104px;right:8px}.envs{width:128px;right:8px}.pk{width:38px}.mini-c i{padding:1px 0}.mini-c i{font-size:.4rem}.enc-nm{font-size:.8rem}.env-chips i{font-size:.48rem;padding:2px 2px}}
-@media (prefers-reduced-motion:reduce){.env,.env-tag,.sheet,.sheet-l,.env-chips i,.env.bits .env-bits,.mini,.mini-c i,.mini-b{transition:none;animation:none}.envs .mini{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.bitsrow span,.env,.env-tag,.sheet,.sheet-l,.env-chips i,.env.bits .env-bits,.mini,.mini-c i,.mini-b{transition:none;animation:none}.envs .mini{transform:scale(1)}}
 :root[data-theme="dark"] .vtag{color:#08130C}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
 
@@ -499,7 +506,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
           <li class="enc-row L4" data-n="4"><span class="enc-n">4</span><span class="enc-nm">Transporte<small>Segmento</small></span></li>
           <li class="enc-row L3" data-n="3"><span class="enc-n">3</span><span class="enc-nm">Rede<small>Pacote</small></span></li>
           <li class="enc-row L2" data-n="2"><span class="enc-n">2</span><span class="enc-nm">Enlace<small>Quadro</small></span></li>
-          <li class="enc-row L1" data-n="1"><span class="enc-n">1</span><span class="enc-nm">Física<small>Bits</small></span></li>
+          <li class="enc-row L1" data-n="1"><span class="bitsrow" aria-hidden="true"><span>01101001 11001010 00101101 10010111 01011010 11100101 00110101 10101100 01101001 11001010 00101101 10010111 01011010 11100101 00110101 10101100 01101001 11001010 00101101 10010111 01011010 11100101 00110101 10101100 01101001 11001010 00101101 10010111 01011010 11100101 00110101 10101100 01101001 11001010 00101101 10010111 01011010 11100101 00110101 10101100 01101001 11001010 00101101 10010111 01011010 11100101 00110101 10101100 </span><span>10010110 01010011 11010010 00111001 10100101 01101110 10010110 01010011 11010010 00111001 10100101 01101110 10010110 01010011 11010010 00111001 10100101 01101110 10010110 01010011 11010010 00111001 10100101 01101110 10010110 01010011 11010010 00111001 10100101 01101110 10010110 01010011 11010010 00111001 10100101 01101110 10010110 01010011 11010010 00111001 10100101 01101110 10010110 01010011 11010010 00111001 10100101 01101110 </span></span><span class="enc-n">1</span><span class="enc-nm">Física<small>Bits</small></span></li>
         </ol>
         <div class="env noenv" id="env" aria-hidden="true">
           <span class="env-tag" id="envTag">DADOS</span>
@@ -973,7 +980,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if(reduce){rows.forEach(r=>r.classList.add("done"));rows[5].classList.add("cur");env.classList.add("split");envs.classList.add("show");mheld=["DADOS","TCP"];renderMini();pks.forEach(p=>p.classList.add("boxed","in","shut","framed"));label("Quadros","l2");place(rows[5]);cap.innerHTML=S[2].cap;return;}
     let k=0;
-    function reset(){env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur"));held=[];mheld=[];renderChips();renderMini();pks.forEach(p=>p.classList.remove("boxed","in","shut","framed","bits"));minis.forEach(m=>m.classList.remove("open"));env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("doc","in");sheetT.textContent="ARQ";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
+    function reset(){env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur","bitson"));held=[];mheld=[];renderChips();renderMini();pks.forEach(p=>p.classList.remove("boxed","in","shut","framed","bits"));minis.forEach(m=>m.classList.remove("open"));env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("doc","in");sheetT.textContent="ARQ";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
     function grow(add,name,c){minis.forEach(m=>m.classList.add("open"));setTimeout(()=>{mheld.push(...add);renderMini();label(name,c);},380);setTimeout(()=>minis.forEach(m=>m.classList.remove("open")),900);}
     function step(){
       if(k===rows.length){setTimeout(reset,2600);return;}
@@ -991,7 +998,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         }
         if(n==="3"){setTimeout(()=>{pks.forEach(p=>p.classList.add("boxed"));label("Pacotes","l3");},300);setTimeout(()=>pks.forEach(p=>p.classList.add("in")),1200);setTimeout(()=>pks.forEach(p=>p.classList.add("shut")),2000);k++;setTimeout(step,3000);return;}
         if(n==="2"){setTimeout(()=>{pks.forEach(p=>p.classList.add("framed"));label("Quadros","l2");},400);k++;setTimeout(step,2600);return;}
-        pks.forEach(p=>p.classList.add("bits"));label("Bits","l1");k++;setTimeout(step,2000);
+        envs.classList.remove("show");r.classList.add("bitson");k++;setTimeout(step,2000);
       },650);
     }
     place(rows[0]);setTimeout(step,400);
