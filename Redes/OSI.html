@@ -107,7 +107,7 @@ a{color:var(--green-ink)}
 .enc-dir{font:600 .75rem var(--font-mono);color:var(--green-ink);white-space:nowrap}
 .enc-body{position:relative}
 .enc-stack{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.enc-row{--lc:var(--muted);display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:center;min-height:46px;padding:6px 132px 6px 6px;border-radius:12px;background:color-mix(in srgb,var(--lc) 9%,var(--surface));border:1.5px solid color-mix(in srgb,var(--lc) 22%,transparent);transition:background .4s,border-color .4s,box-shadow .4s,transform .4s}
+.enc-row{--lc:var(--muted);display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:center;min-height:46px;padding:6px 166px 6px 6px;border-radius:12px;background:color-mix(in srgb,var(--lc) 9%,var(--surface));border:1.5px solid color-mix(in srgb,var(--lc) 22%,transparent);transition:background .4s,border-color .4s,box-shadow .4s,transform .4s}
 .enc-row.L7{--lc:var(--l7)}.enc-row.L6{--lc:var(--l6)}.enc-row.L5{--lc:var(--l5)}.enc-row.L4{--lc:var(--l4)}.enc-row.L3{--lc:var(--l3)}.enc-row.L2{--lc:var(--l2)}.enc-row.L1{--lc:var(--l1)}
 .enc-n{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font:800 .95rem var(--font-display);color:#fff;background:var(--lc)}
 .enc-nm{font:700 .88rem var(--font-display);line-height:1.15;display:grid;color:var(--ink)}
@@ -137,10 +137,24 @@ a{color:var(--green-ink)}
 .env-tag{position:absolute;left:50%;top:2px;transform:translate(-50%,-40px);font:800 .66rem var(--font-mono);color:#fff;background:var(--tc,var(--l7));padding:4px 8px;border-radius:5px;white-space:nowrap;opacity:0;z-index:2;box-shadow:0 6px 12px -6px rgba(0,0,0,.4)}
 .env-tag.drop{animation:tagDrop .8s cubic-bezier(.5,0,.6,1) both}
 @keyframes tagDrop{0%{opacity:0;transform:translate(-50%,-40px) rotate(-5deg)}20%{opacity:1;transform:translate(-50%,-30px) rotate(2deg)}75%{opacity:1;transform:translate(-50%,10px)}100%{opacity:0;transform:translate(-50%,16px)}}
+.env.split{opacity:0}
+.env.split .env-box{transform:scale(.5);transition:transform .45s}
+.envs{position:absolute;right:10px;top:0;width:150px;height:64px;display:flex;justify-content:space-between;opacity:0;transition:transform .6s cubic-bezier(.5,0,.25,1),opacity .3s;will-change:transform;pointer-events:none}
+.envs.show{opacity:1}
+.envs-n{z-index:8;position:absolute;left:50%;bottom:calc(100% + 14px);transform:translateX(-50%);font:800 .62rem var(--font-mono);color:#fff;background:var(--nc,var(--l4));padding:2px 7px;border-radius:5px;white-space:nowrap;box-shadow:0 5px 10px -6px rgba(0,0,0,.4);transition:background .3s}
+.mini{position:relative;width:46px;height:64px;border-radius:6px;background:#FFFDF6;border:1.5px solid #B9A56A;box-shadow:0 8px 16px -10px rgba(0,0,0,.5);transform:scale(0)}
+.envs.show .mini{animation:popIn .55s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i)*.14s)}
+@keyframes popIn{from{transform:scale(0) translateX(-30px);opacity:0}to{transform:scale(1);opacity:1}}
+.mini::before{content:"";position:absolute;left:-1.5px;right:-1.5px;top:-1.5px;height:26px;background:#F0E5C2;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .3s,background .3s;z-index:2;border-radius:6px 6px 0 0}
+.mini.open::before{transform:scaleY(-1);background:#CDBB86;z-index:0}
+.mini-c{position:absolute;left:3px;right:3px;bottom:3px;display:grid;grid-template-columns:1fr 1fr;gap:2px;z-index:1}
+.mini-c i{font:700 .44rem var(--font-mono);font-style:normal;color:#fff;text-align:center;padding:1.5px 0;border-radius:3px;animation:chipIn .35s cubic-bezier(.2,.8,.2,1) both}
+.mini-b{position:absolute;inset:0;border-radius:5px;display:grid;place-items:center;font:700 .5rem var(--font-mono);letter-spacing:.08em;color:#fff;background:var(--l1);opacity:0;transition:opacity .4s;white-space:nowrap;overflow:hidden;z-index:4}
+.mini.bits .mini-b{opacity:1;animation:bitsRun 1.4s linear infinite}
 .enc-cap{font-size:.82rem;color:var(--muted);margin-top:12px;min-height:2.6em}
 .enc-cap b{color:var(--ink)}
-@media (max-width:420px){.enc-row{padding-right:118px;gap:8px}.env{width:104px;right:8px}.enc-nm{font-size:.8rem}.env-chips i{font-size:.48rem;padding:2px 2px}}
-@media (prefers-reduced-motion:reduce){.env,.env-tag,.env-chips i,.env.bits .env-bits{transition:none;animation:none}}
+@media (max-width:420px){.enc-row{padding-right:146px;gap:8px}.env{width:104px;right:8px}.envs{width:128px;right:8px}.mini{width:38px}.mini-c i{font-size:.4rem}.enc-nm{font-size:.8rem}.env-chips i{font-size:.48rem;padding:2px 2px}}
+@media (prefers-reduced-motion:reduce){.env,.env-tag,.env-chips i,.env.bits .env-bits,.mini,.mini-c i,.mini-b{transition:none;animation:none}.envs .mini{transform:scale(1)}}
 :root[data-theme="dark"] .vtag{color:#08130C}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
 
@@ -437,7 +451,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         <span class="chip"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="17" width="16" height="4" rx="1"/></svg>Modelo OSI</span>
       </div>
     </div>
-    <figure class="hero-card enc" id="enc" aria-label="Animação: um envelope desce pelas 7 camadas do Modelo OSI e recebe um cabeçalho em cada uma, virando segmento, pacote, quadro e bits">
+    <figure class="hero-card enc" id="enc" aria-label="Animação: os dados descem pelas 7 camadas do Modelo OSI; no Transporte são divididos em vários segmentos pequenos, que viram pacotes, depois quadros e por fim bits">
       <div class="enc-top"><h3>Encapsulamento no Modelo OSI</h3><span class="enc-dir" aria-hidden="true">↓ envio</span></div>
       <div class="enc-body">
         <ol class="enc-stack">
@@ -459,6 +473,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
             <span class="env-chips" id="envChips"></span>
             <span class="env-bits">0110100101110010010110100101</span>
           </div>
+        </div>
+        <div class="envs" id="envs" aria-hidden="true">
+          <span class="envs-n" id="envsName">Segmentos</span>
+          <div class="mini" style="--i:0"><div class="mini-c"></div><span class="mini-b">0110101</span></div>
+          <div class="mini" style="--i:1"><div class="mini-c"></div><span class="mini-b">1001011</span></div>
+          <div class="mini" style="--i:2"><div class="mini-c"></div><span class="mini-b">0101101</span></div>
         </div>
       </div>
       <figcaption class="enc-cap" id="encCap">Os dados descem camada a camada até virar bits no cabo.</figcaption>
@@ -896,31 +916,45 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       7:{tag:"DADOS",name:"Dados",add:[["DADOS","l7"]],cap:"<b>Aplicação:</b> o programa (o ping, por exemplo) cria os <b>dados</b> e coloca no envelope."},
       6:{tag:"formato",name:"Dados",add:[],cap:"<b>Apresentação:</b> define o formato e a codificação. Continuam sendo <b>dados</b>."},
       5:{tag:"sessão",name:"Dados",add:[],cap:"<b>Sessão:</b> abre e controla o diálogo entre os dois lados."},
-      4:{tag:"+ TCP",name:"Segmento",add:[["TCP","l4"]],cap:"<b>Transporte:</b> entra o cabeçalho com as portas. O envelope vira <b>segmento</b>."},
-      3:{tag:"+ IP",name:"Pacote",add:[["IP","l3"]],cap:"<b>Rede:</b> entra o cabeçalho IP com origem e destino. Agora é um <b>pacote</b>."},
-      2:{tag:"+ ETH · FCS",name:"Quadro",add:[["ETH","l2"],["FCS","l2"]],cap:"<b>Enlace:</b> entram os endereços MAC e o FCS. O pacote vira <b>quadro</b>."},
-      1:{tag:"0101",name:"Bits",add:[],cap:"<b>Física:</b> o quadro vira <b>bits</b>, sinais elétricos que seguem pelo cabo."}
+      4:{cap:"<b>Transporte:</b> divide os dados em vários <b>segmentos</b> pequenos e põe um cabeçalho (portas e numeração) em cada um."},
+      3:{cap:"<b>Rede:</b> cada segmento recebe um cabeçalho IP, com origem e destino, e vira um <b>pacote</b>."},
+      2:{cap:"<b>Enlace:</b> cada pacote recebe os endereços MAC e o FCS e vira um <b>quadro</b>."},
+      1:{cap:"<b>Física:</b> cada quadro vira uma sequência de <b>bits</b>, sinais que seguem pelo cabo."}
     };
-    const order=["DADOS","TCP","IP","ETH","FCS"];
-    let held=[];
-    function renderChips(){const list=order.filter(o=>held.some(h=>h[0]===o));
-      chips.innerHTML=["ETH","IP","TCP","DADOS","FCS"].filter(o=>list.includes(o)).map(o=>{const h=held.find(x=>x[0]===o);return `<i style="background:var(--${h[1]})">${o}</i>`;}).join("");}
-    function place(r){env.style.transform=`translateY(${r.offsetTop+r.offsetHeight/2-32}px)`;}
+    const envs=document.getElementById("envs"),minis=[...envs.querySelectorAll(".mini")],envsName=document.getElementById("envsName");
+    const MC={DADOS:"l7",TCP:"l4",IP:"l3",ETH:"l2",FCS:"l2"};
+    let held=[],mheld=[];
+    function renderChips(){
+      chips.innerHTML=["ETH","IP","TCP","DADOS","FCS"].filter(o=>held.includes(o)).map(o=>`<i style="background:var(--${MC[o]})">${o==="DADOS"?"DADOS":o}</i>`).join("");}
+    function renderMini(){
+      minis.forEach((m,i)=>{m.querySelector(".mini-c").innerHTML=mheld.map(o=>`<i style="background:var(--${MC[o]})">${o==="DADOS"?"D"+(i+1):o}</i>`).join("");});}
+    function label(t,c){envsName.textContent=t;envsName.style.setProperty("--nc",`var(--${c})`);}
+    function place(r){const y=`translateY(${r.offsetTop+r.offsetHeight/2-32}px)`;env.style.transform=y;envs.style.transform=y;}
     const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if(reduce){rows.forEach(r=>r.classList.add("done"));rows[5].classList.add("cur");held=[["DADOS","l7"],["TCP","l4"],["IP","l3"],["ETH","l2"],["FCS","l2"]];renderChips();nameEl.textContent="Quadro";place(rows[5]);cap.innerHTML=S[2].cap;return;}
+    if(reduce){rows.forEach(r=>r.classList.add("done"));rows[5].classList.add("cur");env.classList.add("split");envs.classList.add("show");mheld=["DADOS","TCP","IP","ETH","FCS"];renderMini();label("Quadros","l2");place(rows[5]);cap.innerHTML=S[2].cap;return;}
     let k=0;
-    function reset(){env.classList.add("hide");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur"));held=[];renderChips();env.classList.remove("bits");nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
+    function reset(){env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur"));held=[];mheld=[];renderChips();renderMini();minis.forEach(m=>m.classList.remove("bits","open"));env.classList.remove("bits","split");nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
+    function grow(add,name,c){minis.forEach(m=>m.classList.add("open"));setTimeout(()=>{mheld.push(...add);renderMini();label(name,c);},380);setTimeout(()=>minis.forEach(m=>m.classList.remove("open")),900);}
     function step(){
-      if(k===rows.length){setTimeout(reset,2400);return;}
+      if(k===rows.length){setTimeout(reset,2600);return;}
       const r=rows[k],n=r.dataset.n,st=S[n];
       rows.forEach(x=>x.classList.remove("cur"));if(k>0)rows[k-1].classList.add("done");
       r.classList.add("cur");place(r);cap.innerHTML=st.cap;
       setTimeout(()=>{
-        if(n==="1"){env.classList.add("bits");nameEl.textContent="Bits";k++;setTimeout(step,1600);return;}
-        tag.textContent=st.tag;tag.style.setProperty("--tc",`var(--l${n})`);
-        env.classList.add("open");tag.classList.remove("drop");void tag.offsetWidth;tag.classList.add("drop");
-        setTimeout(()=>{st.add.forEach(a=>held.push(a));renderChips();nameEl.textContent=st.name;env.classList.remove("open");},560);
-        k++;setTimeout(step,1250);
+        if(+n>=5){
+          tag.textContent=st.tag;tag.style.setProperty("--tc",`var(--l${n})`);
+          env.classList.add("open");tag.classList.remove("drop");void tag.offsetWidth;tag.classList.add("drop");
+          setTimeout(()=>{st.add.forEach(a=>held.push(a[0]));renderChips();nameEl.textContent=st.name;env.classList.remove("open");},560);
+          k++;setTimeout(step,1250);return;
+        }
+        if(n==="4"){
+          env.classList.add("split");mheld=["DADOS"];renderMini();label("Segmentos","l4");envs.classList.add("show");
+          setTimeout(()=>grow(["TCP"],"Segmentos","l4"),900);
+          k++;setTimeout(step,2300);return;
+        }
+        if(n==="3"){grow(["IP"],"Pacotes","l3");k++;setTimeout(step,1700);return;}
+        if(n==="2"){grow(["ETH","FCS"],"Quadros","l2");k++;setTimeout(step,1700);return;}
+        minis.forEach(m=>m.classList.add("bits"));label("Bits","l1");k++;setTimeout(step,2000);
       },650);
     }
     place(rows[0]);setTimeout(step,400);
