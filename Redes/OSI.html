@@ -155,18 +155,32 @@ a{color:var(--green-ink)}
 .mini{position:relative;width:46px;height:64px;border-radius:6px;background:#FFFDF6;border:1.5px solid #B9A56A;box-shadow:0 8px 16px -10px rgba(0,0,0,.5);transform:scale(0)}
 .envs.show .mini{transform:scale(1);animation:popIn .55s cubic-bezier(.2,.9,.3,1.2) backwards;animation-delay:calc(var(--i)*.14s);transition:transform .5s,opacity .4s}
 .pk{position:relative;width:46px;height:64px}
-.envs.show .pk.boxed .mini{transform:scale(.6) translateY(-3px)}
-.mbox{position:absolute;left:-5px;right:-5px;bottom:-3px;height:44px;border-radius:3px 3px 6px 6px;background:#D6A867;border:1.5px solid #A67A42;box-shadow:0 8px 14px -8px rgba(0,0,0,.55);z-index:6;opacity:0;transform:translateY(34px);transition:opacity .4s,transform .55s cubic-bezier(.3,.9,.3,1.15),height .5s,background .4s;overflow:hidden;display:grid;align-content:center;justify-items:center;gap:2px}
+.envs.show .pk.boxed .mini{transform:scale(.6) translateY(-26px)}
+.envs.show .pk.boxed.in .mini{transform:scale(.6) translateY(6px)}
+.mbox{position:absolute;left:-5px;right:-5px;bottom:-3px;height:46px;border-radius:3px 3px 6px 6px;background:#D6A867;border:1.5px solid #A67A42;box-shadow:0 8px 14px -8px rgba(0,0,0,.55);z-index:6;opacity:0;transform:translateY(34px);transition:opacity .4s,transform .55s cubic-bezier(.3,.9,.3,1.15),height .5s,bottom .5s,background .4s;overflow:hidden;display:grid;place-items:center}
 .mbox::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:9px;transform:translateX(-50%);background:#E8C98F;opacity:.7}
 .pk.boxed .mbox{opacity:1;transform:none}
-.mbox em{position:relative;font:800 .5rem var(--font-mono);font-style:normal;background:#fff;color:var(--l3);border:1.5px solid var(--l3);border-radius:3px;padding:1px 4px;line-height:1.1;text-align:center}
+.mbox em{position:relative;font:800 .5rem var(--font-mono);font-style:normal;background:#fff;color:var(--l3);border:1.5px solid var(--l3);border-radius:3px;padding:1px 4px;line-height:1.1;text-align:center;opacity:0;transform:scale(.4);transition:opacity .35s,transform .35s}
 .mbox em small{display:block;font:700 .36rem var(--font-mono);color:#3A3020}
-.mbox-c{position:relative;display:flex;gap:2px}
-.mbox-c i{font:700 .4rem var(--font-mono);font-style:normal;color:#fff;padding:1.5px 2px;border-radius:3px;animation:chipIn .35s cubic-bezier(.2,.8,.2,1) both}
-.pk.bits .mbox{height:64px;bottom:0;background:var(--l1);border-color:var(--l1);color:#fff}
-.pk.bits .mbox::before,.pk.bits .mbox em,.pk.bits .mbox-c{opacity:0}
-.pk.bits .mini{opacity:0}
+.pk.shut .mbox em{opacity:1;transform:none}
+.mlid{position:absolute;left:-5px;right:-5px;bottom:41px;height:9px;z-index:7;display:flex;opacity:0;transition:opacity .3s}
+.pk.boxed .mlid{opacity:1}
+.mlid i{flex:1;height:100%;background:#C79A57;border:1.5px solid #A67A42;transition:transform .45s cubic-bezier(.4,0,.3,1)}
+.mlid i:first-child{transform-origin:left bottom;transform:rotate(-78deg);border-radius:3px 0 0 0}
+.mlid i:last-child{transform-origin:right bottom;transform:rotate(78deg);border-radius:0 3px 0 0}
+.pk.shut .mlid i{transform:none}
+.pk.shut .mlid{bottom:41px}
+.fr{position:absolute;left:-6px;right:-6px;top:-1px;bottom:-1px;z-index:5;border-radius:7px;border:2px solid var(--l2);background:color-mix(in srgb,var(--l2) 22%,#fff);opacity:0;transform:scale(.6);transition:opacity .4s,transform .5s cubic-bezier(.3,.9,.3,1.15)}
+.fr b{position:absolute;left:0;right:0;height:12px;display:grid;place-items:center;background:var(--l2);color:#fff;font:800 .42rem var(--font-mono);letter-spacing:.05em}
+.fr-h{top:0;border-radius:4px 4px 0 0}.fr-t{bottom:0;border-radius:0 0 4px 4px}
+.pk.framed .fr{opacity:1;transform:none}
+.pk.framed .mbox{bottom:13px;height:34px;z-index:6}
+.pk.framed .mlid{bottom:44px}
+.pk.framed .mlid{opacity:0}
 .mbox-b{position:absolute;inset:0;display:grid;place-items:center;font:700 .5rem var(--font-mono);letter-spacing:.08em;color:#fff;opacity:0;white-space:nowrap;overflow:hidden;transition:opacity .4s}
+.pk.bits .mbox{height:64px;bottom:0;background:var(--l1);border-color:var(--l1)}
+.pk.bits .mbox::before,.pk.bits .mbox em,.pk.bits .fr,.pk.bits .mlid{opacity:0}
+.pk.bits .mini{opacity:0}
 .pk.bits .mbox-b{opacity:1;animation:bitsRun 1.4s linear infinite}
 @keyframes popIn{from{transform:scale(0) translateX(-30px);opacity:0}to{transform:scale(1);opacity:1}}
 .mini::before{content:"";position:absolute;left:-1.5px;right:-1.5px;top:-1.5px;height:26px;background:#F0E5C2;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .3s,background .3s;z-index:2;border-radius:6px 6px 0 0}
@@ -501,9 +515,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         </div>
         <div class="envs" id="envs" aria-hidden="true">
           <span class="envs-n" id="envsName">Segmentos</span>
-          <div class="pk" style="--i:0"><div class="mini"><div class="mini-c"></div></div><span class="mbox"><em>IP<small>A → B</small></em><span class="mbox-c"></span><span class="mbox-b">0110101</span></span></div>
-          <div class="pk" style="--i:1"><div class="mini"><div class="mini-c"></div></div><span class="mbox"><em>IP<small>A → B</small></em><span class="mbox-c"></span><span class="mbox-b">1001011</span></span></div>
-          <div class="pk" style="--i:2"><div class="mini"><div class="mini-c"></div></div><span class="mbox"><em>IP<small>A → B</small></em><span class="mbox-c"></span><span class="mbox-b">0101101</span></span></div>
+          <div class="pk" style="--i:0"><div class="mini"><div class="mini-c"></div></div><span class="fr"><b class="fr-h">MAC</b><b class="fr-t">FCS</b></span><span class="mlid"><i></i><i></i></span><span class="mbox"><em>IP<small>A → B</small></em><span class="mbox-b">0110101</span></span></div>
+          <div class="pk" style="--i:1"><div class="mini"><div class="mini-c"></div></div><span class="fr"><b class="fr-h">MAC</b><b class="fr-t">FCS</b></span><span class="mlid"><i></i><i></i></span><span class="mbox"><em>IP<small>A → B</small></em><span class="mbox-b">1001011</span></span></div>
+          <div class="pk" style="--i:2"><div class="mini"><div class="mini-c"></div></div><span class="fr"><b class="fr-h">MAC</b><b class="fr-t">FCS</b></span><span class="mlid"><i></i><i></i></span><span class="mbox"><em>IP<small>A → B</small></em><span class="mbox-b">0101101</span></span></div>
         </div>
       </div>
       <figcaption class="enc-cap" id="encCap">Os dados descem camada a camada até virar bits no cabo.</figcaption>
@@ -942,8 +956,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       6:{cap:"<b>Apresentação:</b> <b>compacta</b> o arquivo (e, se preciso, criptografa) para ocupar menos espaço."},
       5:{cap:"<b>Sessão:</b> abre o diálogo e <b>coloca o arquivo dentro do envelope</b> que será enviado."},
       4:{cap:"<b>Transporte:</b> <b>divide</b> os dados vindos das camadas de cima em vários <b>segmentos</b> e coloca em cada um a etiqueta <b>TCP</b> ou <b>UDP</b>."},
-      3:{cap:"<b>Rede:</b> recebe os segmentos e coloca cada um dentro de uma <b>caixa</b>, o <b>pacote</b>, com o rótulo <b>IP</b> (origem e destino)."},
-      2:{cap:"<b>Enlace:</b> recebe os pacotes e os <b>organiza em quadros</b>, colando na caixa os endereços físicos (<b>MAC</b>) e o FCS."},
+      3:{cap:"<b>Rede:</b> coloca cada segmento dentro de uma <b>caixa</b>, fecha a caixa e cola o rótulo <b>IP</b> (origem e destino). A caixa é o <b>pacote</b>."},
+      2:{cap:"<b>Enlace:</b> organiza cada pacote em um <b>quadro</b> (frame): cabeçalho com os endereços físicos (<b>MAC</b>) no início e o <b>FCS</b> no fim."},
       1:{cap:"<b>Física:</b> <b>converte</b> os quadros em <b>bits</b>, sinais que seguem pelo cabo."}
     };
     const sheet=document.getElementById("sheet"),sheetT=document.getElementById("sheetT");
@@ -954,13 +968,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       chips.innerHTML=["MAC","IP","TCP","DADOS","FCS"].filter(o=>held.includes(o)).map(o=>`<i style="background:var(--${MC[o]})">${o==="DADOS"?"DADOS":o}</i>`).join("");}
     function renderMini(){
       minis.forEach((m,i)=>{m.querySelector(".mini-c").innerHTML=mheld.map(o=>`<i style="background:var(--${MC[o]})">${o==="DADOS"?"D"+(i+1):o}</i>`).join("");});}
-    let bh=[];function renderBox(){pks.forEach(p=>{p.querySelector(".mbox-c").innerHTML=bh.map(o=>`<i style="background:var(--${MC[o]})">${o}</i>`).join("");});}
     function label(t,c){envsName.textContent=t;envsName.style.setProperty("--nc",`var(--${c})`);}
     function place(r){const y=`translateY(${r.offsetTop+r.offsetHeight/2-32}px)`;env.style.transform=y;envs.style.transform=y;}
     const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if(reduce){rows.forEach(r=>r.classList.add("done"));rows[5].classList.add("cur");env.classList.add("split");envs.classList.add("show");mheld=["DADOS","TCP"];renderMini();bh=["MAC","FCS"];renderBox();pks.forEach(p=>p.classList.add("boxed"));label("Quadros","l2");place(rows[5]);cap.innerHTML=S[2].cap;return;}
+    if(reduce){rows.forEach(r=>r.classList.add("done"));rows[5].classList.add("cur");env.classList.add("split");envs.classList.add("show");mheld=["DADOS","TCP"];renderMini();pks.forEach(p=>p.classList.add("boxed","in","shut","framed"));label("Quadros","l2");place(rows[5]);cap.innerHTML=S[2].cap;return;}
     let k=0;
-    function reset(){env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur"));held=[];mheld=[];bh=[];renderChips();renderMini();renderBox();pks.forEach(p=>p.classList.remove("boxed","bits"));minis.forEach(m=>m.classList.remove("open"));env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("zip","in");sheetT.textContent="ARQ";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
+    function reset(){env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur"));held=[];mheld=[];renderChips();renderMini();pks.forEach(p=>p.classList.remove("boxed","in","shut","framed","bits"));minis.forEach(m=>m.classList.remove("open"));env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("zip","in");sheetT.textContent="ARQ";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
     function grow(add,name,c){minis.forEach(m=>m.classList.add("open"));setTimeout(()=>{mheld.push(...add);renderMini();label(name,c);},380);setTimeout(()=>minis.forEach(m=>m.classList.remove("open")),900);}
     function step(){
       if(k===rows.length){setTimeout(reset,2600);return;}
@@ -976,8 +989,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
           setTimeout(()=>grow(["TCP"],"Segmentos","l4"),900);
           k++;setTimeout(step,2300);return;
         }
-        if(n==="3"){setTimeout(()=>{pks.forEach(p=>p.classList.add("boxed"));label("Pacotes","l3");},300);k++;setTimeout(step,2200);return;}
-        if(n==="2"){setTimeout(()=>{bh=["MAC","FCS"];renderBox();label("Quadros","l2");},400);k++;setTimeout(step,2200);return;}
+        if(n==="3"){setTimeout(()=>{pks.forEach(p=>p.classList.add("boxed"));label("Pacotes","l3");},300);setTimeout(()=>pks.forEach(p=>p.classList.add("in")),1200);setTimeout(()=>pks.forEach(p=>p.classList.add("shut")),2000);k++;setTimeout(step,3000);return;}
+        if(n==="2"){setTimeout(()=>{pks.forEach(p=>p.classList.add("framed"));label("Quadros","l2");},400);k++;setTimeout(step,2600);return;}
         pks.forEach(p=>p.classList.add("bits"));label("Bits","l1");k++;setTimeout(step,2000);
       },650);
     }
