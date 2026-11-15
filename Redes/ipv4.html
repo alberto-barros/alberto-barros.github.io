@@ -724,7 +724,6 @@ html{scroll-padding-top:84px}
 #hero-svg .hr-ring{fill:none;stroke:#4DC262;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:rring 2.8s ease-out infinite}
 #hero-svg .hr-ring.b{animation-delay:1.4s}
 @keyframes rring{from{transform:scale(1);opacity:.55}to{transform:scale(1.45);opacity:0}}
-#hero-svg .xmark{transition:opacity .3s}
 .hn-leg{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:.8rem;font-weight:600;color:var(--muted)}
 .hn-leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 .hn-leg i.ok{background:var(--ok)}.hn-leg i.no{background:var(--bad)}
@@ -793,8 +792,8 @@ html{scroll-padding-top:84px}
       </div>
     </div>
     <figure class="hero-net">
-      <svg id="hero-svg" viewBox="0 0 400 330" role="img" aria-label="Animação: 6 PCs de classes A, B e C ligados ao switch SW1. Pings entre PCs da mesma classe são aceitos; entre classes diferentes não há comunicação."></svg>
-      <figcaption class="hn-leg"><span><i class="ok"></i>Mesma classe: o ping é aceito</span><span><i class="no"></i>Outra classe: não há comunicação</span></figcaption>
+      <svg id="hero-svg" viewBox="0 0 400 330" role="img" aria-label="Animação: 6 PCs de classes A, B e C ligados ao switch SW1. Pings trocados entre os PCs da mesma classe."></svg>
+      <figcaption class="hn-leg"><span><i class="ok"></i>Cada PC conversa com o outro PC da mesma classe</span></figcaption>
     </figure>
   </div>
 </div>
@@ -1832,14 +1831,8 @@ show mac address-table
   });
   var pk=[], last=0, acc=0;
   function blink(p){ p.led.setAttribute('opacity',1); setTimeout(function(){ p.led.setAttribute('opacity',.35); },350); }
-  function xAt(pc){
-    if(pc.xm) pc.xm.remove();
-    var x=mk('g',{'class':'xmark',transform:'translate('+(pc.x+22)+','+(pc.y-16)+')'}); pc.xm=x;
-    mk('circle',{r:9,style:'fill:var(--bad)'},x); mk('path',{d:'M-3.5 -3.5l7 7M3.5 -3.5l-7 7',stroke:'#fff','stroke-width':2.2,'stroke-linecap':'round'},x);
-    setTimeout(function(){ x.setAttribute('opacity',0); },1000); setTimeout(function(){ x.remove(); if(pc.xm===x) pc.xm=null; },1400);
-  }
   function spawn(){
-    var a=Math.floor(Math.random()*6), same=Math.random()<.6, b;
+    var a=Math.floor(Math.random()*6), same=true, b;
     if(same) b=P.findIndex(function(q,i){ return i!==a && q.k===P[a].k; });
     else { var o=P.map(function(_,i){return i;}).filter(function(i){ return P[i].k!==P[a].k; }); b=o[Math.floor(Math.random()*o.length)]; }
     var c=mk('circle',{r:5.5,'stroke-width':1.5,style:'fill:'+C[P[a].k]+';stroke:var(--surface)'},gpk);
@@ -1854,7 +1847,7 @@ show mac address-table
       else if(t<.6){ if(!p.hit){ p.hit=true; blink(A); } var v=(t-.4)/.2; x=A.port.x+(B.port.x-A.port.x)*v; y=A.port.y+(B.port.y-A.port.y)*v; }
       else { if(!p.out){ p.out=true; blink(B); } var w=Math.min((t-.6)/.4,1); x=B.port.x+(B.x-B.port.x)*w; y=B.port.y+(B.y-B.port.y)*w; }
       p.el.setAttribute('cx',x); p.el.setAttribute('cy',y);
-      if(p.t>=1){ p.el.remove(); if(p.cross){ xAt(B); return false; } if(B.xm){ B.xm.remove(); B.xm=null; } var h=B.halo; h.setAttribute('opacity',1); setTimeout(function(){ h.setAttribute('opacity',0); },450); return false; }
+      if(p.t>=1){ p.el.remove(); var h=B.halo; h.setAttribute('opacity',1); setTimeout(function(){ h.setAttribute('opacity',0); },450); return false; }
       return true; });
     requestAnimationFrame(frame);
   }
