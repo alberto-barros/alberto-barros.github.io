@@ -8,7 +8,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&display=swap">
 <style>
 /* Layout: barra IFSC fixa, hero com cartão dos 4 setores, seções em coluna de 1080px; o planejador do aluno alimenta tabelas, comandos, testes e animação */
 :root{
@@ -573,40 +573,38 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
-/* menu igual às outras aulas */
-.bar .wrap{flex-wrap:nowrap;gap:12px}
-.brand{flex:none}
-.nav{display:flex;flex:1 1 auto;min-width:0;margin-left:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-block:2px}
-.nav::-webkit-scrollbar{display:none}
-.nav a:first-child{margin-left:auto}
-.nav a{white-space:nowrap;flex:none}
-.back{flex:none;margin-left:0!important}
-@media (max-width:1100px){.nav a{background:var(--surface);border:1px solid var(--line)}}
-.burger{display:none}
-@media (max-width:700px){
-  .bar .wrap{gap:10px}
-  .brand{margin-right:auto}
-  .burger{order:3;display:inline-grid;place-content:center;gap:4px;width:42px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
-  .burger span{display:block;width:18px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s}
-  .burger[aria-expanded="true"]{background:var(--green);border-color:var(--green)}
-  .burger[aria-expanded="true"] span{background:var(--surface)}
-  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
-  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;overflow:visible;
-    background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px rgba(0,0,0,.35);
-    padding:10px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
-  .nav.open{display:flex}
-  .nav a:first-child{margin-left:0}
-  .nav a{background:transparent;border:0;border-radius:12px;font-size:1rem;padding:12px 14px;color:var(--ink)}
-  .nav a:hover,.nav a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
-  .back{padding:7px 12px 7px 10px}
-}
-@media (max-width:400px){.brand-txt{display:none}}
-@media (min-width:1101px){.nav{gap:2px}.nav a{padding:6px 8px}}
-.nav a.nav-ch{color:var(--red)}
-@media (max-width:1100px){.nav a.nav-ch{border-color:color-mix(in srgb,var(--red) 40%,var(--line))}}
 
+/* barra superior igual à página inicial de Redes */
+.accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
+.topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;position:relative}
+.tb-brand{display:flex;align-items:center;gap:14px;text-decoration:none;min-width:0;color:var(--ink)}
+.tb-brand .mark{height:40px;width:auto;flex:none}
+.tb-brand .inst,.tb-brand .site{display:grid;line-height:1.12}
+.tb-brand b{font-weight:800;white-space:nowrap}
+.tb-brand .inst b{font-size:.84rem;letter-spacing:.01em}
+.tb-brand .site b{font-size:.95rem;letter-spacing:-.01em}
+.tb-brand span span{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.tb-brand .div{width:1px;height:30px;background:var(--line)}
+.topnav{display:flex;align-items:center;gap:6px;flex:none}
+.topnav a,.topnav button{display:inline-flex;align-items:center;gap:6px;font:700 .82rem var(--f-top);padding:8px 14px;border-radius:10px;text-decoration:none;border:0;background:transparent;color:var(--ink);cursor:pointer;transition:background .2s}
+.topnav svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.topnav .ghost:hover,.topnav .ghost[aria-expanded="true"]{background:var(--surface-2)}
+.topnav .ghost .chev{transition:transform .2s}
+.topnav .ghost[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.topnav .solid{background:#32A041;color:#fff;box-shadow:0 4px 12px rgba(50,160,65,.28)}
+.topnav .solid:hover{background:#247A30}
+.topnav .tb-back{background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
+.topnav .tb-back:hover{background:#A51418}
+.tmenu{position:absolute;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:min(300px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.35);padding:8px;display:grid;gap:2px}
+.tmenu a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:600;font-size:.95rem}
+.tmenu a b{font:600 .75rem var(--f-mono);color:var(--green-strong);min-width:2ch}
+.tmenu a:hover,.tmenu a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
+.tmenu a.ch,.tmenu a.ch b{color:var(--red)}
+.tmenu a.ch:hover{background:color-mix(in srgb,var(--red) 8%,var(--surface))}
+@media (max-width:760px){.tb-brand .div,.tb-brand .site{display:none}}
+@media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
+@media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
 </style>
 </head>
 <body>
@@ -644,19 +642,23 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   </defs>
 </svg>
 
-<header class="bar">
+<div class="accent" aria-hidden="true"></div>
+<nav class="topbar" aria-label="Navegação">
   <div class="wrap">
-    <div class="brand">
-      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg>
-      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    <a class="tb-brand" href="https://alberto-barros.github.io/" title="Página inicial">
+      <svg class="mark" viewBox="0 0 34 46" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8191E"/><g fill="#32A041"><rect x="12" y="0" width="10" height="10" rx="2"/><rect x="24" y="0" width="10" height="10" rx="2"/><rect x="0" y="12" width="10" height="10" rx="2"/><rect x="12" y="12" width="10" height="10" rx="2"/><rect x="0" y="24" width="10" height="10" rx="2"/><rect x="12" y="24" width="10" height="10" rx="2"/><rect x="24" y="24" width="10" height="10" rx="2"/><rect x="0" y="36" width="10" height="10" rx="2"/><rect x="12" y="36" width="10" height="10" rx="2"/></g></svg>
+      <span class="inst"><b>INSTITUTO FEDERAL</b><span>Santa Catarina · Câmpus Garopaba</span></span>
+      <span class="div" aria-hidden="true"></span>
+      <span class="site"><b>Redes de Computadores</b><span>Laboratório · Sub-redes</span></span>
+    </a>
+    <div class="topnav">
+      <button type="button" class="ghost" id="tb-topics" aria-expanded="false" aria-controls="tmenu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span class="tb-lbl">Tópicos</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <a class="solid" href="#quiz-sec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
+      <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <button type="button" class="burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
-    <nav class="nav" id="menu" aria-label="Seções">
-      <a href="#conceito">Sub-rede</a><a href="#beneficios">Benefícios</a><a href="#planejador">Planejador</a><a href="#animacao">Animação</a><a href="#passos">Atividade</a><a class="nav-ch" href="#dhcp">Desafio DHCP</a><a href="#checklist-sec">Checklist</a><a href="#erros">Erros</a><a href="#quiz-sec">Quiz</a>
-    </nav>
-    <a class="back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Voltar</a>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Sub-rede</a><a href="#beneficios"><b>02</b>Benefícios</a><a href="#planejador"><b>03</b>Planejador</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Atividade</a><a href="#dhcp" class="ch"><b>06</b>Desafio DHCP</a><a href="#checklist-sec"><b>07</b>Checklist</a><a href="#erros"><b>08</b>Erros comuns</a><a href="#quiz-sec"><b>09</b>Quiz</a></div>
   </div>
-</header>
+</nav>
 
 <div class="hero">
   <div class="wrap">
@@ -2005,14 +2007,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   paint();
   render();
 
-  // ---------- menu hambúrguer ----------
+  // ---------- menu de tópicos ----------
   (function(){
-    var btn = $('burger'), menu = $('menu');
-    function setOpen(o){ menu.classList.toggle('open', o); btn.setAttribute('aria-expanded', o); btn.setAttribute('aria-label', o ? 'Fechar menu das seções' : 'Abrir menu das seções'); }
-    btn.addEventListener('click', function(e){ e.stopPropagation(); setOpen(!menu.classList.contains('open')); });
-    menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
-    document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !menu.contains(e.target)) setOpen(false); });
-    document.addEventListener('keydown', function(e){ if (e.key==='Escape' && menu.classList.contains('open')){ setOpen(false); btn.focus(); } });
+    var btn = $('tb-topics'), menu = $('tmenu');
+    function setOpen(o){ menu.hidden = !o; btn.setAttribute('aria-expanded', o); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); setOpen(menu.hidden); });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) setOpen(false); });
+    document.addEventListener('click', function(e){ if (!menu.hidden && !menu.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function(e){ if (e.key==='Escape' && !menu.hidden){ setOpen(false); btn.focus(); } });
   })();
 })();
 </script>
