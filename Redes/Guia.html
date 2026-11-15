@@ -398,6 +398,112 @@ footer{padding-block:36px;border-top:1px solid var(--line);margin-top:24px}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;max-width:1080px}
 .foot-brand{display:flex;align-items:center;gap:12px;color:var(--ink)}
 .foot-brand svg{height:52px;width:auto}
+/* ===== Quiz ===== */
+:root{--ok:#1E7A30;--bad:#C8191E;--warn:#A86A00;--mint:#C6EECD;--green-strong:#1E7A30;--code-bg:#000;--code-fg:#D7F2DD;--code-muted:#7FA88B;--f-display:var(--font-display);--f-body:var(--font-body)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ok:#6FD982;--bad:#F0585C;--warn:#F0B23B;--mint:#1C4A2A;--green-strong:#86DD94}}
+:root[data-theme="dark"]{--ok:#6FD982;--bad:#F0585C;--warn:#F0B23B;--mint:#1C4A2A;--green-strong:#86DD94}
+.qz-wrap{max-width:1080px}
+.qz-ico svg,.qz-chip svg,.qz-opt .st svg,.qz-fb .fi svg,.btn svg{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.btn{border:0;background:var(--green);color:#fff;font:700 .9rem var(--f-body);padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.btn:hover{background:var(--green-strong)}
+:root[data-theme="dark"] .btn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#08130C}}
+.btn svg{width:16px;height:16px}
+/* quiz: uma pergunta por vez */
+.quiz{border-radius:26px;overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--green) 80%,transparent)}
+.qz-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:18px 22px;background:var(--code-bg);color:var(--code-fg)}
+.qz-brand{display:flex;align-items:center;gap:12px}
+.qz-ico{width:42px;height:42px;border-radius:13px;background:var(--green);display:grid;place-items:center;color:#fff;flex:none}
+.qz-ico svg{width:22px;height:22px}
+.qz-brand b{font:700 1.08rem var(--f-display);display:block}
+.qz-brand small{color:var(--code-muted);font-size:.8rem}
+.qz-chips{display:flex;gap:8px}
+.qz-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font:700 .95rem var(--f-display);font-variant-numeric:tabular-nums}
+.qz-chip svg{width:16px;height:16px}
+.qz-chip.ok{background:color-mix(in srgb,#6FD982 18%,transparent);color:#8BE39B}
+.qz-chip.bad{background:color-mix(in srgb,#FF6B6B 18%,transparent);color:#FF8A8A}
+.qz-steps{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;padding:16px 22px 0}
+.qz-steps i{height:7px;border-radius:99px;background:var(--surface-2);transition:background .3s,transform .3s}
+.qz-steps i.cur{background:var(--green);transform:scaleY(1.5)}
+.qz-steps i.ok{background:var(--ok)}
+.qz-steps i.bad{background:var(--bad)}
+.qz-stage{padding:22px;min-height:420px;display:grid}
+.qz-card{display:grid;gap:18px;align-content:start;animation:qzIn .45s cubic-bezier(.2,.8,.2,1)}
+.qz-card.out{animation:qzOut .3s ease-in forwards}
+@keyframes qzIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes qzOut{to{opacity:0;transform:translateX(-40px)}}
+.qz-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qz-num{font:800 .8rem var(--font-mono);color:var(--green-strong);background:var(--mint);padding:5px 10px;border-radius:999px}
+.qz-tag{font:700 .72rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.qz-q{font:700 clamp(1.2rem,2.6vw,1.6rem)/1.35 var(--f-display);letter-spacing:-.01em;text-wrap:pretty;max-width:none}
+.qz-q code{font-size:.85em}
+.qz-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.qz-opt{position:relative;text-align:left;border:2px solid var(--line);background:var(--surface);color:var(--ink);font:600 1rem var(--f-body);padding:16px 16px;border-radius:16px;cursor:pointer;display:grid;grid-template-columns:38px minmax(0,1fr) 22px;gap:12px;align-items:center;transition:transform .15s,border-color .15s,background .15s,box-shadow .15s}
+.qz-opt .L{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);font:800 .95rem var(--f-display);color:var(--muted);transition:background .15s,color .15s}
+.qz-opt .st{display:grid;place-items:center;width:22px;height:22px}
+.qz-opt .st svg{width:22px;height:22px}
+.qz-opt:hover:not([disabled]){border-color:var(--green);transform:translateY(-2px);box-shadow:0 10px 22px -16px var(--green)}
+.qz-opt:hover:not([disabled]) .L{background:var(--green);color:#fff}
+.qz-opt[disabled]{cursor:default}
+.qz-opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.qz-opt.right .L{background:var(--ok);color:var(--surface)}
+.qz-opt.right .st{color:var(--ok)}
+.qz-opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface));animation:shake .4s}
+.qz-opt.wrong .L{background:var(--bad);color:var(--surface)}
+.qz-opt.wrong .st{color:var(--bad)}
+.qz-opt.dim{opacity:.45}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.qz-fb{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;border-radius:18px;padding:16px 18px;background:color-mix(in srgb,var(--fc) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--fc) 40%,transparent);animation:qzIn .35s ease-out}
+.qz-fb .fi{width:44px;height:44px;border-radius:13px;background:var(--fc);color:var(--surface);display:grid;place-items:center}
+.qz-fb .fi svg{width:24px;height:24px}
+.qz-fb h4{margin:0;font:700 1.05rem var(--f-display);color:var(--fc)}
+.qz-fb p{color:var(--muted);font-size:.95rem;margin-top:2px}
+.qz-fb p b{color:var(--ink)}
+.qz-next{display:flex;justify-content:flex-end;align-items:center;gap:14px;flex-wrap:wrap}
+.qz-timer{flex:1;min-width:120px;height:4px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.qz-timer i{display:block;height:100%;width:0;background:var(--green);animation:qzT var(--dur,4s) linear forwards}
+@keyframes qzT{to{width:100%}}
+.qz-end{display:grid;gap:22px;justify-items:center;text-align:center;align-content:center;animation:qzIn .5s cubic-bezier(.2,.8,.2,1)}
+.qz-ring{width:170px;height:170px;border-radius:50%;display:grid;place-content:center;justify-items:center;position:relative;background:conic-gradient(var(--gc) calc(var(--p)*1%),var(--surface-2) 0)}
+.qz-ring::before{content:"";position:absolute;inset:13px;border-radius:50%;background:var(--surface)}
+.qz-ring > *{position:relative}
+.qz-ring span{font:700 .72rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.qz-ring b{font:800 3.2rem/1 var(--f-display);color:var(--gc);font-variant-numeric:tabular-nums}
+.qz-ring small{color:var(--muted);font-size:.85rem}
+.qz-end h3{font-size:1.6rem}
+.qz-end > p{color:var(--muted);max-width:52ch}
+.qz-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;max-width:560px}
+.qz-sum span{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:12px;font:700 .82rem var(--f-display);background:color-mix(in srgb,var(--sc) 12%,var(--surface));color:var(--sc);border:1px solid color-mix(in srgb,var(--sc) 35%,transparent)}
+.qz-sum span small{font:600 .66rem var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.btn.ghost{background:transparent;color:var(--green-strong);border:2px solid var(--green)}
+.btn.ghost:hover{background:var(--mint)}
+@media (prefers-reduced-motion: reduce){.qz-card,.qz-card.out,.qz-fb,.qz-end,.qz-opt.wrong{animation:none}.qz-timer{display:none}}
+@media (max-width:600px){.qz-stage{padding:16px;min-height:0}.qz-steps{padding:14px 16px 0;gap:4px}.qz-bar{padding:14px 16px}.qz-opts{grid-template-columns:1fr}.qz-opt{padding:12px;grid-template-columns:32px minmax(0,1fr) 20px}.qz-opt .L{width:32px;height:32px}.qz-sum{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.qz-sum span{padding:8px 2px}.qz-next .btn{flex:1 1 100%;justify-content:center}}
+/* revisão das respostas */
+.qz-sumwrap{display:grid;gap:12px;justify-items:center;width:100%}
+.qz-hint{font-size:.88rem;color:var(--muted)}
+.qz-sum button{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:12px;font:700 .82rem var(--f-display);background:color-mix(in srgb,var(--sc) 12%,var(--surface));color:var(--sc);border:1.5px solid color-mix(in srgb,var(--sc) 35%,transparent);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.qz-sum button small{font:600 .66rem var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.qz-sum button:hover{transform:translateY(-2px);box-shadow:0 8px 18px -12px var(--sc)}
+.qz-sum button[aria-pressed="true"]{border-color:var(--sc);border-width:2.5px;background:color-mix(in srgb,var(--sc) 22%,var(--surface))}
+.qz-review{width:100%;max-width:720px;text-align:left;display:grid;gap:12px;border-radius:18px;padding:18px;border:2px solid color-mix(in srgb,var(--fc) 45%,transparent);background:color-mix(in srgb,var(--fc) 6%,var(--surface));animation:qzIn .35s ease-out}
+.qz-review[hidden]{display:none}
+.qz-res{margin-left:auto;font:700 .78rem var(--f-body);color:var(--fc)}
+.qz-rq{font:700 1.15rem/1.4 var(--f-display)}
+.qz-rl{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.qz-rl li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-size:.95rem;color:var(--muted)}
+.qz-rl .L{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--surface-2);font:800 .85rem var(--f-display)}
+.qz-rl em{font:700 .72rem var(--f-body);font-style:normal;letter-spacing:.04em;text-transform:uppercase}
+.qz-rl li.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface));color:var(--ink);font-weight:600}
+.qz-rl li.right .L{background:var(--ok);color:var(--surface)}
+.qz-rl li.right em{color:var(--ok)}
+.qz-rl li.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface));color:var(--ink)}
+.qz-rl li.wrong .L{background:var(--bad);color:var(--surface)}
+.qz-rl li.wrong em{color:var(--bad)}
+.qz-rexp{font-size:.93rem;color:var(--muted);background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.qz-rexp b{color:var(--ink)}
+@media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
+@media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
 </style>
 </head>
 <body>
@@ -410,10 +516,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     </a>
     <div class="topnav">
       <button type="button" class="ghost" id="tb-topics" aria-expanded="false" aria-controls="tmenu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span class="tb-lbl">Tópicos</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
-      <a class="solid" href="#cap1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l14 8-14 8z"/></svg>Começar</a>
+      <a class="solid" href="#quiz"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#cap1"><b>01</b>Introdução</a><a href="#cap2"><b>02</b>Topologias</a><a href="#cap3"><b>03</b>Meios de transmissão</a><a href="#cap4"><b>04</b>Cabeamento</a><a href="#cap5"><b>05</b>OSI e TCP/IP</a><a href="#referencias"><b>REF</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#cap1"><b>01</b>Introdução</a><a href="#cap2"><b>02</b>Topologias</a><a href="#cap3"><b>03</b>Meios de transmissão</a><a href="#cap4"><b>04</b>Cabeamento</a><a href="#cap5"><b>05</b>OSI e TCP/IP</a><a href="#quiz"><b>06</b>Quiz</a><a href="#referencias"><b>REF</b>Referências</a></div>
   </div>
 </nav>
 
@@ -426,12 +532,18 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     </div>
     <nav class="hero-card" aria-label="Sumário">
       <h3>Sumário</h3>
-      <div class="vlist"><a class="vrow" href="#cap1" style="--vc:#1C7EC0"><span class="vtag">CAP 1</span><b>Introdução às redes</b><svg class="i"><use href="#i-net"/></svg></a><a class="vrow" href="#cap2" style="--vc:#C98204"><span class="vtag">CAP 2</span><b>Topologias de rede</b><svg class="i"><use href="#i-topo"/></svg></a><a class="vrow" href="#cap3" style="--vc:#8250C8"><span class="vtag">CAP 3</span><b>Meios de transmissão</b><svg class="i"><use href="#i-wave"/></svg></a><a class="vrow" href="#cap4" style="--vc:#D1407A"><span class="vtag">CAP 4</span><b>Cabeamento de rede local</b><svg class="i"><use href="#i-plug"/></svg></a><a class="vrow" href="#cap5" style="--vc:#2F9E41"><span class="vtag">CAP 5</span><b>Arquitetura OSI e TCP/IP</b><svg class="i"><use href="#i-layers"/></svg></a><a class="vrow" href="#referencias" style="--vc:#8A9A90"><span class="vtag">REF</span><b>Referências</b><svg class="i"><use href="#i-ref"/></svg></a></div>
+      <div class="vlist"><a class="vrow" href="#cap1" style="--vc:#1C7EC0"><span class="vtag">CAP 1</span><b>Introdução às redes</b><svg class="i"><use href="#i-net"/></svg></a><a class="vrow" href="#cap2" style="--vc:#C98204"><span class="vtag">CAP 2</span><b>Topologias de rede</b><svg class="i"><use href="#i-topo"/></svg></a><a class="vrow" href="#cap3" style="--vc:#8250C8"><span class="vtag">CAP 3</span><b>Meios de transmissão</b><svg class="i"><use href="#i-wave"/></svg></a><a class="vrow" href="#cap4" style="--vc:#D1407A"><span class="vtag">CAP 4</span><b>Cabeamento de rede local</b><svg class="i"><use href="#i-plug"/></svg></a><a class="vrow" href="#cap5" style="--vc:#2F9E41"><span class="vtag">CAP 5</span><b>Arquitetura OSI e TCP/IP</b><svg class="i"><use href="#i-layers"/></svg></a><a class="vrow" href="#quiz" style="--vc:#E0A100"><span class="vtag">QUIZ</span><b>Teste seu conhecimento</b><svg class="i"><use href="#i-target"/></svg></a><a class="vrow" href="#referencias" style="--vc:#8A9A90"><span class="vtag">REF</span><b>Referências</b><svg class="i"><use href="#i-ref"/></svg></a></div>
       <p class="hint">Cada capítulo traz conceitos com referência aos autores e laboratórios animados.</p>
     </nav>
   </div>
 </div>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="qi-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+<symbol id="qi-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
+<symbol id="qi-play" viewBox="0 0 24 24"><path d="M7 4v16l13-8z" fill="currentColor"/></symbol>
+<symbol id="qi-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></symbol>
+</defs></svg>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="ifsc-mark" viewBox="0 0 410 555"><circle cx="60" cy="60" r="66" fill="#CD191E"/><g fill="#2F9E41"><rect x="145" y="0" width="120" height="120" rx="10"/><rect x="290" y="0" width="120" height="120" rx="10"/><rect x="0" y="145" width="120" height="120" rx="10"/><rect x="145" y="145" width="120" height="120" rx="10"/><rect x="0" y="290" width="120" height="120" rx="10"/><rect x="145" y="290" width="120" height="120" rx="10"/><rect x="290" y="290" width="120" height="120" rx="10"/><rect x="0" y="435" width="120" height="120" rx="10"/><rect x="145" y="435" width="120" height="120" rx="10"/></g></symbol>
@@ -941,6 +1053,20 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 </section>
 
 <!-- ================= REFERÊNCIAS ================= -->
+<section id="quiz">
+  <div class="wrap">
+    <div class="chap-text" style="margin-bottom:24px"><span class="chap-num">Teste seu conhecimento</span><h2>Quiz de Redes de Computadores</h2></div>
+    <div class="quiz" id="quiz-box">
+      <div class="qz-bar">
+        <div class="qz-brand"><span class="qz-ico"><svg><use href="#qi-bulb"/></svg></span><div><b>Quiz · Redes de Computadores</b><small>10 perguntas · nota de 0 a 10</small></div></div>
+        <div class="qz-chips"><span class="qz-chip ok"><svg><use href="#qi-check"/></svg><b id="q-ok">0</b></span><span class="qz-chip bad"><svg><use href="#qi-x"/></svg><b id="q-bad">0</b></span></div>
+      </div>
+      <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
+      <div class="qz-stage" id="q-stage" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
 <section id="referencias">
   <header class="chap small">
     <div class="chap-icon"><svg><use href="#i-ref"/></svg></div>
@@ -1351,6 +1477,94 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!menu.hidden){setOp
 const links=[...menu.querySelectorAll('a')];
 const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting)links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+en.target.id))}),{rootMargin:'-40% 0px -55% 0px'});
 document.querySelectorAll('main section[id]').forEach(x=>io.observe(x));})();
+</script>
+<script>
+(function(){ var G=function(i){return document.getElementById(i)};
+
+  (function(){
+    var BANK = [{"t": "Introdução", "q": "Qual é o principal objetivo de uma rede de computadores?", "o": ["Compartilhar recursos e permitir a comunicação entre dispositivos", "Aumentar a velocidade do processador de cada computador", "Substituir o sistema operacional dos computadores", "Armazenar dados apenas em um único computador central"], "e": "Uma rede conecta dispositivos para <b>compartilhar recursos</b> (arquivos, impressoras, internet) e trocar informações."}, {"t": "Introdução", "q": "Qual classificação de rede abrange uma sala, um prédio ou um campus?", "o": ["LAN", "WAN", "MAN", "PAN"], "e": "A <b>LAN</b> (Local Area Network) cobre uma área restrita. A MAN cobre uma cidade e a WAN, grandes distâncias."}, {"t": "Introdução", "q": "A internet é um exemplo clássico de qual tipo de rede?", "o": ["WAN", "LAN", "PAN", "SAN"], "e": "A internet interliga redes do mundo todo: é uma <b>WAN</b> (rede de longa distância)."}, {"t": "Introdução", "q": "No modelo cliente-servidor, qual é o papel do servidor?", "o": ["Fornecer serviços e recursos aos clientes que os solicitam", "Apenas encaminhar quadros entre portas de um switch", "Converter sinais elétricos em ópticos", "Atribuir endereços MAC às placas de rede"], "e": "O servidor <b>responde às requisições</b> dos clientes, oferecendo serviços como web, arquivos e e-mail."}, {"t": "Topologias", "q": "Na topologia em estrela, o que acontece se o dispositivo central (switch) falhar?", "o": ["Toda a rede fica indisponível", "Apenas um computador perde a conexão", "A rede continua funcionando normalmente", "Os dados passam a circular em anel"], "e": "Na estrela todo o tráfego passa pelo ponto central: se ele falha, <b>a rede inteira para</b>."}, {"t": "Topologias", "q": "Qual topologia usa um único cabo compartilhado (backbone) ao qual todos os dispositivos se conectam?", "o": ["Barramento", "Estrela", "Anel", "Malha"], "e": "No <b>barramento</b>, todos compartilham um único meio. Um rompimento do cabo pode derrubar a rede."}, {"t": "Topologias", "q": "Qual topologia oferece a maior redundância, com vários caminhos entre os nós?", "o": ["Malha (mesh)", "Barramento", "Estrela", "Anel simples"], "e": "Na <b>malha</b> cada nó tem várias ligações, então há rotas alternativas. O custo de cabeamento é alto."}, {"t": "Topologias", "q": "Qual é a vantagem de a topologia em estrela ser a mais usada em redes locais?", "o": ["A falha de um cabo isola apenas um dispositivo e facilita a manutenção", "Usa a menor quantidade de cabos possível", "Dispensa equipamentos de interconexão", "Não tem ponto único de falha"], "e": "Um cabo rompido afeta só aquela estação. A desvantagem é o <b>ponto central</b> como único ponto de falha."}, {"t": "Meios", "q": "Qual meio de transmissão é imune a interferência eletromagnética e alcança as maiores distâncias?", "o": ["Fibra óptica", "Cabo UTP", "Cabo coaxial", "Rádio (Wi-Fi)"], "e": "A fibra transmite <b>luz</b>, por isso não sofre interferência eletromagnética e tem grande alcance."}, {"t": "Meios", "q": "Qual é o comprimento máximo recomendado de um segmento de cabo UTP em Ethernet?", "o": ["100 metros", "10 metros", "500 metros", "1 000 metros"], "e": "Para UTP, o limite do canal é de <b>100 m</b> (90 m de cabo horizontal mais cordões)."}, {"t": "Meios", "q": "Qual fibra óptica é indicada para longas distâncias, com um único modo de propagação?", "o": ["Monomodo", "Multimodo", "Coaxial", "Par trançado"], "e": "A fibra <b>monomodo</b> tem núcleo fino e um só caminho de luz, alcançando dezenas de quilômetros."}, {"t": "Meios", "q": "Qual característica é típica de uma transmissão sem fio (Wi-Fi)?", "o": ["Meio compartilhado, mais sujeito a interferências e a escutas", "Imunidade total a interferências", "Alcance ilimitado", "Necessidade de um cabo por dispositivo"], "e": "O ar é um meio <b>compartilhado</b>: interferências, obstáculos e segurança exigem cuidado."}, {"t": "Cabeamento", "q": "Qual é a função do trançamento dos pares em um cabo UTP?", "o": ["Reduzir interferência eletromagnética e diafonia", "Aumentar a resistência mecânica do cabo", "Blindar o cabo contra umidade", "Aumentar a tensão do sinal"], "e": "O <b>trançado</b> faz as interferências se cancelarem entre os pares, reduzindo ruído e crosstalk."}, {"t": "Cabeamento", "q": "Qual é a sequência de cores do padrão T568B, do pino 1 ao 8?", "o": ["Laranja/branco, laranja, verde/branco, azul, azul/branco, verde, marrom/branco, marrom", "Verde/branco, verde, laranja/branco, azul, azul/branco, laranja, marrom/branco, marrom", "Azul/branco, azul, laranja/branco, verde, verde/branco, laranja, marrom/branco, marrom", "Marrom/branco, marrom, verde/branco, azul, azul/branco, verde, laranja/branco, laranja"], "e": "No <b>T568B</b> o laranja ocupa os pinos 1 e 2 e o verde os pinos 3 e 6. No T568A essas posições se invertem."}, {"t": "Cabeamento", "q": "Para ligar dois computadores diretamente pelo cabo, sem switch, usa-se tradicionalmente um cabo:", "o": ["Crossover (T568A em uma ponta e T568B na outra)", "Direto (T568B nas duas pontas)", "Coaxial", "Serial"], "e": "O <b>crossover</b> inverte os pares de transmissão e recepção. Hoje, o Auto MDI-X dispensa a distinção na maioria dos equipamentos."}, {"t": "Cabeamento", "q": "Quais pinos do RJ45 são usados em Fast Ethernet (100BASE-TX)?", "o": ["1, 2, 3 e 6", "4, 5, 7 e 8", "1, 3, 5 e 7", "Todos os 8 pinos"], "e": "O Fast Ethernet usa dois pares: <b>1-2 (transmissão)</b> e <b>3-6 (recepção)</b>. O Gigabit usa os quatro pares."}, {"t": "Cabeamento", "q": "Qual ferramenta é usada para fixar o conector RJ45 no cabo?", "o": ["Alicate de crimpagem", "Testador de cabos", "Alicate de impacto (punch down)", "Multímetro"], "e": "O <b>alicate de crimpagem</b> prensa o conector. O punch down é usado em patch panels e keystones."}, {"t": "Cabeamento", "q": "O que um testador de cabos de rede verifica?", "o": ["A continuidade e a ordem dos fios nos pares", "A velocidade da internet contratada", "A temperatura do cabo", "A quantidade de dados trafegados"], "e": "O testador acende LEDs na sequência dos pinos e acusa <b>rompimento, curto ou inversão</b>."}, {"t": "Cabeamento", "q": "Qual categoria de cabo UTP suporta 10 Gb/s a até 55 m (e 100 m na versão A)?", "o": ["Cat6 (Cat6A para 100 m)", "Cat5", "Cat3", "Cat5e apenas"], "e": "O Cat6 chega a 10 Gb/s em até 55 m. O <b>Cat6A</b> mantém 10 Gb/s nos 100 m."}, {"t": "Arquitetura", "q": "Quantas camadas tem o modelo OSI?", "o": ["7", "4", "5", "6"], "e": "O OSI tem <b>sete camadas</b>: física, enlace, rede, transporte, sessão, apresentação e aplicação."}, {"t": "Arquitetura", "q": "Em qual camada do modelo OSI atua o switch (Ethernet)?", "o": ["Enlace (camada 2)", "Física (camada 1)", "Rede (camada 3)", "Transporte (camada 4)"], "e": "O switch encaminha <b>quadros</b> pelos endereços MAC, na camada de <b>enlace</b>."}, {"t": "Arquitetura", "q": "Qual é a PDU (unidade de dados) da camada de rede?", "o": ["Pacote", "Quadro", "Segmento", "Bit"], "e": "Rede: <b>pacote</b>. Enlace: quadro. Transporte: segmento (TCP) ou datagrama (UDP). Física: bits."}, {"t": "Arquitetura", "q": "Qual camada do OSI é responsável pelo endereçamento IP e pelo roteamento?", "o": ["Rede (camada 3)", "Enlace (camada 2)", "Transporte (camada 4)", "Sessão (camada 5)"], "e": "O <b>IP</b> e os roteadores atuam na camada de <b>rede</b>."}, {"t": "Arquitetura", "q": "Qual protocolo de transporte é orientado à conexão e garante entrega confiável?", "o": ["TCP", "UDP", "IP", "ICMP"], "e": "O <b>TCP</b> usa confirmações, retransmissão e controle de fluxo. O UDP não garante entrega."}, {"t": "Arquitetura", "q": "Quantos segmentos são trocados no handshake do TCP para abrir uma conexão?", "o": ["3 (SYN, SYN-ACK, ACK)", "2 (SYN, ACK)", "4 (FIN, ACK, FIN, ACK)", "1 (SYN)"], "e": "O <b>three-way handshake</b> é SYN, SYN-ACK e ACK."}, {"t": "Arquitetura", "q": "O que é encapsulamento?", "o": ["Adicionar cabeçalhos a cada camada ao descer a pilha de protocolos", "Criptografar todos os dados da rede", "Remover cabeçalhos ao subir as camadas", "Dividir a rede em sub-redes"], "e": "No <b>encapsulamento</b> cada camada acrescenta seu cabeçalho aos dados recebidos da camada acima."}, {"t": "Arquitetura", "q": "A pilha TCP/IP original possui quantas camadas?", "o": ["4 (acesso à rede, internet, transporte, aplicação)", "7", "5", "3"], "e": "O TCP/IP tem <b>quatro camadas</b>. Muitos livros usam o modelo híbrido de cinco camadas."}, {"t": "Arquitetura", "q": "Um hub, ao receber um quadro em uma porta, o que faz?", "o": ["Repete o sinal por todas as outras portas", "Envia apenas à porta do destinatário", "Descarta o quadro", "Roteia pelo endereço IP"], "e": "O hub é um repetidor da camada <b>física</b>: gera mais colisões, por isso foi substituído pelo switch."}, {"t": "Arquitetura", "q": "Por que o switch é preferido ao hub em uma LAN?", "o": ["Aprende endereços MAC e encaminha o quadro só à porta de destino", "Opera na camada 3 e roteia entre redes", "Amplifica o sinal elétrico", "Dispensa o uso de cabos"], "e": "O switch mantém uma tabela MAC, <b>segmenta os domínios de colisão</b> e aumenta o desempenho."}, {"t": "Arquitetura", "q": "Em qual camada do TCP/IP atuam protocolos como HTTP, DNS e SMTP?", "o": ["Aplicação", "Transporte", "Internet", "Acesso à rede"], "e": "HTTP, DNS, SMTP e FTP são protocolos da camada de <b>aplicação</b>."}];
+    var Q = [];
+    var stage = G('q-stage'), steps = G('q-steps'), cur = 0, ans = [], picks = [], timer = null, lastSet = [];
+    function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+    function draw(){
+      var seen = [];
+      try { seen = JSON.parse(localStorage.getItem('redes-quiz-seen')||'[]') || []; } catch(e){}
+      var fresh = BANK.map(function(_,i){return i;}).filter(function(i){ return seen.indexOf(i)<0 && lastSet.indexOf(i)<0; });
+      if (fresh.length < 10){ seen = []; fresh = BANK.map(function(_,i){return i;}).filter(function(i){ return lastSet.indexOf(i)<0; }); }
+      var pick = shuffle(fresh).slice(0,10);
+      lastSet = pick; seen = seen.concat(pick);
+      try { localStorage.setItem('redes-quiz-seen', JSON.stringify(seen)); } catch(e){}
+      return pick.map(function(i){
+        var x = BANK[i], ord = shuffle([0,1,2,3]);
+        return {t:x.t, q:x.q, e:x.e, o:ord.map(function(k){return x.o[k];}), c:ord.indexOf(0)};
+      });
+    }
+    var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var SVG = function(id){ return '<svg><use href="#'+id+'"/></svg>'; };
+    function chips(){ var ok = ans.filter(function(a){return a===true;}).length, bad = ans.filter(function(a){return a===false;}).length; G('q-ok').textContent = ok; G('q-bad').textContent = bad; }
+    function drawSteps(){ steps.innerHTML = Q.map(function(_,i){ return '<i class="'+(ans[i]===true?'ok':ans[i]===false?'bad':i===cur?'cur':'')+'"></i>'; }).join(''); }
+    function swap(html){
+      var old = stage.firstElementChild;
+      var put = function(){ stage.innerHTML = html; };
+      if (old && !reduced){ old.classList.add('out'); setTimeout(put, 280); } else put();
+    }
+    function show(i){
+      clearTimeout(timer); cur = i; drawSteps();
+      var x = Q[i];
+      swap('<div class="qz-card"><div class="qz-meta"><span class="qz-num">Pergunta '+(i+1)+' de '+Q.length+'</span><span class="qz-tag">'+x.t+'</span></div>'+
+        '<p class="qz-q">'+x.q+'</p><div class="qz-opts" role="group" aria-label="Alternativas">'+
+        x.o.map(function(o,j){ return '<button type="button" class="qz-opt" data-o="'+j+'"><span class="L">'+'ABCD'[j]+'</span><span>'+o+'</span><span class="st"></span></button>'; }).join('')+
+        '</div><div class="qz-after"></div></div>');
+    }
+    function answer(j){
+      var x = Q[cur], right = j===x.c, card = stage.querySelector('.qz-card');
+      ans[cur] = right; picks[cur] = j; chips(); drawSteps();
+      card.querySelectorAll('.qz-opt').forEach(function(b,k){
+        b.disabled = true;
+        if (k===x.c){ b.classList.add('right'); b.querySelector('.st').innerHTML = SVG('qi-check'); }
+        else if (k===j){ b.classList.add('wrong'); b.querySelector('.st').innerHTML = SVG('qi-x'); }
+        else b.classList.add('dim');
+      });
+      var last = cur===Q.length-1, dur = right ? 3500 : 7000;
+      card.querySelector('.qz-after').outerHTML =
+        '<div class="qz-fb" style="--fc:'+(right?'var(--ok)':'var(--bad)')+'"><span class="fi">'+SVG(right?'qi-check':'qi-x')+'</span><div><h4>'+(right?'Resposta certa!':'Não foi dessa vez. A resposta é a letra '+'ABCD'[x.c]+'.')+'</h4><p>'+x.e+'</p></div></div>'+
+        '<div class="qz-next"><button type="button" class="btn" id="q-go">'+(last?'Ver minha nota':'Próxima pergunta')+' <span aria-hidden="true">→</span></button></div>';
+      G('q-go').focus({preventScroll:true});
+    }
+    function review(i){
+      var x = Q[i], p = picks[i], box = G('q-review'), ok = ans[i];
+      stage.querySelectorAll('[data-r]').forEach(function(b){ b.setAttribute('aria-pressed', +b.dataset.r===i); });
+      box.style.setProperty('--fc', ok ? 'var(--ok)' : 'var(--bad)');
+      box.innerHTML = '<div class="qz-meta"><span class="qz-num">Pergunta '+(i+1)+' de '+Q.length+'</span><span class="qz-tag">'+x.t+'</span><span class="qz-res">'+(ok?'Você acertou':'Você errou')+'</span></div>'+
+        '<p class="qz-rq">'+x.q+'</p><ul class="qz-rl">'+x.o.map(function(o,k){
+          var cls = k===x.c ? 'right' : (k===p ? 'wrong' : ''), note = k===x.c ? (k===p?'Sua resposta · correta':'Resposta correta') : (k===p ? 'Sua resposta' : '');
+          return '<li class="'+cls+'"><span class="L">'+'ABCD'[k]+'</span><span>'+o+'</span>'+(note?'<em>'+note+'</em>':'')+'</li>'; }).join('')+'</ul>'+
+        '<p class="qz-rexp"><b>Explicação: </b>'+x.e+'</p>';
+      box.hidden = false;
+      box.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'nearest'});
+    }
+    function next(){ clearTimeout(timer); if (cur < Q.length-1) show(cur+1); else end(); }
+    function end(){
+      cur = Q.length; drawSteps();
+      var ok = ans.filter(function(a){return a;}).length, nota = ok/Q.length*10, c, t, m;
+      if (nota>=9){ c='var(--ok)'; t='Excelente!'; m='Você domina os conceitos de redes, meios, cabeamento e arquitetura.'; }
+      else if (nota>=7){ c='var(--green)'; t='Muito bem!'; m='Bom resultado. Revise as perguntas marcadas em vermelho.'; }
+      else if (nota>=5){ c='var(--warn)'; t='Quase lá'; m='Releia os capítulos indicados nas perguntas erradas e tente de novo.'; }
+      else { c='var(--bad)'; t='Vamos revisar'; m='Volte ao início do guia, refaça os laboratórios animados e tente o quiz de novo.'; }
+      swap('<div class="qz-end"><div class="qz-ring" style="--gc:'+c+';--p:'+(nota*10)+'"><span>Sua nota</span><b>'+nota.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'</b><small>de 10</small></div>'+
+        '<div><h3>'+t+'</h3><p style="color:var(--muted);margin-top:6px">'+ok+' de '+Q.length+' acertos. '+m+'</p></div>'+
+        '<div class="qz-sumwrap"><p class="qz-hint">Clique em um card para rever a pergunta e a resposta.</p><div class="qz-sum">'+Q.map(function(x,i){ return '<button type="button" data-r="'+i+'" aria-pressed="false" style="--sc:'+(ans[i]?'var(--ok)':'var(--bad)')+'">'+(ans[i]?'✓':'✗')+' '+(i+1)+'<small>'+x.t+'</small></button>'; }).join('')+'</div><div class="qz-review" id="q-review" hidden></div></div>'+
+        '<button type="button" class="btn" id="q-redo">'+SVG('qi-play')+'Tentar novamente com novas perguntas</button></div>');
+    }
+    stage.addEventListener('click', function(e){
+      var b = e.target.closest('.qz-opt'); if (b && !b.disabled){ answer(+b.dataset.o); return; }
+      var r = e.target.closest('[data-r]'); if (r){ review(+r.dataset.r); return; }
+      if (e.target.closest('#q-go')) next();
+      if (e.target.closest('#q-redo')){ ans = []; picks = []; Q = draw(); chips(); show(0); G('quiz-box').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'}); }
+    });
+    Q = draw(); chips(); show(0);
+  })();
+})();
 </script>
 </body>
 </html>
