@@ -151,10 +151,10 @@ a{color:var(--green-ink)}
 .env.split .env-box{transform:scale(.5);transition:transform .45s}
 .envs{position:absolute;right:10px;top:0;width:150px;height:64px;display:flex;justify-content:space-between;opacity:0;transition:transform .6s cubic-bezier(.5,0,.25,1),opacity .3s;will-change:transform;pointer-events:none}
 .envs.show{opacity:1}
-.envs-n{z-index:8;position:absolute;left:50%;bottom:calc(100% + 14px);transform:translateX(-50%);font:800 .62rem var(--font-mono);color:#fff;background:var(--nc,var(--l4));padding:2px 7px;border-radius:5px;white-space:nowrap;box-shadow:0 5px 10px -6px rgba(0,0,0,.4);transition:background .3s}
-.mini{position:relative;width:46px;height:64px;border-radius:6px;background:#FFFDF6;border:1.5px solid #B9A56A;box-shadow:0 8px 16px -10px rgba(0,0,0,.5);transform:scale(0)}
+.envs-n{z-index:8;position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);font:800 .62rem var(--font-mono);color:#fff;background:var(--nc,var(--l4));padding:2px 7px;border-radius:5px;white-space:nowrap;box-shadow:0 5px 10px -6px rgba(0,0,0,.4);transition:background .3s}
+.mini{position:absolute;left:0;top:15px;width:100%;height:34px;border-radius:5px;background:#FFFDF6;border:1.5px solid #B9A56A;box-shadow:0 8px 16px -10px rgba(0,0,0,.5);transform:scale(0)}
 .envs.show .mini{transform:scale(1);animation:popIn .55s cubic-bezier(.2,.9,.3,1.2) backwards;animation-delay:calc(var(--i)*.14s);transition:transform .5s,opacity .4s}
-.pk{position:relative;width:46px;height:64px}
+.pk{position:relative;width:48px;height:64px}
 .envs.show .pk.boxed .mini{transform:scale(.6) translateY(-26px)}
 .envs.show .pk.boxed.in .mini{transform:scale(.6) translateY(6px)}
 .mbox{position:absolute;left:-5px;right:-5px;bottom:-3px;height:46px;border-radius:3px 3px 6px 6px;background:#D6A867;border:1.5px solid #A67A42;box-shadow:0 8px 14px -8px rgba(0,0,0,.55);z-index:6;opacity:0;transform:translateY(34px);transition:opacity .4s,transform .55s cubic-bezier(.3,.9,.3,1.15),height .5s,bottom .5s,background .4s;overflow:hidden;display:grid;place-items:center}
@@ -183,7 +183,7 @@ a{color:var(--green-ink)}
 .pk.bits .mini{opacity:0}
 .pk.bits .mbox-b{opacity:1;animation:bitsRun 1.4s linear infinite}
 @keyframes popIn{from{transform:scale(0) translateX(-30px);opacity:0}to{transform:scale(1);opacity:1}}
-.mini::before{content:"";position:absolute;left:-1.5px;right:-1.5px;top:-1.5px;height:26px;background:#F0E5C2;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .3s,background .3s;z-index:2;border-radius:6px 6px 0 0}
+.mini::before{content:"";position:absolute;left:-1.5px;right:-1.5px;top:-1.5px;height:19px;background:#F0E5C2;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .3s,background .3s;z-index:2;border-radius:6px 6px 0 0}
 .mini.open::before{transform:scaleY(-1);background:#CDBB86;z-index:0}
 .mini-c{position:absolute;left:3px;right:3px;bottom:3px;display:grid;grid-template-columns:1fr 1fr;gap:2px;z-index:1}
 .mini-c i{font:700 .44rem var(--font-mono);font-style:normal;color:#fff;text-align:center;padding:1.5px 0;border-radius:3px;animation:chipIn .35s cubic-bezier(.2,.8,.2,1) both}
@@ -191,7 +191,7 @@ a{color:var(--green-ink)}
 .mini.bits .mini-b{opacity:1;animation:bitsRun 1.4s linear infinite}
 .enc-cap{font-size:.82rem;color:var(--muted);margin-top:12px;min-height:2.6em}
 .enc-cap b{color:var(--ink)}
-@media (max-width:420px){.enc-row{padding-right:146px;gap:8px}.env{width:104px;right:8px}.envs{width:128px;right:8px}.mini,.pk{width:38px}.mini-c i{font-size:.4rem}.enc-nm{font-size:.8rem}.env-chips i{font-size:.48rem;padding:2px 2px}}
+@media (max-width:420px){.enc-row{padding-right:146px;gap:8px}.env{width:104px;right:8px}.envs{width:128px;right:8px}.pk{width:38px}.mini-c i{padding:1px 0}.mini-c i{font-size:.4rem}.enc-nm{font-size:.8rem}.env-chips i{font-size:.48rem;padding:2px 2px}}
 @media (prefers-reduced-motion:reduce){.env,.env-tag,.sheet,.sheet-l,.env-chips i,.env.bits .env-bits,.mini,.mini-c i,.mini-b{transition:none;animation:none}.envs .mini{transform:scale(1)}}
 :root[data-theme="dark"] .vtag{color:#08130C}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
