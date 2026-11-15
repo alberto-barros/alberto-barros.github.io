@@ -102,7 +102,7 @@ a{color:var(--green-ink)}
 .enc{margin:0;--l7:#D6457A;--l6:#E2703A;--l5:#D4A017;--l4:#2F9E41;--l3:#1690B5;--l2:#3B6FD6;--l1:#7A4FCF}
 :root[data-theme="dark"] .enc{--l7:#F06C98;--l6:#F38D5A;--l5:#E8BA3A;--l4:#4DC262;--l3:#3DB4D8;--l2:#6A93EE;--l1:#A07CEB}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .enc{--l7:#F06C98;--l6:#F38D5A;--l5:#E8BA3A;--l4:#4DC262;--l3:#3DB4D8;--l2:#6A93EE;--l1:#A07CEB}}
-.enc-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
+.enc-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:26px}
 .enc-top h3{margin:0!important}
 .enc-dir{font:600 .75rem var(--font-mono);color:var(--green-ink);white-space:nowrap}
 .enc-body{position:relative}
@@ -117,22 +117,21 @@ a{color:var(--green-ink)}
 /* envelope */
 .env{position:absolute;right:10px;top:0;width:118px;transition:transform .6s cubic-bezier(.5,0,.25,1),opacity .4s;will-change:transform;pointer-events:none}
 .env.hide{opacity:0}
-.env-box{position:relative;height:56px;border-radius:7px;background:#FFFDF6;border:1.5px solid #C9B98F;box-shadow:0 8px 18px -10px rgba(0,0,0,.45);overflow:hidden;display:grid;align-content:end;justify-items:center;padding:0 5px 4px;transition:background .4s,border-color .4s}
-.env-box::before,.env-box::after{content:"";position:absolute;bottom:0;width:62%;height:70%;background:linear-gradient(to top right,transparent 49%,#EDE3C6 50%) ;opacity:.6}
-.env-box::before{left:0}
-.env-box::after{right:0;transform:scaleX(-1)}
-.env-flap{position:absolute;left:0;right:0;top:0;height:30px;background:#F2E8CB;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .35s;z-index:2;border-top:1px solid #C9B98F}
-.env.open .env-flap{transform:scaleY(-1);}
-.env-name{position:absolute;top:22px;left:0;right:0;text-align:center;font:800 .72rem var(--font-display);color:#3A3020;z-index:3;letter-spacing:.02em}
-.env-chips{position:relative;z-index:1;display:flex;gap:2px;flex-wrap:nowrap}
+.env-box{position:relative;height:64px}
+.env-back{position:absolute;inset:0;border-radius:7px;background:#E9DDB8;border:1.5px solid #C9B98F;box-shadow:0 8px 18px -10px rgba(0,0,0,.45)}
+.env-front{position:absolute;left:0;right:0;bottom:0;height:46px;border-radius:0 0 7px 7px;background:#FFFDF6;clip-path:polygon(0 0,50% 42%,100% 0,100% 100%,0 100%);z-index:3;border-bottom:1.5px solid #C9B98F;transition:background .4s}
+.env-flap{position:absolute;left:0;right:0;top:0;height:34px;background:#F2E8CB;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .35s,background .35s;z-index:4;border-radius:7px 7px 0 0}
+.env.open .env-flap{transform:scaleY(-1);background:#D9CBA0;z-index:1}
+.env-name{position:absolute;top:30px;left:0;right:0;text-align:center;font:800 .72rem var(--font-display);color:#3A3020;z-index:5;letter-spacing:.02em}
+.env-chips{position:absolute;left:0;right:0;bottom:5px;justify-content:center;z-index:5;display:flex;gap:2px;flex-wrap:nowrap}
 .env-chips i{font:700 .52rem var(--font-mono);font-style:normal;color:#fff;padding:2px 3px;border-radius:3px;animation:chipIn .35s cubic-bezier(.2,.8,.2,1) both}
 @keyframes chipIn{from{opacity:0;transform:translateY(-8px) scale(.6)}}
-.env-bits{position:absolute;inset:0;display:grid;place-items:center;font:700 .66rem var(--font-mono);letter-spacing:.1em;color:#fff;background:var(--l1);opacity:0;transition:opacity .4s;white-space:nowrap;overflow:hidden;z-index:4}
+.env-bits{position:absolute;inset:0;border-radius:7px;display:grid;place-items:center;font:700 .66rem var(--font-mono);letter-spacing:.1em;color:#fff;background:var(--l1);opacity:0;transition:opacity .4s;white-space:nowrap;overflow:hidden;z-index:6}
 .env.bits .env-bits{opacity:1;animation:bitsRun 1.4s linear infinite}
 @keyframes bitsRun{from{text-indent:0}to{text-indent:-5em}}
-.env-tag{position:absolute;left:50%;top:-6px;transform:translate(-50%,-26px);font:800 .66rem var(--font-mono);color:#fff;background:var(--tc,var(--l7));padding:4px 8px;border-radius:6px;white-space:nowrap;opacity:0;z-index:5;box-shadow:0 6px 12px -6px rgba(0,0,0,.4)}
-.env-tag.drop{animation:tagDrop .75s cubic-bezier(.5,0,.6,1) both}
-@keyframes tagDrop{0%{opacity:0;transform:translate(-50%,-34px) rotate(-6deg)}25%{opacity:1;transform:translate(-50%,-22px) rotate(3deg)}70%{opacity:1;transform:translate(-50%,6px) scale(.85)}100%{opacity:0;transform:translate(-50%,18px) scale(.5)}}
+.env-tag{position:absolute;left:50%;top:2px;transform:translate(-50%,-40px);font:800 .66rem var(--font-mono);color:#fff;background:var(--tc,var(--l7));padding:4px 8px;border-radius:5px;white-space:nowrap;opacity:0;z-index:2;box-shadow:0 6px 12px -6px rgba(0,0,0,.4)}
+.env-tag.drop{animation:tagDrop .8s cubic-bezier(.5,0,.6,1) both}
+@keyframes tagDrop{0%{opacity:0;transform:translate(-50%,-40px) rotate(-5deg)}20%{opacity:1;transform:translate(-50%,-30px) rotate(2deg)}75%{opacity:1;transform:translate(-50%,10px)}100%{opacity:0;transform:translate(-50%,16px)}}
 .enc-cap{font-size:.82rem;color:var(--muted);margin-top:12px;min-height:2.6em}
 .enc-cap b{color:var(--ink)}
 @media (max-width:420px){.enc-row{padding-right:118px;gap:8px}.env{width:104px;right:8px}.enc-nm{font-size:.8rem}.env-chips i{font-size:.48rem;padding:2px 2px}}
@@ -448,7 +447,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         <div class="env" id="env" aria-hidden="true">
           <span class="env-tag" id="envTag">DADOS</span>
           <div class="env-box">
+            <span class="env-back"></span>
             <span class="env-flap"></span>
+            <span class="env-front"></span>
             <span class="env-name" id="envName">Dados</span>
             <span class="env-chips" id="envChips"></span>
             <span class="env-bits">0110100101110010010110100101</span>
@@ -899,7 +900,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     let held=[];
     function renderChips(){const list=order.filter(o=>held.some(h=>h[0]===o));
       chips.innerHTML=["ETH","IP","TCP","DADOS","FCS"].filter(o=>list.includes(o)).map(o=>{const h=held.find(x=>x[0]===o);return `<i style="background:var(--${h[1]})">${o}</i>`;}).join("");}
-    function place(r){env.style.transform=`translateY(${r.offsetTop+r.offsetHeight/2-28}px)`;}
+    function place(r){env.style.transform=`translateY(${r.offsetTop+r.offsetHeight/2-32}px)`;}
     const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if(reduce){rows.forEach(r=>r.classList.add("done"));rows[5].classList.add("cur");held=[["DADOS","l7"],["TCP","l4"],["IP","l3"],["ETH","l2"],["FCS","l2"]];renderChips();nameEl.textContent="Quadro";place(rows[5]);cap.innerHTML=S[2].cap;return;}
     let k=0;
