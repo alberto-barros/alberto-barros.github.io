@@ -98,6 +98,39 @@ a{color:var(--green-ink)}
 .vrow b{font-family:var(--font-display);font-size:.9rem}
 .vrow .net{font-family:var(--font-mono);font-size:.78rem;color:var(--muted)}
 .vrow.r{--vc:var(--red)}
+/* Animação do encapsulamento (hero) */
+.enc{margin:0;--c4:#1C7EC0;--c3:#2F9E41;--c2:#C98204}
+.enc-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
+.enc-top h3{margin:0!important}
+.enc-dir{font:600 .75rem var(--font-mono);color:var(--green-ink);white-space:nowrap}
+.enc-stack{list-style:none;margin:0;padding:0;display:grid;gap:6px;position:relative}
+.enc-row{display:grid;grid-template-columns:26px 104px minmax(0,1fr);gap:10px;align-items:center;padding:7px 10px;border-radius:12px;background:var(--surface-2);border:1.5px solid transparent;opacity:.4;transition:opacity .35s,border-color .35s,background .35s}
+.enc-n{font:800 1rem var(--font-display);color:var(--muted);text-align:center}
+.enc-nm{font:600 .86rem var(--font-display);line-height:1.15;display:grid}
+.enc-nm small{font:600 .68rem var(--font-mono);color:var(--muted);letter-spacing:.02em}
+.enc-pdu{display:flex;gap:2px;min-width:0;justify-content:flex-end;visibility:hidden}
+.enc-pdu i{font:700 .66rem var(--font-mono);font-style:normal;padding:5px 6px;border-radius:5px;color:#fff;white-space:nowrap}
+.enc-pdu .d{background:var(--ink);color:var(--surface);padding-inline:9px}
+.enc-pdu .h4{background:var(--c4)}
+.enc-pdu .h3{background:var(--c3)}
+.enc-pdu .h2{background:var(--c2)}
+.enc-row.on{opacity:1}
+.enc-row.on .enc-pdu{visibility:visible}
+.enc-row.cur{background:var(--surface);border-color:var(--green);box-shadow:0 8px 20px -14px var(--green)}
+.enc-row.cur .enc-n{color:var(--green-ink)}
+.enc-row.cur .enc-nm small{color:var(--green-ink)}
+.enc-row.cur .new{animation:encIn .5s cubic-bezier(.2,.8,.2,1) both}
+.enc-row.cur[data-n="7"] .d{animation:encIn .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes encIn{from{opacity:0;transform:translateY(-10px) scale(.8)}}
+.bits{font:700 .74rem var(--font-mono);color:var(--green-ink);letter-spacing:.12em;white-space:nowrap;overflow:hidden;max-width:100%;display:block;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%);mask-image:linear-gradient(90deg,transparent,#000 18%)}
+.enc-row.cur .bits{animation:bitsRun 1.6s linear infinite}
+@keyframes bitsRun{from{text-indent:0}to{text-indent:-4.2em}}
+.enc-cap{font-size:.82rem;color:var(--muted);margin-top:12px;min-height:2.6em}
+.enc-cap b{color:var(--ink)}
+:root[data-theme="dark"] .enc{--c4:#4AA8E8;--c3:#3FAE52;--c2:#D9961C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .enc{--c4:#4AA8E8;--c3:#3FAE52;--c2:#D9961C}}
+@media (max-width:420px){.enc-row{grid-template-columns:20px 84px minmax(0,1fr);gap:8px;padding:6px 8px}.enc-nm{font-size:.78rem}.enc-pdu i{font-size:.58rem;padding:4px 4px}.enc-pdu .d{padding-inline:5px}}
+@media (prefers-reduced-motion:reduce){.enc-row.cur .new,.enc-row.cur .d,.enc-row.cur .bits{animation:none}}
 :root[data-theme="dark"] .vtag{color:#08130C}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
 
@@ -394,16 +427,19 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         <span class="chip"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="17" width="16" height="4" rx="1"/></svg>Modelo OSI</span>
       </div>
     </div>
-    <div class="hero-card">
-      <h3>Caminho do ping na atividade</h3>
-      <div class="vlist">
-        <div class="vrow" style="--vc:var(--green)"><span class="vtag">ORIGEM</span><b>PC1</b><span class="net">camadas 3 · 2 · 1</span></div>
-        <div class="vrow" style="--vc:var(--green-ink)"><span class="vtag">SWITCH</span><b>SW1</b><span class="net">camadas 2 · 1</span></div>
-        <div class="vrow" style="--vc:var(--green-ink)"><span class="vtag">SWITCH</span><b>SW2</b><span class="net">camadas 2 · 1</span></div>
-        <div class="vrow r"><span class="vtag">DESTINO</span><b>PC10</b><span class="net">camadas 1 · 2 · 3</span></div>
-      </div>
-      <p class="hint">Todos na rede 10.1.1.0/24. Sem roteador e sem gateway.</p>
-    </div>
+    <figure class="hero-card enc" id="enc" aria-label="Animação: os dados descem pelas 7 camadas do Modelo OSI e ganham cabeçalhos, virando segmento, pacote, quadro e bits">
+      <div class="enc-top"><h3>Encapsulamento no Modelo OSI</h3><span class="enc-dir" aria-hidden="true">↓ envio</span></div>
+      <ol class="enc-stack">
+        <li class="enc-row" data-n="7"><span class="enc-n">7</span><span class="enc-nm">Aplicação<small>Dados</small></span><span class="enc-pdu"><i class="d">DADOS</i></span></li>
+        <li class="enc-row" data-n="6"><span class="enc-n">6</span><span class="enc-nm">Apresentação<small>Dados</small></span><span class="enc-pdu"><i class="d">DADOS</i></span></li>
+        <li class="enc-row" data-n="5"><span class="enc-n">5</span><span class="enc-nm">Sessão<small>Dados</small></span><span class="enc-pdu"><i class="d">DADOS</i></span></li>
+        <li class="enc-row" data-n="4"><span class="enc-n">4</span><span class="enc-nm">Transporte<small>Segmento</small></span><span class="enc-pdu"><i class="h4 new">TCP</i><i class="d">DADOS</i></span></li>
+        <li class="enc-row" data-n="3"><span class="enc-n">3</span><span class="enc-nm">Rede<small>Pacote</small></span><span class="enc-pdu"><i class="h3 new">IP</i><i class="h4">TCP</i><i class="d">DADOS</i></span></li>
+        <li class="enc-row" data-n="2"><span class="enc-n">2</span><span class="enc-nm">Enlace<small>Quadro</small></span><span class="enc-pdu"><i class="h2 new">ETH</i><i class="h3">IP</i><i class="h4">TCP</i><i class="d">DADOS</i><i class="h2 new">FCS</i></span></li>
+        <li class="enc-row" data-n="1"><span class="enc-n">1</span><span class="enc-nm">Física<small>Bits</small></span><span class="enc-pdu"><span class="bits" aria-hidden="true">0110100101110010010110</span></span></li>
+      </ol>
+      <figcaption class="enc-cap" id="encCap" aria-live="off">Os dados descem camada a camada até virar bits no cabo.</figcaption>
+    </figure>
   </div>
 </div>
 
@@ -828,6 +864,21 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   setPlay(playing);render();requestAnimationFrame(loop);
   const onMq=()=>{buildTopo();buildDraw();render();};
   if(mq.addEventListener)mq.addEventListener("change",onMq);else if(mq.addListener)mq.addListener(onMq);
+
+  // Animação do encapsulamento no topo
+  (function(){
+    const rows=[...document.querySelectorAll("#enc .enc-row")],cap=document.getElementById("encCap");
+    const CAP={7:"A aplicação gera os <b>dados</b> (o ping, por exemplo).",6:"Apresentação: formata e codifica os <b>dados</b>.",5:"Sessão: controla o diálogo. Ainda são <b>dados</b>.",4:"Transporte: soma o cabeçalho de segmento e forma o <b>segmento</b>.",3:"Rede: soma o cabeçalho IP com origem e destino e forma o <b>pacote</b>.",2:"Enlace: soma o cabeçalho Ethernet (MACs) e o FCS e forma o <b>quadro</b>.",1:"Física: o quadro vira <b>bits</b>, sinais elétricos no cabo."};
+    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){rows.forEach(r=>r.classList.add("on"));rows[6].classList.add("cur");cap.innerHTML=CAP[1];return;}
+    let k=0;
+    function step(){
+      if(k===rows.length){setTimeout(()=>{rows.forEach(r=>r.classList.remove("on","cur"));k=0;setTimeout(step,500);},2600);return;}
+      rows.forEach(r=>r.classList.remove("cur"));
+      const r=rows[k];r.classList.add("on","cur");cap.innerHTML=CAP[r.dataset.n];
+      k++;setTimeout(step,k===rows.length?2200:1300);
+    }
+    step();
+  })();
 
   // Menu de tópicos
   (function(){
