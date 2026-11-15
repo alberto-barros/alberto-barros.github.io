@@ -157,7 +157,7 @@ a{color:var(--green-ink)}
 .enc-n,.enc-nm{position:relative;z-index:1}
 .bitsrow{-webkit-mask-image:linear-gradient(to right,rgba(0,0,0,.18) 0 110px,#000 170px);mask-image:linear-gradient(to right,rgba(0,0,0,.18) 0 110px,#000 170px);position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:1px;opacity:0;transition:opacity .6s;pointer-events:none;font:700 .95rem/1 var(--font-mono);color:var(--l1);white-space:nowrap;overflow:hidden;letter-spacing:.3em}
 .bitsrow span{display:block;width:max-content;animation:bitsFlow 7s linear infinite}
-.bitsrow span+span{animation-duration:5s;opacity:.7}
+.enc-row.rxbits .bitsrow span{animation-direction:reverse}
 @keyframes bitsFlow{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .enc-row.bitson .bitsrow{opacity:.9}
 .env.split{opacity:0}
@@ -1001,7 +1001,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     const dirEl=document.querySelector("#enc .enc-dir");
     function setDir(rx){dirEl.textContent=rx?"↑ recebimento":"↓ envio";dirEl.classList.toggle("rx",rx);}
     const R=["<b>Aplicação:</b> o programa mostra o texto “Modelo OSI entendendo as camadas” ao usuário. Mensagem recebida!","<b>Apresentação:</b> abre o DOC e o converte de volta em caracteres.","<b>Sessão:</b> abre o envelope e tira o arquivo.","<b>Transporte:</b> retira o cabeçalho TCP e junta os 4 segmentos, na ordem, em um só envelope.","<b>Rede:</b> confere o IP, abre as caixas e tira os segmentos.","<b>Enlace:</b> junta os bits em quadros, confere o FCS, retira o cabeçalho MAC e entrega os pacotes para cima.","<b>Física:</b> recebe os bits que chegam pelo cabo e os entrega à camada de Enlace."];
-    function startRecv(){setDir(true);stepUp(6);}
+    function startRecv(){setDir(true);rows[6].classList.add("rxbits");stepUp(6);}
     function stepUp(j){
       if(j<0){setTimeout(reset,2800);return;}
       const r=rows[j];
@@ -1019,7 +1019,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         T(()=>stepUp(-1),200);
       },650);
     }
-    function reset(){setDir(false);env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur","bitson"));held=[];mheld=[];renderChips();grid.innerHTML="";refresh();env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("doc","in");clearInterval(typer);sheetCh.textContent="";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
+    function reset(){setDir(false);env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur","bitson","rxbits"));held=[];mheld=[];renderChips();grid.innerHTML="";refresh();env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("doc","in");clearInterval(typer);sheetCh.textContent="";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
     function grow(add,name,c){minis.forEach(m=>m.classList.add("open"));setTimeout(()=>{mheld.push(...add);renderMini();label(name,c);},380);setTimeout(()=>minis.forEach(m=>m.classList.remove("open")),900);}
     function step(){
       if(k===rows.length){setTimeout(startRecv,1800);return;}
