@@ -8,7 +8,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
 <style>
 /* Layout: barra IFSC fixa, hero com cartão das 3 sub-redes, seções em coluna de 1080px; o planejador alimenta tabelas, comandos do roteador, testes e animação */
 :root{
@@ -677,6 +677,45 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 .qz-rexp b{color:var(--ink)}
 @media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
 @media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
+/* topo no padrão do site Redes de Computadores */
+html{scroll-padding-top:84px}
+.tb-accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
+.tb{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif}
+.tb-wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.tb-brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink);min-width:0}
+.tb-mark{height:40px;width:auto;flex:none}
+.tb-inst{display:grid;line-height:1.12}
+.tb-inst b{font-size:.84rem;font-weight:800;letter-spacing:.01em;white-space:nowrap}
+.tb-inst span{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.tb-div{width:1px;height:30px;background:var(--line)}
+.tb-site{display:grid;line-height:1.15}
+.tb-site b{font-size:.95rem;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.tb-site span{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.tb-right{display:flex;align-items:center;gap:6px;flex:none}
+.tb-links{display:flex;align-items:center;gap:2px}
+.tb-links a{font-size:.82rem;font-weight:700;color:var(--ink);padding:8px 10px;border-radius:10px;text-decoration:none;white-space:nowrap;transition:background .2s,color .2s}
+.tb-links a:hover,.tb-links a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
+.tb-back{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;padding:8px 14px;border-radius:10px;text-decoration:none;background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25);margin-left:6px;transition:background .2s}
+.tb-back:hover{background:#A51418}
+.tb-back svg{width:15px;height:15px}
+.tb-burger{display:none;place-content:center;gap:4px;width:40px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;padding:0;margin-left:4px}
+.tb-burger span{display:block;width:18px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s}
+.tb-burger[aria-expanded="true"]{background:var(--green);border-color:var(--green)}
+.tb-burger[aria-expanded="true"] span{background:#fff}
+.tb-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.tb-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.tb-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+@media (max-width:1320px){.tb-div,.tb-site{display:none}}
+@media (max-width:1060px){
+  .tb-burger{display:inline-grid}
+  .tb-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:2px;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px rgba(0,0,0,.35);padding:10px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
+  .tb-links.open{display:flex}
+  .tb-links a{font-size:1rem;padding:12px 14px}
+  .tb-div,.tb-site{display:grid}.tb-div{display:block}
+}
+@media (max-width:760px){.tb-div,.tb-site{display:none}}
+@media (max-width:560px){.tb-inst span{display:none}}
+@media (max-width:420px){.tb-inst{display:none}.tb-back{padding:8px 11px}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -711,17 +750,20 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   </defs>
 </svg>
 
-<header class="bar">
-  <div class="wrap">
-    <div class="brand">
-      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg>
-      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+<div class="tb-accent" aria-hidden="true"></div>
+<header class="tb">
+  <div class="tb-wrap">
+    <a class="tb-brand" href="https://alberto-barros.github.io/" title="Página inicial">
+      <svg class="tb-mark" viewBox="0 0 34 46" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8191E"/><g fill="#32A041"><rect x="12" y="0" width="10" height="10" rx="2"/><rect x="24" y="0" width="10" height="10" rx="2"/><rect x="0" y="12" width="10" height="10" rx="2"/><rect x="12" y="12" width="10" height="10" rx="2"/><rect x="0" y="24" width="10" height="10" rx="2"/><rect x="12" y="24" width="10" height="10" rx="2"/><rect x="24" y="24" width="10" height="10" rx="2"/><rect x="0" y="36" width="10" height="10" rx="2"/><rect x="12" y="36" width="10" height="10" rx="2"/></g></svg>
+      <span class="tb-inst"><b>INSTITUTO FEDERAL</b><span>Santa Catarina · Câmpus Garopaba</span></span>
+      <span class="tb-div" aria-hidden="true"></span>
+      <span class="tb-site"><b>Redes de Computadores</b><span>Laboratório · Endereço IP</span></span>
+    </a>
+    <div class="tb-right">
+      <nav class="tb-links" id="menu" aria-label="Seções"><a href="#conceito">Conceito</a><a href="#osi">Modelo OSI</a><a href="#classes">Classes</a><a href="#configurar">Configurar</a><a href="#ping">Ping</a><a href="#animacao">Animação</a><a href="#topologia">Topologia</a><a href="#passos">Atividade</a><a href="#entrega">Quiz</a></nav>
+      <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
+      <button type="button" class="tb-burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
     </div>
-    <button type="button" class="burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
-    <nav class="nav" id="menu" aria-label="Seções">
-      <a href="#conceito">IPv4</a><a href="#osi">OSI</a><a href="#classes">Classes</a><a href="#configurar">Configurar</a><a href="#ping">Ping</a><a href="#animacao">Animação</a><a href="#topologia">Topologia</a><a href="#passos">Atividade</a><a href="#entrega">Quiz</a>
-    </nav>
-    <a class="back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Voltar</a>
   </div>
 </header>
 
