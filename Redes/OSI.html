@@ -99,38 +99,44 @@ a{color:var(--green-ink)}
 .vrow .net{font-family:var(--font-mono);font-size:.78rem;color:var(--muted)}
 .vrow.r{--vc:var(--red)}
 /* Animação do encapsulamento (hero) */
-.enc{margin:0;--c4:#1C7EC0;--c3:#2F9E41;--c2:#C98204}
+.enc{margin:0;--l7:#D6457A;--l6:#E2703A;--l5:#D4A017;--l4:#2F9E41;--l3:#1690B5;--l2:#3B6FD6;--l1:#7A4FCF}
+:root[data-theme="dark"] .enc{--l7:#F06C98;--l6:#F38D5A;--l5:#E8BA3A;--l4:#4DC262;--l3:#3DB4D8;--l2:#6A93EE;--l1:#A07CEB}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .enc{--l7:#F06C98;--l6:#F38D5A;--l5:#E8BA3A;--l4:#4DC262;--l3:#3DB4D8;--l2:#6A93EE;--l1:#A07CEB}}
 .enc-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
 .enc-top h3{margin:0!important}
 .enc-dir{font:600 .75rem var(--font-mono);color:var(--green-ink);white-space:nowrap}
-.enc-stack{list-style:none;margin:0;padding:0;display:grid;gap:6px;position:relative}
-.enc-row{display:grid;grid-template-columns:26px 104px minmax(0,1fr);gap:10px;align-items:center;padding:7px 10px;border-radius:12px;background:var(--surface-2);border:1.5px solid transparent;opacity:.4;transition:opacity .35s,border-color .35s,background .35s}
-.enc-n{font:800 1rem var(--font-display);color:var(--muted);text-align:center}
-.enc-nm{font:600 .86rem var(--font-display);line-height:1.15;display:grid}
-.enc-nm small{font:600 .68rem var(--font-mono);color:var(--muted);letter-spacing:.02em}
-.enc-pdu{display:flex;gap:2px;min-width:0;justify-content:flex-end;visibility:hidden}
-.enc-pdu i{font:700 .66rem var(--font-mono);font-style:normal;padding:5px 6px;border-radius:5px;color:#fff;white-space:nowrap}
-.enc-pdu .d{background:var(--ink);color:var(--surface);padding-inline:9px}
-.enc-pdu .h4{background:var(--c4)}
-.enc-pdu .h3{background:var(--c3)}
-.enc-pdu .h2{background:var(--c2)}
-.enc-row.on{opacity:1}
-.enc-row.on .enc-pdu{visibility:visible}
-.enc-row.cur{background:var(--surface);border-color:var(--green);box-shadow:0 8px 20px -14px var(--green)}
-.enc-row.cur .enc-n{color:var(--green-ink)}
-.enc-row.cur .enc-nm small{color:var(--green-ink)}
-.enc-row.cur .new{animation:encIn .5s cubic-bezier(.2,.8,.2,1) both}
-.enc-row.cur[data-n="7"] .d{animation:encIn .5s cubic-bezier(.2,.8,.2,1) both}
-@keyframes encIn{from{opacity:0;transform:translateY(-10px) scale(.8)}}
-.bits{font:700 .74rem var(--font-mono);color:var(--green-ink);letter-spacing:.12em;white-space:nowrap;overflow:hidden;max-width:100%;display:block;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%);mask-image:linear-gradient(90deg,transparent,#000 18%)}
-.enc-row.cur .bits{animation:bitsRun 1.6s linear infinite}
-@keyframes bitsRun{from{text-indent:0}to{text-indent:-4.2em}}
+.enc-body{position:relative}
+.enc-stack{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.enc-row{--lc:var(--muted);display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:center;min-height:46px;padding:6px 132px 6px 6px;border-radius:12px;background:color-mix(in srgb,var(--lc) 9%,var(--surface));border:1.5px solid color-mix(in srgb,var(--lc) 22%,transparent);transition:background .4s,border-color .4s,box-shadow .4s,transform .4s}
+.enc-row.L7{--lc:var(--l7)}.enc-row.L6{--lc:var(--l6)}.enc-row.L5{--lc:var(--l5)}.enc-row.L4{--lc:var(--l4)}.enc-row.L3{--lc:var(--l3)}.enc-row.L2{--lc:var(--l2)}.enc-row.L1{--lc:var(--l1)}
+.enc-n{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font:800 .95rem var(--font-display);color:#fff;background:var(--lc)}
+.enc-nm{font:700 .88rem var(--font-display);line-height:1.15;display:grid;color:var(--ink)}
+.enc-nm small{font:600 .68rem var(--font-mono);color:color-mix(in srgb,var(--lc) 80%,var(--ink))}
+.enc-row.done{background:color-mix(in srgb,var(--lc) 16%,var(--surface))}
+.enc-row.cur{background:color-mix(in srgb,var(--lc) 24%,var(--surface));border-color:var(--lc);box-shadow:0 10px 22px -14px var(--lc);transform:translateX(3px)}
+/* envelope */
+.env{position:absolute;right:10px;top:0;width:118px;transition:transform .6s cubic-bezier(.5,0,.25,1),opacity .4s;will-change:transform;pointer-events:none}
+.env.hide{opacity:0}
+.env-box{position:relative;height:56px;border-radius:7px;background:#FFFDF6;border:1.5px solid #C9B98F;box-shadow:0 8px 18px -10px rgba(0,0,0,.45);overflow:hidden;display:grid;align-content:end;justify-items:center;padding:0 5px 4px;transition:background .4s,border-color .4s}
+.env-box::before,.env-box::after{content:"";position:absolute;bottom:0;width:62%;height:70%;background:linear-gradient(to top right,transparent 49%,#EDE3C6 50%) ;opacity:.6}
+.env-box::before{left:0}
+.env-box::after{right:0;transform:scaleX(-1)}
+.env-flap{position:absolute;left:0;right:0;top:0;height:30px;background:#F2E8CB;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .35s;z-index:2;border-top:1px solid #C9B98F}
+.env.open .env-flap{transform:scaleY(-1);}
+.env-name{position:absolute;top:22px;left:0;right:0;text-align:center;font:800 .72rem var(--font-display);color:#3A3020;z-index:3;letter-spacing:.02em}
+.env-chips{position:relative;z-index:1;display:flex;gap:2px;flex-wrap:nowrap}
+.env-chips i{font:700 .52rem var(--font-mono);font-style:normal;color:#fff;padding:2px 3px;border-radius:3px;animation:chipIn .35s cubic-bezier(.2,.8,.2,1) both}
+@keyframes chipIn{from{opacity:0;transform:translateY(-8px) scale(.6)}}
+.env-bits{position:absolute;inset:0;display:grid;place-items:center;font:700 .66rem var(--font-mono);letter-spacing:.1em;color:#fff;background:var(--l1);opacity:0;transition:opacity .4s;white-space:nowrap;overflow:hidden;z-index:4}
+.env.bits .env-bits{opacity:1;animation:bitsRun 1.4s linear infinite}
+@keyframes bitsRun{from{text-indent:0}to{text-indent:-5em}}
+.env-tag{position:absolute;left:50%;top:-6px;transform:translate(-50%,-26px);font:800 .66rem var(--font-mono);color:#fff;background:var(--tc,var(--l7));padding:4px 8px;border-radius:6px;white-space:nowrap;opacity:0;z-index:5;box-shadow:0 6px 12px -6px rgba(0,0,0,.4)}
+.env-tag.drop{animation:tagDrop .75s cubic-bezier(.5,0,.6,1) both}
+@keyframes tagDrop{0%{opacity:0;transform:translate(-50%,-34px) rotate(-6deg)}25%{opacity:1;transform:translate(-50%,-22px) rotate(3deg)}70%{opacity:1;transform:translate(-50%,6px) scale(.85)}100%{opacity:0;transform:translate(-50%,18px) scale(.5)}}
 .enc-cap{font-size:.82rem;color:var(--muted);margin-top:12px;min-height:2.6em}
 .enc-cap b{color:var(--ink)}
-:root[data-theme="dark"] .enc{--c4:#4AA8E8;--c3:#3FAE52;--c2:#D9961C}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .enc{--c4:#4AA8E8;--c3:#3FAE52;--c2:#D9961C}}
-@media (max-width:420px){.enc-row{grid-template-columns:20px 84px minmax(0,1fr);gap:8px;padding:6px 8px}.enc-nm{font-size:.78rem}.enc-pdu i{font-size:.58rem;padding:4px 4px}.enc-pdu .d{padding-inline:5px}}
-@media (prefers-reduced-motion:reduce){.enc-row.cur .new,.enc-row.cur .d,.enc-row.cur .bits{animation:none}}
+@media (max-width:420px){.enc-row{padding-right:118px;gap:8px}.env{width:104px;right:8px}.enc-nm{font-size:.8rem}.env-chips i{font-size:.48rem;padding:2px 2px}}
+@media (prefers-reduced-motion:reduce){.env,.env-tag,.env-chips i,.env.bits .env-bits{transition:none;animation:none}}
 :root[data-theme="dark"] .vtag{color:#08130C}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
 
@@ -427,18 +433,29 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         <span class="chip"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="17" width="16" height="4" rx="1"/></svg>Modelo OSI</span>
       </div>
     </div>
-    <figure class="hero-card enc" id="enc" aria-label="Animação: os dados descem pelas 7 camadas do Modelo OSI e ganham cabeçalhos, virando segmento, pacote, quadro e bits">
+    <figure class="hero-card enc" id="enc" aria-label="Animação: um envelope desce pelas 7 camadas do Modelo OSI e recebe um cabeçalho em cada uma, virando segmento, pacote, quadro e bits">
       <div class="enc-top"><h3>Encapsulamento no Modelo OSI</h3><span class="enc-dir" aria-hidden="true">↓ envio</span></div>
-      <ol class="enc-stack">
-        <li class="enc-row" data-n="7"><span class="enc-n">7</span><span class="enc-nm">Aplicação<small>Dados</small></span><span class="enc-pdu"><i class="d">DADOS</i></span></li>
-        <li class="enc-row" data-n="6"><span class="enc-n">6</span><span class="enc-nm">Apresentação<small>Dados</small></span><span class="enc-pdu"><i class="d">DADOS</i></span></li>
-        <li class="enc-row" data-n="5"><span class="enc-n">5</span><span class="enc-nm">Sessão<small>Dados</small></span><span class="enc-pdu"><i class="d">DADOS</i></span></li>
-        <li class="enc-row" data-n="4"><span class="enc-n">4</span><span class="enc-nm">Transporte<small>Segmento</small></span><span class="enc-pdu"><i class="h4 new">TCP</i><i class="d">DADOS</i></span></li>
-        <li class="enc-row" data-n="3"><span class="enc-n">3</span><span class="enc-nm">Rede<small>Pacote</small></span><span class="enc-pdu"><i class="h3 new">IP</i><i class="h4">TCP</i><i class="d">DADOS</i></span></li>
-        <li class="enc-row" data-n="2"><span class="enc-n">2</span><span class="enc-nm">Enlace<small>Quadro</small></span><span class="enc-pdu"><i class="h2 new">ETH</i><i class="h3">IP</i><i class="h4">TCP</i><i class="d">DADOS</i><i class="h2 new">FCS</i></span></li>
-        <li class="enc-row" data-n="1"><span class="enc-n">1</span><span class="enc-nm">Física<small>Bits</small></span><span class="enc-pdu"><span class="bits" aria-hidden="true">0110100101110010010110</span></span></li>
-      </ol>
-      <figcaption class="enc-cap" id="encCap" aria-live="off">Os dados descem camada a camada até virar bits no cabo.</figcaption>
+      <div class="enc-body">
+        <ol class="enc-stack">
+          <li class="enc-row L7" data-n="7"><span class="enc-n">7</span><span class="enc-nm">Aplicação<small>Dados</small></span></li>
+          <li class="enc-row L6" data-n="6"><span class="enc-n">6</span><span class="enc-nm">Apresentação<small>Dados</small></span></li>
+          <li class="enc-row L5" data-n="5"><span class="enc-n">5</span><span class="enc-nm">Sessão<small>Dados</small></span></li>
+          <li class="enc-row L4" data-n="4"><span class="enc-n">4</span><span class="enc-nm">Transporte<small>Segmento</small></span></li>
+          <li class="enc-row L3" data-n="3"><span class="enc-n">3</span><span class="enc-nm">Rede<small>Pacote</small></span></li>
+          <li class="enc-row L2" data-n="2"><span class="enc-n">2</span><span class="enc-nm">Enlace<small>Quadro</small></span></li>
+          <li class="enc-row L1" data-n="1"><span class="enc-n">1</span><span class="enc-nm">Física<small>Bits</small></span></li>
+        </ol>
+        <div class="env" id="env" aria-hidden="true">
+          <span class="env-tag" id="envTag">DADOS</span>
+          <div class="env-box">
+            <span class="env-flap"></span>
+            <span class="env-name" id="envName">Dados</span>
+            <span class="env-chips" id="envChips"></span>
+            <span class="env-bits">0110100101110010010110100101</span>
+          </div>
+        </div>
+      </div>
+      <figcaption class="enc-cap" id="encCap">Os dados descem camada a camada até virar bits no cabo.</figcaption>
     </figure>
   </div>
 </div>
@@ -865,19 +882,43 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   const onMq=()=>{buildTopo();buildDraw();render();};
   if(mq.addEventListener)mq.addEventListener("change",onMq);else if(mq.addListener)mq.addListener(onMq);
 
-  // Animação do encapsulamento no topo
+  // Animação do encapsulamento no topo: envelope desce camada a camada
   (function(){
-    const rows=[...document.querySelectorAll("#enc .enc-row")],cap=document.getElementById("encCap");
-    const CAP={7:"A aplicação gera os <b>dados</b> (o ping, por exemplo).",6:"Apresentação: formata e codifica os <b>dados</b>.",5:"Sessão: controla o diálogo. Ainda são <b>dados</b>.",4:"Transporte: soma o cabeçalho de segmento e forma o <b>segmento</b>.",3:"Rede: soma o cabeçalho IP com origem e destino e forma o <b>pacote</b>.",2:"Enlace: soma o cabeçalho Ethernet (MACs) e o FCS e forma o <b>quadro</b>.",1:"Física: o quadro vira <b>bits</b>, sinais elétricos no cabo."};
-    if(window.matchMedia("(prefers-reduced-motion: reduce)").matches){rows.forEach(r=>r.classList.add("on"));rows[6].classList.add("cur");cap.innerHTML=CAP[1];return;}
+    const rows=[...document.querySelectorAll("#enc .enc-row")],env=document.getElementById("env"),tag=document.getElementById("envTag"),
+          nameEl=document.getElementById("envName"),chips=document.getElementById("envChips"),cap=document.getElementById("encCap");
+    const S={
+      7:{tag:"DADOS",name:"Dados",add:[["DADOS","l7"]],cap:"<b>Aplicação:</b> o programa (o ping, por exemplo) cria os <b>dados</b> e coloca no envelope."},
+      6:{tag:"formato",name:"Dados",add:[],cap:"<b>Apresentação:</b> define o formato e a codificação. Continuam sendo <b>dados</b>."},
+      5:{tag:"sessão",name:"Dados",add:[],cap:"<b>Sessão:</b> abre e controla o diálogo entre os dois lados."},
+      4:{tag:"+ TCP",name:"Segmento",add:[["TCP","l4"]],cap:"<b>Transporte:</b> entra o cabeçalho com as portas. O envelope vira <b>segmento</b>."},
+      3:{tag:"+ IP",name:"Pacote",add:[["IP","l3"]],cap:"<b>Rede:</b> entra o cabeçalho IP com origem e destino. Agora é um <b>pacote</b>."},
+      2:{tag:"+ ETH · FCS",name:"Quadro",add:[["ETH","l2"],["FCS","l2"]],cap:"<b>Enlace:</b> entram os endereços MAC e o FCS. O pacote vira <b>quadro</b>."},
+      1:{tag:"0101",name:"Bits",add:[],cap:"<b>Física:</b> o quadro vira <b>bits</b>, sinais elétricos que seguem pelo cabo."}
+    };
+    const order=["DADOS","TCP","IP","ETH","FCS"];
+    let held=[];
+    function renderChips(){const list=order.filter(o=>held.some(h=>h[0]===o));
+      chips.innerHTML=["ETH","IP","TCP","DADOS","FCS"].filter(o=>list.includes(o)).map(o=>{const h=held.find(x=>x[0]===o);return `<i style="background:var(--${h[1]})">${o}</i>`;}).join("");}
+    function place(r){env.style.transform=`translateY(${r.offsetTop+r.offsetHeight/2-28}px)`;}
+    const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(reduce){rows.forEach(r=>r.classList.add("done"));rows[5].classList.add("cur");held=[["DADOS","l7"],["TCP","l4"],["IP","l3"],["ETH","l2"],["FCS","l2"]];renderChips();nameEl.textContent="Quadro";place(rows[5]);cap.innerHTML=S[2].cap;return;}
     let k=0;
+    function reset(){env.classList.add("hide");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur"));held=[];renderChips();env.classList.remove("bits");nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
     function step(){
-      if(k===rows.length){setTimeout(()=>{rows.forEach(r=>r.classList.remove("on","cur"));k=0;setTimeout(step,500);},2600);return;}
-      rows.forEach(r=>r.classList.remove("cur"));
-      const r=rows[k];r.classList.add("on","cur");cap.innerHTML=CAP[r.dataset.n];
-      k++;setTimeout(step,k===rows.length?2200:1300);
+      if(k===rows.length){setTimeout(reset,2400);return;}
+      const r=rows[k],n=r.dataset.n,st=S[n];
+      rows.forEach(x=>x.classList.remove("cur"));if(k>0)rows[k-1].classList.add("done");
+      r.classList.add("cur");place(r);cap.innerHTML=st.cap;
+      setTimeout(()=>{
+        if(n==="1"){env.classList.add("bits");nameEl.textContent="Bits";k++;setTimeout(step,1600);return;}
+        tag.textContent=st.tag;tag.style.setProperty("--tc",`var(--l${n})`);
+        env.classList.add("open");tag.classList.remove("drop");void tag.offsetWidth;tag.classList.add("drop");
+        setTimeout(()=>{st.add.forEach(a=>held.push(a));renderChips();nameEl.textContent=st.name;env.classList.remove("open");},560);
+        k++;setTimeout(step,1250);
+      },650);
     }
-    step();
+    place(rows[0]);setTimeout(step,400);
+    window.addEventListener("resize",()=>{const c=rows.find(x=>x.classList.contains("cur"));if(c)place(c);});
   })();
 
   // Menu de tópicos
