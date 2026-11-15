@@ -1010,7 +1010,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         if(n==="5"){env.classList.remove("noenv");env.classList.add("open");setTimeout(()=>sheet.classList.add("in"),650);setTimeout(()=>{env.classList.remove("open");nameEl.textContent="Dados";},1500);k++;setTimeout(step,2500);return;}
         if(n==="4"){
           env.classList.add("split");build(4);mheld=[];renderMini();label("Segmentos","l4");envs.classList.add("show");
-          setTimeout(()=>grow(["TCP"],"Segmentos","l4"),900);
+          setTimeout(()=>{mheld.push("TCP");renderMini();},900);
           k++;setTimeout(step,2300);return;
         }
         if(n==="3"){setTimeout(()=>{label("Pacotes","l3");pks.forEach((p,i)=>setTimeout(()=>p.classList.add("boxed"),i*90));},300);setTimeout(()=>pks.forEach((p,i)=>setTimeout(()=>p.classList.add("in"),i*60)),1400);setTimeout(()=>pks.forEach((p,i)=>setTimeout(()=>p.classList.add("shut"),i*60)),2300);k++;setTimeout(step,3400);return;}
