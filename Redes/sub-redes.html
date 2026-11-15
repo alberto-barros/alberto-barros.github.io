@@ -65,13 +65,6 @@ a{color:var(--green-strong)}
 .back:hover{background:#A51318;transform:translateY(-1px)}
 .back svg{width:16px;height:16px}
 .bar{position:sticky}
-.menu-btn{display:none;place-content:center;gap:5px;width:44px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
-.menu-btn span{display:block;width:20px;height:2.5px;border-radius:2px;background:var(--green-strong);transition:transform .2s,opacity .2s}
-.menu-btn[aria-expanded="true"]{background:var(--surface-2);border-color:var(--green)}
-.menu-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
-.menu-btn[aria-expanded="true"] span:nth-child(2){opacity:0}
-.menu-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
-@keyframes navIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (max-width:860px){.back{margin-left:auto}}
 
 /* hero */
@@ -568,26 +561,6 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 @media (max-width:860px){
   .hero .wrap,.def,.deliver{grid-template-columns:1fr}
   .grid3{grid-template-columns:1fr 1fr}
-  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:2px;margin:0;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px color-mix(in srgb,var(--ink) 40%,transparent);padding-block:8px 14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-  .nav.open{display:flex;animation:navIn .18s ease-out}
-  .nav a{font-size:1rem;padding:12px 14px;border-radius:12px;display:flex;align-items:center;gap:12px}
-  .nav a::before{content:counter(navi,decimal-leading-zero);counter-increment:navi;font:600 .75rem var(--f-mono);color:var(--green)}
-  .nav{counter-reset:navi}
-  .menu-btn{display:inline-grid}
-  .bar .wrap{flex-wrap:nowrap;gap:10px}
-  .brand{min-width:0}
-  .brand-txt span{white-space:nowrap}
-}
-@media (max-width:400px){
-  .brand{gap:9px}
-  .ifsc-logo{height:34px}
-  .brand-txt .b1{font-size:.76rem}
-  .brand-txt .b2{font-size:.74rem}
-  .back{padding:7px 11px 7px 9px;font-size:.8rem}
-}
-@media (max-width:350px){
-  .back-txt{display:none}
-  .back{padding:9px}
 }
 @media (max-width:600px){
   .grid3,.errs,.observe,.stats{grid-template-columns:1fr}
@@ -599,6 +572,41 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   .bit{font-size:.55rem}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* menu igual às outras aulas */
+.bar .wrap{flex-wrap:nowrap;gap:12px}
+.brand{flex:none}
+.nav{display:flex;flex:1 1 auto;min-width:0;margin-left:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-block:2px}
+.nav::-webkit-scrollbar{display:none}
+.nav a:first-child{margin-left:auto}
+.nav a{white-space:nowrap;flex:none}
+.back{flex:none;margin-left:0!important}
+@media (max-width:1100px){.nav a{background:var(--surface);border:1px solid var(--line)}}
+.burger{display:none}
+@media (max-width:700px){
+  .bar .wrap{gap:10px}
+  .brand{margin-right:auto}
+  .burger{order:3;display:inline-grid;place-content:center;gap:4px;width:42px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
+  .burger span{display:block;width:18px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s}
+  .burger[aria-expanded="true"]{background:var(--green);border-color:var(--green)}
+  .burger[aria-expanded="true"] span{background:var(--surface)}
+  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;overflow:visible;
+    background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px rgba(0,0,0,.35);
+    padding:10px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
+  .nav.open{display:flex}
+  .nav a:first-child{margin-left:0}
+  .nav a{background:transparent;border:0;border-radius:12px;font-size:1rem;padding:12px 14px;color:var(--ink)}
+  .nav a:hover,.nav a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
+  .back{padding:7px 12px 7px 10px}
+}
+@media (max-width:400px){.brand-txt{display:none}}
+@media (min-width:1101px){.nav{gap:2px}.nav a{padding:6px 8px}}
+.nav a.nav-ch{color:var(--red)}
+@media (max-width:1100px){.nav a.nav-ch{border-color:color-mix(in srgb,var(--red) 40%,var(--line))}}
+
 </style>
 </head>
 <body>
@@ -642,11 +650,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg>
       <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
     </div>
+    <button type="button" class="burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
     <nav class="nav" id="menu" aria-label="Seções">
-      <a href="#conceito">Conceito</a><a href="#planejador">Planejador</a><a href="#animacao">Animação</a><a href="#passos">Passo a passo</a><a class="nav-ch" href="#dhcp">Desafio DHCP</a><a href="#checklist-sec">Checklist</a><a href="#quiz-sec">Quiz</a>
+      <a href="#conceito">Sub-rede</a><a href="#beneficios">Benefícios</a><a href="#planejador">Planejador</a><a href="#animacao">Animação</a><a href="#passos">Atividade</a><a class="nav-ch" href="#dhcp">Desafio DHCP</a><a href="#checklist-sec">Checklist</a><a href="#erros">Erros</a><a href="#quiz-sec">Quiz</a>
     </nav>
-    <a class="back" aria-label="Voltar para Redes" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span class="back-txt">Voltar</span></a>
-    <button class="menu-btn" type="button" id="menu-btn" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+    <a class="back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Voltar</a>
   </div>
 </header>
 
@@ -1997,13 +2005,15 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   paint();
   render();
 
-  // ---------- menu do celular ----------
-  var menu = $('menu'), mbtn = $('menu-btn');
-  function setMenu(open){ menu.classList.toggle('open', open); mbtn.setAttribute('aria-expanded', open); mbtn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu'); }
-  mbtn.addEventListener('click', function(e){ e.stopPropagation(); setMenu(!menu.classList.contains('open')); });
-  menu.addEventListener('click', function(e){ if (e.target.closest('a')) setMenu(false); });
-  document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !e.target.closest('.bar')) setMenu(false); });
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && menu.classList.contains('open')){ setMenu(false); mbtn.focus(); } });
+  // ---------- menu hambúrguer ----------
+  (function(){
+    var btn = $('burger'), menu = $('menu');
+    function setOpen(o){ menu.classList.toggle('open', o); btn.setAttribute('aria-expanded', o); btn.setAttribute('aria-label', o ? 'Fechar menu das seções' : 'Abrir menu das seções'); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); setOpen(!menu.classList.contains('open')); });
+    menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
+    document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !menu.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function(e){ if (e.key==='Escape' && menu.classList.contains('open')){ setOpen(false); btn.focus(); } });
+  })();
 })();
 </script>
 </body>
