@@ -1043,7 +1043,7 @@ html{scroll-padding-top:84px}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#m1"><b>03</b>Instalar o vsftpd</a><a href="#m2"><b>04</b>Configurar</a><a href="#m3"><b>05</b>Permissões</a><a href="#m4"><b>06</b>IP e teste</a><a href="#m5"><b>07</b>FileZilla</a><a href="#m6"><b>08</b>Backup</a><a href="#m7"><b>09</b>Nova página</a><a href="#m8"><b>10</b>Conferir</a><a href="#m9"><b>11</b>Exercícios</a><a href="#entrega"><b>12</b>Quiz</a><a href="#checklist-sec"><b>13</b>Checklist</a><a href="#desafio"><b>14</b>Desafio</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#m1"><b>03</b>Instalar o vsftpd</a><a href="#m2"><b>04</b>Configurar</a><a href="#m3"><b>05</b>Permissões</a><a href="#m4"><b>06</b>IP e teste</a><a href="#m5"><b>07</b>FileZilla</a><a href="#m6"><b>08</b>Backup</a><a href="#m7"><b>09</b>Nova página</a><a href="#m8"><b>10</b>Conferir</a><a href="#m9"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#entrega"><b>13</b>Quiz</a><a href="#desafio"><b>14</b>Desafio</a></div>
   </div>
 </nav>
 
@@ -1675,6 +1675,21 @@ Mon Nov  9 10:38:15 2026 [pid 2312] [aluno] <span class="ok">OK UPLOAD</span>: C
     <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>Depois de cada exercício, confira o resultado no <code>/var/log/vsftpd.log</code> e no navegador da hospedeira.</p></div>
   </div>
 </section>
+<section class="sec" id="checklist-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Checklist da aula</span>
+      <h2>Quanto você já concluiu</h2>
+      <p>Marque cada item quando terminar. Cada um vale o percentual ao lado e o total é 100%.</p>
+    </div>
+    <div class="ck-card" id="checklist">
+      <div class="prog-head"><b class="ck-title">Progresso</b><p id="prog-txt"><b>0%</b> concluído</p></div>
+      <div class="progress" role="progressbar" aria-label="Progresso da aula" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="prog-bar"></i></div>
+      <div class="check"><p class="ck-group">Passos da aula</p><label for="ck1"><input type="checkbox" id="ck1" data-w="6"><span>Passo 1 · vsftpd instalado e porta 21 aberta</span><em>6%</em></label><label for="ck2"><input type="checkbox" id="ck2" data-w="10"><span>Passo 2 · <code>write_enable</code>, <code>local_umask</code> e <code>local_root</code> configurados e vsftpd reiniciado</span><em>10%</em></label><label for="ck3"><input type="checkbox" id="ck3" data-w="5"><span>Passo 3 · Pasta <code>/var/www/html</code> passada para o seu usuário com <code>chown</code></span><em>5%</em></label><label for="ck4"><input type="checkbox" id="ck4" data-w="5"><span>Passo 4 · IP da VM anotado e login testado com <code>curl</code></span><em>5%</em></label><label for="ck5"><input type="checkbox" id="ck5" data-w="8"><span>Passo 5 · Conectado pelo FileZilla da hospedeira</span><em>8%</em></label><label for="ck6"><input type="checkbox" id="ck6" data-w="10"><span>Passo 6 · Backup do site antigo na pasta <code>Salvar Dados</code></span><em>10%</em></label><label for="ck7"><input type="checkbox" id="ck7" data-w="10"><span>Passo 7 · Nova página baixada, com o seu nome, enviada e aberta pelo IP</span><em>10%</em></label><label for="ck8"><input type="checkbox" id="ck8" data-w="6"><span>Passo 8 · Arquivo conferido na VM e transferências vistas no <code>vsftpd.log</code></span><em>6%</em></label><p class="ck-group">Exercícios</p><label for="ck9"><input type="checkbox" id="ck9" data-w="10"><span>Exercício 01 · Pasta <code>images</code> criada e imagem enviada</span><em>10%</em></label><label for="ck10"><input type="checkbox" id="ck10" data-w="10"><span>Exercício 02 · Imagem inserida na página e conferida no navegador</span><em>10%</em></label><p class="ck-group ch">Desafio</p><label for="ck11" class="ck-ch"><input type="checkbox" id="ck11" data-w="20"><span>Desafio · vsftpd seguro com TLS: chave, certificado, configuração e conexão com cadeado no FileZilla</span><em>20%</em></label></div>
+      <div class="ck-foot"><span>Passos 60% · Exercícios 20% · Desafio 20%</span><button class="linkbtn" type="button" id="ck-reset">Desmarcar tudo</button></div>
+    </div>
+  </div>
+</section>
 <section class="sec" id="entrega">
   <div class="wrap">
     <div class="sec-head">
@@ -1689,22 +1704,6 @@ Mon Nov  9 10:38:15 2026 [pid 2312] [aluno] <span class="ok">OK UPLOAD</span>: C
         <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
         <div class="qz-stage" id="q-stage" aria-live="polite"></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="checklist-sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Checklist da aula</span>
-      <h2>Quanto você já concluiu</h2>
-      <p>Marque cada item quando terminar. Cada um vale o percentual ao lado e o total é 100%.</p>
-    </div>
-    <div class="ck-card" id="checklist">
-      <div class="prog-head"><b class="ck-title">Progresso</b><p id="prog-txt"><b>0%</b> concluído</p></div>
-      <div class="progress" role="progressbar" aria-label="Progresso da aula" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="prog-bar"></i></div>
-      <div class="check"><p class="ck-group">Passos da aula</p><label for="ck1"><input type="checkbox" id="ck1" data-w="6"><span>Passo 1 · vsftpd instalado e porta 21 aberta</span><em>6%</em></label><label for="ck2"><input type="checkbox" id="ck2" data-w="10"><span>Passo 2 · <code>write_enable</code>, <code>local_umask</code> e <code>local_root</code> configurados e vsftpd reiniciado</span><em>10%</em></label><label for="ck3"><input type="checkbox" id="ck3" data-w="5"><span>Passo 3 · Pasta <code>/var/www/html</code> passada para o seu usuário com <code>chown</code></span><em>5%</em></label><label for="ck4"><input type="checkbox" id="ck4" data-w="5"><span>Passo 4 · IP da VM anotado e login testado com <code>curl</code></span><em>5%</em></label><label for="ck5"><input type="checkbox" id="ck5" data-w="8"><span>Passo 5 · Conectado pelo FileZilla da hospedeira</span><em>8%</em></label><label for="ck6"><input type="checkbox" id="ck6" data-w="10"><span>Passo 6 · Backup do site antigo na pasta <code>Salvar Dados</code></span><em>10%</em></label><label for="ck7"><input type="checkbox" id="ck7" data-w="10"><span>Passo 7 · Nova página baixada, com o seu nome, enviada e aberta pelo IP</span><em>10%</em></label><label for="ck8"><input type="checkbox" id="ck8" data-w="6"><span>Passo 8 · Arquivo conferido na VM e transferências vistas no <code>vsftpd.log</code></span><em>6%</em></label><p class="ck-group">Exercícios</p><label for="ck9"><input type="checkbox" id="ck9" data-w="10"><span>Exercício 01 · Pasta <code>images</code> criada e imagem enviada</span><em>10%</em></label><label for="ck10"><input type="checkbox" id="ck10" data-w="10"><span>Exercício 02 · Imagem inserida na página e conferida no navegador</span><em>10%</em></label><p class="ck-group ch">Desafio</p><label for="ck11" class="ck-ch"><input type="checkbox" id="ck11" data-w="20"><span>Desafio · vsftpd seguro com TLS: chave, certificado, configuração e conexão com cadeado no FileZilla</span><em>20%</em></label></div>
-      <div class="ck-foot"><span>Passos 60% · Exercícios 20% · Desafio 20%</span><button class="linkbtn" type="button" id="ck-reset">Desmarcar tudo</button></div>
     </div>
   </div>
 </section>
