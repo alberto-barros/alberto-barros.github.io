@@ -8,7 +8,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
 <style>
 /* Layout: barra IFSC fixa (logo, seções, Voltar), hero claro com cartão do caminho do ping, seções em coluna de 1080px separadas por linhas; laboratório animado com pilha OSI */
 :root{
@@ -50,43 +50,34 @@ a{color:var(--green-ink)}
 .eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--green)}
 .sec-num{font-family:var(--font-mono);font-size:.8rem;color:var(--green-ink);font-weight:600}
 
-/* Barra */
-.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.bar .wrap{display:flex;align-items:center;gap:12px;padding-block:10px;flex-wrap:nowrap}
-.brand{display:flex;align-items:center;gap:12px;flex:none;text-decoration:none;color:var(--ink)}
-.ifsc-logo{height:40px;width:auto;flex:none;overflow:visible}
-.brand-txt{display:flex;flex-direction:column;line-height:1.05}
-.brand-txt .b1{font-family:"Open Sans",var(--font-body);font-weight:800;font-size:.95rem;letter-spacing:.01em}
-.brand-txt .b2{font-family:"Open Sans",var(--font-body);font-weight:400;font-size:.88rem}
-.nav{display:flex;gap:4px;flex:1 1 auto;min-width:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-block:2px}
-.nav::-webkit-scrollbar{display:none}
-.nav a:first-child{margin-left:auto}
-.nav a{flex:none;white-space:nowrap;text-decoration:none;color:var(--muted);font-weight:600;font-size:.85rem;padding:6px 10px;border-radius:999px}
-.nav a:hover,.nav a.cur{background:var(--surface-2);color:var(--green-ink)}
-.nav a:focus-visible,.back:focus-visible,.burger:focus-visible{outline:3px solid var(--green);outline-offset:2px}
-@media (max-width:1100px){.nav a{background:var(--surface);border:1px solid var(--line)}}
-.back{flex:none;display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#C8191E;color:#fff;font-weight:700;font-size:.85rem;padding:7px 14px 7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px #C8191E;transition:background .2s,transform .2s}
-.back:hover{background:#A51318;transform:translateY(-1px)}
-.back svg{width:16px;height:16px}
-.burger{display:none}
-@media (max-width:700px){
-  .bar .wrap{gap:10px}
-  .brand{margin-right:auto}
-  .burger{order:3;display:inline-grid;place-content:center;gap:4px;width:42px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
-  .burger span{display:block;width:18px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s}
-  .burger[aria-expanded="true"]{background:var(--green);border-color:var(--green)}
-  .burger[aria-expanded="true"] span{background:var(--surface)}
-  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
-  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;overflow:visible;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px rgba(0,0,0,.35);padding:10px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
-  .nav.open{display:flex}
-  .nav a:first-child{margin-left:0}
-  .nav a{background:transparent;border:0;border-radius:12px;font-size:1rem;padding:12px 14px;color:var(--ink)}
-  .nav a:hover,.nav a.cur{background:var(--surface-2);color:var(--green-ink)}
-  .back{padding:7px 12px 7px 10px}
-}
-@media (max-width:400px){.brand-txt{display:none}}
+/* Barra superior igual à página inicial de Redes */
+.accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
+.topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;position:relative}
+.tb-brand{display:flex;align-items:center;gap:14px;text-decoration:none;min-width:0;color:var(--ink)}
+.tb-brand .mark{height:40px;width:auto;flex:none}
+.tb-brand .inst{display:grid;line-height:1.12}
+.tb-brand b{font-weight:800;white-space:nowrap}
+.tb-brand .inst b{font-size:.84rem;letter-spacing:.01em}
+.tb-brand span span{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.topnav{display:flex;align-items:center;gap:6px;flex:none}
+.topnav a,.topnav button{display:inline-flex;align-items:center;gap:6px;font:700 .82rem var(--f-top);padding:8px 14px;border-radius:10px;text-decoration:none;border:0;background:transparent;color:var(--ink);cursor:pointer;transition:background .2s}
+.topnav svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.topnav .ghost:hover,.topnav .ghost[aria-expanded="true"]{background:var(--surface-2)}
+.topnav .ghost .chev{transition:transform .2s}
+.topnav .ghost[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.topnav .solid{background:#32A041;color:#fff;box-shadow:0 4px 12px rgba(50,160,65,.28)}
+.topnav .solid:hover{background:#247A30}
+.topnav .tb-back{background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
+.topnav .tb-back:hover{background:#A51418}
+.topnav a:focus-visible,.topnav button:focus-visible,.tb-brand:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.tmenu{position:absolute;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:min(300px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.35);padding:8px;display:grid;gap:2px}
+.tmenu[hidden]{display:none}
+.tmenu a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:600;font-size:.95rem}
+.tmenu a b{font:600 .75rem var(--font-mono);color:var(--green-ink);min-width:2ch}
+.tmenu a:hover,.tmenu a:focus-visible,.tmenu a.cur{background:var(--surface-2);color:var(--green-ink)}
+@media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
+@media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
 
 /* Hero */
 .hero{background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
@@ -111,7 +102,7 @@ a{color:var(--green-ink)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
 
 /* Seções */
-section.sec{padding-block:64px;border-bottom:1px solid var(--line);scroll-margin-top:64px}
+section.sec{padding-block:64px;border-bottom:1px solid var(--line);scroll-margin-top:72px}
 section.sec:last-of-type{border-bottom:0}
 .sec-head{display:grid;gap:10px;margin-bottom:32px}
 .sec-head p{color:var(--muted);font-size:1.05rem;max-width:70ch}
@@ -362,19 +353,21 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   </symbol>
 </defs></svg>
 
-<header class="bar">
+<div class="accent" aria-hidden="true"></div>
+<nav class="topbar" aria-label="Navegação">
   <div class="wrap">
-    <div class="brand">
-      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg>
-      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    <a class="tb-brand" href="https://alberto-barros.github.io/" title="Página inicial">
+      <svg class="mark" viewBox="0 0 34 46" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8191E"/><g fill="#32A041"><rect x="12" y="0" width="10" height="10" rx="2"/><rect x="24" y="0" width="10" height="10" rx="2"/><rect x="0" y="12" width="10" height="10" rx="2"/><rect x="12" y="12" width="10" height="10" rx="2"/><rect x="0" y="24" width="10" height="10" rx="2"/><rect x="12" y="24" width="10" height="10" rx="2"/><rect x="24" y="24" width="10" height="10" rx="2"/><rect x="0" y="36" width="10" height="10" rx="2"/><rect x="12" y="36" width="10" height="10" rx="2"/></g></svg>
+      <span class="inst"><b>INSTITUTO FEDERAL</b><span>Santa Catarina · Câmpus Garopaba</span></span>
+    </a>
+    <div class="topnav">
+      <button type="button" class="ghost" id="tb-topics" aria-expanded="false" aria-controls="tmenu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span class="tb-lbl">Tópicos</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Checklist</a>
+      <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <button type="button" class="burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
-    <nav class="nav" id="menu" aria-label="Seções">
-      <a href="#objetivos">Objetivos</a><a href="#simulacao">Simulação</a><a href="#topologia">Topologia</a><a href="#roteiro">Roteiro</a><a href="#observar">Onde olhar</a><a href="#refletir">Para refletir</a><a href="#entrega">Checklist</a>
-    </nav>
-    <a class="back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Voltar</a>
+    <div class="tmenu" id="tmenu" hidden><a href="#objetivos"><b>01</b>Objetivos</a><a href="#simulacao"><b>02</b>Simulação</a><a href="#topologia"><b>03</b>Topologia</a><a href="#roteiro"><b>04</b>Roteiro</a><a href="#observar"><b>05</b>Onde olhar</a><a href="#refletir"><b>06</b>Para refletir</a><a href="#entrega"><b>07</b>Checklist</a></div>
   </div>
-</header>
+</nav>
 
 <div class="hero">
   <div class="wrap">
@@ -822,15 +815,17 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   const onMq=()=>{buildTopo();buildDraw();render();};
   if(mq.addEventListener)mq.addEventListener("change",onMq);else if(mq.addListener)mq.addListener(onMq);
 
-  // Menu hambúrguer
-  const menu=document.getElementById("menu"),burger=document.getElementById("burger");
-  function setMenu(o){menu.classList.toggle("open",o);burger.setAttribute("aria-expanded",o?"true":"false");burger.setAttribute("aria-label",o?"Fechar menu das seções":"Abrir menu das seções");}
-  burger.addEventListener("click",e=>{e.stopPropagation();setMenu(!menu.classList.contains("open"));});
-  menu.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
-  document.addEventListener("keydown",e=>{if(e.key==="Escape")setMenu(false);});
-  document.addEventListener("click",e=>{if(!menu.contains(e.target)&&e.target!==burger)setMenu(false);});
-  const secs=[...menu.querySelectorAll("a")].map(a=>[a,document.querySelector(a.getAttribute("href"))]).filter(x=>x[1]);
-  if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){secs.forEach(x=>x[0].classList.toggle("cur",x[1]===e.target));}});},{rootMargin:"-40% 0px -55% 0px"});secs.forEach(x=>io.observe(x[1]));}
+  // Menu de tópicos
+  (function(){
+    const btn=document.getElementById("tb-topics"),menu=document.getElementById("tmenu");
+    function setOpen(o){menu.hidden=!o;btn.setAttribute("aria-expanded",o?"true":"false");}
+    btn.addEventListener("click",e=>{e.stopPropagation();setOpen(menu.hidden);});
+    menu.addEventListener("click",e=>{if(e.target.closest("a"))setOpen(false);});
+    document.addEventListener("click",e=>{if(!menu.hidden&&!menu.contains(e.target))setOpen(false);});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!menu.hidden){setOpen(false);btn.focus();}});
+    const secs=[...menu.querySelectorAll("a")].map(a=>[a,document.querySelector(a.getAttribute("href"))]).filter(x=>x[1]);
+    if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)secs.forEach(x=>x[0].classList.toggle("cur",x[1]===e.target));});},{rootMargin:"-40% 0px -55% 0px"});secs.forEach(x=>io.observe(x[1]));}
+  })();
 
   // Checklist
   const boxes=[...document.querySelectorAll("#check input")],prog=document.getElementById("progress");
