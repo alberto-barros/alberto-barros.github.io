@@ -1000,24 +1000,21 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     let k=0;
     const dirEl=document.querySelector("#enc .enc-dir");
     function setDir(rx){dirEl.textContent=rx?"↑ recebimento":"↓ envio";dirEl.classList.toggle("rx",rx);}
-    const R=["<b>Aplicação:</b> o programa mostra o texto “Modelo OSI entendendo as camadas” ao usuário. Mensagem recebida!","<b>Apresentação:</b> abre o DOC e o converte de volta em caracteres.","<b>Sessão:</b> abre o envelope e tira o arquivo.","<b>Transporte:</b> retira o cabeçalho TCP e junta os 4 segmentos, na ordem, em um só envelope.","<b>Rede:</b> confere o IP, abre as caixas e tira os segmentos.","<b>Enlace:</b> junta os bits em quadros, confere o FCS, retira o cabeçalho MAC e entrega os pacotes para cima.","<b>Física:</b> recebe os bits que chegam pelo cabo e os entrega à camada de Enlace."];
+    const R=["<b>Aplicação:</b> recebe o DOC e mostra o texto ao usuário: “Modelo OSI entendendo as camadas”. Mensagem recebida!","<b>Apresentação:</b> recebe o DOC, confere o formato e o entrega para a Aplicação.","<b>Sessão:</b> abre o envelope e entrega o arquivo para cima.","<b>Transporte:</b> recebe os 4 segmentos, retira o cabeçalho TCP e junta tudo em um só envelope.","<b>Rede:</b> recebe as caixas (pacotes), abre cada uma e entrega só os envelopes para cima.","<b>Enlace:</b> recebe os quadros, confere o FCS, retira o MAC e entrega só as caixas para cima.","<b>Física:</b> recebe os bits que chegam pelo cabo e os entrega ao Enlace, que os junta em quadros."];
     function startRecv(){setDir(true);rows[6].classList.add("rxbits");stepUp(6);}
     function stepUp(j){
       if(j<0){setTimeout(reset,2800);return;}
-      const r=rows[j];
+      const r=rows[j],T=setTimeout;
       rows.forEach((x,i)=>{x.classList.remove("cur","done");if(i>j)x.classList.add("done");});
       if(j!==6)rows[6].classList.remove("bitson");
       r.classList.add("cur");place(r);cap.innerHTML=R[j];
-      const T=(f,t)=>setTimeout(f,t);
-      T(()=>{
-        if(j===6){T(()=>stepUp(5),2400);return;}
-        if(j===5){envs.classList.add("show");label("Quadros","l2");T(()=>{pks.forEach((p,i)=>T(()=>p.classList.remove("framed"),i*120));label("Pacotes","l3");},1300);T(()=>stepUp(4),3400);return;}
-        if(j===4){pks.forEach((p,i)=>T(()=>p.classList.remove("shut"),i*60));T(()=>pks.forEach((p,i)=>T(()=>p.classList.remove("in"),i*60)),900);T(()=>{pks.forEach(p=>p.classList.remove("boxed"));label("Segmentos","l4");},1800);T(()=>stepUp(3),3100);return;}
-        if(j===3){T(()=>{mheld=[];renderMini();},300);T(()=>{envs.classList.remove("show");env.classList.remove("split");},1500);T(()=>stepUp(2),3000);return;}
-        if(j===2){env.classList.add("open");T(()=>sheet.classList.remove("in"),700);T(()=>stepUp(1),2600);return;}
-        if(j===1){env.classList.remove("open");env.classList.add("noenv");T(()=>{sheet.classList.remove("doc");typeText();},900);T(()=>stepUp(0),2800);return;}
-        T(()=>stepUp(-1),200);
-      },650);
+      if(j===6){T(()=>stepUp(5),2200);return;}
+      if(j===5){envs.classList.add("show");label("Quadros","l2");T(()=>{pks.forEach((p,i)=>T(()=>p.classList.remove("framed"),i*100));label("Pacotes","l3");},1100);T(()=>stepUp(4),1600);return;}
+      if(j===4){T(()=>pks.forEach((p,i)=>T(()=>p.classList.remove("shut"),i*60)),800);T(()=>pks.forEach((p,i)=>T(()=>p.classList.remove("in"),i*60)),1500);T(()=>{pks.forEach(p=>p.classList.remove("boxed"));label("Segmentos","l4");stepUp(3);},2300);return;}
+      if(j===3){T(()=>{mheld=[];renderMini();},700);T(()=>{envs.classList.remove("show");env.classList.remove("split");},1500);T(()=>stepUp(2),2500);return;}
+      if(j===2){T(()=>env.classList.add("open"),700);T(()=>sheet.classList.remove("in"),1200);T(()=>{env.classList.remove("open");env.classList.add("noenv");stepUp(1);},2000);return;}
+      if(j===1){T(()=>stepUp(0),1500);return;}
+      T(()=>{sheet.classList.remove("doc");typeText();},900);T(()=>stepUp(-1),3600);
     }
     function reset(){setDir(false);env.classList.add("hide");envs.classList.remove("show");setTimeout(()=>{rows.forEach(r=>r.classList.remove("done","cur","bitson","rxbits"));held=[];mheld=[];renderChips();grid.innerHTML="";refresh();env.classList.remove("bits","split","open");env.classList.add("noenv");sheet.classList.remove("doc","in");clearInterval(typer);sheetCh.textContent="";nameEl.textContent="";k=0;place(rows[0]);setTimeout(()=>{env.classList.remove("hide");setTimeout(step,500);},450);},450);}
     function grow(add,name,c){minis.forEach(m=>m.classList.add("open"));setTimeout(()=>{mheld.push(...add);renderMini();label(name,c);},380);setTimeout(()=>minis.forEach(m=>m.classList.remove("open")),900);}
