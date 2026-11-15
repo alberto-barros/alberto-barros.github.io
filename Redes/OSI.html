@@ -293,11 +293,22 @@ tr.grp td{background:var(--surface-2);font-family:var(--font-display);font-weigh
 .qs li small{color:#C8191E;font-weight:600;font-size:.88rem}
 
 /* Checklist */
-.check{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.check label{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;cursor:pointer}
-.check input{width:20px;height:20px;accent-color:var(--green);margin-top:3px;flex:0 0 auto}
-.check input:checked + span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--green)}
-.progress{font-family:var(--font-mono);font-size:.85rem;color:var(--green-ink)}
+#entrega .sec-head{margin-bottom:16px}
+.deliver{display:grid;grid-template-columns:1fr;gap:20px;align-items:start}
+.deliver > *{min-width:0}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;gap:16px}
+.prog-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+#prog-txt{font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+#prog-txt b{font:800 1.5rem var(--font-display);color:var(--green-ink)}
+#prog-txt.done{color:var(--green-ink);font-weight:700}
+.progress{height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--green-ink));transition:width .3s}
+.check{display:grid;gap:8px}
+.check label{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:.95rem;cursor:pointer;padding:8px 10px;border-radius:10px}
+.check label:hover{background:var(--surface-2)}
+.check input{width:18px;height:18px;accent-color:var(--green);margin-top:3px}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+@media (max-width:600px){.dcard{padding:18px}}
 
 footer{padding-block:36px;color:var(--muted);font-size:.88rem;border-top:1px solid var(--line)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
@@ -614,21 +625,25 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   </section>
 
   <section class="sec" id="entrega">
-  <div class="wrap"><div class="read">
+  <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Autoavaliação</span>
-      <h2>Checklist da atividade</h2>
-      <p class="lead">Não é preciso enviar nada. Use a lista para conferir se você completou cada etapa.</p>
-      <p class="progress" id="progress"></p>
+      <span class="sec-num" id="checklist-h">Checklist</span>
+      <p>Não é preciso enviar nada. Use a lista para conferir se você completou cada etapa.</p>
     </div>
-    <ul class="check" id="check">
-      <li><label><input type="checkbox" id="c1"><span>Topologia com 10 PCs e 2 switches interligados (5 PCs por switch).</span></label></li>
-      <li><label><input type="checkbox" id="c2"><span>Todos os links com indicador verde.</span></label></li>
-      <li><label><input type="checkbox" id="c3"><span>IPs de 10.1.1.1 a 10.1.1.10, máscara 255.255.255.0.</span></label></li>
-      <li><label><input type="checkbox" id="c4"><span>Ping de PC1 para PC10 com sucesso no Command Prompt.</span></label></li>
-      <li><label><input type="checkbox" id="c5"><span>Simulação (Simple PDU) executada, com In Layers e Out Layers observados em cada dispositivo.</span></label></li>
-    </ul>
-  </div></div>
+    <div class="deliver">
+      <div class="dcard">
+        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 5</span></div>
+        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
+        <div class="check" id="checklist">
+          <label><input type="checkbox" id="ck1"><span>Topologia com 10 PCs e 2 switches interligados (5 PCs por switch)</span></label>
+          <label><input type="checkbox" id="ck2"><span>Todos os links com indicador verde</span></label>
+          <label><input type="checkbox" id="ck3"><span>IPs de <code>10.1.1.1</code> a <code>10.1.1.10</code>, máscara <code>255.255.255.0</code></span></label>
+          <label><input type="checkbox" id="ck4"><span>Ping de PC1 para PC10 com sucesso no Command Prompt</span></label>
+          <label><input type="checkbox" id="ck5"><span>Simulação (Simple PDU) executada, com In Layers e Out Layers observados em cada dispositivo</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
   </section>
 </main>
 
@@ -828,11 +843,15 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
   })();
 
   // Checklist
-  const boxes=[...document.querySelectorAll("#check input")],prog=document.getElementById("progress");
-  function upd(){const n=boxes.filter(b=>b.checked).length;prog.textContent=`${n} de ${boxes.length} itens concluídos`;
-    try{localStorage.setItem("ifsc-lan-check-v2",JSON.stringify(boxes.map(b=>b.checked)));}catch(e){}}
-  try{const v=JSON.parse(localStorage.getItem("ifsc-lan-check-v2")||"[]");boxes.forEach((b,k)=>b.checked=!!v[k]);}catch(e){}
-  boxes.forEach(b=>b.addEventListener("change",upd));upd();
+  const cks=[...document.querySelectorAll("#checklist input")];
+  const $=id=>document.getElementById(id);
+  function updProg(){const n=cks.filter(c=>c.checked).length,pc=Math.round(n/cks.length*100);
+    $("prog").style.width=pc+"%";$("prog-bar").setAttribute("aria-valuenow",pc);
+    $("prog-txt").innerHTML="<b>"+pc+"%</b> · "+n+" de "+cks.length+(pc===100?" · concluído":"");
+    $("prog-txt").classList.toggle("done",pc===100);
+    try{localStorage.setItem("ifsc-osi-check",JSON.stringify(cks.map(c=>c.checked)));}catch(e){}}
+  try{const v=JSON.parse(localStorage.getItem("ifsc-osi-check")||"[]");cks.forEach((c,k)=>c.checked=!!v[k]);}catch(e){}
+  cks.forEach(c=>c.addEventListener("change",updProg));updProg();
 })();
 </script>
 
