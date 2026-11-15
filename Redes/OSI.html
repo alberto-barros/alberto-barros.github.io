@@ -118,10 +118,15 @@ a{color:var(--green-ink)}
 .env{position:absolute;right:10px;top:0;width:118px;transition:transform .6s cubic-bezier(.5,0,.25,1),opacity .4s;will-change:transform;pointer-events:none}
 .env.hide{opacity:0}
 .env-box{position:relative;height:64px}
-.env-back{position:absolute;inset:0;border-radius:7px;background:#E9DDB8;border:1.5px solid #C9B98F;box-shadow:0 8px 18px -10px rgba(0,0,0,.45)}
-.env-front{position:absolute;left:0;right:0;bottom:0;height:46px;border-radius:0 0 7px 7px;background:#FFFDF6;clip-path:polygon(0 0,50% 42%,100% 0,100% 100%,0 100%);z-index:3;border-bottom:1.5px solid #C9B98F;transition:background .4s}
-.env-flap{position:absolute;left:0;right:0;top:0;height:34px;background:#F2E8CB;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .35s,background .35s;z-index:4;border-radius:7px 7px 0 0}
-.env.open .env-flap{transform:scaleY(-1);background:#D9CBA0;z-index:1}
+.env-back{position:absolute;inset:0;border-radius:7px;background:#DCCB98;border:1.5px solid #B9A56A;box-shadow:0 8px 18px -10px rgba(0,0,0,.45)}
+.env-front,.env-flap{position:absolute;left:0;right:0;filter:drop-shadow(0 0 .6px #A8935A) drop-shadow(0 0 .6px #A8935A)}
+.env-front i,.env-flap i{display:block;width:100%;height:100%;background:#FFFDF6;transition:background .3s}
+.env-front{bottom:0;height:46px;z-index:3}
+.env-front i{clip-path:polygon(0 0,50% 42%,100% 0,100% 100%,0 100%);border-radius:0 0 7px 7px}
+.env-flap{top:0;height:37px;transform-origin:top;transition:transform .35s;z-index:4}
+.env-flap i{clip-path:polygon(0 0,100% 0,100% 49%,50% 100%,0 49%);border-radius:7px 7px 0 0}
+.env.open .env-flap{transform:scaleY(-1);z-index:1}
+.env.open .env-flap i{background:#CDBB86}
 .env-name{position:absolute;top:30px;left:0;right:0;text-align:center;font:800 .72rem var(--font-display);color:#3A3020;z-index:5;letter-spacing:.02em}
 .env-chips{position:absolute;left:0;right:0;bottom:5px;justify-content:center;z-index:5;display:flex;gap:2px;flex-wrap:nowrap}
 .env-chips i{font:700 .52rem var(--font-mono);font-style:normal;color:#fff;padding:2px 3px;border-radius:3px;animation:chipIn .35s cubic-bezier(.2,.8,.2,1) both}
@@ -448,8 +453,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
           <span class="env-tag" id="envTag">DADOS</span>
           <div class="env-box">
             <span class="env-back"></span>
-            <span class="env-flap"></span>
-            <span class="env-front"></span>
+            <span class="env-flap"><i></i></span>
+            <span class="env-front"><i></i></span>
             <span class="env-name" id="envName">Dados</span>
             <span class="env-chips" id="envChips"></span>
             <span class="env-bits">0110100101110010010110100101</span>
