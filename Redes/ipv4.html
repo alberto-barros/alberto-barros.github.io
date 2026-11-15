@@ -1247,6 +1247,25 @@ show mac address-table
   </div>
 </section>
 
+<section class="sec" id="erros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Solução de problemas</span>
+      <h2>Erros comuns</h2>
+    </div>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Ping falha na mesma classe</h3><p>Compare IP e máscara dos dois PCs. Um octeto digitado errado ou uma máscara trocada (255.255.0.0 no lugar de 255.0.0.0) já muda a rede calculada.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Link vermelho</h3><p>Cabo errado. Entre PC e switch use <b>Copper Straight-Through</b>. Apague o cabo e ligue de novo na porta FastEthernet0 do PC.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Link laranja que não fica verde</h3><p>O switch ainda está verificando a porta (cerca de 30 s). Aguarde ou use Fast Forward Time.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>“IP address conflict”</h3><p>Dois PCs com o mesmo endereço. Cada host precisa de um IP único dentro da rede.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Máscara que não é a padrão</h3><p>Se a máscara foi digitada à mão, confira: A = 255.0.0.0, B = 255.255.0.0, C = 255.255.255.0. Apague e clique de novo no campo para o Packet Tracer sugerir.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Ping no próprio IP “funciona”</h3><p><code>ping 10.0.0.10</code> dentro do PC0 sempre responde: o pacote nem sai da placa. Teste sempre contra outro PC.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>No laboratório real o ping não responde</h3><p>O Firewall do Windows bloqueia ICMP por padrão. Libere a regra “Compartilhamento de Arquivo e Impressora (Solicitação de Eco - ICMPv4)”.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Achar que mesma classe é mesma rede</h3><p>192.168.1.10 e 192.168.20.10 são classe C, mas redes diferentes. O que decide é o resultado da máscara aplicada ao IP.</p></article>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="entrega">
   <div class="wrap">
     <div class="sec-head">
@@ -1274,25 +1293,6 @@ show mac address-table
           <label><input type="checkbox" id="ck6"><span>Modo Simulation observado e <code>show mac address-table</code> executado</span></label>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="erros">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Solução de problemas</span>
-      <h2>Erros comuns</h2>
-    </div>
-    <div class="errs">
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Ping falha na mesma classe</h3><p>Compare IP e máscara dos dois PCs. Um octeto digitado errado ou uma máscara trocada (255.255.0.0 no lugar de 255.0.0.0) já muda a rede calculada.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Link vermelho</h3><p>Cabo errado. Entre PC e switch use <b>Copper Straight-Through</b>. Apague o cabo e ligue de novo na porta FastEthernet0 do PC.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Link laranja que não fica verde</h3><p>O switch ainda está verificando a porta (cerca de 30 s). Aguarde ou use Fast Forward Time.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>“IP address conflict”</h3><p>Dois PCs com o mesmo endereço. Cada host precisa de um IP único dentro da rede.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Máscara que não é a padrão</h3><p>Se a máscara foi digitada à mão, confira: A = 255.0.0.0, B = 255.255.0.0, C = 255.255.255.0. Apague e clique de novo no campo para o Packet Tracer sugerir.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Ping no próprio IP “funciona”</h3><p><code>ping 10.0.0.10</code> dentro do PC0 sempre responde: o pacote nem sai da placa. Teste sempre contra outro PC.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>No laboratório real o ping não responde</h3><p>O Firewall do Windows bloqueia ICMP por padrão. Libere a regra “Compartilhamento de Arquivo e Impressora (Solicitação de Eco - ICMPv4)”.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Achar que mesma classe é mesma rede</h3><p>192.168.1.10 e 192.168.20.10 são classe C, mas redes diferentes. O que decide é o resultado da máscara aplicada ao IP.</p></article>
     </div>
   </div>
 </section>
