@@ -1000,7 +1000,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     let k=0;
     const dirEl=document.querySelector("#enc .enc-dir");
     function setDir(rx){dirEl.textContent=rx?"↑ recebimento":"↓ envio";dirEl.classList.toggle("rx",rx);}
-    const R=["<b>Aplicação:</b> o programa mostra o texto ao usuário. Mensagem recebida!","<b>Apresentação:</b> abre o DOC e o converte de volta em caracteres.","<b>Sessão:</b> abre o envelope e tira o arquivo.","<b>Transporte:</b> retira o cabeçalho TCP e junta os 4 segmentos, na ordem, em um só envelope.","<b>Rede:</b> confere o IP, abre as caixas e tira os segmentos.","<b>Enlace:</b> confere o FCS, retira o cabeçalho MAC e entrega os pacotes para cima.","<b>Física:</b> recebe os bits que chegam pelo cabo e os junta de novo em quadros."];
+    const R=["<b>Aplicação:</b> o programa mostra o texto ao usuário. Mensagem recebida!","<b>Apresentação:</b> abre o DOC e o converte de volta em caracteres.","<b>Sessão:</b> abre o envelope e tira o arquivo.","<b>Transporte:</b> retira o cabeçalho TCP e junta os 4 segmentos, na ordem, em um só envelope.","<b>Rede:</b> confere o IP, abre as caixas e tira os segmentos.","<b>Enlace:</b> junta os bits em quadros, confere o FCS, retira o cabeçalho MAC e entrega os pacotes para cima.","<b>Física:</b> recebe os bits que chegam pelo cabo e os entrega à camada de Enlace."];
     function startRecv(){setDir(true);stepUp(6);}
     function stepUp(j){
       if(j<0){setTimeout(reset,2800);return;}
@@ -1010,8 +1010,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       r.classList.add("cur");place(r);cap.innerHTML=R[j];
       const T=(f,t)=>setTimeout(f,t);
       T(()=>{
-        if(j===6){envs.classList.add("show");T(()=>r.classList.remove("bitson"),900);T(()=>stepUp(5),2500);return;}
-        if(j===5){pks.forEach((p,i)=>T(()=>p.classList.remove("framed"),i*120));label("Pacotes","l3");T(()=>stepUp(4),2600);return;}
+        if(j===6){T(()=>stepUp(5),2400);return;}
+        if(j===5){envs.classList.add("show");label("Quadros","l2");T(()=>{pks.forEach((p,i)=>T(()=>p.classList.remove("framed"),i*120));label("Pacotes","l3");},1300);T(()=>stepUp(4),3400);return;}
         if(j===4){pks.forEach((p,i)=>T(()=>p.classList.remove("shut"),i*60));T(()=>pks.forEach((p,i)=>T(()=>p.classList.remove("in"),i*60)),900);T(()=>{pks.forEach(p=>p.classList.remove("boxed"));label("Segmentos","l4");},1800);T(()=>stepUp(3),3100);return;}
         if(j===3){T(()=>{mheld=[];renderMini();},300);T(()=>{envs.classList.remove("show");env.classList.remove("split");},1500);T(()=>stepUp(2),3000);return;}
         if(j===2){env.classList.add("open");T(()=>sheet.classList.remove("in"),700);T(()=>stepUp(1),2600);return;}
