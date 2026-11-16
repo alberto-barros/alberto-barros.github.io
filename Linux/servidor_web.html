@@ -1050,7 +1050,7 @@ section.sec{scroll-margin-top:72px}
       <a class="solid" href="#quiz-sec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#apache"><b>02</b>O que é o Apache</a><a href="#m1"><b>03</b>Instalar o Apache</a><a href="#m2"><b>04</b>Verificar o serviço</a><a href="#m3"><b>05</b>Logs de acesso</a><a href="#m4"><b>06</b>Sua página</a><a href="#m5"><b>07</b>Acesso pelo IP</a><a href="#m6"><b>08</b>Desinstalar o Apache</a><a href="#nginx"><b>09</b>O que é o Nginx</a><a href="#m7"><b>10</b>Instalar o Nginx</a><a href="#m8"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#quiz-sec"><b>13</b>Quiz</a><a href="#desafio"><b>14</b>Desafio</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#apache"><b>02</b>O que é o Apache</a><a href="#m1"><b>03</b>Instalar o Apache</a><a href="#m2"><b>04</b>Verificar o serviço</a><a href="#m3"><b>05</b>Logs de acesso</a><a href="#m4"><b>06</b>Sua página</a><a href="#m5"><b>07</b>Acesso pelo IP</a><a href="#m6"><b>08</b>Desinstalar o Apache</a><a href="#nginx"><b>09</b>O que é o Nginx</a><a href="#m7"><b>10</b>Instalar o Nginx</a><a href="#m8"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#desafio"><b>13</b>Desafio</a><a href="#quiz-sec"><b>14</b>Quiz</a></div>
   </div>
 </nav>
 
@@ -1486,23 +1486,6 @@ curl -I http://192.168.0.25</pre></div>
     </div>
   </div>
 </section>
-<section class="sec" id="quiz-sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Quiz: teste seu conhecimento</span>
-    </div>
-    <div class="deliver">
-      <div class="quiz" id="quiz">
-        <div class="qz-bar">
-          <div class="qz-brand"><span class="qz-ico"><svg><use href="#i-bulb"></use></svg></span><div><b>Quiz · Servidor Web</b><small>10 perguntas · nota de 0 a 10</small></div></div>
-          <div class="qz-chips"><span class="qz-chip ok"><svg><use href="#i-check"></use></svg><b id="q-ok">0</b></span><span class="qz-chip bad"><svg><use href="#i-x"></use></svg><b id="q-bad">0</b></span></div>
-        </div>
-        <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
-        <div class="qz-stage" id="q-stage" aria-live="polite"></div>
-      </div>
-    </div>
-  </div>
-</section>
 <section class="sec desafio" id="desafio">
   <div class="wrap">
     <div class="ch-banner">
@@ -1559,6 +1542,23 @@ sudo systemctl reload nginx</pre></div>
 </section>
 </main>
 
+<section class="sec" id="quiz-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Quiz: teste seu conhecimento</span>
+    </div>
+    <div class="deliver">
+      <div class="quiz" id="quiz">
+        <div class="qz-bar">
+          <div class="qz-brand"><span class="qz-ico"><svg><use href="#i-bulb"></use></svg></span><div><b>Quiz · Servidor Web</b><small>10 perguntas · nota de 0 a 10</small></div></div>
+          <div class="qz-chips"><span class="qz-chip ok"><svg><use href="#i-check"></use></svg><b id="q-ok">0</b></span><span class="qz-chip bad"><svg><use href="#i-x"></use></svg><b id="q-bad">0</b></span></div>
+        </div>
+        <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
+        <div class="qz-stage" id="q-stage" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
 <footer>
   <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Câmpus Garopaba</span><span>Servidor Web no Linux · Apache e Nginx</span></div>
 </footer>
