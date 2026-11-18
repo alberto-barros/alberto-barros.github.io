@@ -1150,6 +1150,35 @@ body{background:#f6faf7;color:var(--ink)}
 .nx-tbl td{border-color:var(--line)}
 .nx-tbl td:first-child{color:var(--ink)}
 
+/* barra superior igual à da página IPv4 */
+.accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
+.topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;position:relative}
+.tb-brand{display:flex;align-items:center;gap:14px;text-decoration:none;min-width:0;color:var(--ink)}
+.tb-brand .mark{height:40px;width:auto;flex:none}
+.tb-brand .inst{display:grid;line-height:1.12}
+.tb-brand b{font-weight:800;white-space:nowrap}
+.tb-brand .inst b{font-size:.84rem;letter-spacing:.01em}
+.tb-brand span span{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.topnav{display:flex;align-items:center;gap:6px;flex:none}
+.topnav a,.topnav button{display:inline-flex;align-items:center;gap:6px;font:700 .82rem var(--f-top);padding:8px 14px;border-radius:10px;text-decoration:none;border:0;background:transparent;color:var(--ink);cursor:pointer;transition:background .2s}
+.topnav svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.topnav .ghost:hover,.topnav .ghost[aria-expanded="true"]{background:var(--surface-2)}
+.topnav .ghost .chev{transition:transform .2s}
+.topnav .ghost[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.topnav .solid{background:#32A041;color:#fff;box-shadow:0 4px 12px rgba(50,160,65,.28)}
+.topnav .solid:hover{background:#247A30}
+.topnav .tb-back{background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
+.topnav .tb-back:hover{background:#A51418}
+.tmenu{position:absolute;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:min(300px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.35);padding:8px;display:grid;gap:2px}
+.tmenu[hidden]{display:none}
+.tmenu a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:600;font-size:.95rem}
+.tmenu a b{font:600 .75rem var(--f-mono);color:var(--green-strong);min-width:2ch}
+.tmenu a:hover,.tmenu a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
+@media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
+@media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
+html{scroll-padding-top:84px}
+
 /* ajustes finos */
 .nx-team .nx-th{gap:12px}
 .nx-team .nx-th h3{min-width:0;font-size:1.02rem;overflow-wrap:anywhere}
@@ -1210,17 +1239,22 @@ body{background:#f6faf7;color:var(--ink)}
 </svg>
 <script>document.documentElement.classList.add("nx-js")</script>
 <div class="nx-bgfx" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-<header class="bar">
+<div class="accent" aria-hidden="true"></div>
+<nav class="topbar" aria-label="Navegação">
   <div class="wrap">
-    <div class="brand">
-      <svg class="ifsc-logo" viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg>
-      <div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div>
+    <a class="tb-brand" href="https://alberto-barros.github.io/" title="Página inicial">
+      <svg class="mark" viewBox="0 0 34 46" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8191E"/><g fill="#32A041"><rect x="12" y="0" width="10" height="10" rx="2"/><rect x="24" y="0" width="10" height="10" rx="2"/><rect x="0" y="12" width="10" height="10" rx="2"/><rect x="12" y="12" width="10" height="10" rx="2"/><rect x="0" y="24" width="10" height="10" rx="2"/><rect x="12" y="24" width="10" height="10" rx="2"/><rect x="24" y="24" width="10" height="10" rx="2"/><rect x="0" y="36" width="10" height="10" rx="2"/><rect x="12" y="36" width="10" height="10" rx="2"/></g></svg>
+      <span class="inst"><b>INSTITUTO FEDERAL</b><span>Santa Catarina · Câmpus Garopaba</span></span>
+    </a>
+    <div class="topnav">
+      <button type="button" class="ghost" id="tb-topics" aria-expanded="false" aria-controls="tmenu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span class="tb-lbl">Tópicos</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <a class="solid" href="#checklist-sec"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>Checklist</a>
+      <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <button type="button" class="burger" id="burger" aria-label="Abrir menu das seções" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
-    <nav class="nav" id="menu" aria-label="Seções"><a href="#inicio">Cenário</a><a href="#equipes">Equipes</a><a href="#plano">Plano</a><a href="#m1">Fase 1</a><a href="#m2">Fase 2</a><a href="#m3">Fase 3</a><a href="#m4">Fase 4</a><a href="#avaliacao">Nota</a><a href="#checklist-sec">Checklist</a></nav>
-    <a class="back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>Voltar</a>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Cenário</a><a href="#equipes"><b>02</b>Equipes</a><a href="#plano"><b>03</b>Plano</a><a href="#m1"><b>04</b>Fase 1</a><a href="#m2"><b>05</b>Fase 2</a><a href="#m3"><b>06</b>Fase 3</a><a href="#m4"><b>07</b>Fase 4</a><a href="#avaliacao"><b>08</b>Nota</a><a href="#checklist-sec"><b>09</b>Checklist</a></div>
   </div>
-</header>
+</nav>
+<button type="button" id="burger" hidden></button><nav id="menu" hidden></nav>
 
 <div class="hero">
   <div class="wrap">
@@ -1442,6 +1476,17 @@ body{background:#f6faf7;color:var(--ink)}
   var st=[];try{st=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){}
   bt.forEach(function(b,i){if(st[i])b.setAttribute('aria-pressed','true');paint(b);
     b.addEventListener('click',function(){b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')==='true'?'false':'true');paint(b);save();});});
+})();
+</script>
+
+<script>
+(function(){
+  var b=document.getElementById('tb-topics'), m=document.getElementById('tmenu'); if(!b||!m) return;
+  function set(o){ m.hidden=!o; b.setAttribute('aria-expanded',o); }
+  b.addEventListener('click',function(e){ e.stopPropagation(); set(m.hidden); });
+  m.querySelectorAll('a').forEach(function(a){ a.addEventListener('click',function(){ set(false); }); });
+  document.addEventListener('click',function(e){ if(!m.hidden && !m.contains(e.target)) set(false); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') set(false); });
 })();
 </script>
 
