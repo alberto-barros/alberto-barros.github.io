@@ -179,7 +179,6 @@ footer .fb svg{height:26px;width:auto}
           <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           <clipPath id="scrclip"><rect x="0" y="0" width="206" height="130" rx="4"/></clipPath>
         </defs>
-        <ellipse class="floor" cx="210" cy="236" rx="170" ry="11"/>
 
         <!-- cabos -->
         <g class="cables">
@@ -285,10 +284,6 @@ footer .fb svg{height:26px;width:auto}
         <text class="lbl sub" id="host" x="372" y="211">www.google.com</text>
         <g id="pkts"></g>
       </svg>
-      <figcaption class="net-info">
-        <span class="net-cap"><i class="live"></i><span id="cap">Abrindo o navegador…</span></span>
-        <span class="steps"><b>Acesso</b><span id="steps"></span></span>
-      </figcaption>
     </figure>
   </div>
 </header>
@@ -333,7 +328,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 {
   const NS='http://www.w3.org/2000/svg';
   const mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
-  const gk=$('pkts'),cap=$('cap'),stepsEl=$('steps'),srv=$('srv'),cur=$('cur'),load=$('load');
+  const gk=$('pkts'),cap={},stepsEl={},srv=$('srv'),cur=$('cur'),load=$('load');
   const lit=[$('l0'),$('l1')],cab=[$('c0'),$('c1')];
   const STEPS=['DNS','HTTP','Página'];
   const drawSteps=n=>stepsEl.innerHTML=STEPS.map((s,i)=>`<span class="step${i<n?' on':''}">${i+1} · ${s}</span>`).join(' ');
