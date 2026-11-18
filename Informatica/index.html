@@ -110,6 +110,32 @@ section{padding-block:72px 16px}
 .head h2{font-size:clamp(1.7rem,3.4vw,2.3rem);font-weight:800;letter-spacing:-.03em}
 .head p{color:var(--muted);max-width:62ch;margin:0}
 
+/* Cards da trilha */
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.84rem;color:var(--muted);margin-top:4px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:10px;height:10px;border-radius:3px;background:var(--blue)}
+.legend .l i{background:var(--red)}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:80px;row-gap:60px;align-items:stretch}
+@media (max-width:760px){.cards{grid-template-columns:1fr}}
+.chap{position:relative;display:grid;gap:10px;align-content:start;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s ease}
+.chap:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--blue) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--blue) 25%,transparent),0 14px 30px -6px color-mix(in srgb,var(--blue) 45%,transparent),0 0 46px -4px color-mix(in srgb,var(--blue) 40%,transparent)}
+.chap.lab:hover{border-color:color-mix(in srgb,var(--red) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--red) 25%,transparent),0 14px 30px -6px color-mix(in srgb,var(--red) 40%,transparent),0 0 46px -4px color-mix(in srgb,var(--red) 35%,transparent)}
+.chap .top{display:flex;align-items:center;gap:10px}
+.chap .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);flex:none}
+.chap.lab .ic{background:var(--red)}
+.chap .ic .i{width:24px;height:24px}
+.chap .kind{margin-left:auto;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--blue-soft);border:1px solid var(--blue-chip);color:var(--blue-ink)}
+.chap.lab .kind{background:color-mix(in srgb,var(--red) 10%,var(--surface));border-color:color-mix(in srgb,var(--red) 30%,var(--surface));color:var(--red)}
+.chap .num{font-family:var(--font-mono);font-weight:600;font-size:.82rem;color:var(--muted);min-width:2ch;text-align:right}
+.chap h3{font-size:1.14rem;font-weight:700;letter-spacing:-.015em;margin-top:2px}
+.chap p{margin:0;color:var(--muted);font-size:.93rem;line-height:1.55}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--font-mono);font-size:.7rem;padding:2px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+.chap .go{display:flex;align-items:center;justify-content:space-between;gap:6px;font-weight:700;font-size:.88rem;color:var(--blue-ink);margin-top:6px;padding-top:12px;border-top:1px solid var(--line)}
+.chap.lab .go{color:var(--red)}
+.go .i{width:16px;height:16px;transition:transform .2s}
+.chap:hover .go .i{transform:translateX(4px)}
+
 footer{margin-top:80px;border-top:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.86rem}
 footer .wrap{display:flex;justify-content:flex-start;align-items:center;gap:12px;flex-wrap:wrap;padding-block:22px}
 footer .fb{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:600}
@@ -269,7 +295,18 @@ footer .fb svg{height:26px;width:auto}
 
 <main class="wrap">
 <section id="capitulos">
-  <div class="head reveal"><span class="eyebrow">Conteúdo</span><h2>Escolha por onde começar</h2><p>Os temas da trilha serão publicados aqui em breve.</p></div>
+  <div class="head reveal"><span class="eyebrow">Conteúdo</span><h2>Escolha por onde começar</h2><p>Siga a trilha na ordem dos números.</p><div class="legend"><span><i></i>Teoria</span><span class="l"><i></i>Prática</span></div></div>
+  <div class="cards">
+    <div class="node">
+      <a class="chap lab reveal" href="https://alberto-barros.github.io/Informatica/formularios.html">
+        <div class="top"><div class="ic"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></div><span class="kind">Prática</span><span class="num">01</span></div>
+        <h3>Formulários</h3>
+        <p>Monte uma pesquisa de infraestrutura do IFSC no Google Formulários, em 9 etapas, e veja como ela aparece para quem responde.</p>
+        <div class="tags"><span class="tag">prática</span><span class="tag">Google Formulários</span><span class="tag">pesquisa</span></div>
+        <span class="go">Praticar <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+    </div>
+  </div>
 </section>
 </main>
 
