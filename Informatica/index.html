@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Informática para Internet · IFSC Garopaba</title>
+<meta name="description" content="Guia de estudo interativo de Informática para Internet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#F5F9FF;--surface:#fff;--surface-2:#EDF3FC;--ink:#0F1B33;--muted:#5C6C88;--line:#DCE6F5;
+  --blue:#3B8EEA;--blue-ink:#1F63B8;--blue-soft:#E6F1FF;--blue-chip:#BBD7FA;--violet:#8B6CF0;--red:#C8191E;
+  --h-strong:#0A1428;--h-top:#DCEBFF;--h-mesh:.42;--h-dot:rgba(15,27,51,.14);--h-g1:#2F7BE0;--h-g2:#8B6CF0;--h-cable:#BCCDEA;--h-edge:#DCE6F5;--h-stand:#A7B6D2;--h-floor:rgba(15,27,51,.07);
+  --font-display:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--font-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0A101C;--surface:#111A2B;--surface-2:#192338;--ink:#F4F8FF;--muted:#93A4C2;--line:#1D2A42;
+  --blue:#5AA9FF;--blue-ink:#8CC2FF;--blue-soft:#12233D;--blue-chip:#25406B;--violet:#A28BFF;--red:#FF6B6F;
+  --h-strong:#F4F8FF;--h-top:#0E1A30;--h-mesh:.22;--h-dot:rgba(244,248,255,.12);--h-g1:#7CBBFF;--h-g2:#B3A1FF;--h-cable:#2A3A57;--h-edge:#1D2A42;--h-stand:#56657A;--h-floor:rgba(0,0,0,.4);color-scheme:dark}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+a:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px}
+h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
+.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* TOPO INSTITUCIONAL */
+.accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#3B8EEA 32%,#8B6CF0 100%)}
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;min-width:0}
+.brand .mark{height:40px;width:auto;flex:none}
+.brand .inst{display:grid;line-height:1.12}
+.brand .inst b{font-size:.84rem;font-weight:800;letter-spacing:.01em;white-space:nowrap}
+.brand .inst span{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.topnav{display:flex;align-items:center;gap:6px;flex:none}
+.topnav a{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;padding:8px 14px;border-radius:10px;text-decoration:none;transition:background .2s}
+.topnav .ghost:hover{background:var(--surface-2)}
+.topnav .back{background:var(--red);color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
+.topnav .back:hover{background:#A51418}
+.topnav .i{width:15px;height:15px}
+@media (max-width:560px){.topnav .ghost{display:none}.brand .inst span{display:none}}
+@media (max-width:420px){.brand .inst{display:none}.topnav a{padding:8px 11px}}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(180deg,var(--h-top) 0%,var(--bg) 100%);color:var(--ink);border-bottom:1px solid var(--line)}
+.mesh{position:absolute;inset:0;z-index:-2;filter:blur(70px);opacity:var(--h-mesh)}
+.mesh i{position:absolute;border-radius:50%}
+.mesh i:nth-child(1){width:46vmax;height:46vmax;left:-14vmax;top:-22vmax;background:#7CC4FF;animation:m1 24s ease-in-out infinite alternate}
+.mesh i:nth-child(2){width:40vmax;height:40vmax;right:-12vmax;top:-10vmax;background:#B3A1FF;animation:m2 28s ease-in-out infinite alternate}
+.mesh i:nth-child(3){width:34vmax;height:34vmax;left:38%;bottom:-24vmax;background:#8EE6F2;animation:m1 32s ease-in-out infinite alternate-reverse}
+@keyframes m1{to{transform:translate(10%,8%) scale(1.1)}}
+@keyframes m2{to{transform:translate(-12%,10%) scale(.92)}}
+.dots{position:absolute;inset:0;z-index:-1;background-image:radial-gradient(var(--h-dot) 1.1px,transparent 1.3px);background-size:24px 24px;-webkit-mask-image:radial-gradient(ellipse 75% 80% at 70% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 75% 80% at 70% 40%,#000 20%,transparent 75%)}
+.hero .wrap{position:relative;padding-block:clamp(48px,8vw,96px);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(28px,5vw,64px);align-items:center}
+.hero-text{display:grid;gap:22px;justify-items:start;min-width:0}
+.hero h1{font-size:clamp(2.6rem,5.2vw,4.4rem);font-weight:800;letter-spacing:-.04em;line-height:1.02;color:var(--h-strong)}
+.hero h1 .hl{display:block;background:linear-gradient(95deg,var(--h-g1),var(--h-g2));-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
+.term{display:inline-flex;align-items:center;gap:.6ch;max-width:100%;height:2.5em;padding:0 16px;border-radius:12px;background:#0A1226;color:#DCE8FF;font-family:var(--font-mono);font-size:.92rem;box-shadow:0 10px 26px rgba(20,40,90,.25);white-space:nowrap;overflow:hidden}
+.term .pr{color:#7CBBFF}
+.term .type{color:#C9DDFF;min-width:20ch}
+.term .type::after{content:"▌";animation:blink 1s steps(1) infinite;color:#B3A1FF}
+@keyframes blink{50%{opacity:0}}
+.hero p{max-width:52ch;font-size:1.1rem;color:var(--h-strong);margin:0}
+
+/* animação sem moldura */
+.net{margin:0;min-width:0;width:100%;display:grid;gap:14px;justify-items:center}
+.net-svg{width:100%;max-width:580px;height:auto;display:block;overflow:visible}
+.floor{fill:var(--h-floor)}
+.cables path{fill:none;stroke:var(--h-cable);stroke-width:3;stroke-linecap:round;stroke-dasharray:1 7}
+.cables-lit path{fill:none;stroke:var(--blue);stroke-width:3.5;stroke-linecap:round;opacity:0;transition:opacity .25s}
+.cables-lit path.on{opacity:1}
+.pc{filter:drop-shadow(0 8px 10px rgba(25,50,110,.2))}
+.pc .bez{fill:#1B2A47}
+.pc .stand{fill:var(--h-stand)}
+.srv{filter:drop-shadow(0 10px 12px rgba(40,60,140,.28))}
+.srv .body{fill:url(#srvg)}
+.srv .slot{fill:rgba(8,16,40,.35);stroke:rgba(255,255,255,.35);stroke-width:1}
+.srv .led{fill:#2B4A86;transition:fill .15s}
+.srv.hit .led{fill:#C6F4FF}
+.globe{fill:none;stroke:var(--blue);stroke-width:1.6}
+.lbl{font-family:var(--font-display);font-weight:600;font-size:10px;text-anchor:middle;fill:var(--ink)}
+.lbl.sub{font-family:var(--font-mono);font-weight:400;font-size:8px;fill:var(--muted)}
+.cur{transition:transform .6s cubic-bezier(.3,.7,.2,1)}
+.cur.click .cp{animation:clk .28s}
+@keyframes clk{50%{transform:scale(.8)}}
+.scene{opacity:0;transition:opacity .35s;pointer-events:none}
+.scene.show{opacity:1}
+.sp{font-family:var(--font-display)}
+.net-info{display:grid;gap:8px;justify-items:center;width:100%;font-family:var(--font-mono);font-size:.8rem;color:var(--muted)}
+.net-cap{display:flex;align-items:center;gap:8px;max-width:100%;height:1.5em;color:var(--ink);white-space:nowrap;overflow:hidden}
+.net-cap span{overflow:hidden;text-overflow:ellipsis}
+.live{flex:none;width:8px;height:8px;border-radius:50%;background:var(--blue);animation:live 1.8s infinite}
+@keyframes live{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--blue) 60%,transparent)}100%{box-shadow:0 0 0 9px transparent}}
+.steps{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap;height:2em;max-width:100%;overflow:hidden;white-space:nowrap}
+.steps>b{font-family:var(--font-display);font-weight:600;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.step{display:inline-flex;gap:6px;align-items:center;padding:3px 10px;border-radius:999px;border:1px dashed var(--line);color:var(--muted);transition:all .4s}
+.step.on{border-style:solid;border-color:var(--blue-chip);background:var(--blue-soft);color:var(--blue-ink)}
+@media (max-width:960px){.hero .wrap{grid-template-columns:1fr}.net-svg{max-width:500px}}
+@media (max-width:560px){.steps>b{display:none}}
+
+/* SECTIONS */
+section{padding-block:72px 16px}
+.eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-ink)}
+.head{display:grid;gap:8px;margin-bottom:32px}
+.head h2{font-size:clamp(1.7rem,3.4vw,2.3rem);font-weight:800;letter-spacing:-.03em}
+.head p{color:var(--muted);max-width:62ch;margin:0}
+
+footer{margin-top:80px;border-top:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.86rem}
+footer .wrap{display:flex;justify-content:flex-start;align-items:center;gap:12px;flex-wrap:wrap;padding-block:22px}
+footer .fb{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:600}
+footer .fb svg{height:26px;width:auto}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="accent" aria-hidden="true"></div>
+<nav class="topbar" aria-label="Navegação">
+  <div class="wrap">
+    <a class="brand" href="https://alberto-barros.github.io/" title="Página inicial">
+      <svg class="mark" viewBox="0 0 34 46" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8191E"/><g fill="#32A041"><rect x="12" y="0" width="10" height="10" rx="2"/><rect x="24" y="0" width="10" height="10" rx="2"/><rect x="0" y="12" width="10" height="10" rx="2"/><rect x="12" y="12" width="10" height="10" rx="2"/><rect x="0" y="24" width="10" height="10" rx="2"/><rect x="12" y="24" width="10" height="10" rx="2"/><rect x="24" y="24" width="10" height="10" rx="2"/><rect x="0" y="36" width="10" height="10" rx="2"/><rect x="12" y="36" width="10" height="10" rx="2"/></g></svg>
+      <span class="inst"><b>INSTITUTO FEDERAL</b><span>Santa Catarina · Câmpus Garopaba</span></span>
+    </a>
+    <div class="topnav">
+      <a class="ghost" href="#capitulos">Temas</a>
+      <a class="back" href="https://alberto-barros.github.io/"><svg class="i" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="mesh" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="dots" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-text">
+      <h1>Informática <span class="hl">para Internet</span></h1>
+      <div class="term" aria-hidden="true"><span class="pr">$</span><span>estudar</span><span class="type" id="type"></span></div>
+      <p>Uma trilha para entender, na prática, como o computador acessa a internet: navegador, endereços, buscas, formulários e serviços online.</p>
+    </div>
+    <figure class="net" aria-label="Animação: um computador acessando páginas da internet, como busca, formulário, vídeo e loja">
+      <svg viewBox="0 0 420 250" class="net-svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="srvg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5AA9FF"/><stop offset="1" stop-color="#7A5CE6"/></linearGradient>
+          <linearGradient id="vid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B8EEA"/><stop offset="1" stop-color="#8B6CF0"/></linearGradient>
+          <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <clipPath id="scrclip"><rect x="0" y="0" width="206" height="130" rx="4"/></clipPath>
+        </defs>
+        <ellipse class="floor" cx="210" cy="236" rx="170" ry="11"/>
+
+        <!-- cabos -->
+        <g class="cables">
+          <path id="c0" d="M232 92 C275 55,295 60,336 78"/>
+          <path id="c1" d="M336 128 C295 165,275 150,232 118"/>
+        </g>
+        <g class="cables-lit">
+          <path id="l0" d="M232 92 C275 55,295 60,336 78"/>
+          <path id="l1" d="M336 128 C295 165,275 150,232 118"/>
+        </g>
+
+        <!-- computador -->
+        <g class="pc" transform="translate(0 6)">
+          <rect class="bez" x="10" y="10" width="222" height="146" rx="12"/>
+          <g transform="translate(17 17)">
+            <g clip-path="url(#scrclip)">
+              <rect width="206" height="130" fill="#fff"/>
+              <!-- barra do navegador -->
+              <rect width="206" height="18" fill="#E6EEFB"/>
+              <circle cx="9" cy="9" r="2.5" fill="#FF6B6F"/><circle cx="17" cy="9" r="2.5" fill="#FFC857"/><circle cx="25" cy="9" r="2.5" fill="#5ED38A"/>
+              <rect x="36" y="3" width="162" height="12" rx="6" fill="#fff"/>
+              <text id="url" x="44" y="11.6" font-family="JetBrains Mono,monospace" font-size="6.4" fill="#3A4A68"></text>
+              <rect id="load" x="0" y="16.5" width="0" height="1.5" fill="#3B8EEA"/>
+
+              <g transform="translate(0 18)">
+                <!-- cena 0: busca -->
+                <g class="scene show sp" id="s0">
+                  <text x="103" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#2F6FD0">Google</text>
+                  <rect x="33" y="46" width="140" height="16" rx="8" fill="#fff" stroke="#BFD0EA"/>
+                  <text id="q" x="45" y="57" font-size="7.5" fill="#1B2A47"></text>
+                  <circle cx="162" cy="53.5" r="3.4" fill="none" stroke="#3B8EEA" stroke-width="1.4"/><path d="M164.6 56l3 3" stroke="#3B8EEA" stroke-width="1.4" stroke-linecap="round"/>
+                  <g id="res" opacity="0" style="transition:opacity .4s">
+                    <rect x="33" y="72" width="78" height="4" rx="2" fill="#3B8EEA"/><rect x="33" y="79" width="130" height="3" rx="1.5" fill="#D5DFF0"/>
+                    <rect x="33" y="88" width="64" height="4" rx="2" fill="#3B8EEA"/><rect x="33" y="95" width="120" height="3" rx="1.5" fill="#D5DFF0"/>
+                    <rect x="33" y="104" width="86" height="4" rx="2" fill="#3B8EEA"/>
+                  </g>
+                </g>
+                <!-- cena 1: formulário -->
+                <g class="scene sp" id="s1">
+                  <text x="14" y="16" font-size="9" font-weight="700" fill="#1B2A47">Inscrição</text>
+                  <text x="14" y="30" font-size="6" fill="#6B7A99">Nome</text>
+                  <rect x="14" y="33" width="178" height="14" rx="4" fill="#F5F8FF" stroke="#BFD0EA"/>
+                  <text id="t1" x="19" y="43" font-size="7.5" fill="#1B2A47"></text>
+                  <text x="14" y="60" font-size="6" fill="#6B7A99">E-mail</text>
+                  <rect x="14" y="63" width="178" height="14" rx="4" fill="#F5F8FF" stroke="#BFD0EA"/>
+                  <text id="t2" x="19" y="73" font-size="7.5" fill="#1B2A47"></text>
+                  <rect id="btn" x="14" y="87" width="56" height="16" rx="5" fill="#3B8EEA" style="transition:fill .2s"/>
+                  <text x="42" y="97.5" text-anchor="middle" font-size="7.5" font-weight="700" fill="#fff">Enviar</text>
+                  <text id="ok" x="80" y="98" font-size="8" font-weight="700" fill="#1E9E5A" opacity="0" style="transition:opacity .3s">✓ Enviado com sucesso!</text>
+                </g>
+                <!-- cena 2: vídeo -->
+                <g class="scene sp" id="s2">
+                  <rect x="14" y="8" width="178" height="70" rx="6" fill="url(#vid)"/>
+                  <g id="play"><circle cx="103" cy="43" r="12" fill="#fff" opacity=".92"/><path d="M99.5 37.5v11l9-5.5z" fill="#3B6FD0"/></g>
+                  <rect x="14" y="84" width="178" height="4" rx="2" fill="#DCE6F5"/>
+                  <rect id="vfill" x="14" y="84" width="0" height="4" rx="2" fill="#8B6CF0"/>
+                  <text x="14" y="102" font-size="7.5" font-weight="700" fill="#1B2A47">Aula: como a internet funciona</text>
+                </g>
+                <!-- cena 3: loja -->
+                <g class="scene sp" id="s3">
+                  <text x="14" y="15" font-size="9" font-weight="700" fill="#1B2A47">Loja Online</text>
+                  <path d="M172 6h4l2 9h10l2-7h-15" fill="none" stroke="#3A4A68" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="180" cy="19" r="1.2" fill="#3A4A68"/><circle cx="187" cy="19" r="1.2" fill="#3A4A68"/>
+                  <g id="badge" opacity="0" style="transition:opacity .3s"><circle cx="192" cy="6" r="5" fill="#E5484D"/><text x="192" y="8.6" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">1</text></g>
+                  <g>
+                    <rect x="14" y="26" width="56" height="44" rx="6" fill="#DCEBFF"/><rect x="26" y="34" width="32" height="28" rx="5" fill="#3B8EEA"/>
+                    <rect x="75" y="26" width="56" height="44" rx="6" fill="#E9E3FF"/><circle cx="103" cy="48" r="14" fill="#8B6CF0"/>
+                    <rect x="136" y="26" width="56" height="44" rx="6" fill="#D9F5F3"/><path d="M164 34l14 26h-28z" fill="#2CB5B0"/>
+                  </g>
+                  <text x="42" y="79" text-anchor="middle" font-size="6.5" font-weight="700" fill="#1B2A47">R$ 49</text>
+                  <text x="103" y="79" text-anchor="middle" font-size="6.5" font-weight="700" fill="#1B2A47">R$ 89</text>
+                  <text x="164" y="79" text-anchor="middle" font-size="6.5" font-weight="700" fill="#1B2A47">R$ 35</text>
+                  <rect x="19" y="84" width="46" height="13" rx="4" fill="#3B8EEA"/><text x="42" y="93" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">Comprar</text>
+                  <rect id="buy" x="80" y="84" width="46" height="13" rx="4" fill="#3B8EEA" style="transition:fill .25s"/><text id="buyt" x="103" y="93" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">Comprar</text>
+                  <rect x="141" y="84" width="46" height="13" rx="4" fill="#3B8EEA"/><text x="164" y="93" text-anchor="middle" font-size="6.5" font-weight="700" fill="#fff">Comprar</text>
+                </g>
+                <!-- cursor -->
+                <g class="cur" id="cur" style="transform:translate(120px,80px)"><g class="cp"><path d="M0 0v13l3.5-3 2.5 5.5 2.2-1-2.5-5.4H10z" fill="#111" stroke="#fff" stroke-width="1"/></g></g>
+              </g>
+            </g>
+          </g>
+          <rect class="stand" x="110" y="156" width="14" height="14"/>
+          <rect class="stand" x="88" y="168" width="58" height="7" rx="3.5"/>
+        </g>
+        <text class="lbl" x="121" y="198">Computador</text>
+        <text class="lbl sub" x="121" y="211">navegador</text>
+
+        <!-- servidor -->
+        <g>
+          <circle class="globe" cx="372" cy="36" r="15"/>
+          <ellipse class="globe" cx="372" cy="36" rx="6.5" ry="15"/>
+          <path class="globe" d="M357 36h30M360 28h24M360 44h24"/>
+        </g>
+        <g class="srv" id="srv">
+          <rect class="body" x="336" y="62" width="72" height="104" rx="12"/>
+          <g>
+            <rect class="slot" x="344" y="72" width="56" height="22" rx="5"/><circle class="led" cx="389" cy="83" r="2.6"/>
+            <rect class="slot" x="344" y="100" width="56" height="22" rx="5"/><circle class="led" cx="389" cy="111" r="2.6"/>
+            <rect class="slot" x="344" y="128" width="56" height="22" rx="5"/><circle class="led" cx="389" cy="139" r="2.6"/>
+          </g>
+        </g>
+        <text class="lbl" x="372" y="198">Servidor web</text>
+        <text class="lbl sub" id="host" x="372" y="211">www.google.com</text>
+        <g id="pkts"></g>
+      </svg>
+      <figcaption class="net-info">
+        <span class="net-cap"><i class="live"></i><span id="cap">Abrindo o navegador…</span></span>
+        <span class="steps"><b>Acesso</b><span id="steps"></span></span>
+      </figcaption>
+    </figure>
+  </div>
+</header>
+
+<main class="wrap">
+<section id="capitulos">
+  <div class="head reveal"><span class="eyebrow">Conteúdo</span><h2>Escolha por onde começar</h2><p>Os temas da trilha serão publicados aqui em breve.</p></div>
+</section>
+</main>
+
+<footer><div class="wrap"><span class="fb"><svg class="mark" viewBox="0 0 34 46" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8191E"/><g fill="#32A041"><rect x="12" y="0" width="10" height="10" rx="2"/><rect x="24" y="0" width="10" height="10" rx="2"/><rect x="0" y="12" width="10" height="10" rx="2"/><rect x="12" y="12" width="10" height="10" rx="2"/><rect x="0" y="24" width="10" height="10" rx="2"/><rect x="12" y="24" width="10" height="10" rx="2"/><rect x="24" y="24" width="10" height="10" rx="2"/><rect x="0" y="36" width="10" height="10" rx="2"/><rect x="12" y="36" width="10" height="10" rx="2"/></g></svg>IFSC · Câmpus Garopaba</span></div></footer>
+
+<script>
+(()=>{
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id);
+
+/* Texto digitando */
+const words=['--tema "navegador"','--tema "URL e DNS"','--tema "HTTP e HTTPS"','--lab formulários','--tema "buscas na web"'];
+const te=$('type');let wi=0,ci=0,del=false;
+function type(){const w=words[wi];te.textContent=w.slice(0,ci);
+  if(!del&&ci<w.length)ci++;else if(!del){del=true;return setTimeout(type,1400)}else if(ci>0)ci--;else{del=false;wi=(wi+1)%words.length}
+  setTimeout(type,del?45:90)}
+RM?te.textContent=words[0]:type();
+
+/* Revelação */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');io.unobserve(e.target)}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* Animação: computador acessando páginas */
+{
+  const NS='http://www.w3.org/2000/svg';
+  const mk=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+  const gk=$('pkts'),cap=$('cap'),stepsEl=$('steps'),srv=$('srv'),cur=$('cur'),load=$('load');
+  const lit=[$('l0'),$('l1')],cab=[$('c0'),$('c1')];
+  const STEPS=['DNS','HTTP','Página'];
+  const drawSteps=n=>stepsEl.innerHTML=STEPS.map((s,i)=>`<span class="step${i<n?' on':''}">${i+1} · ${s}</span>`).join(' ');
+  drawSteps(0);
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  let vis=true;
+  new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(document.querySelector('.net'));
+  const gate=async ms=>{await sleep(ms);while(!vis||document.hidden)await sleep(300)};
+
+  function travel(i,fwd,color,ms,r=6){return new Promise(res=>{
+    const path=cab[i],L=path.getTotalLength();
+    const dot=mk('circle',{r,fill:color,filter:'url(#glow)'});gk.append(dot);lit[i].classList.add('on');
+    const t0=performance.now();
+    (function f(now){const t=Math.min(1,(now-t0)/ms),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,pt=path.getPointAtLength(L*(fwd?e:1-e));
+      dot.setAttribute('cx',pt.x);dot.setAttribute('cy',pt.y);
+      if(t<1)requestAnimationFrame(f);else{dot.remove();lit[i].classList.remove('on');res()}})(t0)})}
+  const pulse=()=>{srv.classList.add('hit');setTimeout(()=>srv.classList.remove('hit'),500)};
+
+  async function typeInto(el,txt,sp=65){el.textContent='';for(const ch of txt){el.textContent+=ch;await gate(sp)}}
+  function move(x,y){cur.style.transform=`translate(${x}px,${y}px)`}
+  async function click(){cur.classList.add('click');await sleep(280);cur.classList.remove('click')}
+
+  const scenes=[
+    {url:'https://www.google.com',host:'www.google.com',color:'#3B8EEA',
+     async run(){
+       $('q').textContent='';$('res').setAttribute('opacity',0);
+       move(60,48);await gate(700);await click();cap.textContent='Digitando uma pesquisa…';
+       await typeInto($('q'),'o que é um switch?');
+       move(158,49);await gate(500);await click();
+       $('res').setAttribute('opacity',1);cap.textContent='Resultados da busca recebidos';await gate(1600)}},
+    {url:'https://formulario.exemplo.br',host:'formulario.exemplo.br',color:'#8B6CF0',
+     async run(){
+       $('t1').textContent='';$('t2').textContent='';$('ok').setAttribute('opacity',0);$('btn').setAttribute('fill','#3B8EEA');
+       move(70,38);await gate(600);await click();cap.textContent='Preenchendo o formulário…';
+       await typeInto($('t1'),'Maria Silva');
+       move(70,70);await gate(450);await click();
+       await typeInto($('t2'),'maria@exemplo.com',55);
+       move(40,92);await gate(500);await click();
+       $('btn').setAttribute('fill','#1E9E5A');$('ok').setAttribute('opacity',1);
+       cap.textContent='Dados enviados ao servidor (POST)';await gate(1700)}},
+    {url:'https://videos.exemplo.br/aula',host:'videos.exemplo.br',color:'#2CB5B0',
+     async run(){
+       $('vfill').setAttribute('width',0);$('play').setAttribute('opacity',1);
+       move(100,38);await gate(700);await click();$('play').setAttribute('opacity',0);
+       cap.textContent='Vídeo chegando em pedaços (streaming)';
+       const t0=performance.now(),D=2600;
+       await new Promise(r=>(function f(n){const t=Math.min(1,(n-t0)/D);$('vfill').setAttribute('width',178*t*.7);if(t<1)requestAnimationFrame(f);else r()})(t0));
+       await gate(300)}},
+    {url:'https://loja.exemplo.br',host:'loja.exemplo.br',color:'#E5A100',
+     async run(){
+       $('badge').setAttribute('opacity',0);$('buy').setAttribute('fill','#3B8EEA');$('buyt').textContent='Comprar';
+       move(96,84);await gate(800);await click();
+       $('buy').setAttribute('fill','#1E9E5A');$('buyt').textContent='✓ Adicionado';$('badge').setAttribute('opacity',1);
+       cap.textContent='Produto no carrinho · pedido enviado ao servidor';await gate(1800)}}
+  ];
+
+  function show(i){scenes.forEach((_,k)=>$('s'+k).classList.toggle('show',k===i))}
+
+  async function visit(i){
+    const S=scenes[i];
+    move(120,100);
+    $('load').setAttribute('width',0);
+    cap.textContent='Digitando o endereço na barra…';drawSteps(0);
+    await typeInto($('url'),S.url,35);
+    $('host').textContent=S.host;
+    cap.textContent='1 · Resolvendo o nome (DNS)…';drawSteps(1);await gate(700);
+    cap.textContent='2 · Requisição HTTP → servidor';drawSteps(2);
+    load.style.transition='width 1.4s linear';load.setAttribute('width',120);
+    await travel(0,true,S.color,850);pulse();
+    cap.textContent='Servidor respondeu · 200 OK';
+    await Promise.all([0,1,2].map(k=>gate(k*160).then(()=>travel(1,false,S.color,850,k?4.5:6))));
+    load.style.transition='width .3s';load.setAttribute('width',206);
+    drawSteps(3);show(i);cap.textContent='3 · Página carregada';await gate(500);
+    await S.run();
+    load.style.transition='none';load.setAttribute('width',0);
+  }
+
+  if(RM){show(0);$('url').textContent=scenes[0].url;$('q').textContent='o que é um switch?';$('res').setAttribute('opacity',1);drawSteps(3);cap.textContent='Navegador, internet e servidor trocando dados'}
+  else(async function loop(){let i=0;while(true){await gate(300);await visit(i);i=(i+1)%scenes.length;await gate(500)}})();
+}
+})();
+</script>
+</body>
+</html>
