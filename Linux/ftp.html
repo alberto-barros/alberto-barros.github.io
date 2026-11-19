@@ -1135,6 +1135,26 @@ html,body{overflow-x:clip}
 .cite:hover,.cite:focus-visible{color:#1D6FD8;background:none;text-decoration:underline}
 #refs .ref,#refs .books li{scroll-margin-top:84px}
 #refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
+
+/* ===== layout do desafio (estilo Roteamento) ===== */
+.desafio .ch-banner{border-radius:28px;box-shadow:0 30px 60px -36px var(--red);position:relative;overflow:hidden}
+.desafio .ch-banner .ico{width:64px;height:64px;border-radius:20px;box-shadow:0 14px 26px -12px var(--red)}
+.desafio .ch-banner .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--red);animation:icoRing 2.4s ease-out infinite}
+.desafio .ch-banner .ico svg{animation:icoWiggle 3s ease-in-out infinite}
+.desafio .def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start;margin-bottom:8px}
+.desafio .def > *{min-width:0}
+.desafio .def p+p{margin-top:14px}
+.desafio .def .big{font-size:1.2rem;line-height:1.55}
+.desafio .def .big strong{color:var(--red)}
+.desafio .ch-ports{grid-template-columns:repeat(2,minmax(0,1fr))}
+.desafio .port-card b{font-size:1.8rem}
+.desafio .sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:40px 0 18px}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red));color:#fff}
+.desafio .btn{background:linear-gradient(135deg,#E5484D,var(--red));box-shadow:0 10px 22px -12px var(--red)}
+.desafio .tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)))}
+.desafio .sec-head h2::after{background:var(--red)}
+@media (max-width:860px){.desafio .def{grid-template-columns:1fr}}
+@media (max-width:480px){.desafio .ch-ports{grid-template-columns:1fr 1fr}.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1837,16 +1857,27 @@ Mon Nov  9 10:38:15 2026 [pid 2312] [aluno] <span class="ok">OK UPLOAD</span>: C
     <div class="ch-banner">
       <div class="ico"><svg><use href="#i-lock"/></svg></div>
       <div>
-        <span class="sec-num">Desafio · VM e hospedeira</span>
+        <span class="sec-num">Desafio · VM e hospedeira · FTPS</span>
         <h2>Deixar o vsftpd seguro com TLS</h2>
         <p>Hoje a sua senha passa pela rede em texto puro. Neste desafio você cria uma chave e um certificado e obriga o vsftpd a criptografar tudo. Esse modo se chama <b>FTPS</b> (FTP sobre TLS) e continua usando a porta 21.</p>
       </div>
     </div>
 
-    <div class="ch-keys">
-      <div class="err"><h3><svg><use href="#i-lock"/></svg>Chave privada</h3><p>Arquivo <code>vsftpd.key</code>. Fica só no servidor e só o root pode ler. É ela que prova que o servidor é ele mesmo <span class="cites">(<a class="cite" href="#ref-ford">FORD-HUTCHINSON, 2005</a>)</span>.</p></div>
-      <div class="err"><h3><svg><use href="#i-shield"/></svg>Certificado</h3><p>Arquivo <code>vsftpd.pem</code>. É público e vai para o FileZilla na hora da conexão. Como nós mesmos assinamos, ele é <b>autoassinado</b> <span class="cites">(<a class="cite" href="#ref-ford">FORD-HUTCHINSON, 2005</a>)</span>.</p></div>
+    <div class="def">
+      <div>
+        <p class="big"><strong>FTPS</strong> é o FTP dentro de uma conexão <strong>TLS</strong>: a senha e os arquivos viajam criptografados, e o servidor continua na porta 21 <span class="cites">(<a class="cite" href="#ref-ford">FORD-HUTCHINSON, 2005</a>)</span>.</p>
+        <p>Para isso o servidor precisa de dois arquivos. A <b>chave privada</b> (<code>vsftpd.key</code>) fica só no servidor, com leitura apenas para o root, e é ela que prova que o servidor é ele mesmo.</p>
+        <p>O <b>certificado</b> (<code>vsftpd.pem</code>) é público e vai para o FileZilla na hora da conexão. Como nós mesmos assinamos, ele é <b>autoassinado</b>, e por isso o FileZilla pergunta se você confia nele <span class="cites">(<a class="cite" href="#ref-ford">FORD-HUTCHINSON, 2005</a>)</span>.</p>
+      </div>
+      <div class="ports ch-ports">
+        <div class="port-card" style="--vc:var(--s1)"><b>21</b><strong>Mesma porta</strong><span>O FTPS explícito não muda de porta: começa em texto e passa para TLS.</span></div>
+        <div class="port-card" style="--vc:var(--s3)"><b>.key</b><strong>Chave privada</strong><span>Só no servidor, com <code>chmod 600</code>.</span></div>
+        <div class="port-card" style="--vc:var(--s2)"><b>.pem</b><strong>Certificado</strong><span>Público, vai para o FileZilla confiar.</span></div>
+        <div class="port-card" style="--vc:var(--s4)"><b>365</b><strong>Dias de validade</strong><span>Chave RSA de 2048 bits.</span></div>
+      </div>
     </div>
+
+    <h3 class="sub-h">Passo a passo do desafio</h3>
 
     <ol class="steps">
       <li class="step">
