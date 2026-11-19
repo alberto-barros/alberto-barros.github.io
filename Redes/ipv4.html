@@ -1213,6 +1213,21 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 .desafio .port-card strong{align-self:auto}
 .desafio .port-card::before{display:none}
 .desafio .port-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--vc),transparent)}
+
+/* desenho da rede: ao passar o mouse o grupo "se aproxima" da tela */
+#draw{overflow:visible}
+.draw-scroll{padding:6px 0}
+#draw .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;
+  transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease}
+#draw:has(.grp:hover) .grp:not(:hover),#draw:has(.grp:focus-visible) .grp:not(:focus-visible){opacity:.55;filter:saturate(.6);transition:opacity .35s,filter .35s,transform .5s cubic-bezier(.3,1.5,.5,1)}
+#draw .grp:hover,#draw .grp:focus-visible{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
+#draw .grp > rect:first-child{transition:fill-opacity .35s,stroke-opacity .35s,stroke-width .35s}
+#draw .grp:hover > rect:first-child,#draw .grp:focus-visible > rect:first-child{fill-opacity:.2;stroke-opacity:1;stroke-width:2.5}
+#draw .grp .mon{transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+#draw .grp:hover .mon{animation:monGlow 1.6s ease-in-out infinite}
+@keyframes monGlow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 6px var(--gc))}}
+@media (max-width:600px){#draw .grp:hover,#draw .grp:focus-visible{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){#draw .grp,#draw .grp .mon{transition:none;animation:none}#draw .grp:hover{transform:none}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -2190,34 +2205,36 @@ show mac address-table
       {t:'DESAFIO',n:'C e A',c:'var(--s4)',pcs:[6,7],l:'?',d:'Mesma classe ≠ mesma rede'}
     ];
     function drawTopo(){
-      var v = mq && mq.matches, h = '', d = $('draw');
+      var v = mq && mq.matches, h = '', d = $('draw'), gh = [];
+      var rectS = function(g){ return 'style="fill:'+g.c+';fill-opacity:.1;stroke:'+g.c+'" stroke-opacity=".45"'; };
       if (v){
         d.setAttribute('viewBox','0 0 360 666');
         G.forEach(function(g,k){
           var gy = 40+k*156;
-          h+='<rect x="6" y="'+gy+'" width="348" height="146" rx="16" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>';
-          h+='<text class="grp-l" x="18" y="'+(gy+22)+'" style="fill:'+g.c+'">'+g.t+'</text><text class="grp-n" x="342" y="'+(gy+22)+'" text-anchor="end">'+g.n+'</text>';
+          gh[k] = '<rect x="6" y="'+gy+'" width="348" height="146" rx="16" '+rectS(g)+'/>'+
+            '<text class="grp-l" x="18" y="'+(gy+22)+'" style="fill:'+g.c+'">'+g.t+'</text><text class="grp-n" x="342" y="'+(gy+22)+'" text-anchor="end">'+g.n+'</text>';
         });
         PCS.forEach(function(p,i){ var left=i%2===0, y=40+Math.floor(i/2)*156+66; h+='<line class="cab" style="stroke:'+COL[p.c]+'" x1="'+(left?100:260)+'" y1="'+y+'" x2="'+(left?150:210)+'" y2="'+y+'"/><text class="port" x="'+(left?125:235)+'" y="'+(y-7)+'">'+p.port+'</text>'; });
         h+='<rect class="sw-body" x="150" y="8" width="60" height="650" rx="12"/><rect class="sw-top" x="150" y="8" width="60" height="10" rx="5"/><text class="sw-t" x="180" y="38">SW1</text>';
         h+='<text class="sw-s" transform="translate(184,334) rotate(-90)">Switch 2960</text>';
         PCS.forEach(function(p,i){ var left=i%2===0, y=40+Math.floor(i/2)*156+66; h+='<rect class="led" x="'+(left?153:197)+'" y="'+(y-6)+'" width="10" height="12" rx="2"/>'; });
-        PCS.forEach(function(p,i){ var left=i%2===0, x=left?70:290, y=40+Math.floor(i/2)*156+66; h+=pcSvg(p,x,y-4,false); });
+        PCS.forEach(function(p,i){ var left=i%2===0, x=left?70:290, y=40+Math.floor(i/2)*156+66; gh[Math.floor(i/2)] += pcSvg(p,x,y-4,false); });
       } else {
         d.setAttribute('viewBox','0 0 1000 370');
         var sx=500, sy=78;
         var px = function(i){ var k=Math.floor(i/2); return 20+k*245+(i%2?168:58); };
         G.forEach(function(g,k){
           var x=20+k*245;
-          h+='<rect x="'+x+'" y="168" width="225" height="190" rx="18" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>';
-          h+='<text class="grp-l" x="'+(x+16)+'" y="192" style="fill:'+g.c+'">'+g.t+'</text><text class="grp-n" x="'+(x+209)+'" y="192" text-anchor="end">'+g.n+'</text>';
+          gh[k] = '<rect x="'+x+'" y="168" width="225" height="190" rx="18" '+rectS(g)+'/>'+
+            '<text class="grp-l" x="'+(x+16)+'" y="192" style="fill:'+g.c+'">'+g.t+'</text><text class="grp-n" x="'+(x+209)+'" y="192" text-anchor="end">'+g.n+'</text>';
         });
         PCS.forEach(function(p,i){ var s0=sx-126+i*36; h+='<path class="cab" style="stroke:'+COL[p.c]+'" d="M'+s0+' '+(sy+24)+' C '+s0+' 160, '+px(i)+' 150, '+px(i)+' 236"/>'; });
         h+='<g transform="translate('+sx+','+sy+')"><rect class="sw-body" x="-150" y="-30" width="300" height="56" rx="10"/><rect class="sw-top" x="-150" y="-30" width="300" height="10" rx="5"/>';
         for (var j=0;j<8;j++) h+='<rect class="led" x="'+(-133+j*36)+'" y="12" width="14" height="7" rx="2"/>';
         h+='<text class="sw-t" y="-1">SW1</text><text class="sw-s" y="-1" x="96">Switch 2960</text></g>';
-        PCS.forEach(function(p,i){ h+=pcSvg(p,px(i),262,true); });
+        PCS.forEach(function(p,i){ gh[Math.floor(i/2)] += pcSvg(p,px(i),262,true); });
       }
+      G.forEach(function(g,k){ h += '<g class="grp" tabindex="0" style="--gc:'+g.c+'" aria-label="'+g.t+' '+g.n+'">'+gh[k]+'</g>'; });
       d.innerHTML = h;
     }
     function pcSvg(p,x,y,port){
