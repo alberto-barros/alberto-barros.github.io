@@ -1155,6 +1155,19 @@ html,body{overflow-x:clip}
 .desafio .sec-head h2::after{background:var(--red)}
 @media (max-width:860px){.desafio .def{grid-template-columns:1fr}}
 @media (max-width:480px){.desafio .ch-ports{grid-template-columns:1fr 1fr}.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
+
+/* ===== seções de conceito (estilo Roteamento) ===== */
+.anat-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:12px;box-shadow:0 18px 40px -30px color-mix(in srgb,var(--green) 60%,transparent)}
+.anat-box h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.anat-rows{display:grid;gap:0}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:12px 0;border-top:1px dashed var(--line)}
+.anat:first-child{border-top:0}
+.anat b{font-family:var(--f-display);font-size:.9rem}
+.anat span{font-size:.9rem;color:var(--muted)}
+.anat i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+.uses{padding:0}.uses .anat span{font-family:var(--f-body)}
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+#vantagens .grid3{gap:18px}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1204,7 +1217,7 @@ html,body{overflow-x:clip}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#m1"><b>03</b>Instalar o vsftpd</a><a href="#m2"><b>04</b>Configurar</a><a href="#m3"><b>05</b>Permissões</a><a href="#m4"><b>06</b>IP e teste</a><a href="#m5"><b>07</b>FileZilla</a><a href="#m6"><b>08</b>Backup</a><a href="#m7"><b>09</b>Nova página</a><a href="#m8"><b>10</b>Conferir</a><a href="#m9"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#desafio"><b>13</b>Desafio</a><a href="#entrega"><b>14</b>Quiz</a><a href="#refs"><b>15</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#serve"><b>03</b>Para que serve</a><a href="#vantagens"><b>04</b>Vantagens</a><a href="#portas"><b>05</b>Portas e cuidados</a><a href="#m1"><b>06</b>Instalar o vsftpd</a><a href="#m2"><b>07</b>Configurar</a><a href="#m3"><b>08</b>Permissões</a><a href="#m4"><b>09</b>IP e teste</a><a href="#m5"><b>10</b>FileZilla</a><a href="#m6"><b>11</b>Backup</a><a href="#m7"><b>12</b>Nova página</a><a href="#m8"><b>13</b>Conferir</a><a href="#m9"><b>14</b>Exercícios</a><a href="#checklist-sec"><b>15</b>Checklist</a><a href="#desafio"><b>16</b>Desafio</a><a href="#entrega"><b>17</b>Quiz</a><a href="#refs"><b>18</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1430,12 +1443,77 @@ Password:
 <section class="sec" id="ftp">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Conceito</span>
+      <span class="sec-num">Parte 1 · Conceito</span>
       <h2>O que é FTP</h2>
       <p>Entenda o protocolo antes de instalar o servidor.</p>
     </div>
-    <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-bulb"/></svg></div><h3>O que é</h3><p><b>FTP</b> (File Transfer Protocol) é o protocolo de transferência de arquivos. Ele existe desde 1971 e funciona no modelo <b>cliente e servidor</b>: o servidor guarda os arquivos e o cliente se conecta para enviar ou baixar <span class="cites">(<a class="cite" href="#ref-bhushan">BHUSHAN, 1971</a>)</span>. O padrão que usamos até hoje é a RFC 959 <span class="cites">(<a class="cite" href="#ref-postel">POSTEL; REYNOLDS, 1985</a>)</span>.</p></div><div class="ben"><div class="ico"><svg><use href="#i-swap"/></svg></div><h3>Para que serve</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Publicar sites: enviar HTML, CSS e imagens para o servidor web</li><li>Fazer backup de arquivos do servidor</li><li>Trocar arquivos grandes entre computadores</li><li>Atualizar sites em hospedagens</li></ul></div><div class="ben"><div class="ico"><svg><use href="#i-check"/></svg></div><h3>Vantagens</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Gratuito e aceito em quase todo sistema</li><li>Transfere pastas inteiras de uma vez</li><li>Retoma transferências interrompidas</li><li>Clientes fáceis de usar, como o FileZilla</li><li>Controle de acesso por usuário e senha</li></ul></div></div>
+    <div class="def">
+      <div>
+        <p class="big"><strong>FTP</strong> (File Transfer Protocol) é o protocolo de <strong>transferência de arquivos</strong> entre dois computadores ligados em rede <span class="cites">(<a class="cite" href="#ref-postel">POSTEL; REYNOLDS, 1985</a>)</span>.</p>
+        <p>Ele existe desde 1971 <span class="cites">(<a class="cite" href="#ref-bhushan">BHUSHAN, 1971</a>)</span> e funciona no modelo <b>cliente e servidor</b>: o servidor guarda os arquivos e fica esperando conexões; o cliente se conecta, faz o login e envia ou baixa arquivos <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+        <p>O FTP usa <b>duas conexões</b>: uma de <b>controle</b>, na porta 21, para o login e os comandos, e outra de <b>dados</b>, aberta só enquanto o arquivo é transferido. Nesta aula o servidor é o <b>vsftpd</b>, na VM, e o cliente é o <b>FileZilla</b>, na máquina hospedeira.</p>
+      </div>
+      <div class="anat-box">
+        <h3>Anatomia de uma conexão FTP</h3>
+        <div class="anat-rows">
+          <div class="anat"><b><i style="background:var(--s1)"></i>Cliente</b><span>FileZilla, na máquina hospedeira</span></div>
+          <div class="anat"><b><i style="background:var(--green)"></i>Servidor</b><span>vsftpd, na VM Linux Mint</span></div>
+          <div class="anat"><b><i style="background:var(--s3)"></i>Controle</b><span>porta 21: login e comandos (listar, enviar, baixar)</span></div>
+          <div class="anat"><b><i style="background:var(--s2)"></i>Dados</b><span>conexão aberta para cada transferência de arquivo</span></div>
+          <div class="anat"><b><i style="background:var(--s4)"></i>Acesso</b><span>usuário e senha de uma conta do Linux</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<section class="sec" id="serve">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Uso</span>
+      <h2>Para que serve o FTP</h2>
+      <p>Sempre que for preciso levar arquivos de um computador para outro, ou deixar um site no ar.</p>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big">O FTP serve para <strong>enviar</strong> arquivos ao servidor e <strong>baixar</strong> arquivos dele, em pastas inteiras e de qualquer tamanho.</p>
+        <p>É o jeito clássico de publicar um site: o aluno edita a página na própria máquina e envia ao servidor web, que fica na pasta <code>/var/www/html</code>. É o que você vai fazer nesta aula.</p>
+      </div>
+      <div class="anat-rows uses">
+        <div class="anat"><b>Publicar sites</b><span>enviar HTML, CSS e imagens para o servidor web</span></div>
+        <div class="anat"><b>Fazer backup</b><span>copiar os arquivos do servidor para a hospedeira</span></div>
+        <div class="anat"><b>Trocar arquivos grandes</b><span>mover arquivos entre computadores da mesma rede</span></div>
+        <div class="anat"><b>Atualizar sites</b><span>mandar a nova versão de uma página em hospedagens</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="vantagens">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Por que usar</span>
+      <h2>Vantagens e benefícios do FTP</h2>
+      <p>Por ser simples e antigo, o FTP continua presente em servidores, hospedagens e laboratórios <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+    </div>
+    <div class="grid3">
+      <article class="ben"><div class="ico"><svg><use href="#i-globe"/></svg></div><h3>Aceito em todo lugar</h3><p>Praticamente todo sistema operacional e toda hospedagem têm cliente e servidor FTP.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-check"/></svg></div><h3>Gratuito</h3><p>O vsftpd e o FileZilla são gratuitos e de código aberto, sem licença para pagar.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-folder"/></svg></div><h3>Pastas inteiras</h3><p>Transfere uma pasta com todos os arquivos de uma vez, mantendo a estrutura.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-pulse"/></svg></div><h3>Retoma transferências</h3><p>Se a conexão cai no meio de um arquivo grande, a transferência pode continuar de onde parou.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-pc"/></svg></div><h3>Clientes fáceis</h3><p>No FileZilla basta arrastar os arquivos de um lado para o outro, sem decorar comandos.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-lock"/></svg></div><h3>Controle de acesso</h3><p>Cada pessoa entra com o seu usuário e senha, e o servidor decide o que ela pode fazer.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="portas">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Na prática</span>
+      <h2>Portas, cuidados e funcionamento</h2>
+      <p>O que precisa estar aberto, o que pode dar errado e como as duas máquinas vão conversar nesta aula.</p>
+    </div>
     <h3 class="sub-h">Portas usadas</h3>
     <div class="ports">
       <div class="port-card" style="--vc:var(--green)"><b>21</b><strong>Controle</strong><span>Porta onde o servidor espera a conexão. Por ela passam o login e os comandos (listar, enviar, baixar) <span class="cites">(<a class="cite" href="#ref-postel">POSTEL; REYNOLDS, 1985</a>)</span>.</span></div>
@@ -1461,6 +1539,7 @@ Password:
 
     <h3 class="sub-h">Arquivos do vsftpd</h3>
     <div class="tbl-wrap files"><table><thead><tr><th>Caminho</th><th>Para que serve</th></tr></thead><tbody><tr><td>/etc/vsftpd.conf</td><td>Arquivo de configuração do servidor FTP</td></tr><tr><td>/var/log/vsftpd.log</td><td>Registro de logins e de cada arquivo enviado ou baixado</td></tr><tr><td>/etc/ftpusers</td><td>Usuários proibidos de entrar por FTP (o root está nesta lista)</td></tr><tr><td>/usr/sbin/vsftpd</td><td>O programa do servidor</td></tr></tbody></table></div>
+  
   </div>
 </section>
 
