@@ -12,13 +12,13 @@
 :root{
   --bg:#F8FAFC;--surface:#fff;--surface-2:#F1F5F9;--ink:#0F172A;--muted:#64748B;--line:#E2E8F0;
   --green:#32A041;--green-ink:#247A30;--green-soft:#E9F7EC;--green-chip:#BFE5C6;--red:#C8191E;--red-soft:#FDECEC;--red-chip:#F6C5C7;
-  --h-strong:#000;--h-top:#E8F6EB;--h-mesh:.36;--h-dot:rgba(15,23,42,.14);--h-g1:#247A30;--h-g2:#0E9C7A;--h-cable:#C3D5C8;--h-edge:#E2E8F0;--h-stand:#A9B8AE;--h-floor:rgba(15,23,42,.07);
+  --h-strong:#000;--h-top:#F1FAF2;--h-mesh:.34;--h-dot:rgba(15,23,42,.14);--h-g1:#247A30;--h-g2:#0E9C7A;--h-cable:#C3D5C8;--h-edge:#E2E8F0;--h-stand:#A9B8AE;--h-floor:rgba(15,23,42,.07);
   --font-display:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;--font-mono:"JetBrains Mono",ui-monospace,monospace;
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#0B0F17;--surface:#121824;--surface-2:#1A2233;--ink:#F8FAFC;--muted:#94A3B8;--line:#1E293B;
   --green:#3DBE50;--green-ink:#5ADB6E;--green-soft:#12301A;--green-chip:#1F4A29;--red:#FF6B6F;--red-soft:#3A1517;--red-chip:#5C2226;
-  --h-strong:#F8FAFC;--h-top:#0D1A12;--h-mesh:.2;--h-dot:rgba(248,250,252,.12);--h-g1:#5ADB6E;--h-g2:#3FE0B5;--h-cable:#2A3A4F;--h-edge:#1E293B;--h-stand:#56657A;--h-floor:rgba(0,0,0,.4);color-scheme:dark}}
+  --h-strong:#F8FAFC;--h-top:#0E1611;--h-mesh:.2;--h-dot:rgba(248,250,252,.12);--h-g1:#5ADB6E;--h-g2:#3FE0B5;--h-cable:#2A3A4F;--h-edge:#1E293B;--h-stand:#56657A;--h-floor:rgba(0,0,0,.4);color-scheme:dark}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -91,7 +91,6 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 /* animação sem moldura */
 .lan{margin:0;min-width:0;width:100%;display:grid;gap:14px;justify-items:center}
 .lan-svg{width:100%;max-width:560px;height:auto;display:block;overflow:visible}
-.floor{fill:var(--h-floor)}
 .cables path{fill:none;stroke:var(--h-cable);stroke-width:3;stroke-linecap:round}
 .cables-lit path{fill:none;stroke:var(--green);stroke-width:3.5;stroke-linecap:round;opacity:0;transition:opacity .25s}
 .cables-lit path.on{opacity:1}
@@ -104,7 +103,6 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .pc text{font-family:var(--font-display);font-weight:600;fill:var(--ink);font-size:11px;text-anchor:middle}
 .pc .ip{font-family:var(--font-mono);font-weight:400;font-size:9px;fill:var(--muted)}
 .pc .code{font-family:var(--font-mono);font-weight:400;font-size:7px;fill:#7CFF95;text-anchor:start}
-.switch{filter:drop-shadow(0 12px 14px rgba(23,80,40,.28))}
 .sw-body{fill:url(#swg)}
 .sw-label{font-family:var(--font-display);font-weight:600;font-size:10px;letter-spacing:.32em;fill:#fff;text-anchor:middle}
 .port rect{fill:#0b1f10;stroke:rgba(255,255,255,.5);stroke-width:1}
@@ -166,24 +164,72 @@ section{padding-block:72px 16px}
 @keyframes arry{0%{transform:translateY(0);opacity:0}15%,85%{opacity:1}100%{transform:translateY(32px);opacity:0}}
 @keyframes arrx{0%{transform:translateX(0);opacity:0}15%,85%{opacity:1}100%{transform:translateX(48px);opacity:0}}
 @media (max-width:760px){.cards{grid-template-columns:1fr;row-gap:60px}.node,.node.lab{grid-column:auto}.arr.right,.arr.elbow{display:none}.arr.m-only{display:block}.node:has(+ .node.lab)>.arr.down .ln{stroke:var(--red)}.node:has(+ .node.lab)>.arr.down .hd,.node:has(+ .node.lab)>.arr.down .pk{fill:var(--red)}}
-.chap{position:relative;display:grid;gap:10px;align-content:start;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s ease}
-.chap:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--green) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--green) 25%,transparent),0 14px 30px -6px color-mix(in srgb,var(--green) 45%,transparent),0 0 46px -4px color-mix(in srgb,var(--green) 40%,transparent)}
-.chap.lab:hover{border-color:color-mix(in srgb,var(--red) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--red) 25%,transparent),0 14px 30px -6px color-mix(in srgb,var(--red) 40%,transparent),0 0 46px -4px color-mix(in srgb,var(--red) 35%,transparent)}
+/* ---------- Cards modernos ---------- */
+.chap{--c:var(--green);--c2:#5FD16F;--c-ink:var(--green-ink);--c-soft:var(--green-soft);--c-chip:var(--green-chip);--mx:50%;--my:0%;
+  position:relative;display:grid;gap:12px;align-content:start;text-decoration:none;isolation:isolate;overflow:hidden;
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px -16px rgba(15,23,42,.18);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s}
+.chap.lab{--c:var(--red);--c2:#F0535A;--c-ink:var(--red);--c-soft:var(--red-soft);--c-chip:var(--red-chip)}
+/* luz que segue o mouse */
+.chap::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .35s;background:radial-gradient(420px circle at var(--mx) var(--my),color-mix(in srgb,var(--c) 13%,transparent),transparent 60%)}
+/* faixa colorida no topo */
+.chap::after{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--c),var(--c2),var(--c));transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.chap:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--c) 45%,var(--line));box-shadow:0 1px 2px rgba(15,23,42,.04),0 22px 44px -18px color-mix(in srgb,var(--c) 55%,transparent)}
+.chap:hover::before{opacity:1}
+.chap:hover::after{transform:scaleX(1)}
 .chap .top{display:flex;align-items:center;gap:10px}
-.chap .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);flex:none}
-.chap.lab .ic{background:var(--red)}
-.chap .ic .i{width:24px;height:24px}
-.chap .kind{margin-left:auto;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--green-soft);border:1px solid var(--green-chip);color:var(--green-ink)}
-.chap.lab .kind{background:var(--red-soft);border-color:var(--red-chip);color:var(--red)}
+.chap .ic{position:relative;width:52px;height:52px;border-radius:15px;display:grid;place-items:center;flex:none;color:#fff;overflow:hidden;
+  background:linear-gradient(140deg,var(--c2),var(--c));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 20px -8px color-mix(in srgb,var(--c) 70%,transparent);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.chap .ic::after{content:"";position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);transform:translateX(-80%);transition:transform .8s}
+.chap:hover .ic{transform:rotate(-6deg) scale(1.06)}
+.chap:hover .ic::after{transform:translateX(80%)}
+.chap .ic .i{width:26px;height:26px;overflow:visible}
+.chap .kind{margin-left:auto;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--c-soft);border:1px solid var(--c-chip);color:var(--c-ink)}
 .chap .num{font-family:var(--font-mono);font-weight:600;font-size:.82rem;color:var(--muted);min-width:2ch;text-align:right}
-.chap h3{font-size:1.14rem;font-weight:700;letter-spacing:-.015em;margin-top:2px}
+.chap h3{font-size:1.16rem;font-weight:700;letter-spacing:-.02em;margin-top:2px}
 .chap p{margin:0;color:var(--muted);font-size:.93rem;line-height:1.55}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-family:var(--font-mono);font-size:.7rem;padding:2px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
-.chap .go{display:flex;align-items:center;justify-content:space-between;gap:6px;font-weight:700;font-size:.88rem;color:var(--green-ink);margin-top:6px;padding-top:12px;border-top:1px solid var(--line)}
-.chap.lab .go{color:var(--red)}
-.go .i{width:16px;height:16px;transition:transform .2s}
-.chap:hover .go .i{transform:translateX(4px)}
+.tag{font-family:var(--font-mono);font-size:.7rem;padding:3px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);transition:border-color .3s,color .3s,background .3s}
+.chap:hover .tag{border-color:var(--c-chip);color:var(--c-ink);background:var(--c-soft)}
+.chap .go{display:flex;align-items:center;justify-content:space-between;gap:6px;font-weight:700;font-size:.9rem;color:var(--c-ink);margin-top:6px;padding-top:14px;border-top:1px dashed var(--line)}
+.go .i{width:16px;height:16px}
+.go .gb{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--c-soft);color:var(--c-ink);transition:background .3s,color .3s,transform .3s}
+.chap:hover .go .gb{background:var(--c);color:#fff;transform:translateX(4px)}
+
+/* ---------- Ícones animados ---------- */
+.a-float{animation:a-float 3.2s ease-in-out infinite;transform-origin:center}
+@keyframes a-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-2px) rotate(-6deg)}}
+.a-book .pg{transform-box:fill-box;transform-origin:left center;animation:a-flip 3s ease-in-out infinite}
+@keyframes a-flip{0%,100%{transform:scaleX(1)}45%,55%{transform:scaleX(.15)}}
+.a-book .ln{stroke-dasharray:14;animation:a-draw 3s ease-in-out infinite}
+@keyframes a-draw{0%,100%{stroke-dashoffset:0}50%{stroke-dashoffset:14}}
+.a-lay .l1,.a-lay .l2,.a-lay .l3{animation:a-stack 2.4s ease-in-out infinite}
+.a-lay .l2{animation-delay:.2s}.a-lay .l3{animation-delay:.4s}
+@keyframes a-stack{0%,100%{transform:translateY(0)}35%{transform:translateY(-2.2px)}}
+.a-ip .d{animation:a-pulse 1.6s ease-in-out infinite}
+.a-ip .d2{animation-delay:.25s}.a-ip .d3{animation-delay:.5s}
+@keyframes a-pulse{0%,100%{opacity:1}50%{opacity:.2}}
+.a-ip .cur{animation:a-blink 1s steps(1) infinite}
+@keyframes a-blink{50%{opacity:0}}
+.a-flask .bub{transform-box:fill-box;transform-origin:center;animation:a-bub 2.2s ease-in infinite;opacity:0}
+.a-flask .b2{animation-delay:.7s}.a-flask .b3{animation-delay:1.4s}
+@keyframes a-bub{0%{transform:translateY(3px) scale(.4);opacity:0}30%{opacity:1}100%{transform:translateY(-6px) scale(1);opacity:0}}
+.a-flask .liq{animation:a-pulse 2.2s ease-in-out infinite}
+.a-grid .q{transform-box:fill-box;transform-origin:center;animation:a-q 2.4s ease-in-out infinite}
+.a-grid .q2{animation-delay:.3s}.a-grid .q3{animation-delay:.9s}.a-grid .q4{animation-delay:.6s}
+@keyframes a-q{0%,100%{transform:scale(1);fill:rgba(255,255,255,0)}35%{transform:scale(.72);fill:rgba(255,255,255,.55)}}
+.a-sw .led{animation:a-led 1.2s steps(1) infinite}
+.a-sw .led2{animation-delay:.4s}.a-sw .led3{animation-delay:.8s}
+@keyframes a-led{0%{opacity:1}50%{opacity:.2}}
+.a-sw .wire{stroke-dasharray:3 3;animation:a-dash 1s linear infinite}
+@keyframes a-dash{to{stroke-dashoffset:-6}}
+.a-rt .w1,.a-rt .w2{animation:a-wave 1.8s ease-in-out infinite}
+.a-rt .w2{animation-delay:.3s}
+@keyframes a-wave{0%,100%{opacity:.25}40%{opacity:1}}
+.a-rt .led{animation:a-led 1.2s steps(1) infinite}
+.chap:hover .ic svg *{animation-duration:.9s}
 
 footer{margin-top:80px;border-top:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.86rem}
 footer .wrap{display:flex;justify-content:flex-start;align-items:center;gap:12px;flex-wrap:wrap;padding-block:22px}
@@ -244,7 +290,6 @@ footer .fb svg{height:26px;width:auto}
           <linearGradient id="swg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2F9E41"/><stop offset="1" stop-color="#176B3A"/></linearGradient>
           <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
-        <ellipse class="floor" cx="210" cy="252" rx="150" ry="12"/>
         <g class="cables">
           <path id="c0" d="M70 112 C70 165,165 150,165 196"/>
           <path id="c1" d="M210 112 L210 196"/>
@@ -278,81 +323,81 @@ footer .fb svg{height:26px;width:auto}
   <div class="cards">
     <div class="node">
       <a class="chap reveal" href="https://alberto-barros.github.io/Redes/Guia.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-book"/></svg></div><span class="kind">Teoria</span><span class="num">01</span></div>
+        <div class="top"><div class="ic"><svg class="i a-float a-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/><path class="ln" d="M9 8h7M9 12h5"/></svg></div><span class="kind">Teoria</span><span class="num">01</span></div>
         <h3>Guia de Estudo</h3>
         <p>Resumo dos conceitos da disciplina com laboratórios animados: topologias, meios, cabeamento, OSI e TCP/IP.</p>
         <div class="tags"><span class="tag">topologias</span><span class="tag">cabeamento</span><span class="tag">TCP/IP</span></div>
-        <span class="go">Estudar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Estudar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
     <div class="node">
       <a class="chap reveal" href="https://alberto-barros.github.io/Redes/OSI.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-layers"/></svg></div><span class="kind">Teoria</span><span class="num">02</span></div>
+        <div class="top"><div class="ic"><svg class="i a-lay" viewBox="0 0 24 24"><path class="l3" d="M3 16.5L12 21l9-4.5"/><path class="l2" d="M3 12l9 4.5 9-4.5"/><path class="l1" d="M12 3l9 4.5-9 4.5-9-4.5z"/></svg></div><span class="kind">Teoria</span><span class="num">02</span></div>
         <h3>Modelo OSI</h3>
         <p>As 7 camadas do modelo OSI, a função de cada uma, PDUs, encapsulamento e a comparação com o TCP/IP.</p>
         <div class="tags"><span class="tag">7 camadas</span><span class="tag">PDU</span><span class="tag">encapsulamento</span></div>
-        <span class="go">Estudar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Estudar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
     <div class="node">
       <a class="chap reveal" href="https://alberto-barros.github.io/Redes/ipteoria.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-ip"/></svg></div><span class="kind">Teoria</span><span class="num">03</span></div>
+        <div class="top"><div class="ic"><svg class="i a-ip" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="11" rx="2"/><path d="M8 20h8M12 16v4"/><path class="d d1" d="M7 9v3"/><path class="d d2" d="M10 9v3h1.5a1.5 1.5 0 0 0 0-3H10"/><path class="cur" d="M16 9v3"/></svg></div><span class="kind">Teoria</span><span class="num">03</span></div>
         <h3>Endereço IP</h3>
         <p>O que é um endereço IP, como ele é escrito em decimal e binário, rede e host, IPs públicos, privados e especiais.</p>
         <div class="tags"><span class="tag">IPv4</span><span class="tag">binário</span><span class="tag">público × privado</span></div>
-        <span class="go">Estudar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Estudar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr right" aria-hidden="true"><svg viewBox="0 0 72 40"><path class="ln" d="M2 20H58"/><path class="hd" d="M56 12l13 8-13 8z"/><circle class="pk" cx="6" cy="20" r="4.5"/></svg></span><span class="arr down m-only" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
     <div class="node lab">
       <a class="chap reveal lab" href="https://alberto-barros.github.io/Redes/ipv4.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-flask"/></svg></div><span class="kind">Prática</span><span class="num">04</span></div>
+        <div class="top"><div class="ic"><svg class="i a-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L4.3 19a1.4 1.4 0 0 0 1.2 2h13a1.4 1.4 0 0 0 1.2-2L14 9.5V3"/><path class="liq" d="M7 15h10"/><circle class="bub b1" cx="10.5" cy="17.5" r="1" fill="currentColor" stroke="none"/><circle class="bub b2" cx="13.5" cy="18" r="1.2" fill="currentColor" stroke="none"/><circle class="bub b3" cx="12" cy="16.5" r=".8" fill="currentColor" stroke="none"/></svg></div><span class="kind">Prática</span><span class="num">04</span></div>
         <h3>Laboratório · Endereço IP</h3>
         <p>Configure IPs de classe A, B e C em 8 PCs ligados a um switch e descubra, com ping, quem consegue conversar com quem.</p>
         <div class="tags"><span class="tag">prática</span><span class="tag">classes</span><span class="tag">Packet Tracer</span></div>
-        <span class="go">Praticar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Praticar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down m-only" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span><span class="arr elbow" aria-hidden="true"><svg class="el-line" viewBox="0 0 100 100" preserveAspectRatio="none"><path class="ln" vector-effect="non-scaling-stroke" d="M100 0V50H0V92"/></svg><svg class="el-head" viewBox="0 0 16 14"><path class="hd" d="M0 0l8 13 8-13z"/></svg><i class="el-pk"></i></span>
     </div>
     <div class="node">
       <a class="chap reveal" href="https://alberto-barros.github.io/Redes/subredes.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-grid"/></svg></div><span class="kind">Teoria</span><span class="num">05</span></div>
+        <div class="top"><div class="ic"><svg class="i a-grid" viewBox="0 0 24 24"><rect class="q q1" x="3" y="3" width="8" height="8" rx="1.5"/><rect class="q q2" x="13" y="3" width="8" height="8" rx="1.5"/><rect class="q q3" x="3" y="13" width="8" height="8" rx="1.5"/><rect class="q q4" x="13" y="13" width="8" height="8" rx="1.5"/></svg></div><span class="kind">Teoria</span><span class="num">05</span></div>
         <h3>Sub-redes</h3>
         <p>Máscara, CIDR, endereço de rede, broadcast e como dividir uma rede em sub-redes menores.</p>
         <div class="tags"><span class="tag">máscara</span><span class="tag">CIDR</span><span class="tag">broadcast</span></div>
-        <span class="go">Estudar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Estudar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr right" aria-hidden="true"><svg viewBox="0 0 72 40"><path class="ln" d="M2 20H58"/><path class="hd" d="M56 12l13 8-13 8z"/><circle class="pk" cx="6" cy="20" r="4.5"/></svg></span><span class="arr down m-only" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
     <div class="node lab">
       <a class="chap reveal lab" href="https://alberto-barros.github.io/Redes/sub-redes.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-flask"/></svg></div><span class="kind">Prática</span><span class="num">06</span></div>
+        <div class="top"><div class="ic"><svg class="i a-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L4.3 19a1.4 1.4 0 0 0 1.2 2h13a1.4 1.4 0 0 0 1.2-2L14 9.5V3"/><path class="liq" d="M7 15h10"/><circle class="bub b1" cx="10.5" cy="17.5" r="1" fill="currentColor" stroke="none"/><circle class="bub b2" cx="13.5" cy="18" r="1.2" fill="currentColor" stroke="none"/><circle class="bub b3" cx="12" cy="16.5" r=".8" fill="currentColor" stroke="none"/></svg></div><span class="kind">Prática</span><span class="num">06</span></div>
         <h3>Laboratório · Sub-redes</h3>
         <p>Escolha sua faixa, configure os IPs e veja o pacote atravessar (ou não) as sub-redes no Packet Tracer, com DHCP.</p>
         <div class="tags"><span class="tag">prática</span><span class="tag">Packet Tracer</span><span class="tag">DHCP</span></div>
-        <span class="go">Praticar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Praticar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down lab-lab" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
     <div class="node lab">
       <a class="chap reveal lab" href="https://alberto-barros.github.io/Redes/vlan.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-vlan"/></svg></div><span class="kind">Prática</span><span class="num">07</span></div>
+        <div class="top"><div class="ic"><svg class="i a-sw" viewBox="0 0 24 24"><rect x="2.5" y="9" width="19" height="6" rx="1.5"/><path class="wire" d="M6 9V5M12 9V5M18 9V5M6 15v4M12 15v4M18 15v4"/><circle class="led led1" cx="6.5" cy="12" r=".9" fill="currentColor" stroke="none"/><circle class="led led2" cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/><circle class="led led3" cx="17.5" cy="12" r=".9" fill="currentColor" stroke="none"/></svg></div><span class="kind">Prática</span><span class="num">07</span></div>
         <h3>Laboratório · VLAN</h3>
         <p>Divida um switch em redes virtuais separadas: crie VLANs, atribua portas e teste a comunicação no Packet Tracer.</p>
         <div class="tags"><span class="tag">prática</span><span class="tag">VLAN</span><span class="tag">switch</span><span class="tag">Packet Tracer</span></div>
-        <span class="go">Praticar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Praticar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down lab-lab" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
     <div class="node lab">
       <a class="chap reveal lab" href="https://alberto-barros.github.io/Redes/roteamento.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-router"/></svg></div><span class="kind">Prática</span><span class="num">08</span></div>
+        <div class="top"><div class="ic"><svg class="i a-rt" viewBox="0 0 24 24"><rect x="2.5" y="13" width="19" height="7" rx="2"/><circle class="led" cx="6.5" cy="16.5" r=".9" fill="currentColor" stroke="none"/><circle class="led" cx="10" cy="16.5" r=".9" fill="currentColor" stroke="none" style="animation-delay:.5s"/><path d="M12 13V9"/><path class="w1" d="M8.5 6.5a5 5 0 0 1 7 0"/><path class="w2" d="M6 4a8.5 8.5 0 0 1 12 0"/></svg></div><span class="kind">Prática</span><span class="num">08</span></div>
         <h3>Laboratório · Roteamento</h3>
         <p>Como o roteador escolhe o caminho entre redes: rotas estáticas, RIP e um site publicado no Packet Tracer.</p>
         <div class="tags"><span class="tag">prática</span><span class="tag">roteador</span><span class="tag">estático × dinâmico</span><span class="tag">RIP</span></div>
-        <span class="go">Praticar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Praticar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
     </div>
   </div>
@@ -377,6 +422,7 @@ function type(){const w=words[wi];te.textContent=w.slice(0,ci);
   setTimeout(type,del?45:90)}
 RM?te.textContent=words[0]:type();
 
+document.querySelectorAll('.chap').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')}));
 /* Contadores e revelação */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');io.unobserve(e.target)}),{threshold:.15});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
