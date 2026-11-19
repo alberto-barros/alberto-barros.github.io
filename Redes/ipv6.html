@@ -1561,6 +1561,93 @@ end
 show ipv6 interface brief</pre></div>
       </div>
     </div>
+    <h3 class="ping-h3" style="margin-top:44px">Entregando IPv6 automaticamente: o roteador como servidor DHCPv6</h3>
+    <div class="def">
+      <div>
+        <p class="big">Nesta atividade o <strong>aluno deixa o PC em modo automático</strong> e quem entrega o endereço é o <strong>roteador R1</strong>, que faz o papel de servidor DHCPv6.</p>
+        <p>O roteador anuncia na rede uma mensagem de <b>Router Advertisement</b> com o <b>flag M</b> (<i>managed config</i>) ligado. Esse flag diz ao PC: “peça seu endereço a um servidor DHCPv6”. O PC então pergunta ao servidor e recebe um endereço de dentro do prefixo <code>2001:db8:acad:1::/64</code>, mais o DNS <span class="cites">(<a class="cite" href="#ref-rfc4861">NARTEN et al., 2007</a>)</span>.</p>
+        <p>Como o servidor guarda quem recebeu cada endereço, esse modo se chama <b>DHCPv6 com estado</b> (<i>stateful</i>). É o equivalente mais próximo do DHCP que você conhece no IPv4.</p>
+      </div>
+      <div class="ip-anatomy">
+        <h3>Dados da atividade</h3>
+        <div class="anat-rows">
+          <div class="anat"><b>Roteador</b><span>R1 · GigabitEthernet0/0</span></div>
+          <div class="anat"><b>IP do R1 (gateway)</b><span>2001:db8:acad:1::1/64</span></div>
+          <div class="anat"><b>Pool DHCPv6</b><span>LAN-ALUNOS</span></div>
+          <div class="anat"><b>Prefixo entregue</b><span>2001:db8:acad:1::/64</span></div>
+          <div class="anat"><b>DNS</b><span>2001:4860:4860::8888</span></div>
+          <div class="anat"><b>Clientes</b><span>PC0 e PC1 em modo automático</span></div>
+        </div>
+      </div>
+    </div>
+
+    <ol class="steps" style="margin-top:28px">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Monte a topologia</h3>
+          <div class="pt-ui"><span>Network Devices</span><span>Routers</span><span>2911</span></div>
+          <ul>
+            <li><b>1 roteador</b> renomeado para <code>R1</code>, <b>1 switch 2960</b> (<code>SW1</code>) e <b>2 PCs</b> (PC0 e PC1).</li>
+            <li>Cabo <b>Copper Straight-Through</b> do <code>GigabitEthernet0/0</code> do R1 até uma porta do SW1.</li>
+            <li>Cabos <b>Copper Straight-Through</b> de PC0 e PC1 até o SW1.</li>
+          </ul>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Configure o R1 como servidor DHCPv6</h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R1 · CLI</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre data-hl>enable
+configure terminal
+ipv6 unicast-routing
+ipv6 dhcp pool LAN-ALUNOS
+ address prefix 2001:db8:acad:1::/64
+ dns-server 2001:4860:4860::8888
+ domain-name aula.local
+exit
+interface GigabitEthernet0/0
+ ipv6 address 2001:db8:acad:1::1/64
+ ipv6 nd managed-config-flag
+ ipv6 nd prefix default no-advertise
+ ipv6 dhcp server LAN-ALUNOS
+ no shutdown
+end
+show ipv6 interface brief</pre></div>
+          <ul>
+            <li><code>ipv6 dhcp pool</code> cria o “cardápio” de endereços: o prefixo, o DNS e o domínio que serão entregues.</li>
+            <li><code>ipv6 nd managed-config-flag</code> liga o flag M no anúncio do roteador: manda o PC procurar um servidor DHCPv6.</li>
+            <li><code>ipv6 nd prefix default no-advertise</code> impede que o PC monte o endereço sozinho por SLAAC, assim ele usa o DHCPv6.</li>
+            <li><code>ipv6 dhcp server</code> ativa o serviço DHCPv6 na interface que atende a LAN.</li>
+          </ul>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Deixe os PCs em modo automático</h3>
+          <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>IPv6 Configuration</span><span>Automatic</span></div>
+          <p>Faça o mesmo no PC1. Não digite endereço nem gateway: o aluno só escolhe <b>Automatic</b>. Depois abra o <b>Command Prompt</b> e execute <code>ipconfig</code> para ver o endereço recebido.</p>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Verifique no PC e no roteador <span class="tag">Observe</span></h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R1 · CLI</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre data-hl>show ipv6 dhcp pool
+show ipv6 dhcp binding</pre></div>
+          <div class="tests">
+            <div class="test-row"><div class="test-head"><span class="kind same">No PC</span><b>ipconfig</b><small>qual endereço IPv6 o PC recebeu?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Endereço dentro de 2001:db8:acad:1::/64. </b>Os 64 primeiros bits são o prefixo da rede; os últimos 64 bits são o identificador que o servidor escolheu.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">No roteador</span><b>show ipv6 dhcp binding</b><small>quem recebeu endereço?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Uma entrada para cada PC. </b>Cada entrada mostra o identificador do cliente e o endereço entregue a ele.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">Conectividade</span><b>PC0 › ping (endereço do PC1)</b><small>os PCs se enxergam?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>Os dois PCs estão na mesma /64. O primeiro pacote pode dar <i>timed out</i> enquanto o NDP descobre o MAC.</span></p></details></div>
+          </div>
+        </div>
+      </li>
+    </ol>
+    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Se o PC não receber endereço:</b> alguns Packet Tracer tratam o modo automático só por SLAAC. Nesse caso, remova as linhas <code>ipv6 nd managed-config-flag</code> e <code>ipv6 nd prefix default no-advertise</code> da interface: com <code>ipv6 unicast-routing</code> e o endereço na interface, o PC monta o endereço sozinho (SLAAC), que também é automático. Confira com <code>show ipv6 interface brief</code> se a interface está <i>up</i>.</p></div>
+
     <div class="note"><div class="ico"><svg><use href="#i-eye"></use></svg></div><p><b>Testar:</b> no Packet Tracer, use <code>ping 2001:db8:acad:1::1</code> a partir de um PC da mesma sub-rede.</p></div>
   </div>
 </section>
@@ -1699,7 +1786,7 @@ show ipv6 interface brief</pre></div>
     </div>
     <div class="deliver">
       <div class="dcard">
-        <div class="prog-head"><h3>Itens da aula</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 7</span></div>
+        <div class="prog-head"><h3>Itens da aula</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 8</span></div>
         <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
         <div class="check" id="checklist">
           <label><input type="checkbox" id="ck1"><span>Sei explicar o que é o IPv6 e por que ele foi criado</span></label>
@@ -1709,6 +1796,7 @@ show ipv6 interface brief</pre></div>
           <label><input type="checkbox" id="ck5"><span>Testei a comunicação com <code>ping</code> para um endereço IPv6</span></label>
           <label><input type="checkbox" id="ck6"><span>Criei sub-redes /64 a partir de um /48 em hexadecimal</span></label>
           <label><input type="checkbox" id="ck7"><span>Usei a calculadora e conferi meus resultados</span></label>
+          <label><input type="checkbox" id="ck8"><span>Configurei o R1 como servidor DHCPv6 e os PCs receberam endereço no modo automático</span></label>
         </div>
       </div>
     </div>
@@ -2007,7 +2095,7 @@ show ipv6 interface brief</pre></div>
   
 // ---------- quiz ----------
   (function(){
-    var BANK = [{"t": "Conceito", "q": "Quantos bits tem um endereço IPv6?", "o": ["128 bits", "32 bits", "64 bits", "48 bits"], "e": "O IPv6 usa <b>128 bits</b>. O IPv4 usa 32."}, {"t": "Conceito", "q": "Em que sistema de numeração o endereço IPv6 é escrito?", "o": ["Hexadecimal", "Decimal", "Binário puro", "Octal"], "e": "Os 8 grupos de 16 bits são escritos em <b>hexadecimal</b> (0 a 9 e a a f)."}, {"t": "Conceito", "q": "Quantos grupos de 16 bits tem um endereço IPv6 completo?", "o": ["8", "4", "6", "16"], "e": "128 ÷ 16 = <b>8 grupos</b>, separados por dois-pontos."}, {"t": "Conceito", "q": "Qual é o principal motivo da criação do IPv6?", "o": ["Esgotamento dos endereços IPv4", "Deixar a Internet mais lenta de propósito", "Substituir o protocolo TCP", "Eliminar os roteadores"], "e": "O IPv4 tem só cerca de 4,3 bilhões de endereços. O IPv6 resolve o <b>esgotamento</b>."}, {"t": "Vantagens", "q": "Qual protocolo substitui o ARP no IPv6?", "o": ["NDP (Neighbor Discovery)", "DHCP", "DNS", "RIP"], "e": "O <b>NDP</b>, que usa mensagens ICMPv6, descobre os vizinhos e seus endereços MAC."}, {"t": "Vantagens", "q": "O que o IPv6 não possui, ao contrário do IPv4?", "o": ["Broadcast", "Multicast", "Endereço de loopback", "Prefixo"], "e": "Não existe broadcast no IPv6: ele foi trocado por <b>multicast</b>."}, {"t": "Vantagens", "q": "Qual é o tamanho do cabeçalho IPv6 básico?", "o": ["40 bytes fixos", "20 a 60 bytes", "128 bytes", "8 bytes"], "e": "O cabeçalho IPv6 tem <b>40 bytes</b> de tamanho fixo."}, {"t": "Vantagens", "q": "Qual mecanismo permite ao host montar sozinho o endereço, sem servidor DHCP?", "o": ["SLAAC", "NAT", "VLAN", "ARP"], "e": "No <b>SLAAC</b> o host usa o prefixo anunciado pelo roteador e gera o identificador de interface."}, {"t": "Escrita", "q": "Qual é a forma abreviada de <code>2001:0db8:0000:0000:0000:0000:0000:0001</code>?", "o": ["2001:db8::1", "2001:db8:0:1", "2001:db8::0001", "2001::db8::1"], "e": "Tira-se os zeros à esquerda e troca-se a maior sequência de grupos zero por <b>::</b>."}, {"t": "Escrita", "q": "Quantas vezes o <code>::</code> pode aparecer em um endereço?", "o": ["No máximo uma vez", "Até duas vezes", "Quantas vezes quiser", "Nenhuma vez"], "e": "Se aparecesse duas vezes, não seria possível saber quantos zeros cada um substitui."}, {"t": "Escrita", "q": "O que representa <code>::1</code>?", "o": ["O loopback (o próprio host)", "A rota padrão", "Todos os roteadores", "Um endereço global"], "e": "<code>::1</code> é o <b>loopback</b>, como o 127.0.0.1 no IPv4."}, {"t": "Escrita", "q": "O que significa <code>::/0</code>?", "o": ["A rota padrão", "O loopback", "O endereço de broadcast", "Uma rede /64"], "e": "<code>::/0</code> é a <b>rota padrão</b>, equivalente ao 0.0.0.0/0."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços link-local?", "o": ["fe80::/10", "2000::/3", "fc00::/7", "ff00::/8"], "e": "Os endereços <b>link-local</b> começam com fe80 e só valem no enlace local."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços globais unicast?", "o": ["2000::/3", "fe80::/10", "ff00::/8", "::1/128"], "e": "Os globais começam com <b>2 ou 3</b> (2000::/3)."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços multicast?", "o": ["ff00::/8", "fe80::/10", "2001::/16", "fd00::/8"], "e": "O multicast começa com <b>ff</b>. Exemplo: ff02::1 (todos os nós)."}, {"t": "Tipos", "q": "Qual é o equivalente aproximado dos endereços privados IPv4 no IPv6?", "o": ["ULA (fd00::/8)", "Link-local", "Multicast", "Loopback"], "e": "O <b>ULA</b> (local único) vale dentro da organização e não é roteado na Internet."}, {"t": "Tipos", "q": "Qual prefixo é reservado para documentação e exemplos?", "o": ["2001:db8::/32", "fe80::/10", "2002::/16", "fd00::/8"], "e": "O <b>2001:db8::/32</b> nunca é entregue a ninguém, então é seguro usar em aulas."}, {"t": "Endereçar", "q": "Qual comprimento de prefixo deve ter uma LAN com SLAAC?", "o": ["/64", "/48", "/32", "/128"], "e": "O SLAAC usa 64 bits de rede e 64 bits de interface, então a LAN é um <b>/64</b>."}, {"t": "Endereçar", "q": "No EUI-64, quais dois bytes são inseridos no meio do MAC?", "o": ["ff:fe", "fe:80", "00:00", "ab:cd"], "e": "O MAC é dividido ao meio e recebe <b>ff:fe</b> no centro."}, {"t": "Endereçar", "q": "Qual comando Cisco habilita o encaminhamento IPv6 no roteador?", "o": ["ipv6 unicast-routing", "ip routing", "ipv6 enable-forward", "router ipv6"], "e": "Sem <b>ipv6 unicast-routing</b> o roteador não encaminha pacotes IPv6 entre interfaces."}, {"t": "Endereçar", "q": "Qual comando testa a conectividade IPv6 no Linux?", "o": ["ping -6 endereço", "arp -6", "ping -v6", "ipconfig6"], "e": "Use <b>ping -6</b> (ou o comando antigo ping6)."}, {"t": "Sub-redes", "q": "Quantas sub-redes /64 existem em um prefixo /48?", "o": ["65.536", "256", "4.096", "16"], "e": "São 16 bits de sub-rede: 2<sup>16</sup> = <b>65.536</b>."}, {"t": "Sub-redes", "q": "Quantas sub-redes /64 existem em um prefixo /56?", "o": ["256", "16", "65.536", "1.024"], "e": "São 8 bits: 2<sup>8</sup> = <b>256</b> sub-redes."}, {"t": "Sub-redes", "q": "Qual é a próxima sub-rede /64 depois de <code>2001:db8:acad:9::/64</code>?", "o": ["2001:db8:acad:a::/64", "2001:db8:acad:10::/64", "2001:db8:acad:9::1/64", "2001:db8:acad:90::/64"], "e": "O ID é hexadecimal: depois do <b>9</b> vem o <b>a</b>."}, {"t": "Sub-redes", "q": "Qual é a 17ª sub-rede /64 de 2001:db8:acad::/48 (contando a primeira como ::0)?", "o": ["2001:db8:acad:10::/64", "2001:db8:acad:17::/64", "2001:db8:acad:11::/64", "2001:db8:acad:f::/64"], "e": "A 1ª é 0 e a 16ª é f. A 17ª é <b>10</b> (hexadecimal, 16 em decimal)."}, {"t": "Sub-redes", "q": "Dividindo um /48 em sub-redes /52, qual é o salto no 4º grupo?", "o": ["1000", "0100", "0010", "0001"], "e": "Um /52 tem 4.096 /64, que é <b>0x1000</b> no 4º grupo."}, {"t": "Sub-redes", "q": "Qual é o primeiro endereço usável, em geral usado como gateway, em <code>2001:db8:acad:1::/64</code>?", "o": ["2001:db8:acad:1::1", "2001:db8:acad:1::", "2001:db8:acad:1:ffff:ffff:ffff:ffff", "2001:db8:acad::1"], "e": "Não há endereço de rede reservado como no IPv4. Por convenção o gateway é o <b>::1</b>."}, {"t": "Cabeçalho", "q": "Que campo do IPv6 substitui o TTL do IPv4?", "o": ["Hop Limit (limite de saltos)", "Flow Label", "Next Header", "Traffic Class"], "e": "O <b>Hop Limit</b> é decrementado a cada roteador."}, {"t": "Cabeçalho", "q": "Qual valor do campo Próximo Cabeçalho identifica o ICMPv6?", "o": ["58", "1", "6", "17"], "e": "<b>58</b> = ICMPv6. 6 = TCP e 17 = UDP."}, {"t": "Cabeçalho", "q": "O IPv6 elimina a necessidade de NAT para poupar endereços. Isso significa que:", "o": ["O firewall continua necessário", "Não é preciso firewall", "O ping deixa de funcionar", "O roteador não é necessário"], "e": "O NAT nunca foi um firewall. Mantenha <b>filtros de tráfego</b> também no IPv6."}];
+    var BANK = [{"t": "Conceito", "q": "Quantos bits tem um endereço IPv6?", "o": ["128 bits", "32 bits", "64 bits", "48 bits"], "e": "O IPv6 usa <b>128 bits</b>. O IPv4 usa 32."}, {"t": "Conceito", "q": "Em que sistema de numeração o endereço IPv6 é escrito?", "o": ["Hexadecimal", "Decimal", "Binário puro", "Octal"], "e": "Os 8 grupos de 16 bits são escritos em <b>hexadecimal</b> (0 a 9 e a a f)."}, {"t": "Conceito", "q": "Quantos grupos de 16 bits tem um endereço IPv6 completo?", "o": ["8", "4", "6", "16"], "e": "128 ÷ 16 = <b>8 grupos</b>, separados por dois-pontos."}, {"t": "Conceito", "q": "Qual é o principal motivo da criação do IPv6?", "o": ["Esgotamento dos endereços IPv4", "Deixar a Internet mais lenta de propósito", "Substituir o protocolo TCP", "Eliminar os roteadores"], "e": "O IPv4 tem só cerca de 4,3 bilhões de endereços. O IPv6 resolve o <b>esgotamento</b>."}, {"t": "Vantagens", "q": "Qual protocolo substitui o ARP no IPv6?", "o": ["NDP (Neighbor Discovery)", "DHCP", "DNS", "RIP"], "e": "O <b>NDP</b>, que usa mensagens ICMPv6, descobre os vizinhos e seus endereços MAC."}, {"t": "Vantagens", "q": "O que o IPv6 não possui, ao contrário do IPv4?", "o": ["Broadcast", "Multicast", "Endereço de loopback", "Prefixo"], "e": "Não existe broadcast no IPv6: ele foi trocado por <b>multicast</b>."}, {"t": "Vantagens", "q": "Qual é o tamanho do cabeçalho IPv6 básico?", "o": ["40 bytes fixos", "20 a 60 bytes", "128 bytes", "8 bytes"], "e": "O cabeçalho IPv6 tem <b>40 bytes</b> de tamanho fixo."}, {"t": "Vantagens", "q": "Qual mecanismo permite ao host montar sozinho o endereço, sem servidor DHCP?", "o": ["SLAAC", "NAT", "VLAN", "ARP"], "e": "No <b>SLAAC</b> o host usa o prefixo anunciado pelo roteador e gera o identificador de interface."}, {"t": "Escrita", "q": "Qual é a forma abreviada de <code>2001:0db8:0000:0000:0000:0000:0000:0001</code>?", "o": ["2001:db8::1", "2001:db8:0:1", "2001:db8::0001", "2001::db8::1"], "e": "Tira-se os zeros à esquerda e troca-se a maior sequência de grupos zero por <b>::</b>."}, {"t": "Escrita", "q": "Quantas vezes o <code>::</code> pode aparecer em um endereço?", "o": ["No máximo uma vez", "Até duas vezes", "Quantas vezes quiser", "Nenhuma vez"], "e": "Se aparecesse duas vezes, não seria possível saber quantos zeros cada um substitui."}, {"t": "Escrita", "q": "O que representa <code>::1</code>?", "o": ["O loopback (o próprio host)", "A rota padrão", "Todos os roteadores", "Um endereço global"], "e": "<code>::1</code> é o <b>loopback</b>, como o 127.0.0.1 no IPv4."}, {"t": "Escrita", "q": "O que significa <code>::/0</code>?", "o": ["A rota padrão", "O loopback", "O endereço de broadcast", "Uma rede /64"], "e": "<code>::/0</code> é a <b>rota padrão</b>, equivalente ao 0.0.0.0/0."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços link-local?", "o": ["fe80::/10", "2000::/3", "fc00::/7", "ff00::/8"], "e": "Os endereços <b>link-local</b> começam com fe80 e só valem no enlace local."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços globais unicast?", "o": ["2000::/3", "fe80::/10", "ff00::/8", "::1/128"], "e": "Os globais começam com <b>2 ou 3</b> (2000::/3)."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços multicast?", "o": ["ff00::/8", "fe80::/10", "2001::/16", "fd00::/8"], "e": "O multicast começa com <b>ff</b>. Exemplo: ff02::1 (todos os nós)."}, {"t": "Tipos", "q": "Qual é o equivalente aproximado dos endereços privados IPv4 no IPv6?", "o": ["ULA (fd00::/8)", "Link-local", "Multicast", "Loopback"], "e": "O <b>ULA</b> (local único) vale dentro da organização e não é roteado na Internet."}, {"t": "Tipos", "q": "Qual prefixo é reservado para documentação e exemplos?", "o": ["2001:db8::/32", "fe80::/10", "2002::/16", "fd00::/8"], "e": "O <b>2001:db8::/32</b> nunca é entregue a ninguém, então é seguro usar em aulas."}, {"t": "Endereçar", "q": "Qual comprimento de prefixo deve ter uma LAN com SLAAC?", "o": ["/64", "/48", "/32", "/128"], "e": "O SLAAC usa 64 bits de rede e 64 bits de interface, então a LAN é um <b>/64</b>."}, {"t": "Endereçar", "q": "No EUI-64, quais dois bytes são inseridos no meio do MAC?", "o": ["ff:fe", "fe:80", "00:00", "ab:cd"], "e": "O MAC é dividido ao meio e recebe <b>ff:fe</b> no centro."}, {"t": "Endereçar", "q": "Qual comando Cisco habilita o encaminhamento IPv6 no roteador?", "o": ["ipv6 unicast-routing", "ip routing", "ipv6 enable-forward", "router ipv6"], "e": "Sem <b>ipv6 unicast-routing</b> o roteador não encaminha pacotes IPv6 entre interfaces."}, {"t": "Endereçar", "q": "Qual flag do roteador manda o PC pedir o endereço a um servidor DHCPv6?", "o": ["managed-config-flag (flag M)", "no shutdown", "ipv6 unicast-routing", "dns-server"], "e": "O <b>ipv6 nd managed-config-flag</b> liga o flag M no Router Advertisement: o PC passa a procurar um servidor DHCPv6."}, {"t": "Endereçar", "q": "Para o aluno receber o IPv6 automaticamente, como deve ficar a configuração do PC?", "o": ["Em modo automático (Automatic)", "Com endereço e gateway digitados", "Só com o loopback ::1", "Sem nenhuma placa de rede"], "e": "No modo <b>Automático</b> o PC obtém o endereço do roteador, por SLAAC ou DHCPv6."}, {"t": "Endereçar", "q": "Qual comando do roteador mostra quem recebeu endereço do servidor DHCPv6?", "o": ["show ipv6 dhcp binding", "show ip route", "show vlan brief", "show running-config interface"], "e": "O <b>show ipv6 dhcp binding</b> lista os clientes e os endereços entregues."}, {"t": "Endereçar", "q": "Qual comando testa a conectividade IPv6 no Linux?", "o": ["ping -6 endereço", "arp -6", "ping -v6", "ipconfig6"], "e": "Use <b>ping -6</b> (ou o comando antigo ping6)."}, {"t": "Sub-redes", "q": "Quantas sub-redes /64 existem em um prefixo /48?", "o": ["65.536", "256", "4.096", "16"], "e": "São 16 bits de sub-rede: 2<sup>16</sup> = <b>65.536</b>."}, {"t": "Sub-redes", "q": "Quantas sub-redes /64 existem em um prefixo /56?", "o": ["256", "16", "65.536", "1.024"], "e": "São 8 bits: 2<sup>8</sup> = <b>256</b> sub-redes."}, {"t": "Sub-redes", "q": "Qual é a próxima sub-rede /64 depois de <code>2001:db8:acad:9::/64</code>?", "o": ["2001:db8:acad:a::/64", "2001:db8:acad:10::/64", "2001:db8:acad:9::1/64", "2001:db8:acad:90::/64"], "e": "O ID é hexadecimal: depois do <b>9</b> vem o <b>a</b>."}, {"t": "Sub-redes", "q": "Qual é a 17ª sub-rede /64 de 2001:db8:acad::/48 (contando a primeira como ::0)?", "o": ["2001:db8:acad:10::/64", "2001:db8:acad:17::/64", "2001:db8:acad:11::/64", "2001:db8:acad:f::/64"], "e": "A 1ª é 0 e a 16ª é f. A 17ª é <b>10</b> (hexadecimal, 16 em decimal)."}, {"t": "Sub-redes", "q": "Dividindo um /48 em sub-redes /52, qual é o salto no 4º grupo?", "o": ["1000", "0100", "0010", "0001"], "e": "Um /52 tem 4.096 /64, que é <b>0x1000</b> no 4º grupo."}, {"t": "Sub-redes", "q": "Qual é o primeiro endereço usável, em geral usado como gateway, em <code>2001:db8:acad:1::/64</code>?", "o": ["2001:db8:acad:1::1", "2001:db8:acad:1::", "2001:db8:acad:1:ffff:ffff:ffff:ffff", "2001:db8:acad::1"], "e": "Não há endereço de rede reservado como no IPv4. Por convenção o gateway é o <b>::1</b>."}, {"t": "Cabeçalho", "q": "Que campo do IPv6 substitui o TTL do IPv4?", "o": ["Hop Limit (limite de saltos)", "Flow Label", "Next Header", "Traffic Class"], "e": "O <b>Hop Limit</b> é decrementado a cada roteador."}, {"t": "Cabeçalho", "q": "Qual valor do campo Próximo Cabeçalho identifica o ICMPv6?", "o": ["58", "1", "6", "17"], "e": "<b>58</b> = ICMPv6. 6 = TCP e 17 = UDP."}, {"t": "Cabeçalho", "q": "O IPv6 elimina a necessidade de NAT para poupar endereços. Isso significa que:", "o": ["O firewall continua necessário", "Não é preciso firewall", "O ping deixa de funcionar", "O roteador não é necessário"], "e": "O NAT nunca foi um firewall. Mantenha <b>filtros de tráfego</b> também no IPv6."}];
     var Q = [];
     var stage = $('q-stage'), steps = $('q-steps'), cur = 0, ans = [], picks = [], timer = null, lastSet = [];
     function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
