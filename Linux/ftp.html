@@ -1165,7 +1165,7 @@ html,body{overflow-x:clip}
 .anat b{font-family:var(--f-display);font-size:.9rem}
 .anat span{font-size:.9rem;color:var(--muted)}
 .anat i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
-.uses{padding:0}.uses .anat span{font-family:var(--f-body)}
+
 @media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
 #vantagens .grid3{gap:18px}
 </style>
@@ -1479,11 +1479,14 @@ Password:
         <p class="big">O FTP serve para <strong>enviar</strong> arquivos ao servidor e <strong>baixar</strong> arquivos dele, em pastas inteiras e de qualquer tamanho.</p>
         <p>É o jeito clássico de publicar um site: o aluno edita a página na própria máquina e envia ao servidor web, que fica na pasta <code>/var/www/html</code>. É o que você vai fazer nesta aula.</p>
       </div>
-      <div class="anat-rows uses">
-        <div class="anat"><b>Publicar sites</b><span>enviar HTML, CSS e imagens para o servidor web</span></div>
-        <div class="anat"><b>Fazer backup</b><span>copiar os arquivos do servidor para a hospedeira</span></div>
-        <div class="anat"><b>Trocar arquivos grandes</b><span>mover arquivos entre computadores da mesma rede</span></div>
-        <div class="anat"><b>Atualizar sites</b><span>mandar a nova versão de uma página em hospedagens</span></div>
+      <div class="anat-box">
+        <h3>Usos mais comuns do FTP</h3>
+        <div class="anat-rows">
+          <div class="anat"><b><i style="background:var(--s1)"></i>Publicar sites</b><span>enviar HTML, CSS e imagens para o servidor web</span></div>
+          <div class="anat"><b><i style="background:var(--green)"></i>Fazer backup</b><span>copiar os arquivos do servidor para a hospedeira</span></div>
+          <div class="anat"><b><i style="background:var(--s3)"></i>Trocar arquivos grandes</b><span>mover arquivos entre computadores da mesma rede</span></div>
+          <div class="anat"><b><i style="background:var(--s2)"></i>Atualizar sites</b><span>mandar a nova versão de uma página em hospedagens</span></div>
+        </div>
       </div>
     </div>
   </div>
