@@ -1020,6 +1020,7 @@ html{scroll-padding-top:84px}
 .hero-term .foot i{width:7px;height:7px;border-radius:50%;background:#4ADE80}
 .hero-term .foot span:last-child{margin-left:auto}
 @media (max-width:600px){.ht-screen{height:300px}.hero-term{font-size:.72rem}.hero-term .foot span:nth-child(3){display:none}}
+
 /* ===== cards modernos com ícones animados (estilo Roteamento) ===== */
 html,body{overflow-x:clip}
 :root{--on:#fff}
@@ -1105,6 +1106,35 @@ html,body{overflow-x:clip}
 :root[data-theme="dark"] .vtag,.vtag{color:var(--on)}
 
 @media (prefers-reduced-motion:reduce){.chip svg,.ico::before,.ico svg,.err h3 svg,.port-card b,.vrow::after{animation:none!important}}
+
+/* referências */
+.ref-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.ref-h::after{content:"";height:1px;flex:1;background:var(--line)}
+.sec-head + .ref-h{margin-top:0}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.refs-2{grid-template-columns:minmax(0,520px)}
+.ref{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}
+.ref:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 12px 26px -18px var(--green)}
+.ref-n{font:700 .78rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;justify-self:start}
+.ref b{font-family:var(--f-display);font-size:.98rem;line-height:1.3}
+.ref p{font-size:.88rem;color:var(--muted)}
+.ref-t{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ref-t i{font:600 .7rem var(--f-mono);font-style:normal;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.ref-go{font-size:.8rem;font-weight:700;color:var(--green-strong);margin-top:4px}
+.books{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:bk}
+.books li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 56px;counter-increment:bk;font-size:.95rem;overflow-wrap:anywhere}
+.books li::before{content:counter(bk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;background:var(--green);color:var(--on);display:grid;place-items:center;font:800 .85rem var(--f-display)}
+:root[data-theme="dark"] .books li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .books li::before{color:#08130C}}
+.ref-a{font-weight:700}
+.books small{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+
+/* citações */
+.cites{white-space:normal}
+.cite{font:inherit;color:var(--ink);background:none;padding:0;border-radius:0;text-decoration:none;white-space:normal}
+.cite:hover,.cite:focus-visible{color:#1D6FD8;background:none;text-decoration:underline}
+#refs .ref,#refs .books li{scroll-margin-top:84px}
+#refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1154,7 +1184,7 @@ html,body{overflow-x:clip}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#m1"><b>03</b>Instalar o vsftpd</a><a href="#m2"><b>04</b>Configurar</a><a href="#m3"><b>05</b>Permissões</a><a href="#m4"><b>06</b>IP e teste</a><a href="#m5"><b>07</b>FileZilla</a><a href="#m6"><b>08</b>Backup</a><a href="#m7"><b>09</b>Nova página</a><a href="#m8"><b>10</b>Conferir</a><a href="#m9"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#desafio"><b>13</b>Desafio</a><a href="#entrega"><b>14</b>Quiz</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#m1"><b>03</b>Instalar o vsftpd</a><a href="#m2"><b>04</b>Configurar</a><a href="#m3"><b>05</b>Permissões</a><a href="#m4"><b>06</b>IP e teste</a><a href="#m5"><b>07</b>FileZilla</a><a href="#m6"><b>08</b>Backup</a><a href="#m7"><b>09</b>Nova página</a><a href="#m8"><b>10</b>Conferir</a><a href="#m9"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#desafio"><b>13</b>Desafio</a><a href="#entrega"><b>14</b>Quiz</a><a href="#refs"><b>15</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1384,19 +1414,19 @@ Password:
       <h2>O que é FTP</h2>
       <p>Entenda o protocolo antes de instalar o servidor.</p>
     </div>
-    <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-bulb"/></svg></div><h3>O que é</h3><p><b>FTP</b> (File Transfer Protocol) é o protocolo de transferência de arquivos. Ele existe desde 1971 e funciona no modelo <b>cliente e servidor</b>: o servidor guarda os arquivos e o cliente se conecta para enviar ou baixar.</p></div><div class="ben"><div class="ico"><svg><use href="#i-swap"/></svg></div><h3>Para que serve</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Publicar sites: enviar HTML, CSS e imagens para o servidor web</li><li>Fazer backup de arquivos do servidor</li><li>Trocar arquivos grandes entre computadores</li><li>Atualizar sites em hospedagens</li></ul></div><div class="ben"><div class="ico"><svg><use href="#i-check"/></svg></div><h3>Vantagens</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Gratuito e aceito em quase todo sistema</li><li>Transfere pastas inteiras de uma vez</li><li>Retoma transferências interrompidas</li><li>Clientes fáceis de usar, como o FileZilla</li><li>Controle de acesso por usuário e senha</li></ul></div></div>
+    <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-bulb"/></svg></div><h3>O que é</h3><p><b>FTP</b> (File Transfer Protocol) é o protocolo de transferência de arquivos. Ele existe desde 1971 e funciona no modelo <b>cliente e servidor</b>: o servidor guarda os arquivos e o cliente se conecta para enviar ou baixar <span class="cites">(<a class="cite" href="#ref-bhushan">BHUSHAN, 1971</a>)</span>. O padrão que usamos até hoje é a RFC 959 <span class="cites">(<a class="cite" href="#ref-postel">POSTEL; REYNOLDS, 1985</a>)</span>.</p></div><div class="ben"><div class="ico"><svg><use href="#i-swap"/></svg></div><h3>Para que serve</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Publicar sites: enviar HTML, CSS e imagens para o servidor web</li><li>Fazer backup de arquivos do servidor</li><li>Trocar arquivos grandes entre computadores</li><li>Atualizar sites em hospedagens</li></ul></div><div class="ben"><div class="ico"><svg><use href="#i-check"/></svg></div><h3>Vantagens</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Gratuito e aceito em quase todo sistema</li><li>Transfere pastas inteiras de uma vez</li><li>Retoma transferências interrompidas</li><li>Clientes fáceis de usar, como o FileZilla</li><li>Controle de acesso por usuário e senha</li></ul></div></div>
 
     <h3 class="sub-h">Portas usadas</h3>
     <div class="ports">
-      <div class="port-card" style="--vc:var(--green)"><b>21</b><strong>Controle</strong><span>Porta onde o servidor espera a conexão. Por ela passam o login e os comandos (listar, enviar, baixar).</span></div>
+      <div class="port-card" style="--vc:var(--green)"><b>21</b><strong>Controle</strong><span>Porta onde o servidor espera a conexão. Por ela passam o login e os comandos (listar, enviar, baixar) <span class="cites">(<a class="cite" href="#ref-postel">POSTEL; REYNOLDS, 1985</a>)</span>.</span></div>
       <div class="port-card" style="--vc:var(--s1)"><b>20</b><strong>Dados (modo ativo)</strong><span>No modo ativo, o servidor abre a conexão de dados a partir desta porta até o cliente.</span></div>
-      <div class="port-card" style="--vc:var(--s3)"><b>&gt;1023</b><strong>Dados (modo passivo)</strong><span>No modo passivo, o padrão do FileZilla, o servidor abre uma porta alta e o cliente se conecta nela.</span></div>
+      <div class="port-card" style="--vc:var(--s3)"><b>&gt;1023</b><strong>Dados (modo passivo)</strong><span>No modo passivo, o padrão do FileZilla, o servidor abre uma porta alta e o cliente se conecta nela <span class="cites">(<a class="cite" href="#ref-postel">POSTEL; REYNOLDS, 1985</a>)</span>.</span></div>
       <div class="port-card" style="--vc:var(--s4)"><b>22</b><strong>SFTP</strong><span>Transferência de arquivos segura pelo SSH. Tudo vai criptografado, inclusive a senha.</span></div>
     </div>
 
     <h3 class="sub-h">Cuidados</h3>
     <div class="care">
-      <div class="err"><h3><svg><use href="#i-lock"/></svg>A senha viaja sem criptografia</h3><p>No FTP comum, o usuário, a senha e os arquivos passam pela rede em texto puro. Quem capturar o tráfego (Wireshark, por exemplo) consegue ler tudo. Na internet, prefira <b>SFTP</b> (porta 22) ou <b>FTPS</b> (FTP com TLS).</p></div>
+      <div class="err"><h3><svg><use href="#i-lock"/></svg>A senha viaja sem criptografia</h3><p>No FTP comum, o usuário, a senha e os arquivos passam pela rede em texto puro. Quem capturar o tráfego (Wireshark, por exemplo) consegue ler tudo. Na internet, prefira <b>SFTP</b> (porta 22) ou <b>FTPS</b> (FTP com TLS) <span class="cites">(<a class="cite" href="#ref-allman">ALLMAN; OSTERMANN, 1999</a>)</span>.</p></div>
       <div class="err"><h3><svg><use href="#i-alert"/></svg>Desative o acesso anônimo</h3><p>Com <code>anonymous_enable=YES</code>, qualquer pessoa entra sem senha. Deixe sempre <code>NO</code>, a não ser que o servidor seja de downloads públicos.</p></div>
       <div class="err"><h3><svg><use href="#i-folder"/></svg>Limite as pastas</h3><p>Sem restrição, o usuário navega por todo o sistema de arquivos. Em produção use <code>chroot_local_user=YES</code> para prender cada usuário na própria pasta.</p></div>
       <div class="err"><h3><svg><use href="#i-shield"/></svg>Senhas fortes e firewall</h3><p>Robôs tentam senhas na porta 21 o tempo todo. Use senhas fortes, nunca libere o usuário <b>root</b> e abra no firewall só as portas necessárias.</p></div>
@@ -1468,7 +1498,7 @@ sudo apt install -y vsftpd</pre></div>
         <div class="step-body">
           <h3>Abra o arquivo de configuração</h3>
           <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo nano /etc/vsftpd.conf</pre></div>
-          <p>Procure cada linha com <kbd>Ctrl</kbd>+<kbd>W</kbd>. Para ativar uma linha, apague o <code>#</code> do começo. Deixe assim:</p>
+          <p>Procure cada linha com <kbd>Ctrl</kbd>+<kbd>W</kbd>. Para ativar uma linha, apague o <code>#</code> do começo. Deixe assim: As opções estão descritas no manual do vsftpd <span class="cites">(<a class="cite" href="#ref-evans">EVANS, [s.d.]</a>)</span>.</p>
           <div class="tbl-wrap cfg"><table><thead><tr><th>Linha</th><th>O que faz</th></tr></thead><tbody><tr><td>listen=NO</td><td>Já vem assim. O servidor atende IPv4 e IPv6 pela linha de baixo</td></tr><tr><td>listen_ipv6=YES</td><td>Já vem assim</td></tr><tr><td>anonymous_enable=NO</td><td>Bloqueia o acesso sem senha</td></tr><tr><td>local_enable=YES</td><td>Permite entrar com os usuários do Linux</td></tr><tr><td>write_enable=YES</td><td><b>Tire o #.</b> Libera enviar, apagar e renomear arquivos</td></tr><tr><td>local_umask=022</td><td><b>Tire o #.</b> Arquivos enviados ficam com permissão 644, que o Apache consegue ler</td></tr><tr><td>xferlog_enable=YES</td><td>Já vem assim. Registra as transferências no log</td></tr></tbody></table></div>
         </div>
       </li>
@@ -1814,8 +1844,8 @@ Mon Nov  9 10:38:15 2026 [pid 2312] [aluno] <span class="ok">OK UPLOAD</span>: C
     </div>
 
     <div class="ch-keys">
-      <div class="err"><h3><svg><use href="#i-lock"/></svg>Chave privada</h3><p>Arquivo <code>vsftpd.key</code>. Fica só no servidor e só o root pode ler. É ela que prova que o servidor é ele mesmo.</p></div>
-      <div class="err"><h3><svg><use href="#i-shield"/></svg>Certificado</h3><p>Arquivo <code>vsftpd.pem</code>. É público e vai para o FileZilla na hora da conexão. Como nós mesmos assinamos, ele é <b>autoassinado</b>.</p></div>
+      <div class="err"><h3><svg><use href="#i-lock"/></svg>Chave privada</h3><p>Arquivo <code>vsftpd.key</code>. Fica só no servidor e só o root pode ler. É ela que prova que o servidor é ele mesmo <span class="cites">(<a class="cite" href="#ref-ford">FORD-HUTCHINSON, 2005</a>)</span>.</p></div>
+      <div class="err"><h3><svg><use href="#i-shield"/></svg>Certificado</h3><p>Arquivo <code>vsftpd.pem</code>. É público e vai para o FileZilla na hora da conexão. Como nós mesmos assinamos, ele é <b>autoassinado</b> <span class="cites">(<a class="cite" href="#ref-ford">FORD-HUTCHINSON, 2005</a>)</span>.</p></div>
     </div>
 
     <ol class="steps">
@@ -1930,6 +1960,29 @@ systemctl is-active vsftpd     <span class="c"># active</span></pre></div>
         <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
         <div class="qz-stage" id="q-stage" aria-live="polite"></div>
       </div>
+    </div>
+  </div>
+</section>
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Referências</span>
+      <h2>Para estudar mais</h2>
+      <p>Os conceitos desta aula vêm das normas da Internet (RFCs), do manual do vsftpd e dos livros-texto de redes de computadores. Clique numa citação do texto para ir até a referência.</p>
+    </div>
+    <h3 class="ref-h">Referências bibliográficas</h3>
+    <ol class="books">
+      <li id="ref-allman"><span class="ref-a">ALLMAN, M.; OSTERMANN, S.</span> <i>FTP Security Considerations</i>. RFC 2577. [S. l.]: IETF, maio 1999. Disponível em: <a href="https://www.rfc-editor.org/info/rfc2577" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc2577</a>.<small>Riscos do FTP: senha em texto puro, ataques de força bruta e acesso anônimo.</small></li>
+      <li id="ref-bhushan"><span class="ref-a">BHUSHAN, A.</span> <i>A File Transfer Protocol</i>. RFC 114. [S. l.]: IETF, abr. 1971. Disponível em: <a href="https://www.rfc-editor.org/info/rfc114" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc114</a>.<small>A primeira especificação do FTP, de 1971.</small></li>
+      <li id="ref-evans"><span class="ref-a">EVANS, C.</span> <i>vsftpd.conf: configuration file for vsftpd</i>. [S. l.]: [s. n.], [s.d.]. Disponível em: <a href="https://security.appspot.com/vsftpd/vsftpd_conf.html" target="_blank" rel="noopener">https://security.appspot.com/vsftpd/vsftpd_conf.html</a>.<small>Manual das opções usadas na aula: <code>local_root</code>, <code>write_enable</code>, <code>local_umask</code> e <code>ssl_enable</code>.</small></li>
+      <li id="ref-ford"><span class="ref-a">FORD-HUTCHINSON, P.</span> <i>Securing FTP with TLS</i>. RFC 4217. [S. l.]: IETF, out. 2005. Disponível em: <a href="https://www.rfc-editor.org/info/rfc4217" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc4217</a>.<small>Como proteger o FTP com TLS (FTPS), tema do desafio.</small></li>
+      <li id="ref-kurose"><span class="ref-a">KUROSE, J. F.; ROSS, K. W.</span> <i>Redes de computadores e a Internet</i>: uma abordagem top-down. 6. ed. São Paulo: Pearson, 2013.<small>Cap. 2: camada de aplicação, modelo cliente-servidor e transferência de arquivos.</small></li>
+      <li id="ref-postel"><span class="ref-a">POSTEL, J.; REYNOLDS, J.</span> <i>File Transfer Protocol (FTP)</i>. RFC 959. [S. l.]: IETF, out. 1985. Disponível em: <a href="https://www.rfc-editor.org/info/rfc959" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc959</a>.<small>Padrão do FTP: conexão de controle (porta 21), conexão de dados e modo passivo.</small></li>
+    </ol>
+    <h3 class="ref-h">Ferramentas</h3>
+    <div class="refs">
+      <a class="ref" href="https://filezilla-project.org/" target="_blank" rel="noopener"><span class="ref-n">Cliente</span><b>FileZilla</b><p>Cliente FTP, FTPS e SFTP usado na máquina hospedeira.</p><span class="ref-t"><i>FileZilla Client</i></span><span class="ref-go">Abrir filezilla-project.org ↗</span></a>
+      <a class="ref" href="https://security.appspot.com/vsftpd.html" target="_blank" rel="noopener"><span class="ref-n">Servidor</span><b>vsftpd</b><p>Página oficial do servidor FTP instalado na VM.</p><span class="ref-t"><i>vsftpd</i><i>Linux</i></span><span class="ref-go">Abrir página oficial ↗</span></a>
     </div>
   </div>
 </section>
@@ -2236,6 +2289,3 @@ systemctl is-active vsftpd     <span class="c"># active</span></pre></div>
   })();
 })();
 </script>
-
-</body>
-</html>
