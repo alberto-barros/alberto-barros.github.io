@@ -999,6 +999,39 @@ section.sec{scroll-margin-top:72px}
 .qz-rexp b{color:var(--ink)}
 @media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
 @media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
+
+/* ---- acréscimos: referências ---- */
+.ref-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.ref-h::after{content:"";height:1px;flex:1;background:var(--line)}
+.sec-head + .ref-h{margin-top:0}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.refs-2{grid-template-columns:minmax(0,520px)}
+.ref{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}
+.ref:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 12px 26px -18px var(--green)}
+.ref-n{font:700 .78rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;justify-self:start}
+.ref b{font-family:var(--f-display);font-size:.98rem;line-height:1.3}
+.ref p{font-size:.88rem;color:var(--muted)}
+.ref-t{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ref-t i{font:600 .7rem var(--f-mono);font-style:normal;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.ref-go{font-size:.8rem;font-weight:700;color:var(--green-strong);margin-top:4px}
+.books{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:bk}
+.books li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 56px;counter-increment:bk;font-size:.95rem;overflow-wrap:anywhere}
+.books li::before{content:counter(bk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;background:var(--green);color:var(--on);display:grid;place-items:center;font:800 .85rem var(--f-display)}
+:root[data-theme="dark"] .books li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .books li::before{color:#08130C}}
+.ref-a{font-weight:700}
+.books small{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+
+/* citações */
+.cites{white-space:normal}
+.cite{font:inherit;color:var(--ink);background:none;padding:0;border-radius:0;text-decoration:none;white-space:normal}
+.cite:hover,.cite:focus-visible{color:#1D6FD8;background:none;text-decoration:underline}
+#refs .ref,#refs .books li{scroll-margin-top:84px}
+#refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
+
+:root{--on:#fff}
+:root[data-theme="dark"]{--on:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--on:#08130C}}
 </style>
 </head>
 <body>
@@ -1050,7 +1083,7 @@ section.sec{scroll-margin-top:72px}
       <a class="solid" href="#quiz-sec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#apache"><b>02</b>O que é o Apache</a><a href="#m1"><b>03</b>Instalar o Apache</a><a href="#m2"><b>04</b>Verificar o serviço</a><a href="#m3"><b>05</b>Logs de acesso</a><a href="#m4"><b>06</b>Sua página</a><a href="#m5"><b>07</b>Acesso pelo IP</a><a href="#m6"><b>08</b>Desinstalar o Apache</a><a href="#nginx"><b>09</b>O que é o Nginx</a><a href="#m7"><b>10</b>Instalar o Nginx</a><a href="#m8"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#desafio"><b>13</b>Desafio</a><a href="#quiz-sec"><b>14</b>Quiz</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#apache"><b>02</b>O que é o Apache</a><a href="#m1"><b>03</b>Instalar o Apache</a><a href="#m2"><b>04</b>Verificar o serviço</a><a href="#m3"><b>05</b>Logs de acesso</a><a href="#m4"><b>06</b>Sua página</a><a href="#m5"><b>07</b>Acesso pelo IP</a><a href="#m6"><b>08</b>Desinstalar o Apache</a><a href="#nginx"><b>09</b>O que é o Nginx</a><a href="#m7"><b>10</b>Instalar o Nginx</a><a href="#m8"><b>11</b>Exercícios</a><a href="#checklist-sec"><b>12</b>Checklist</a><a href="#desafio"><b>13</b>Desafio</a><a href="#quiz-sec"><b>14</b>Quiz</a><a href="#refs"><b>15</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1555,6 +1588,27 @@ sudo systemctl reload nginx</pre></div>
         <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
         <div class="qz-stage" id="q-stage" aria-live="polite"></div>
       </div>
+    </div>
+  </div>
+</section>
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Referências</span>
+      <h2>Para estudar mais</h2>
+      <p>Esta aula se apoia na documentação oficial do Apache e do Nginx, nas normas do protocolo HTTP e em livros-texto de redes de computadores.</p>
+    </div>
+    <h3 class="ref-h">Referências bibliográficas</h3>
+    <ol class="books">
+      <li id="ref-fielding"><span class="ref-a">FIELDING, R.; NOTTINGHAM, M.; RESCHKE, J.</span> <i>HTTP Semantics</i>. RFC 9110. [S. l.]: IETF, jun. 2022. Disponível em: <a href="https://www.rfc-editor.org/rfc/rfc9110" target="_blank" rel="noopener">https://www.rfc-editor.org/rfc/rfc9110</a>.</li>
+      <li id="ref-apache"><span class="ref-a">THE APACHE SOFTWARE FOUNDATION.</span> <i>Apache HTTP Server Documentation</i>. [S. l.]: ASF, [s.d.]. Disponível em: <a href="https://httpd.apache.org/docs/" target="_blank" rel="noopener">https://httpd.apache.org/docs/</a>.</li>
+      <li id="ref-kurose"><span class="ref-a">KUROSE, J. F.; ROSS, K. W.</span> <i>Redes de computadores e a Internet</i>: uma abordagem top-down. 6. ed. São Paulo: Pearson, 2013.</li>
+      <li id="ref-nginx"><span class="ref-a">NGINX, INC.</span> <i>nginx documentation</i>. [S. l.]: F5, [s.d.]. Disponível em: <a href="https://nginx.org/en/docs/" target="_blank" rel="noopener">https://nginx.org/en/docs/</a>.</li>
+    </ol>
+    <h3 class="ref-h">Ferramentas</h3>
+    <div class="refs">
+      <a class="ref" href="https://httpd.apache.org/" target="_blank" rel="noopener"><span class="ref-n">Servidor</span><b>Apache HTTP Server</b><p>Página oficial do Apache, com downloads e documentação.</p><span class="ref-go">Abrir site →</span></a>
+      <a class="ref" href="https://nginx.org/" target="_blank" rel="noopener"><span class="ref-n">Servidor</span><b>Nginx</b><p>Página oficial do Nginx, com guias de início rápido.</p><span class="ref-go">Abrir site →</span></a>
     </div>
   </div>
 </section>
