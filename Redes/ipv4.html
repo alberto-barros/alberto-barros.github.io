@@ -1159,6 +1159,32 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 #osi .pkt .c.ip.dst b{color:var(--s1)}
 #osi .pkt .c.ip.src small{color:var(--green-strong);font-weight:800}
 #osi .pkt .c.ip.dst small{color:var(--s1);font-weight:800}
+
+/* ===== cards de classe: mesmo efeito de "A rede que você vai montar" ===== */
+.cls-grid .cls{padding:0;gap:0;border-top:1px solid color-mix(in srgb,var(--vc) 30%,var(--line));border-radius:22px;overflow:hidden;position:relative;
+  box-shadow:0 1px 0 #fff inset,0 18px 34px -26px var(--vc);transition:transform .25s,border-color .25s,box-shadow .25s}
+.cls-grid .cls::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--vc),color-mix(in srgb,var(--vc) 55%,#fff));z-index:1}
+.cls-grid .cls:hover{transform:translateY(-6px);border-color:var(--vc);box-shadow:0 1px 0 #fff inset,0 30px 50px -24px var(--vc)}
+.cls-grid .cls-top{align-items:center;justify-content:flex-start;gap:14px;padding:22px 20px 16px;background:linear-gradient(90deg,color-mix(in srgb,var(--vc) 18%,var(--surface)),var(--surface))}
+.cls-grid .cls-top b{width:56px;height:56px;border-radius:17px;font-size:1.9rem;flex:none;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--vc) 62%,#fff),var(--vc) 52%,color-mix(in srgb,var(--vc) 74%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -4px 0 rgba(0,0,0,.16),0 5px 0 -1px color-mix(in srgb,var(--vc) 55%,#000),0 14px 20px -10px var(--vc);text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.cls-grid .cls-top span{font:700 .78rem var(--f-mono);color:color-mix(in srgb,var(--vc) 70%,var(--ink));background:color-mix(in srgb,var(--vc) 13%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 28%,transparent);padding:5px 11px;border-radius:999px}
+.cls-grid .range{padding:14px 20px 4px;font:800 1.25rem var(--f-mono);color:var(--ink)}
+.cls-grid .oct4{margin:8px 20px 14px;gap:6px}
+.cls-grid .oct4 span{padding:9px 2px;border-radius:10px;font-weight:700;border:1px solid var(--line);background:var(--surface-2);box-shadow:0 3px 0 var(--line)}
+.cls-grid .oct4 span.n{border-color:transparent;color:#fff;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 70%,#fff),var(--vc));box-shadow:0 3px 0 color-mix(in srgb,var(--vc) 60%,#000),0 10px 14px -8px var(--vc);animation:clsBeat 2.8s ease-in-out infinite}
+.cls-grid .oct4 span.n:nth-child(2){animation-delay:.2s}.cls-grid .oct4 span.n:nth-child(3){animation-delay:.4s}
+@keyframes clsBeat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.cls-grid .cls:hover .oct4 span{transform:translateY(-2px);transition:transform .25s}
+.cls-grid dl{padding:0 20px 20px;gap:0 12px}
+.cls-grid dl dt,.cls-grid dl dd{padding:9px 0;border-top:1px dashed var(--line)}
+.cls-grid dl dd{color:var(--ink);font-weight:600}
+:root[data-theme="dark"] .cls-grid .oct4 span.n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cls-grid .oct4 span.n{color:#08130C}}
+.minor div{background:var(--surface);border:1px solid var(--line);box-shadow:0 3px 0 var(--line),0 12px 20px -16px rgba(15,36,23,.4);transition:transform .2s,box-shadow .2s}
+.minor div:hover{transform:translateY(-3px);box-shadow:0 5px 0 var(--line),0 18px 26px -16px rgba(15,36,23,.45)}
+@media (prefers-reduced-motion:reduce){.cls-grid .oct4 span.n{animation:none}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
