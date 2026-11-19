@@ -697,6 +697,35 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 #hero-svg .hl{stroke:var(--green)}
 #hero-svg .hl.cut{stroke:var(--red);animation:none;stroke-dasharray:3 8;opacity:.85}
 #hero-svg .hst{font-family:var(--f-body);font-weight:700;font-size:11.5px;fill:var(--ink);text-anchor:middle}
+
+/* referências */
+.ref-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.ref-h::after{content:"";height:1px;flex:1;background:var(--line)}
+.sec-head + .ref-h{margin-top:0}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.refs-2{grid-template-columns:minmax(0,520px)}
+.ref{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}
+.ref:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 12px 26px -18px var(--green)}
+.ref-n{font:700 .78rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;justify-self:start}
+.ref b{font-family:var(--f-display);font-size:.98rem;line-height:1.3}
+.ref p{font-size:.88rem;color:var(--muted)}
+.ref-t{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ref-t i{font:600 .7rem var(--f-mono);font-style:normal;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.ref-go{font-size:.8rem;font-weight:700;color:var(--green-strong);margin-top:4px}
+.books{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:bk}
+.books li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 56px;counter-increment:bk;font-size:.95rem;overflow-wrap:anywhere}
+.books li::before{content:counter(bk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;background:var(--green);color:#fff;display:grid;place-items:center;font:800 .85rem var(--f-display)}
+:root[data-theme="dark"] .books li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .books li::before{color:#08130C}}
+.ref-a{font-weight:700}
+.books small{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+
+/* citações */
+.cites{white-space:normal}
+.cite{font:600 .72em var(--f-mono);color:var(--green-strong);background:var(--mint);padding:.05em .45em;border-radius:6px;text-decoration:none;white-space:nowrap}
+.cite:hover{background:var(--green);color:#fff}
+#refs .ref,#refs .books li{scroll-margin-top:84px}
+#refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
 </style>
 </head>
 <body>
@@ -753,7 +782,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#beneficios"><b>02</b>Vantagens</a><a href="#tipos"><b>03</b>Estático × dinâmico</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Passo a passo</a><a href="#servidor"><b>06</b>Servidor web</a><a href="#rip" class="tm-ch"><b>07</b>Desafio RIP</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#erros"><b>09</b>Erros comuns</a><a href="#entrega"><b>10</b>Quiz</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#beneficios"><b>02</b>Vantagens</a><a href="#tipos"><b>03</b>Estático × dinâmico</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Passo a passo</a><a href="#servidor"><b>06</b>Servidor web</a><a href="#rip" class="tm-ch"><b>07</b>Desafio RIP</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#erros"><b>09</b>Erros comuns</a><a href="#entrega"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
   </div>
 </nav>
 
@@ -787,10 +816,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     </div>
     <div class="def">
       <div>
-        <p class="big"><strong>Roteamento</strong> é o processo de escolher por onde um pacote IP deve seguir para sair de uma rede e chegar a outra. Quem faz essa escolha é o <strong>roteador</strong>, consultando a sua <strong>tabela de roteamento</strong>.</p>
-        <p>O switch entrega quadros dentro de <b>uma</b> rede, olhando o endereço MAC. O roteador liga redes <b>diferentes</b> e trabalha na camada 3, olhando o <b>IP de destino</b>. Cada porta do roteador pertence a uma rede e serve de gateway para ela.</p>
-        <p>Quando o pacote chega, o roteador procura na tabela a rota que combina com o IP de destino. Se achar, envia o pacote para o <b>próximo salto</b> (o roteador vizinho) ou direto ao destino, se a rede estiver ligada nele. Se não achar, o pacote é descartado e a origem recebe <i>Destination host unreachable</i>.</p>
-        <p>Nenhum roteador conhece o caminho inteiro. Cada um decide só o próximo salto, e o pacote avança de roteador em roteador até a rede de destino. Por isso <b>todos</b> os roteadores do caminho precisam ter a rota, na ida e na volta.</p>
+        <p class="big"><strong>Roteamento</strong> é o processo de escolher por onde um pacote IP deve seguir para sair de uma rede e chegar a outra. Quem faz essa escolha é o <strong>roteador</strong>, consultando a sua <strong>tabela de roteamento</strong> <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+        <p>O switch entrega quadros dentro de <b>uma</b> rede, olhando o endereço MAC. O roteador liga redes <b>diferentes</b> e trabalha na camada 3, olhando o <b>IP de destino</b>. Cada porta do roteador pertence a uma rede e serve de gateway para ela <span class="cites">(<a class="cite" href="#ref-tanenbaum">TANENBAUM; WETHERALL, 2011</a>)</span>.</p>
+        <p>Quando o pacote chega, o roteador procura na tabela a rota que combina com o IP de destino. Se achar, envia o pacote para o <b>próximo salto</b> (o roteador vizinho) ou direto ao destino, se a rede estiver ligada nele. Se não achar, o pacote é descartado e a origem recebe <i>Destination host unreachable</i> <span class="cites">(<a class="cite" href="#ref-baker">BAKER, 1995</a>)</span>.</p>
+        <p>Nenhum roteador conhece o caminho inteiro. Cada um decide só o próximo salto, e o pacote avança de roteador em roteador até a rede de destino <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>. Por isso <b>todos</b> os roteadores do caminho precisam ter a rota, na ida e na volta.</p>
       </div>
       <div class="ip-anatomy">
         <h3>Anatomia de uma linha do <span style="text-transform:none">show ip route</span></h3>
@@ -812,7 +841,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     <div class="sec-head">
       <span class="sec-num">Parte 1 · Por que usar</span>
       <h2>Vantagens e benefícios do roteamento</h2>
-      <p>É o roteamento que permite juntar redes pequenas em redes grandes. A própria Internet é um conjunto de redes ligadas por roteadores.</p>
+      <p>É o roteamento que permite juntar redes pequenas em redes grandes. A própria Internet é um conjunto de redes ligadas por roteadores <span class="cites">(<a class="cite" href="#ref-tanenbaum">TANENBAUM; WETHERALL, 2011</a>)</span>.</p>
     </div>
     <div class="grid3">
       <article class="ben"><div class="ico"><svg><use href="#i-globe"/></svg></div><h3>Liga redes diferentes</h3><p>PCs em redes IP distintas, em salas, câmpus ou cidades diferentes, passam a se comunicar pelo roteador.</p></article>
@@ -830,7 +859,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     <div class="sec-head">
       <span class="sec-num">Parte 1 · Tipos de rota</span>
       <h2>Roteamento estático × dinâmico</h2>
-      <p>A tabela de roteamento pode ser preenchida de duas formas: pelo administrador, linha por linha, ou pelos próprios roteadores, conversando entre si com um protocolo de roteamento.</p>
+      <p>A tabela de roteamento pode ser preenchida de duas formas: pelo administrador, linha por linha, ou pelos próprios roteadores, conversando entre si com um protocolo de roteamento <span class="cites">(<a class="cite" href="#ref-tanenbaum">TANENBAUM; WETHERALL, 2011</a>)</span>.</p>
     </div>
     <div class="vs">
       <article class="vs-card" style="--vc:var(--s1)">
@@ -846,7 +875,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       </article>
       <article class="vs-card" style="--vc:var(--s3)">
         <h3><span class="ico"><svg><use href="#i-refresh"/></svg></span>Dinâmico</h3>
-        <p>Os roteadores anunciam as redes que conhecem aos vizinhos e montam a tabela sozinhos.</p>
+        <p>Os roteadores anunciam as redes que conhecem aos vizinhos e montam a tabela sozinhos <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
         <ul>
           <li><b>Aprende sozinho</b>: basta dizer quais redes cada roteador anuncia.</li>
           <li><b>Adapta-se</b>: se um enlace cai, os roteadores recalculam e usam outro caminho.</li>
@@ -869,7 +898,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         </tbody>
       </table>
     </div>
-    <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>A <b>distância administrativa</b> mede a confiança na origem da rota: conectada = 0, estática = 1, RIP = 120. Se o roteador conhece duas rotas para a mesma rede, entra na tabela a de <b>menor</b> distância. Por isso uma rota estática sempre vence uma rota RIP para o mesmo destino.</p></div>
+    <p class="cites" style="margin-top:10px;font-size:.85rem;color:var(--muted)">Fonte: adaptado de <a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a> e <a class="cite" href="#ref-cisco-ad">CISCO SYSTEMS, 2026</a>.</p>
+    <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>A <b>distância administrativa</b> mede a confiança na origem da rota: conectada = 0, estática = 1, RIP = 120. Se o roteador conhece duas rotas para a mesma rede, entra na tabela a de <b>menor</b> distância. Por isso uma rota estática sempre vence uma rota RIP para o mesmo destino <span class="cites">(<a class="cite" href="#ref-cisco-ad">CISCO SYSTEMS, 2026</a>)</span>.</p></div>
   </div>
 </section>
 
@@ -944,7 +974,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         <div class="step-n">2</div>
         <div class="step-body">
           <h3>Confira o plano de endereços</h3>
-          <p>São 8 redes: 4 redes locais <code>/24</code> e 4 enlaces ponto a ponto <code>/30</code> (cada <code>/30</code> tem exatamente 2 endereços úteis, um para cada ponta do cabo).</p>
+          <p>São 8 redes: 4 redes locais <code>/24</code> e 4 enlaces ponto a ponto <code>/30</code> (cada <code>/30</code> tem exatamente 2 endereços úteis, um para cada ponta do cabo) <span class="cites">(<a class="cite" href="#ref-forouzan">FOROUZAN, 2010</a>)</span>.</p>
           <div class="tbl-wrap">
             <table>
               <thead><tr><th>Roteador</th><th>G0/0 · rede local</th><th>G0/1 · próximo</th><th>G0/2 · anterior</th></tr></thead>
@@ -1060,7 +1090,7 @@ interface gigabitEthernet 0/1
     </div>
     <div class="def">
       <div>
-        <p class="big">O <strong>DNS</strong> (Domain Name System) traduz nomes em endereços IP. O navegador não sabe onde fica <code>cisco.com.br</code>; ele pergunta ao servidor DNS e recebe o IP do servidor web.</p>
+        <p class="big">O <strong>DNS</strong> (Domain Name System) traduz nomes em endereços IP. O navegador não sabe onde fica <code>cisco.com.br</code>; ele pergunta ao servidor DNS e recebe o IP do servidor web <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>; <a class="cite" href="#ref-mockapetris-a">MOCKAPETRIS, 1987a</a>)</span>.</p>
         <p>O roteamento não conhece nomes: os roteadores só encaminham pacotes para o IP <code>192.168.3.100</code>. Por isso o site só abre se as tabelas de roteamento da Parte 1 estiverem certas.</p>
       </div>
       <div class="web" aria-label="Resultado esperado no navegador do PC0">
@@ -1128,7 +1158,7 @@ interface gigabitEthernet 0/1
           <ul>
             <li>Marque <b>DNS Service</b> em <b>On</b>.</li>
             <li>Em <b>Name</b>, digite <code>cisco.com.br</code>.</li>
-            <li>Em <b>Type</b>, deixe <b>A Record</b> (o registro que liga um nome a um IPv4).</li>
+            <li>Em <b>Type</b>, deixe <b>A Record</b> (o registro que liga um nome a um IPv4) <span class="cites">(<a class="cite" href="#ref-mockapetris-b">MOCKAPETRIS, 1987b</a>)</span>.</li>
             <li>Em <b>Address</b>, digite <code>192.168.3.100</code>.</li>
             <li>Clique em <b>Add</b>. O registro aparece na lista abaixo do formulário.</li>
           </ul>
@@ -1186,16 +1216,16 @@ interface gigabitEthernet 0/1
 
     <div class="def">
       <div>
-        <p class="big">O <strong>RIP</strong> (Routing Information Protocol) é um protocolo de <strong>vetor de distância</strong>: cada roteador conta aos vizinhos quais redes conhece e a quantos <strong>saltos</strong> elas estão.</p>
-        <p>A cada 30 segundos o roteador envia a sua tabela aos vizinhos. Quem recebe soma 1 salto e guarda a rota se ela for nova ou melhor que a que já tinha. Depois de algumas trocas, todos conhecem todas as redes: a rede <b>convergiu</b>.</p>
-        <p>A métrica é a contagem de saltos, e o melhor caminho é o que passa por menos roteadores. O limite é 15; uma rede a 16 saltos é considerada inalcançável. Quando um enlace cai, o roteador avisa os vizinhos e todos recalculam.</p>
-        <p>Use sempre a <b>versão 2</b>: ela envia a máscara junto com a rede, o que é obrigatório aqui porque os enlaces usam <code>/30</code>. O comando <code>no auto-summary</code> impede o RIP de resumir tudo em <code>10.0.0.0/8</code>.</p>
+        <p class="big">O <strong>RIP</strong> (Routing Information Protocol) é um protocolo de <strong>vetor de distância</strong>: cada roteador conta aos vizinhos quais redes conhece e a quantos <strong>saltos</strong> elas estão <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+        <p>A cada 30 segundos o roteador envia a sua tabela aos vizinhos <span class="cites">(<a class="cite" href="#ref-malkin">MALKIN, 1998</a>)</span>. Quem recebe soma 1 salto e guarda a rota se ela for nova ou melhor que a que já tinha. Depois de algumas trocas, todos conhecem todas as redes: a rede <b>convergiu</b>.</p>
+        <p>A métrica é a contagem de saltos, e o melhor caminho é o que passa por menos roteadores. O limite é 15; uma rede a 16 saltos é considerada inalcançável <span class="cites">(<a class="cite" href="#ref-malkin">MALKIN, 1998</a>)</span>. Quando um enlace cai, o roteador avisa os vizinhos e todos recalculam.</p>
+        <p>Use sempre a <b>versão 2</b>: ela envia a máscara junto com a rede, o que é obrigatório aqui porque os enlaces usam <code>/30</code> <span class="cites">(<a class="cite" href="#ref-malkin">MALKIN, 1998</a>)</span>. O comando <code>no auto-summary</code> impede o RIP de resumir tudo em <code>10.0.0.0/8</code>.</p>
       </div>
       <div class="ports">
-        <div class="port-card" style="--vc:var(--s1)"><b>UDP 520</b><strong>Porta do RIP</strong><span>As atualizações vão para o endereço multicast 224.0.0.9.</span></div>
-        <div class="port-card" style="--vc:var(--s3)"><b>30 s</b><strong>Atualização</strong><span>Intervalo entre os anúncios da tabela.</span></div>
-        <div class="port-card" style="--vc:var(--s2)"><b>15</b><strong>Máximo de saltos</strong><span>16 saltos significa rede inalcançável.</span></div>
-        <div class="port-card" style="--vc:var(--s4)"><b>120</b><strong>Distância adm.</strong><span>Perde para a rota estática, que tem distância 1.</span></div>
+        <div class="port-card" style="--vc:var(--s1)"><b>UDP 520</b><strong>Porta do RIP</strong><span>As atualizações vão para o endereço multicast 224.0.0.9 <span class="cites">(<a class="cite" href="#ref-malkin">MALKIN, 1998</a>)</span>.</span></div>
+        <div class="port-card" style="--vc:var(--s3)"><b>30 s</b><strong>Atualização</strong><span>Intervalo entre os anúncios da tabela <span class="cites">(<a class="cite" href="#ref-malkin">MALKIN, 1998</a>)</span>.</span></div>
+        <div class="port-card" style="--vc:var(--s2)"><b>15</b><strong>Máximo de saltos</strong><span>16 saltos significa rede inalcançável <span class="cites">(<a class="cite" href="#ref-malkin">MALKIN, 1998</a>)</span>.</span></div>
+        <div class="port-card" style="--vc:var(--s4)"><b>120</b><strong>Distância adm.</strong><span>Perde para a rota estática, que tem distância 1 <span class="cites">(<a class="cite" href="#ref-cisco-ad">CISCO SYSTEMS, 2026</a>)</span>.</span></div>
       </div>
     </div>
 
@@ -1380,6 +1410,21 @@ copy running-config startup-config</pre></div>
         <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
         <div class="qz-stage" id="q-stage" aria-live="polite"></div>
       </div>
+    </div>
+  </div>
+</section>
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Referências</span>
+      <h2>Para estudar mais</h2>
+      <p>Os conceitos desta aula vêm dos livros-texto de redes de computadores, dos padrões da Internet (RFCs) e da documentação da Cisco.</p>
+    </div>
+    <h3 class="ref-h">Referências bibliográficas</h3>
+    <ol class="books"><li id="ref-baker"><span class="ref-a">BAKER, F. (ed.).</span> <i>Requirements for IP Version 4 Routers</i>. RFC 1812. [S. l.]: IETF, jun. 1995. Disponível em: <a href="https://www.rfc-editor.org/info/rfc1812" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc1812</a>. Acesso em: 18 nov. 2026.<small>Requisitos dos roteadores IPv4: encaminhamento pelo IP de destino e mensagens ICMP.</small></li><li id="ref-cisco-ad"><span class="ref-a">CISCO SYSTEMS.</span> <i>Understand administrative distance</i>. Documento 15986. [S. l.]: Cisco, 20 jul. 2026. Disponível em: <a href="https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/15986-admin-distance.html" target="_blank" rel="noopener">https://www.cisco.com/c/en/us/support/docs/ip/border-gateway-protocol-bgp/15986-admin-distance.html</a>. Acesso em: 18 nov. 2026.<small>Distância administrativa padrão de cada origem de rota e o formato [distância/métrica] do <code>show ip route</code>.</small></li><li id="ref-forouzan"><span class="ref-a">FOROUZAN, B. A.</span> <i>Comunicação de dados e redes de computadores</i>. 4. ed. Porto Alegre: AMGH, 2010.<small>Endereçamento IPv4, máscaras, CIDR e protocolos de roteamento.</small></li><li id="ref-kurose"><span class="ref-a">KUROSE, J. F.; ROSS, K. W.</span> <i>Redes de computadores e a Internet</i>: uma abordagem top-down. 6. ed. São Paulo: Pearson, 2013.<small>Cap. 4: camada de rede, algoritmos de roteamento, RIP, OSPF e BGP. Cap. 2: DNS.</small></li><li id="ref-malkin"><span class="ref-a">MALKIN, G. S.</span> <i>RIP Version 2</i>. RFC 2453. [S. l.]: IETF, nov. 1998. Disponível em: <a href="https://www.rfc-editor.org/info/rfc2453" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc2453</a>. Acesso em: 18 nov. 2026.<small>Atualização a cada 30 s, UDP 520, multicast 224.0.0.9, métrica máxima de 15 saltos e máscara nos anúncios.</small></li><li id="ref-mockapetris-a"><span class="ref-a">MOCKAPETRIS, P.</span> <i>Domain names: concepts and facilities</i>. RFC 1034. [S. l.]: IETF, nov. 1987a. Disponível em: <a href="https://www.rfc-editor.org/info/rfc1034" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc1034</a>. Acesso em: 18 nov. 2026.<small>Conceitos do DNS: nomes, servidores de nomes e resolução.</small></li><li id="ref-mockapetris-b"><span class="ref-a">MOCKAPETRIS, P.</span> <i>Domain names: implementation and specification</i>. RFC 1035. [S. l.]: IETF, nov. 1987b. Disponível em: <a href="https://www.rfc-editor.org/info/rfc1035" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc1035</a>. Acesso em: 18 nov. 2026.<small>Formato das mensagens DNS e dos registros, como o registro A.</small></li><li id="ref-tanenbaum"><span class="ref-a">TANENBAUM, A. S.; WETHERALL, D.</span> <i>Redes de computadores</i>. 5. ed. São Paulo: Pearson Prentice Hall, 2011.<small>Cap. 5: camada de rede, algoritmos de roteamento, OSPF, BGP, ICMP e ARP.</small></li></ol>
+    <h3 class="ref-h">Ferramenta e curso</h3>
+    <div class="refs refs-2">
+      <a class="ref" href="https://www.netacad.com/" target="_blank" rel="noopener"><span class="ref-n">Cisco</span><b>Cisco Networking Academy</b><p>Curso CCNA: Introduction to Networks e download do Cisco Packet Tracer, usado no laboratório.</p><span class="ref-t"><i>Packet Tracer</i><i>CCNA</i></span><span class="ref-go">Abrir netacad.com ↗</span></a>
     </div>
   </div>
 </section>
