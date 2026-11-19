@@ -819,6 +819,31 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 .vs-card li::before{content:"";position:absolute;left:12px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--vc)}
 :root[data-theme="dark"] .vs-card .ico{color:#08130C}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vs-card .ico{color:#08130C}}
+
+/* imagens sem fundo branco */
+.drawing{background:none;border:0;box-shadow:none;padding:6px 0 0}
+.anim{background:none;border:0;box-shadow:none;overflow:visible}
+.anim-ctl{border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.anim .stage{background:none}
+.anim .status{border:1px solid var(--line);border-radius:18px;background:var(--surface);margin-top:12px}
+.anim .dh-panel{background:none;border-left:0}
+.dh-win{box-shadow:var(--sh-1)}
+/* tabelas modernas */
+.tbl-wrap{border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:var(--sh-1);overflow:hidden}
+.tbl-wrap table{border-collapse:separate;border-spacing:0}
+.tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--green) 14%,var(--surface)),color-mix(in srgb,var(--green) 6%,var(--surface)));color:var(--green-strong);font-size:.7rem;letter-spacing:.1em;padding:14px 16px;border-bottom:2px solid color-mix(in srgb,var(--green) 35%,var(--line))}
+.tbl-wrap td{padding:13px 16px;border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);transition:background .15s}
+.tbl-wrap tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface-2) 45%,var(--surface))}
+.tbl-wrap tbody tr:hover td{background:color-mix(in srgb,var(--green) 9%,var(--surface))}
+.tbl-wrap td:first-child{font-weight:700}
+.tbl-wrap tr:last-child td{border-bottom:0}
+.desafio .tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)));border-bottom-color:color-mix(in srgb,var(--red) 35%,var(--line))}
+@media (max-width:640px){
+  .tbl-wrap{border:0;background:transparent;box-shadow:none;overflow:visible;border-radius:0}
+  .tbl-wrap tr{box-shadow:var(--sh-1);border-radius:16px}
+  .tbl-wrap tbody tr:nth-child(even) td,.tbl-wrap tbody tr:hover td{background:transparent}
+  .tbl-wrap td{padding:8px 0}
+}
 </style>
 </head>
 <body>
