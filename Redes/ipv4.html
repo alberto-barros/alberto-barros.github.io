@@ -1374,6 +1374,12 @@ sudo ip addr del 192.168.1.10/24 dev enp0s3</pre></div>
           </svg>
           <figcaption class="pa-cap"><span class="pa-c1"><b class="pio-tag req">Echo Request</b> PC0 → 10.0.0.11</span><span class="pa-c2"><b class="pio-tag rep">Echo Reply</b> 10.0.0.11 → PC0</span></figcaption>
         </figure>
+        <div class="read-ping" style="margin-top:14px">
+          <div><b>Reply from</b><span>o destino respondeu: há comunicação</span></div>
+          <div><b>time</b><span>tempo de ida e volta (em ms)</span></div>
+          <div><b>TTL</b><span>quantos saltos ainda restavam ao pacote</span></div>
+          <div><b class="bad-t">Request timed out</b><span>nenhuma resposta chegou a tempo</span></div>
+        </div>
         
       </div>
       <div class="ping-out">
@@ -1401,12 +1407,6 @@ Pinging 172.16.0.10 with 32 bytes of data:
 
 Ping statistics for 172.16.0.10:
     Packets: Sent = 4, <span class="bad">Received = 0, Lost = 4 (100% loss)</span></pre></div>
-        <div class="read-ping">
-          <div><b>Reply from</b><span>o destino respondeu: há comunicação</span></div>
-          <div><b>time</b><span>tempo de ida e volta (em ms)</span></div>
-          <div><b>TTL</b><span>quantos saltos ainda restavam ao pacote</span></div>
-          <div><b class="bad-t">Request timed out</b><span>nenhuma resposta chegou a tempo</span></div>
-        </div>
       </div>
     </div>
 
