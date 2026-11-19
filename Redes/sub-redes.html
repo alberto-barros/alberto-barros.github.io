@@ -398,7 +398,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 .topo-h{font-family:var(--f-display);font-size:1.02rem;font-weight:700;margin:10px 0 0;display:flex;align-items:center;gap:10px}
 .topo-h::before{content:"";width:16px;height:3px;border-radius:3px;background:var(--green)}
 .drawing{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 18px 12px;display:grid;gap:8px;min-width:0}
-.draw-scroll{overflow-x:auto}
+.draw-scroll{overflow-x:auto;padding:16px 4px}
 #draw{display:block;width:100%;min-width:680px;height:auto}
 .drawing figcaption{font-size:.86rem;color:var(--muted);text-align:center}
 #draw .grp-l{font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.1em}
@@ -418,6 +418,17 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 #draw .rtr-i{stroke:var(--code-key);stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .uplink{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px dashed var(--green);border-radius:var(--r);padding:12px 16px;font-size:.9rem;color:var(--muted)}
 .uplink .pill{color:var(--green-strong)}
+/* desenho da rede: ao passar o mouse o setor "se aproxima" da tela */
+#draw{overflow:visible}
+#draw .grp-bg{fill:color-mix(in srgb,var(--gc) 10%,var(--surface));stroke:var(--gc);stroke-opacity:.45;transition:fill .35s,stroke-opacity .35s,stroke-width .35s}
+#draw .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
+#draw:has(.grp:hover) .grp:not(:hover),#draw:has(.grp:focus-visible) .grp:not(:focus-visible){opacity:.55;filter:saturate(.6)}
+#draw .grp:hover,#draw .grp:focus-visible{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
+#draw .grp:hover .grp-bg,#draw .grp:focus-visible .grp-bg{fill:color-mix(in srgb,var(--gc) 20%,var(--surface));stroke-opacity:1;stroke-width:2.5}
+#draw .grp:hover .mon{animation:monGlow 1.6s ease-in-out infinite}
+@keyframes monGlow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 6px var(--gc))}}
+@media (max-width:600px){#draw .grp:hover,#draw .grp:focus-visible{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){#draw .grp,#draw .grp .mon{transition:none;animation:none}#draw .grp:hover{transform:none}}
 @media (max-width:900px){#draw{min-width:0;max-width:420px;margin-inline:auto}.drawing{padding:12px 10px 10px}.uplink{font-size:.84rem}}
 /* responsivo geral */
 @media (max-width:1000px){table{min-width:0}th,td{white-space:normal;padding:10px 10px}td.mono{overflow-wrap:anywhere}}
@@ -1755,6 +1766,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       for (var j=0;j<leds;j++) s += '<rect class="led" x="'+(-w/2+12+j*14)+'" y="'+(hh/2-11)+'" width="9" height="5" rx="1.5"/>';
       return s + '<text class="sw-t" y="4" x="'+(leds?18:0)+'">'+name+'</text></g>';
     }
+    function grp(s, n, inner){ return '<g class="grp" tabindex="0" style="--gc:'+s.c+'" aria-label="'+s.n+' · '+toStr(n.net)+'/'+r.prefix+'">'+inner+'</g>'; }
     if (m){
       // igual à animação: 2 setores em cima, 2 embaixo, L3-IFSC no meio
       var R = {x:180, y:300}, RR = 26;
@@ -1764,51 +1776,61 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
         return {s:s, k:k, top:top, x:x, gx:gx, y:top?6:352, sy:top?204:398};
       });
       G.forEach(function(g){
-        var s = g.s, n = r.nets[g.k];
-        h += '<rect x="'+g.x+'" y="'+g.y+'" width="170" height="246" rx="16" style="fill:color-mix(in srgb,'+s.c+' 10%,var(--surface));stroke:'+s.c+'" stroke-opacity=".45"/>';
+        var ey = g.top ? g.sy+15 : g.sy-15, dx = R.x-g.gx, dy = R.y-ey, L = Math.hypot(dx,dy);
+        var ex = R.x - dx/L*RR, eyy = R.y - dy/L*RR, by = g.top ? g.y+246 : g.y, t = (by-ey)/(eyy-ey);
+        g.bx = g.gx + (ex-g.gx)*t; g.by = by; g.ey = ey;
+        h += '<line class="cab" style="stroke:'+g.s.c+'" x1="'+g.bx.toFixed(1)+'" y1="'+by+'" x2="'+ex.toFixed(1)+'" y2="'+eyy.toFixed(1)+'"/>';
+      });
+      G.forEach(function(g){
+        var s = g.s, n = r.nets[g.k], gh = '<rect class="grp-bg" x="'+g.x+'" y="'+g.y+'" width="170" height="246" rx="16"/>';
+        gh += '<line class="cab" style="stroke:'+s.c+'" x1="'+g.gx+'" y1="'+g.ey+'" x2="'+g.bx.toFixed(1)+'" y2="'+g.by+'"/>';
+        var py = g.top ? 116 : 476;
+        [0,1].forEach(function(j){ var px = g.gx + (j?44:-44);
+          gh += '<line class="cab" style="stroke:'+s.c+'" x1="'+(g.gx+(j?16:-16))+'" y1="'+(g.top?g.sy-15:g.sy+15)+'" x2="'+px+'" y2="'+(g.top?py+22:py-26)+'"/>';
+          var c = s.c, ipy = g.top ? -30 : 50, nmy = g.top ? -44 : 36;
+          gh += '<g transform="translate('+px+','+py+')"><rect class="mon" x="-26" y="-24" width="52" height="36" rx="5" style="stroke:'+c+'"/><rect x="-21" y="-19" width="42" height="26" rx="2" style="fill:'+c+'" opacity=".25"/><rect class="stand" x="-4" y="12" width="8" height="6"/><rect class="stand" x="-12" y="17" width="24" height="4" rx="2"/>'+
+            '<text class="pc-t" y="'+nmy+'" style="font-size:12px">PC'+(g.k*2+j)+'</text><text class="pc-ip" y="'+ipy+'" style="font-size:9px">'+toStr(n.pcs[j])+'</text></g>';
+        });
+        gh += sw(g.gx, g.sy, 120, 30, 'SW-'+s.s, 0);
+        var hy = g.top ? g.y+20 : g.y+212, ny = hy + 15;
+        gh += '<text class="grp-l" x="'+(g.x+10)+'" y="'+hy+'" style="fill:'+s.c+';font-size:10.5px">'+s.n+'</text>';
+        gh += '<text class="grp-n" x="'+(g.x+10)+'" y="'+ny+'" style="font-size:9.5px">'+toStr(n.net)+'/'+r.prefix+' · gw .'+(n.gw%256)+'</text>';
+        h += grp(s, n, gh);
       });
       G.forEach(function(g){
         var ey = g.top ? g.sy+15 : g.sy-15, dx = R.x-g.gx, dy = R.y-ey, L = Math.hypot(dx,dy);
         var ex = R.x - dx/L*RR, eyy = R.y - dy/L*RR;
-        h += '<line class="cab" style="stroke:'+g.s.c+'" x1="'+g.gx+'" y1="'+ey+'" x2="'+ex.toFixed(1)+'" y2="'+eyy.toFixed(1)+'"/>';
         var t = .3, lx = g.gx + (ex-g.gx)*t + (g.k%2 ? 8 : -8), ly = ey + (eyy-ey)*t + 4;
         h += '<text class="port halo" x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" style="text-anchor:'+(g.k%2?'start':'end')+'">Fa0/24 ↔ Fa0/'+(g.k+1)+'</text>';
-      });
-      G.forEach(function(g){
-        var s = g.s, n = r.nets[g.k], py = g.top ? 116 : 476;
-        [0,1].forEach(function(j){ var px = g.gx + (j?44:-44);
-          h += '<line class="cab" style="stroke:'+s.c+'" x1="'+(g.gx+(j?16:-16))+'" y1="'+(g.top?g.sy-15:g.sy+15)+'" x2="'+px+'" y2="'+(g.top?py+22:py-26)+'"/>';
-          var c = s.c, ipy = g.top ? -30 : 50, nmy = g.top ? -44 : 36;
-          h += '<g transform="translate('+px+','+py+')"><rect class="mon" x="-26" y="-24" width="52" height="36" rx="5" style="stroke:'+c+'"/><rect x="-21" y="-19" width="42" height="26" rx="2" style="fill:'+c+'" opacity=".25"/><rect class="stand" x="-4" y="12" width="8" height="6"/><rect class="stand" x="-12" y="17" width="24" height="4" rx="2"/>'+
-            '<text class="pc-t" y="'+nmy+'" style="font-size:12px">PC'+(g.k*2+j)+'</text><text class="pc-ip" y="'+ipy+'" style="font-size:9px">'+toStr(n.pcs[j])+'</text></g>';
-        });
-        h += sw(g.gx, g.sy, 120, 30, 'SW-'+s.s, 0);
-        var hy = g.top ? g.y+20 : g.y+212, ny = hy + 15;
-        h += '<text class="grp-l" x="'+(g.x+10)+'" y="'+hy+'" style="fill:'+s.c+';font-size:10.5px">'+s.n+'</text>';
-        h += '<text class="grp-n" x="'+(g.x+10)+'" y="'+ny+'" style="font-size:9.5px">'+toStr(n.net)+'/'+r.prefix+' · gw .'+(n.gw%256)+'</text>';
       });
       h += '<rect x="'+(R.x-RR-10-96)+'" y="'+(R.y-18)+'" width="96" height="36" rx="9" style="fill:var(--surface);stroke:var(--line)"/>';
       h += '<text class="pc-t" x="'+(R.x-RR-10-48)+'" y="'+(R.y-2)+'" style="font-size:12px">L3-IFSC</text><text class="pc-ip" x="'+(R.x-RR-10-48)+'" y="'+(R.y+11)+'" style="font-size:9px">Switch 3560</text>';
       h += rtr(R.x, R.y, RR);
     } else {
       d.setAttribute('viewBox','0 0 1000 456');
-      SECT.forEach(function(s,k){
-        var x = 20+k*245, gx = x+112.5, n = r.nets[k];
-        h += '<rect x="'+x+'" y="132" width="225" height="312" rx="18" style="fill:color-mix(in srgb,'+s.c+' 10%,var(--surface));stroke:'+s.c+'" stroke-opacity=".45"/>';
-      });
-      SECT.forEach(function(s,k){
+      var UP = SECT.map(function(s,k){
         var gx = 20+k*245+112.5, a = Math.atan2(194-58, gx-500), sx = 500+Math.cos(a)*30, sy = 58+Math.sin(a)*30;
-        h += '<line class="cab" style="stroke:'+s.c+'" x1="'+sx.toFixed(1)+'" y1="'+sy.toFixed(1)+'" x2="'+gx+'" y2="196"/>';
+        // ponto onde o cabo entra no quadro do setor (topo ou lateral)
+        var x0 = 20+k*245, t = (132-sy)/(196-sy);
+        if (gx !== sx){ var xe = gx > sx ? x0 : x0+225, te = (xe-sx)/(gx-sx); if (te > t) t = te; }
+        var ex = sx + (gx-sx)*t, ey = sy + (196-sy)*t;
+        h += '<line class="cab" style="stroke:'+s.c+'" x1="'+sx.toFixed(1)+'" y1="'+sy.toFixed(1)+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'"/>';
+        return {a:a, ex:ex, ey:ey};
       });
       SECT.forEach(function(s,k){
-        var x = 20+k*245, gx = x+112.5, n = r.nets[k];
-        [0,1].forEach(function(j){ var px = gx+(j?56:-56); h += '<path class="cab" style="stroke:'+s.c+'" d="M'+(gx+(j?22:-22))+' 242 C '+(gx+(j?22:-22))+' 280, '+px+' 270, '+px+' 316"/>'; });
+        var x = 20+k*245, gx = x+112.5, n = r.nets[k], gh = '<rect class="grp-bg" x="'+x+'" y="132" width="225" height="312" rx="18"/>';
+        gh += '<line class="cab" style="stroke:'+s.c+'" x1="'+UP[k].ex.toFixed(1)+'" y1="'+UP[k].ey.toFixed(1)+'" x2="'+gx+'" y2="196"/>';
+        [0,1].forEach(function(j){ var px = gx+(j?56:-56); gh += '<path class="cab" style="stroke:'+s.c+'" d="M'+(gx+(j?22:-22))+' 242 C '+(gx+(j?22:-22))+' 280, '+px+' 270, '+px+' 316"/>'; });
         var lx = k<2 ? x+16 : x+209, an = k<2 ? 'start' : 'end';
-        h += '<text class="grp-l halo" x="'+lx+'" y="156" text-anchor="'+an+'" style="fill:'+s.c+'">'+s.n+'</text><text class="grp-n halo" x="'+lx+'" y="172" text-anchor="'+an+'">'+toStr(n.net)+'/'+r.prefix+'</text><text class="grp-n halo" x="'+gx+'" y="432" text-anchor="middle">gateway '+toStr(n.gw)+'</text>';
-        h += '<text class="port halo" x="'+(gx+(k<2?-30:30))+'" y="190">Fa0/24</text>';
-        var a = Math.atan2(194-58, gx-500); h += '<text class="port halo" x="'+(500+Math.cos(a)*62).toFixed(1)+'" y="'+(58+Math.sin(a)*62+4).toFixed(1)+'">Fa0/'+(k+1)+'</text>';
-        h += sw(gx, 220, 176, 46, 'SW-'+s.s, 4);
-        h += pcSvg(k,0,gx-56,342,true,true) + pcSvg(k,1,gx+56,342,true,true);
+        gh += '<text class="grp-l halo" x="'+lx+'" y="156" text-anchor="'+an+'" style="fill:'+s.c+'">'+s.n+'</text><text class="grp-n halo" x="'+lx+'" y="172" text-anchor="'+an+'">'+toStr(n.net)+'/'+r.prefix+'</text><text class="grp-n halo" x="'+gx+'" y="432" text-anchor="middle">gateway '+toStr(n.gw)+'</text>';
+        gh += '<text class="port halo" x="'+(gx+(k<2?-30:30))+'" y="190">Fa0/24</text>';
+        gh += sw(gx, 220, 176, 46, 'SW-'+s.s, 4);
+        gh += pcSvg(k,0,gx-56,342,true,true) + pcSvg(k,1,gx+56,342,true,true);
+        h += grp(s, n, gh);
+      });
+      SECT.forEach(function(s,k){
+        var a = UP[k].a;
+        h += '<text class="port halo" x="'+(500+Math.cos(a)*62).toFixed(1)+'" y="'+(58+Math.sin(a)*62+4).toFixed(1)+'">Fa0/'+(k+1)+'</text>';
       });
       h += rtr(500,58,30);
       h += '<text class="pc-t" x="454" y="54" style="text-anchor:end">L3-IFSC</text><text class="pc-ip" x="454" y="70" style="text-anchor:end">Switch 3560 · ip routing</text>';
