@@ -885,6 +885,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     <symbol id="i-switch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/></symbol>
     <symbol id="i-pc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1.8"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8"/></symbol>
     <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 3.8 5.8 3.8 9s-1.2 6.2-3.8 9c-2.6-2.8-3.8-5.8-3.8-9S9.4 5.8 12 3z"/></symbol>
     <symbol id="i-mask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 5v14M13 5v14" stroke-dasharray="2 2.4"/><path d="M3 12h18" opacity=".5"/></symbol>
     <symbol id="i-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="11" rx="2"/><path d="M8 7V4h8v3M9 12v2M12 12v2M15 12v2M12 18v3"/></symbol>
@@ -1073,9 +1074,9 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
             <div class="stat"><b id="st-total">256</b><span>endereços usados</span></div>
           </div>
         </div>
-        <div class="tbl-wrap">
+        <div class="tbl-wrap pc-tbl">
           <table>
-            <thead><tr><th>Setor</th><th>Rede / CIDR</th><th>Gateway</th><th>Faixa útil</th><th>Broadcast</th></tr></thead>
+            <thead><tr><th><svg><use href="#i-tag"/></svg>Setor</th><th><svg><use href="#i-split"/></svg>Rede / CIDR</th><th><svg><use href="#i-route"/></svg>Gateway</th><th><svg><use href="#i-pc"/></svg>Faixa útil</th><th><svg><use href="#i-wave"/></svg>Broadcast</th></tr></thead>
             <tbody id="plan-body"></tbody>
           </table>
         </div>
@@ -1522,7 +1523,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     // plano
     $('plan-body').innerHTML = r.fit.map(function(n){
       var s = SECT[n.k];
-      return '<tr><td data-label="Setor"><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td data-label="Rede" class="mono">'+toStr(n.net)+'/'+r.prefix+'</td><td data-label="Gateway" class="mono">'+toStr(n.gw)+'</td><td data-label="Faixa útil" class="mono">'+toStr(n.first)+' – '+toStr(n.last)+'</td><td data-label="Broadcast" class="mono">'+toStr(n.bc)+'</td></tr>';
+      return '<tr><td data-label="Setor"><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td data-label="Rede" class="mono"><b class="ip">'+toStr(n.net)+'/'+r.prefix+'</b></td><td data-label="Gateway" class="mono gw-cell">'+toStr(n.gw)+'</td><td data-label="Faixa útil" class="mono">'+toStr(n.first)+' – '+toStr(n.last)+'</td><td data-label="Broadcast" class="mono">'+toStr(n.bc)+'</td></tr>';
     }).join('');
 
     // PCs
