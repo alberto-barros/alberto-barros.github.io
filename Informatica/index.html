@@ -87,6 +87,19 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 @keyframes ledb{0%,100%{fill:#2FD661;opacity:1}50%{fill:#7CF5A0;opacity:.4}}
 .srv.hit .body{stroke:#8FD0FF}
 .srv.hit .led{fill:#C8FFD8;opacity:1;animation:none}
+.net-globe .gl-bg{fill:var(--blue-soft)}
+.net-globe .gl-ring{fill:none;stroke:var(--blue);stroke-width:2}
+.net-globe .mer{fill:none;stroke:var(--blue);stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:spin 4s linear infinite}
+.net-globe .mer.m2{animation-delay:-2s}
+@keyframes spin{0%{transform:scaleX(1)}50%{transform:scaleX(.04)}100%{transform:scaleX(1)}}
+.net-globe .lat{fill:none;stroke:var(--blue);stroke-width:1.2;opacity:.7}
+.net-globe .pulse{fill:none;stroke:var(--blue);stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:pls 2.8s ease-out infinite}
+.net-globe .pulse.p2{animation-delay:1.4s}
+@keyframes pls{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.9);opacity:0}}
+.net-globe .orbit{transform-box:view-box;transform-origin:370px -14px;animation:orb 6s linear infinite}
+@keyframes orb{to{transform:rotate(360deg)}}
+.net-globe .orb-path{fill:none;stroke:var(--violet);stroke-width:1.2;stroke-dasharray:2 4;opacity:.8}
+.net-globe .orb-dot{fill:var(--violet)}
 .lbl{font-family:var(--font-display);font-weight:600;font-size:10px;text-anchor:middle;fill:var(--ink)}
 .lbl.sub{font-family:var(--font-mono);font-weight:400;font-size:8px;fill:var(--muted)}
 .cur{transition:transform .6s cubic-bezier(.3,.7,.2,1)}
@@ -200,11 +213,12 @@ footer .fb svg{height:26px;width:auto}
       <p>Uma trilha para entender, na prática, como o computador acessa a internet: navegador, endereços, buscas, formulários e serviços online.</p>
     </div>
     <figure class="net" aria-label="Animação: um computador acessando páginas da internet, como busca, formulário, vídeo e loja">
-      <svg viewBox="0 0 420 224" class="net-svg" aria-hidden="true">
+      <svg viewBox="0 -46 420 270" class="net-svg" aria-hidden="true">
         <defs>
           <linearGradient id="srvg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5AA9FF"/><stop offset="1" stop-color="#7A5CE6"/></linearGradient>
           <linearGradient id="vid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B8EEA"/><stop offset="1" stop-color="#8B6CF0"/></linearGradient>
           <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <clipPath id="gclip"><circle cx="370" cy="-14" r="22"/></clipPath>
           <clipPath id="scrclip"><rect x="0" y="0" width="206" height="130" rx="4"/></clipPath>
         </defs>
 
@@ -293,6 +307,20 @@ footer .fb svg{height:26px;width:auto}
         </g>
         <text class="lbl" x="121" y="198">Computador</text>
         <text class="lbl sub" x="121" y="211">navegador</text>
+
+        <!-- internet (globo animado) -->
+        <g class="net-globe">
+          <circle class="pulse" cx="370" cy="-14" r="22"/>
+          <circle class="pulse p2" cx="370" cy="-14" r="22"/>
+          <circle class="gl-bg" cx="370" cy="-14" r="22"/>
+          <g clip-path="url(#gclip)">
+            <ellipse class="mer m1" cx="370" cy="-14" rx="22" ry="22"/>
+            <ellipse class="mer m2" cx="370" cy="-14" rx="22" ry="22"/>
+            <path class="lat" d="M348 -14h44M350 -23h40M350 -5h40"/>
+          </g>
+          <circle class="gl-ring" cx="370" cy="-14" r="22"/>
+          <g class="orbit"><ellipse class="orb-path" cx="370" cy="-14" rx="30" ry="10"/><circle class="orb-dot" cx="400" cy="-14" r="3.2"/></g>
+        </g>
 
         <!-- servidor -->
         <g class="srv" id="srv">
