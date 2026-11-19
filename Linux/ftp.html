@@ -1188,6 +1188,10 @@ html,body{overflow-x:clip}
 .fz-queue{border-top:2px solid var(--fz-edge)}
 .fz-path,.fz-f div{border-color:var(--fz-edge)}
 @media (max-width:560px){.fz-pane + .fz-pane{border-left:0;border-top:2px solid var(--fz-edge)}}
+
+/* quadro de download: contorno preto e fundo verde mais fraco */
+.dl{border:2px solid var(--fz-edge);
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 7%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--mint) 35%,var(--surface)),var(--surface) 70%)}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
