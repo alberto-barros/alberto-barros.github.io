@@ -861,6 +861,89 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 .port-card{position:relative;overflow:hidden;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 10%,var(--surface)),var(--surface) 65%);transition:transform .25s,box-shadow .25s}
 .port-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px var(--vc)}
 @media (prefers-reduced-motion:reduce){.ben .ico,.vs-card .ico,.obs .ico,.note .ico,.vs-card .ico svg,.err h3 svg,.err-g::before{animation:none!important}}
+
+/* ===== Ferramenta "Monte o seu plano": visual 3D igual ao IPv4 ===== */
+.finder{margin-top:8px;border:1px solid color-mix(in srgb,var(--green) 28%,var(--line));border-radius:30px;padding:32px;display:grid;gap:26px;
+  background:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,var(--green) 16%,var(--surface)),transparent 60%),linear-gradient(180deg,var(--surface),var(--surface-2));
+  box-shadow:inset 0 1px 0 var(--gloss),0 40px 80px -48px color-mix(in srgb,var(--green) 70%,transparent),0 2px 0 color-mix(in srgb,var(--green) 18%,transparent)}
+.finder-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:20px;align-items:center}
+.finder-head .ico{--ic:var(--green);position:relative;width:72px;height:72px;border-radius:22px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--green) 70%,#fff),var(--green) 45%,color-mix(in srgb,var(--green) 70%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 -2px color-mix(in srgb,var(--green) 55%,#000),0 22px 30px -10px color-mix(in srgb,var(--green) 70%,transparent);
+  animation:icoFloat 3.4s ease-in-out infinite}
+.finder-head .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--green);animation:rring 2.6s ease-out infinite;pointer-events:none}
+.finder-head .ico svg{width:36px;height:36px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.25))}
+:root[data-theme="dark"] .finder-head .ico,:root[data-theme="dark"] .stat .fti{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .finder-head .ico,:root:not([data-theme="light"]) .stat .fti{color:#08130C}}
+.finder-head h3{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em;margin-top:8px}
+.finder-head p{color:var(--muted);margin-top:6px;max-width:62ch}
+.finder .planner{gap:22px}
+.finder .pform{border:1px solid var(--line);border-radius:24px;background:var(--surface);padding:22px;box-shadow:inset 0 1px 0 var(--gloss),0 4px 0 -1px var(--line),0 18px 36px -24px rgba(15,36,23,.35)}
+.finder #base{font-size:1.45rem;padding:13px 16px;border:2px solid color-mix(in srgb,var(--green) 40%,var(--line));border-radius:16px;background:var(--surface-2);box-shadow:inset 0 3px 6px -3px rgba(0,0,0,.18)}
+.finder #base:focus,.finder .field select:focus,.finder #pcstart:focus{box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 25%,transparent);outline:none;border-color:var(--green)}
+.finder .field select,.finder #pcstart{border-radius:14px;box-shadow:inset 0 2px 5px -3px rgba(0,0,0,.18)}
+.finder .presets button{border-radius:12px;padding:6px 10px;background:var(--surface);box-shadow:0 3px 0 var(--line);transition:transform .15s,box-shadow .15s,border-color .15s,color .15s}
+.finder .presets button:hover{transform:translateY(-2px);box-shadow:0 5px 0 color-mix(in srgb,var(--green) 40%,var(--line))}
+.finder .presets button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.finder .seg{box-shadow:inset 0 2px 5px -3px rgba(0,0,0,.2)}
+.finder .seg button[aria-pressed="true"]{box-shadow:0 3px 0 color-mix(in srgb,var(--green) 55%,#000),0 8px 14px -8px var(--green)}
+
+/* cartão da pizza */
+.finder .pizza-card{border:1px solid color-mix(in srgb,var(--green) 30%,var(--line));border-radius:26px;padding:24px;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--green) 9%,var(--surface)),var(--surface) 55%);
+  box-shadow:inset 0 1px 0 var(--gloss),0 4px 0 -1px color-mix(in srgb,var(--green) 22%,var(--line)),0 26px 50px -30px var(--green);grid-template-columns:290px minmax(0,1fr)}
+@container (max-width:760px){
+  .finder .pizza-card{grid-template-columns:1fr;gap:14px;align-content:start}
+  .finder .pizza-card #pizza{max-width:400px}
+  .finder .pz-stage{margin:-6px 0 -4px}
+}
+@container (max-width:420px){.finder .pizza-card{padding:16px}.finder .pizza-card #pizza{max-width:100%}}
+.pz-stage{position:relative;perspective:900px}
+.pz-stage::before{content:"";position:absolute;inset:6% 4% 10%;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--green) 22%,transparent),transparent);filter:blur(6px);z-index:0}
+#pizza{position:relative;z-index:1;max-width:320px;overflow:visible}
+#pizza .sl{cursor:pointer;transform:translate(var(--ox),var(--oy));animation:pzDrop .6s cubic-bezier(.2,.9,.3,1.35) both;animation-delay:var(--d);transition:transform .35s cubic-bezier(.2,.9,.3,1.4),filter .3s}
+#pizza .sl:hover{transform:translate(calc(var(--ox) * 3),calc(var(--oy) * 3 - 10px));filter:drop-shadow(0 10px 8px rgba(0,0,0,.28))}
+@keyframes pzDrop{from{transform:translate(var(--ox),-46px);opacity:0}to{transform:translate(var(--ox),var(--oy));opacity:1}}
+#pizza .sl-top{stroke:color-mix(in srgb,#fff 55%,transparent);stroke-width:.8;stroke-linejoin:round}
+#pizza .sl-n{fill:#fff;font-family:var(--f-display);font-weight:800;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:2.6px;letter-spacing:.02em}
+#pizza .sl-ip{fill:#fff;font-family:var(--f-mono);font-weight:600;paint-order:stroke;stroke:rgba(0,0,0,.25);stroke-width:2px}
+#pizza .sl-free{fill:var(--ink);opacity:.6;font-family:var(--f-mono);font-weight:600}
+.finder .pz-calc span{background:var(--surface);border:1px solid var(--line);box-shadow:0 3px 0 var(--line);border-radius:11px}
+.finder .pz-calc b{border-radius:11px;background:linear-gradient(160deg,color-mix(in srgb,var(--green) 72%,#fff),var(--green));box-shadow:0 3px 0 color-mix(in srgb,var(--green) 60%,#000),0 10px 16px -8px var(--green)}
+.finder .pz-steps button{border-radius:13px;background:var(--surface);box-shadow:0 4px 0 var(--line);transition:transform .15s,box-shadow .15s,border-color .15s,color .15s}
+.finder .pz-steps button:hover{transform:translateY(-2px);box-shadow:0 6px 0 color-mix(in srgb,var(--green) 40%,var(--line))}
+.finder .pz-steps button:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.finder .pz-steps button[aria-pressed="true"]{background:linear-gradient(160deg,color-mix(in srgb,var(--green) 72%,#fff),var(--green));border-color:var(--green);box-shadow:0 4px 0 color-mix(in srgb,var(--green) 55%,#000),0 12px 18px -8px var(--green)}
+.finder .pz-leg i{border-radius:4px;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+
+/* bits e números */
+.finder .bits{border:1px solid var(--line);border-radius:24px;padding:20px 22px;gap:14px;background:var(--surface);box-shadow:inset 0 1px 0 var(--gloss),0 4px 0 -1px var(--line),0 18px 36px -26px rgba(15,36,23,.35)}
+.finder .bits-top b{font-size:1.1rem}
+.finder .oct{gap:4px}
+.finder .bit{border-radius:7px;font-size:.72rem;box-shadow:0 3px 0 var(--line);animation:bitPop .35s both}
+.finder .bit.on{background:linear-gradient(160deg,color-mix(in srgb,var(--green) 72%,#fff),var(--green));box-shadow:0 3px 0 color-mix(in srgb,var(--green) 60%,#000),0 8px 12px -8px var(--green)}
+@keyframes bitPop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+.finder .stats{gap:12px}
+.finder .stat{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;border-radius:18px;background:var(--surface);
+  border:1px solid color-mix(in srgb,var(--tc) 24%,var(--line));box-shadow:inset 0 1px 0 var(--gloss),0 10px 20px -16px var(--tc);transition:transform .2s,box-shadow .2s,border-color .2s}
+.finder .stat:hover{transform:translateY(-3px);border-color:var(--tc);box-shadow:0 16px 28px -16px var(--tc)}
+.stat .fti{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--tc) 65%,#fff),var(--tc) 50%,color-mix(in srgb,var(--tc) 75%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -3px 0 rgba(0,0,0,.16),0 5px 0 -1px color-mix(in srgb,var(--tc) 55%,#000),0 12px 16px -8px var(--tc)}
+.stat .fti svg{width:22px;height:22px;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}
+.finder .stat b{font-size:1.6rem;color:var(--ink)}
+@media (max-width:640px){
+  .finder{padding:18px;border-radius:22px;gap:20px}
+  .finder-head{grid-template-columns:1fr;gap:12px}
+  .finder-head .ico{width:56px;height:56px;border-radius:18px}
+  .finder-head .ico svg{width:28px;height:28px}
+  .finder .pform,.finder .pizza-card,.finder .bits{padding:16px;border-radius:20px}
+  .finder #base{font-size:1.2rem}
+  .finder .stats{grid-template-columns:1fr}
+  .finder .bit{font-size:.55rem;border-radius:5px;box-shadow:0 2px 0 var(--line)}
+  .finder .oct{gap:2px}
+}
+@media (prefers-reduced-motion:reduce){.finder-head .ico,.finder-head .ico::before,#pizza .sl,.finder .bit{animation:none}#pizza .sl{transition:none}}
 </style>
 </head>
 <body>
@@ -1008,6 +1091,11 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       <h2>Escolha sua faixa e seus IPs</h2>
       <p>Cada aluno deve ter um plano diferente. Sugestão: use o seu <b>número de chamada</b> no terceiro octeto (ex.: aluno 17 → <code>192.168.17.0</code>). Tudo abaixo, incluindo os comandos e os testes, se ajusta às suas escolhas.</p>
     </div>
+    <div class="finder">
+    <div class="finder-head">
+      <div class="ico"><svg><use href="#i-split"/></svg></div>
+      <div><span class="eyebrow">Ferramenta interativa</span><h3>Monte o seu plano de sub-redes</h3><p>Escolha a rede base, a máscara, o gateway e o número dos PCs. A pizza, os bits e a tabela se ajustam na hora.</p></div>
+    </div>
     <div class="planner">
       <form class="pform" id="pform" autocomplete="off">
         <div class="field">
@@ -1046,7 +1134,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       </form>
       <div class="pizza-wrap">
     <div class="pizza-card">
-      <svg id="pizza" viewBox="-140 -140 280 280" role="img" aria-labelledby="pz-title"></svg>
+      <div class="pz-stage"><svg id="pizza" viewBox="-150 -98 300 194" role="img" aria-labelledby="pz-title"></svg></div>
       <div class="pizza-txt">
         <span class="eyebrow">A rede como uma pizza</span>
         <h3 id="pz-title">/26 corta a /24 em <em>4 fatias</em></h3>
@@ -1069,9 +1157,9 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
           <div class="bitrow" id="bitrow"></div>
           <div class="bitleg"><span><i style="background:var(--green)"></i>bits de rede (1)</span><span><i style="background:var(--surface-2);border:1px solid var(--line)"></i>bits de host (0)</span></div>
           <div class="stats">
-            <div class="stat"><b id="st-block">64</b><span>endereços por sub-rede</span></div>
-            <div class="stat"><b id="st-hosts">62</b><span>hosts úteis</span></div>
-            <div class="stat"><b id="st-total">256</b><span>endereços usados</span></div>
+            <div class="stat" style="--tc:var(--s1)"><i class="fti"><svg><use href="#i-split"/></svg></i><div><b id="st-block">64</b><span>endereços por sub-rede</span></div></div>
+            <div class="stat" style="--tc:var(--green)"><i class="fti"><svg><use href="#i-pc"/></svg></i><div><b id="st-hosts">62</b><span>hosts úteis</span></div></div>
+            <div class="stat" style="--tc:var(--s3)"><i class="fti"><svg><use href="#i-gauge"/></svg></i><div><b id="st-total">256</b><span>endereços usados</span></div></div>
           </div>
         </div>
         <div class="tbl-wrap pc-tbl">
@@ -1081,6 +1169,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
           </table>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -1632,30 +1721,60 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     var pt = function(ang, rad){ return [Math.cos(ang)*rad, Math.sin(ang)*rad]; };
     if (key !== lastPizza){
       svg.innerHTML = '';
-      mk('circle',{r:R+12,style:'fill:var(--crust)'});
-      mk('circle',{r:R+12,fill:'none',style:'stroke:color-mix(in srgb,var(--ink) 18%,transparent)','stroke-width':1});
-      for (var i=0;i<n;i++){
-        var g = mk('g',{'class':'sl',style:'animation-delay:'+(i*35)+'ms'});
+      // pizza em perspectiva: elipse achatada (K) com espessura (D)
+      var K = .58, D = 20, Rc = R + 14, cy = -10, P = function(a, rad, dy){ return [Math.cos(a)*rad, cy + Math.sin(a)*rad*K + (dy||0)]; };
+      var f = function(v){ return v.toFixed(2); };
+      var defs = mk('defs',{});
+      defs.innerHTML =
+        '<radialGradient id="pzShadow"><stop offset="0" stop-color="#000" stop-opacity=".32"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>'+
+        '<linearGradient id="pzSide" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".38"/><stop offset=".45" stop-color="#000" stop-opacity=".12"/><stop offset=".7" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient>'+
+        '<radialGradient id="pzGloss" cx=".38" cy=".25" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".45" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></radialGradient>'+
+        '<radialGradient id="pzCrust" cx=".5" cy=".4" r=".6"><stop offset=".8" stop-color="#fff" stop-opacity="0"/><stop offset=".93" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity=".15"/></radialGradient>';
+      mk('ellipse',{cx:0,cy:cy+D+10,rx:Rc+10,ry:(Rc+10)*K*.75,fill:'url(#pzShadow)'});
+      // lateral da massa (metade da frente)
+      var sideD = 'M'+f(Rc)+' '+cy+' L'+f(Rc)+' '+(cy+D)+' A'+Rc+' '+f(Rc*K)+' 0 0 1 '+f(-Rc)+' '+(cy+D)+' L'+f(-Rc)+' '+cy+' A'+Rc+' '+f(Rc*K)+' 0 0 0 '+f(Rc)+' '+cy+'Z';
+      mk('path',{d:sideD,style:'fill:color-mix(in srgb,var(--crust) 78%,#5a3410)'});
+      mk('path',{d:sideD,fill:'url(#pzSide)'});
+      mk('ellipse',{cx:0,cy:cy,rx:Rc,ry:f(Rc*K),style:'fill:var(--crust)'});
+      mk('ellipse',{cx:0,cy:cy,rx:Rc,ry:f(Rc*K),fill:'url(#pzCrust)'});
+      mk('ellipse',{cx:0,cy:cy+2,rx:R+3,ry:f((R+3)*K),style:'fill:color-mix(in srgb,var(--crust) 70%,#000)',opacity:.35});
+      // fatias, de trás para a frente
+      var order = []; for (var i=0;i<n;i++) order.push(i);
+      var midOf = function(i){ return -Math.PI/2 + (i+.5)*2*Math.PI/n; };
+      order.sort(function(a,b){ return Math.sin(midOf(a)) - Math.sin(midOf(b)); });
+      var T = 5; // espessura da fatia
+      order.forEach(function(i, z){
         var a0 = -Math.PI/2 + i*2*Math.PI/n, a1 = a0 + 2*Math.PI/n, mid = (a0+a1)/2;
-        var sec = used[i];
-        var fill = sec!==undefined ? SECT[sec].c : 'var(--cheese)';
-        if (n===1) mk('circle',{r:R,style:'fill:'+fill+';stroke:var(--surface)','stroke-width':3},g);
-        else {
-          var p0 = pt(a0,R), p1 = pt(a1,R);
-          mk('path',{d:'M0 0L'+p0[0].toFixed(2)+' '+p0[1].toFixed(2)+'A'+R+' '+R+' 0 0 1 '+p1[0].toFixed(2)+' '+p1[1].toFixed(2)+'Z',style:'fill:'+fill+';stroke:var(--surface)','stroke-width':3,'stroke-linejoin':'round'},g);
-        }
-        // pepperoni
-        var peps = sec!==undefined || n===1 ? [] : n<=2 ? [[-.45,.35],[.4,.82]] : n<=4 ? [[-.35,.32],[.4,.88]] : n<=8 ? [[0,.38]] : [];
-        peps.forEach(function(q){ var c = pt(mid + q[0]*(a1-a0)/2, R*q[1]); mk('circle',{cx:c[0],cy:c[1],r:n<=4?8:6,style:'fill:var(--pep)',opacity:.85},g); });
+        var sec = used[i], fill = sec!==undefined ? SECT[sec].c : 'var(--cheese)';
+        var ex = n===1 ? 0 : 3.5, ox = Math.cos(mid)*ex, oy = Math.sin(mid)*ex*K;
+        var g = mk('g',{'class':'sl'+(sec!==undefined?' use':''),style:'--d:'+(i*45)+'ms;--ox:'+f(ox)+'px;--oy:'+f(oy)+'px'});
+        var tt = mk('title',{},g); tt.textContent = sec!==undefined ? SECT[sec].n+' · '+toStr(base24 + i*r.block)+'/'+r.prefix : 'Fatia livre · '+toStr(base24 + i*r.block)+'/'+r.prefix;
+        var wedge = function(dy){
+          if (n===1) return 'M'+f(R)+' '+(cy+dy)+' A'+R+' '+f(R*K)+' 0 1 1 '+f(-R)+' '+(cy+dy)+' A'+R+' '+f(R*K)+' 0 1 1 '+f(R)+' '+(cy+dy)+'Z';
+          var p0 = P(a0,R,dy), p1 = P(a1,R,dy), c = [0,cy+dy];
+          return 'M'+f(c[0])+' '+f(c[1])+'L'+f(p0[0])+' '+f(p0[1])+'A'+R+' '+f(R*K)+' 0 0 1 '+f(p1[0])+' '+f(p1[1])+'Z';
+        };
+        // espessura: a mesma fatia, mais escura, um pouco abaixo
+        mk('path',{d:wedge(T),'class':'sl-side',style:'fill:color-mix(in srgb,'+fill+' 62%,#000)'},g);
+        mk('path',{d:wedge(0),'class':'sl-top',style:'fill:'+fill},g);
+        mk('path',{d:wedge(0),fill:'url(#pzGloss)','pointer-events':'none',opacity:sec!==undefined?.9:.6},g);
+        // pepperoni nas fatias livres
+        var peps = sec!==undefined || n===1 ? [] : n<=2 ? [[-.45,.35],[.4,.8],[-.2,.72]] : n<=4 ? [[-.35,.38],[.4,.8]] : n<=8 ? [[0,.42]] : [];
+        peps.forEach(function(q){ var c = P(mid + q[0]*(a1-a0)/2, R*q[1]); var rr = n<=4?8:6;
+          mk('ellipse',{cx:f(c[0]),cy:f(c[1]+1.5),rx:rr,ry:f(rr*K),style:'fill:color-mix(in srgb,var(--pep) 60%,#000)'},g);
+          mk('ellipse',{cx:f(c[0]),cy:f(c[1]),rx:rr,ry:f(rr*K),style:'fill:var(--pep)'},g);
+          mk('ellipse',{cx:f(c[0]-rr*.3),cy:f(c[1]-rr*K*.35),rx:f(rr*.35),ry:f(rr*K*.3),fill:'#fff',opacity:.35},g); });
         // rótulo
-        var lr = n===1 ? 0 : (n<=4 ? R*.6 : n<=8 ? R*.74 : R*.8);
-        var lp = n===1 ? [0,-4] : pt(mid, lr);
-        var tcol = sec!==undefined ? '#fff' : 'var(--ink)';
-        if (sec!==undefined) mk('text',{x:lp[0],y:lp[1]-(n<=8?2:-3),'text-anchor':'middle','font-size':n===1?22:n<=4?13:n<=8?11:8.5,'font-weight':800,'font-family':'Sora, sans-serif',style:'fill:'+tcol+';paint-order:stroke;stroke:color-mix(in srgb,#000 22%,transparent);stroke-width:2.5px'},g).textContent = SECT[sec].s;
-        if (n<=8) mk('text',{x:lp[0],y:lp[1]+(n===1?20:sec!==undefined?13:4),'text-anchor':'middle','font-size':n===1?13:n<=4?11.5:10,'font-weight':600,'font-family':'JetBrains Mono, monospace',style:'fill:'+tcol+';opacity:'+(sec!==undefined?.95:.7)+(sec!==undefined?';paint-order:stroke;stroke:color-mix(in srgb,#000 22%,transparent);stroke-width:2px':'')},g).textContent = n===1 ? toStr(base24)+'/24' : '.'+(i*r.block);
-        else if (sec===undefined) mk('text',{x:lp[0],y:lp[1]+3,'text-anchor':'middle','font-size':8,'font-family':'JetBrains Mono, monospace',style:'fill:var(--ink);opacity:.55'},g).textContent = '.'+(i*r.block);
-      }
-      if (n>1) mk('circle',{r:4,style:'fill:var(--surface)'});
+        var lr = n===1 ? 0 : (n<=4 ? R*.58 : n<=8 ? R*.7 : R*.78);
+        var lp = n===1 ? [0,cy] : P(mid, lr);
+        if (sec!==undefined){
+          var big = n===1 ? 20 : n<=4 ? 14 : n<=8 ? 11 : 8;
+          mk('text',{x:f(lp[0]),y:f(lp[1]+(n<=8?-1:3)),'text-anchor':'middle','class':'sl-n','font-size':big},g).textContent = SECT[sec].s;
+          if (n<=8) mk('text',{x:f(lp[0]),y:f(lp[1]+big*.95),'text-anchor':'middle','class':'sl-ip','font-size':n===1?12:n<=4?11:9},g).textContent = n===1 ? toStr(base24)+'/24' : '.'+(i*r.block);
+        } else if (n<=8){
+          mk('text',{x:f(lp[0]),y:f(lp[1]+(n<=4?14:12)),'text-anchor':'middle','class':'sl-free','font-size':n<=4?10.5:9},g).textContent = '.'+(i*r.block);
+        }
+      });
       lastPizza = key;
     }
     var inP = Object.keys(used).length, free = n - inP;
