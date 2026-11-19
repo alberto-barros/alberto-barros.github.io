@@ -1088,15 +1088,10 @@ interface gigabitEthernet 0/1
       <h2>Publique o site ifsc.edu.br</h2>
       <p>Com as rotas estáticas funcionando, coloque um servidor na rede do R3, ao lado do PC2, com os serviços HTTP e DNS e acesse a página pelo nome a partir do PC0, que está do outro lado do anel.</p>
     </div>
-    <div class="def">
+    <div class="def" style="grid-template-columns:minmax(0,1fr)">
       <div>
         <p class="big">O <strong>DNS</strong> (Domain Name System) traduz nomes em endereços IP. O navegador não sabe onde fica <code>ifsc.edu.br</code>; ele pergunta ao servidor DNS e recebe o IP do servidor web <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>; <a class="cite" href="#ref-mockapetris-a">MOCKAPETRIS, 1987a</a>)</span>.</p>
         <p>O roteamento não conhece nomes: os roteadores só encaminham pacotes para o IP <code>192.168.3.100</code>. Por isso o site só abre se as tabelas de roteamento da Parte 1 estiverem certas.</p>
-      </div>
-      <div class="web" aria-label="Resultado esperado no navegador do PC0">
-        <div class="web-top">PC0 · Web Browser</div>
-        <div class="web-url"><span>http://ifsc.edu.br</span><b>Go</b></div>
-        <div class="web-page"><strong>Cisco Packet Tracer</strong><span>Welcome to Cisco Packet Tracer. Opening doors to new opportunities. Mind Wide Open.</span></div>
       </div>
     </div>
 
@@ -1180,6 +1175,11 @@ interface gigabitEthernet 0/1
           <h3>Acesse a página a partir do PC remoto <span class="tag">Observe</span></h3>
           <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>Web Browser</span></div>
           <p>No PC0, digite <code>http://ifsc.edu.br</code> na barra de endereço e clique em <b>Go</b>. Depois faça os testes no <b>Command Prompt</b>.</p>
+          <div class="web" style="margin-top:6px" aria-label="Resultado esperado no navegador do PC0, depois do passo 5">
+        <div class="web-top">PC0 · Web Browser</div>
+        <div class="web-url"><span>http://ifsc.edu.br</span><b>Go</b></div>
+        <div class="web-page"><strong>Cisco Packet Tracer</strong><span>Welcome to Cisco Packet Tracer. Opening doors to new opportunities. Mind Wide Open.</span></div>
+</div>
           <div class="tests" id="tests6"></div>
           <div class="observe">
             <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>No modo Simulation</b><span>Filtre por <code>DNS</code>, <code>TCP</code> e <code>HTTP</code> e abra a página de novo. Qual envelope sai primeiro do PC0?</span></div></div>
