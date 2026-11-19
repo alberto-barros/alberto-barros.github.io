@@ -944,6 +944,8 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 @media (max-width:860px){.desafio .def{grid-template-columns:1fr}}
 @media (max-width:600px){.ch-banner{grid-template-columns:1fr;padding:18px}}
 @media (max-width:480px){.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
+#tmenu a.nav-ch:hover,#tmenu a.nav-ch:focus-visible{background:var(--red)!important;color:#fff!important}
+#tmenu a.nav-ch:hover b,#tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.85}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -991,7 +993,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#osi"><b>02</b>Modelo OSI</a><a href="#classes"><b>03</b>Classes</a><a href="#configurar"><b>04</b>Configurar</a><a href="#ping"><b>05</b>Ping</a><a href="#animacao"><b>06</b>Animação</a><a href="#topologia"><b>07</b>Topologia</a><a href="#passos"><b>08</b>Atividade</a><a href="#desafio" class="nav-ch"><b>09</b>Desafio</a><a href="#checklist-sec"><b>10</b>Checklist</a><a href="#erros"><b>11</b>Erros comuns</a><a href="#entrega"><b>12</b>Quiz</a><a href="#refs"><b>13</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#osi"><b>02</b>Modelo OSI</a><a href="#classes"><b>03</b>Classes</a><a href="#configurar"><b>04</b>Configurar</a><a href="#ping"><b>05</b>Ping</a><a href="#animacao"><b>06</b>Animação</a><a href="#topologia"><b>07</b>Topologia</a><a href="#passos"><b>08</b>Atividade</a><a href="#checklist-sec"><b>09</b>Checklist</a><a href="#desafio" class="nav-ch"><b>10</b>Desafio</a><a href="#erros"><b>11</b>Erros comuns</a><a href="#entrega"><b>12</b>Quiz</a><a href="#refs"><b>13</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1484,6 +1486,28 @@ show mac address-table
   </div>
 </section>
 
+<section class="sec" id="checklist-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num" id="checklist-h">Checklist</span>
+    </div>
+    <div class="deliver">
+      <div class="dcard">
+        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 6</span></div>
+        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
+        <div class="check" id="checklist">
+          <label><input type="checkbox" id="ck1"><span>Topologia com 1 switch 2960 e 8 PCs nas portas Fa0/1 a Fa0/8</span></label>
+          <label><input type="checkbox" id="ck2"><span>PC0 a PC5 com IP e máscara das classes A, B e C</span></label>
+          <label><input type="checkbox" id="ck3"><span>Teste 1 feito: pings na mesma classe funcionando</span></label>
+          <label><input type="checkbox" id="ck4"><span>Teste 2 feito: pings entre classes falhando, com explicação</span></label>
+          <label><input type="checkbox" id="ck5"><span>PC6 e PC7 configurados e Teste 3 realizado</span></label>
+          <label><input type="checkbox" id="ck6"><span>Modo Simulation observado e <code>show mac address-table</code> executado</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec desafio" id="desafio">
   <div class="wrap">
     <div class="ch-banner">
@@ -1545,28 +1569,6 @@ show mac address-table
     </ol>
 
     <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Dica:</b> se o ping falhar, confira primeiro a máscara e depois o IP. A diferença está sempre no octeto que a máscara marca como rede.</p></div>
-  </div>
-</section>
-
-<section class="sec" id="checklist-sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num" id="checklist-h">Checklist</span>
-    </div>
-    <div class="deliver">
-      <div class="dcard">
-        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 6</span></div>
-        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
-        <div class="check" id="checklist">
-          <label><input type="checkbox" id="ck1"><span>Topologia com 1 switch 2960 e 8 PCs nas portas Fa0/1 a Fa0/8</span></label>
-          <label><input type="checkbox" id="ck2"><span>PC0 a PC5 com IP e máscara das classes A, B e C</span></label>
-          <label><input type="checkbox" id="ck3"><span>Teste 1 feito: pings na mesma classe funcionando</span></label>
-          <label><input type="checkbox" id="ck4"><span>Teste 2 feito: pings entre classes falhando, com explicação</span></label>
-          <label><input type="checkbox" id="ck5"><span>PC6 e PC7 configurados e Teste 3 realizado</span></label>
-          <label><input type="checkbox" id="ck6"><span>Modo Simulation observado e <code>show mac address-table</code> executado</span></label>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
