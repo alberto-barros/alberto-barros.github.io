@@ -1059,6 +1059,28 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 @media (max-width:920px){.finder .classify{grid-template-columns:1fr}}
 @media (max-width:600px){.finder{padding:18px;border-radius:22px}.ftiles{grid-template-columns:1fr}.c3d{width:62px;height:62px;font-size:2.1rem;border-radius:20px}.fh-t strong{font-size:1.3rem}.finder #cout{padding:18px}.finder-head .ico{width:60px;height:60px}}
 @media (prefers-reduced-motion:reduce){.c3d,.finder-head .ico,.c3d::before,.finder-head .ico::before,.fb-row i{animation:none!important}}
+
+/* máscara padrão em destaque */
+.ft-mask{grid-column:1/-1;grid-template-columns:auto minmax(0,1fr);gap:18px;padding:20px 22px;border:2px solid var(--s1);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--s1) 12%,var(--surface)),var(--surface) 70%);box-shadow:0 1px 0 #fff inset,0 24px 40px -26px var(--s1)}
+.ft-mask .fti{width:58px;height:58px;border-radius:18px;animation:icoFloat 3.4s ease-in-out infinite}
+.ft-mask .fti svg{width:28px;height:28px}
+.ft-mask small{font-size:.74rem;color:var(--s1)}
+.fm-val{font:800 clamp(1.4rem,3.4vw,2rem) var(--f-mono)!important;letter-spacing:-.01em;margin:2px 0 10px;color:var(--ink)}
+.fm-val em{font-style:normal;color:var(--s1)}
+.fm-bin{display:flex;flex-wrap:wrap;gap:6px 12px}
+.fm-bin .mo{display:inline-flex;gap:2px;font:700 .95rem var(--f-mono)}
+.fm-bin i{font-style:normal;display:grid;place-items:center;width:1.25em;height:1.55em;border-radius:5px}
+.fm-bin i.mn,.fm-leg i.mn{background:var(--s1);color:#fff}
+.fm-bin i.mh,.fm-leg i.mh{background:color-mix(in srgb,var(--green) 22%,var(--surface));color:var(--green-strong)}
+.fm-leg{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:.78rem;color:var(--muted);font-weight:600}
+.fm-leg span{display:inline-flex;align-items:center;gap:6px}
+.fm-leg i{width:12px;height:12px;border-radius:4px;display:inline-block}
+:root[data-theme="dark"] .fm-bin i.mn,:root[data-theme="dark"] .fm-leg i.mn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fm-bin i.mn{color:#08130C}}
+@media (max-width:600px){.ft-mask{grid-template-columns:1fr;padding:16px}.fm-bin .mo{font-size:.8rem}.fm-bin{gap:6px 8px}}
+@media (prefers-reduced-motion:reduce){.ft-mask .fti{animation:none}}
+.ftiles .ft:last-child:not(.ft-mask){grid-column:1/-1}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1801,7 +1823,9 @@ show mac address-table
     if (CL[cls]){
       var k = CL[cls], mask = toInt(k.m), net = and(n,mask), bc = (net | (~mask>>>0))>>>0;
       var priv = o1===10 || (o1===172 && ((n>>>16)&255)>=16 && ((n>>>16)&255)<=31) || (o1===192 && ((n>>>16)&255)===168);
-      html += T('i-shield','var(--s1)','Máscara padrão',k.m+' · /'+k.p);
+      var mb = '', mo = k.m.split('.');
+      for (var oi=0; oi<4; oi++){ var ob = ('00000000'+(+mo[oi]).toString(2)).slice(-8); mb += '<span class="mo">'; for (var bi=0; bi<8; bi++){ mb += '<i class="'+(ob[bi]==='1'?'mn':'mh')+'">'+ob[bi]+'</i>'; } mb += '</span>'; }
+      html += '<div class="ft ft-mask" style="--tc:var(--s1)"><span class="fti">'+ICON('i-shield')+'</span><div class="fm-body"><small>Máscara padrão</small><b class="fm-val">'+k.m+' <em>/'+k.p+'</em></b><div class="fm-bin" aria-label="Máscara em binário">'+mb+'</div><div class="fm-leg"><span><i class="mn"></i>bits de rede (1)</span><span><i class="mh"></i>bits de host (0)</span></div></div></div>';
       html += T('i-route','var(--s3)','Endereço de rede',toStr(net));
       html += T('i-search','var(--s2)','Faixa de hosts',toStr(net+1)+' – '+toStr(bc-1));
       html += T('i-alert','var(--s4)','Broadcast',toStr(bc));
