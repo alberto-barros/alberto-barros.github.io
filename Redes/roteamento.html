@@ -787,6 +787,24 @@ th{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
 footer{background:var(--surface);border-top:1px solid var(--line)}
 @media (max-width:600px){.hero .wrap{padding-block:44px 40px}section.sec{padding-block:56px}}
 
+
+/* cards de vantagens coloridos */
+#beneficios .grid3{counter-reset:bn;gap:18px}
+#beneficios .ben{--bc:var(--green);counter-increment:bn;position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--bc) 22%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,var(--bc) 11%,var(--surface)),var(--surface) 62%);padding:26px 24px 24px}
+#beneficios .ben::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--bc)}
+#beneficios .ben::after{content:"0" counter(bn);position:absolute;right:18px;top:14px;font:800 2.6rem/1 var(--f-display);color:color-mix(in srgb,var(--bc) 16%,transparent);letter-spacing:-.04em}
+#beneficios .ben:nth-child(1){--bc:var(--s1)}
+#beneficios .ben:nth-child(2){--bc:var(--green)}
+#beneficios .ben:nth-child(3){--bc:var(--s2)}
+#beneficios .ben:nth-child(4){--bc:var(--s3)}
+#beneficios .ben:nth-child(5){--bc:var(--red)}
+#beneficios .ben:nth-child(6){--bc:var(--s4)}
+#beneficios .ben .ico{width:48px;height:48px;border-radius:14px;background:var(--bc);color:#fff;box-shadow:0 12px 22px -12px var(--bc)}
+#beneficios .ben .ico svg{width:24px;height:24px}
+#beneficios .ben h3{font-size:1.12rem}
+#beneficios .ben:hover{border-color:var(--bc);box-shadow:0 22px 44px -24px var(--bc)}
+:root[data-theme="dark"] #beneficios .ben .ico{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #beneficios .ben .ico{color:#08130C}}
 </style>
 </head>
 <body>
