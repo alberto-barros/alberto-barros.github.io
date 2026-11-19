@@ -630,10 +630,159 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 
 /* citações */
 .cites{white-space:normal}
-.cite{font:600 .72em var(--f-mono);color:var(--green-strong);background:var(--mint);padding:.05em .45em;border-radius:6px;text-decoration:none;white-space:nowrap}
-.cite:hover{background:var(--green);color:#fff}
+.cite{font:inherit;color:var(--ink);background:none;padding:0;border-radius:0;text-decoration:none;white-space:normal}
+.cite:hover,.cite:focus-visible{color:#1D6FD8;background:none;text-decoration:underline}
 #refs .ref,#refs .books li{scroll-margin-top:84px}
 #refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
+
+/* terminais: preto puro, bolinhas sem símbolo */
+.code,.code pre,.code-top{background:#000!important}
+.code{border:1px solid #1c1c1c}
+.code-top{border-bottom-color:#1c1c1c}
+.dots i::before{content:none!important}
+
+/* ===== acabamento moderno ===== */
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+::selection{background:color-mix(in srgb,var(--green) 28%,transparent)}
+:root{--sh-1:0 1px 2px rgba(15,36,23,.05),0 8px 24px -12px rgba(15,36,23,.12);--sh-2:0 2px 4px rgba(15,36,23,.05),0 22px 44px -22px rgba(30,122,48,.35)}
+/* hero */
+.hero{position:relative;overflow:hidden;background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%)}
+.hero .wrap{padding-block:72px 64px}
+.hero h1{font-size:clamp(2.4rem,5.8vw,4rem);line-height:1.02}
+.hero h1 em{background:linear-gradient(100deg,var(--green-strong),#4DC262 60%,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;box-shadow:var(--sh-1)}
+.eyebrow::before{width:14px}
+.chip{box-shadow:var(--sh-1);transition:transform .2s,border-color .2s}
+.chip:hover{transform:translateY(-2px);border-color:var(--green)}
+.hero-net{background:none;border:0;box-shadow:none;padding:0;border-radius:0}
+/* seções */
+section.sec{padding-block:80px}
+section.sec:nth-of-type(even):not(.desafio){background:color-mix(in srgb,var(--surface) 55%,var(--bg))}
+.sec-head{margin-bottom:40px}
+.sec-head h2::after{content:"";display:block;width:56px;height:4px;border-radius:4px;margin-top:14px;background:linear-gradient(90deg,var(--green),var(--red))}
+.desafio .sec-head h2::after{background:var(--red)}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+/* cartões */
+.ben,.err,.dcard,.anim,.drawing,.stat,.test-row,.port-card,.vs-card,.quiz{box-shadow:var(--sh-1)}
+.ben{border-radius:20px;padding:26px;transition:transform .25s,border-color .25s,box-shadow .25s}
+.ben:hover{transform:translateY(-4px);box-shadow:var(--sh-2)}
+.ico{background:linear-gradient(135deg,var(--mint),color-mix(in srgb,var(--green) 28%,var(--mint)));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 20%,transparent)}
+.anim,.drawing,.dcard,.err{border-radius:22px}
+.note{border:1px solid var(--line);box-shadow:var(--sh-1)}
+.tbl-wrap{box-shadow:var(--sh-1);border-radius:18px}
+th{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+/* passos */
+.step-n{background:linear-gradient(135deg,#4DC262,var(--green-strong));box-shadow:0 12px 26px -12px var(--green)}
+.step.test .step-n{background:var(--surface);box-shadow:none}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red))}
+.step::before{background:linear-gradient(var(--green),transparent);opacity:.5}
+/* botões e menu */
+.btn{background:linear-gradient(135deg,#3DB04F,var(--green-strong));box-shadow:0 10px 22px -12px var(--green-strong);transition:transform .2s,box-shadow .2s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 14px 26px -12px var(--green-strong)}
+.desafio .btn{background:linear-gradient(135deg,#E5484D,var(--red));box-shadow:0 10px 22px -12px var(--red)}
+.topbar{box-shadow:0 8px 30px -22px rgba(15,36,23,.5)}
+/* terminal */
+.code{border-radius:18px;box-shadow:0 24px 48px -26px rgba(0,0,0,.7)}
+.code-top{padding:11px 14px}
+/* banner do desafio */
+.ch-banner{border-radius:28px;box-shadow:0 30px 60px -36px var(--red)}
+/* quiz */
+.quiz{border-radius:28px;box-shadow:var(--sh-2)}
+/* rodapé */
+footer{background:var(--surface);border-top:1px solid var(--line)}
+@media (max-width:600px){.hero .wrap{padding-block:44px 40px}section.sec{padding-block:56px}}
+
+
+/* cards de vantagens coloridos */
+#beneficios .grid3{counter-reset:bn;gap:18px}
+#beneficios .ben{--bc:var(--green);counter-increment:bn;position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--bc) 22%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,var(--bc) 11%,var(--surface)),var(--surface) 62%);padding:26px 24px 24px}
+#beneficios .ben::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--bc)}
+#beneficios .ben::after{content:"0" counter(bn);position:absolute;right:18px;top:14px;font:800 2.6rem/1 var(--f-display);color:color-mix(in srgb,var(--bc) 16%,transparent);letter-spacing:-.04em}
+#beneficios .ben:nth-child(1){--bc:var(--s1)}
+#beneficios .ben:nth-child(2){--bc:var(--green)}
+#beneficios .ben:nth-child(3){--bc:var(--s2)}
+#beneficios .ben:nth-child(4){--bc:var(--s3)}
+#beneficios .ben:nth-child(5){--bc:var(--red)}
+#beneficios .ben:nth-child(6){--bc:var(--s4)}
+#beneficios .ben .ico{width:48px;height:48px;border-radius:14px;background:var(--bc);color:#fff;box-shadow:0 12px 22px -12px var(--bc)}
+#beneficios .ben .ico svg{width:24px;height:24px}
+#beneficios .ben h3{font-size:1.12rem}
+#beneficios .ben:hover{border-color:var(--bc);box-shadow:0 22px 44px -24px var(--bc)}
+:root[data-theme="dark"] #beneficios .ben .ico{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #beneficios .ben .ico{color:#08130C}}
+
+/* cards estático × dinâmico */
+.vs{gap:18px}
+.vs-card{position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--vc) 24%,var(--line));border-top:0;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 11%,var(--surface)),var(--surface) 60%);padding:28px 26px 24px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.vs-card::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--vc)}
+.vs-card:hover{transform:translateY(-4px);border-color:var(--vc);box-shadow:0 22px 44px -24px var(--vc)}
+.vs-card h3{font-size:1.3rem}
+.vs-card .ico{width:48px;height:48px;border-radius:14px;background:var(--vc);color:#fff;box-shadow:0 12px 22px -12px var(--vc)}
+.vs-card .ico svg{width:24px;height:24px}
+.vs-card ul{list-style:none;padding:0;display:grid;gap:8px}
+.vs-card li{position:relative;margin:0;padding:9px 12px 9px 34px;border-radius:12px;background:color-mix(in srgb,var(--vc) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 14%,transparent)}
+.vs-card li::before{content:"";position:absolute;left:12px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--vc)}
+:root[data-theme="dark"] .vs-card .ico{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vs-card .ico{color:#08130C}}
+
+/* imagens sem fundo branco */
+.drawing{background:none;border:0;box-shadow:none;padding:6px 0 0}
+.anim{background:none;border:0;box-shadow:none;overflow:visible}
+.anim-ctl{border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.anim .stage{background:none}
+.anim .status{border:1px solid var(--line);border-radius:18px;background:var(--surface);margin-top:12px}
+.anim .dh-panel{background:none;border-left:0}
+.dh-win{box-shadow:var(--sh-1)}
+/* tabelas modernas */
+.tbl-wrap{border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:var(--sh-1);overflow:hidden}
+.tbl-wrap table{border-collapse:separate;border-spacing:0}
+.tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--green) 14%,var(--surface)),color-mix(in srgb,var(--green) 6%,var(--surface)));color:var(--green-strong);font-size:.7rem;letter-spacing:.1em;padding:14px 16px;border-bottom:2px solid color-mix(in srgb,var(--green) 35%,var(--line))}
+.tbl-wrap td{padding:13px 16px;border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);transition:background .15s}
+.tbl-wrap tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface-2) 45%,var(--surface))}
+.tbl-wrap tbody tr:hover td{background:color-mix(in srgb,var(--green) 9%,var(--surface))}
+.tbl-wrap td:first-child{font-weight:700}
+.tbl-wrap tr:last-child td{border-bottom:0}
+.desafio .tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)));border-bottom-color:color-mix(in srgb,var(--red) 35%,var(--line))}
+@media (max-width:640px){
+  .tbl-wrap{border:0;background:transparent;box-shadow:none;overflow:visible;border-radius:0}
+  .tbl-wrap tr{box-shadow:var(--sh-1);border-radius:16px}
+  .tbl-wrap tbody tr:nth-child(even) td,.tbl-wrap tbody tr:hover td{background:transparent}
+  .tbl-wrap td{padding:8px 0}
+}
+
+/* ===== cards melhores + ícones animados ===== */
+@keyframes icoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes icoPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ic,var(--green)) 45%,transparent)}70%,100%{box-shadow:0 0 0 14px transparent}}
+@keyframes icoSpin{to{transform:rotate(360deg)}}
+@keyframes icoWiggle{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-14deg)}93%{transform:rotate(12deg)}97%{transform:rotate(-6deg)}}
+@keyframes icoGlow{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 6px var(--ic,var(--green)))}}
+.ben .ico,.vs-card .ico,.obs .ico,.note .ico{position:relative;animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite}
+.ben:nth-child(2n) .ico,.vs-card:nth-child(2) .ico,.obs:nth-child(2n) .ico{animation-delay:-1.1s,-.9s}
+.ben:nth-child(3n) .ico{animation-delay:-2.2s,-1.8s}
+#beneficios .ben .ico,.vs-card .ico{--ic:var(--bc,var(--vc))}
+.ben .ico svg,.vs-card .ico svg,.obs .ico svg,.note .ico svg{transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.ben:hover .ico svg,.vs-card:hover .ico svg,.obs:hover .ico svg,.note:hover .ico svg{transform:scale(1.22) rotate(-10deg)}
+.vs-card:nth-child(2) .ico svg{animation:icoSpin 7s linear infinite}
+.vs-card:nth-child(2):hover .ico svg{transform:none}
+/* erros */
+.err{position:relative;overflow:hidden;padding:20px 20px 20px 22px;border-left:5px solid var(--red);background:linear-gradient(160deg,color-mix(in srgb,var(--red) 6%,var(--surface)),var(--surface) 55%);transition:transform .25s,box-shadow .25s,border-color .25s}
+.err:hover{transform:translateY(-3px);box-shadow:0 20px 40px -26px var(--red)}
+.err h3 svg{width:34px;height:34px;padding:7px;border-radius:11px;background:color-mix(in srgb,var(--red) 14%,var(--surface));animation:icoWiggle 5s ease-in-out infinite}
+.errs .err:nth-child(2n) h3 svg{animation-delay:-1.7s}
+.errs .err:nth-child(3n) h3 svg{animation-delay:-3.1s}
+.err:hover h3 svg{animation-duration:1.2s}
+.err-g::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;animation:icoPulse 2s ease-out infinite;--ic:currentColor}
+/* observações */
+.obs{border:1px solid var(--line);background:linear-gradient(160deg,color-mix(in srgb,var(--green) 9%,var(--surface)),var(--surface));box-shadow:var(--sh-1);border-radius:18px;transition:transform .25s,box-shadow .25s}
+.obs:hover{transform:translateY(-3px);box-shadow:var(--sh-2)}
+.obs:nth-child(2n) .ico{background:linear-gradient(135deg,#FFE9A8,#F5C451);color:#7A4B00}
+/* portas (DHCP/servidor) */
+.port-card{position:relative;overflow:hidden;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 10%,var(--surface)),var(--surface) 65%);transition:transform .25s,box-shadow .25s}
+.port-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px var(--vc)}
+@media (prefers-reduced-motion:reduce){.ben .ico,.vs-card .ico,.obs .ico,.note .ico,.vs-card .ico svg,.err h3 svg,.err-g::before{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1176,8 +1325,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       <h2>Para estudar mais</h2>
       <p>Os conceitos desta aula vêm dos livros-texto de redes de computadores.</p>
     </div>
-    <h3 class="ref-h">Livros</h3>
-    <ol class="books"><li id="ref-kurose"><span class="ref-a">KUROSE, J. F.; ROSS, K. W.</span> <i>Redes de computadores e a Internet</i>: uma abordagem top-down. 6. ed. São Paulo: Pearson, 2013.<small>Cap. 4: camada de rede, endereçamento IPv4, sub-redes, DHCP.</small></li><li id="ref-tanenbaum"><span class="ref-a">TANENBAUM, A. S.; WETHERALL, D.</span> <i>Redes de computadores</i>. 5. ed. São Paulo: Pearson Prentice Hall, 2011.<small>Cap. 5: camada de rede, IP, sub-redes, ICMP, ARP e DHCP.</small></li><li id="ref-forouzan"><span class="ref-a">FOROUZAN, B. A.</span> <i>Comunicação de dados e redes de computadores</i>. 4. ed. Porto Alegre: AMGH, 2010.<small>Endereçamento IPv4, máscaras, CIDR e protocolos de apoio.</small></li></ol>
+    <h3 class="ref-h">Referências bibliográficas</h3>
+    <ol class="books"><li id="ref-forouzan"><span class="ref-a">FOROUZAN, B. A.</span> <i>Comunicação de dados e redes de computadores</i>. 4. ed. Porto Alegre: AMGH, 2010.<small>Endereçamento IPv4, máscaras, CIDR e protocolos de apoio.</small></li><li id="ref-kurose"><span class="ref-a">KUROSE, J. F.; ROSS, K. W.</span> <i>Redes de computadores e a Internet</i>: uma abordagem top-down. 6. ed. São Paulo: Pearson, 2013.<small>Cap. 4: camada de rede, endereçamento IPv4, sub-redes, DHCP.</small></li><li id="ref-tanenbaum"><span class="ref-a">TANENBAUM, A. S.; WETHERALL, D.</span> <i>Redes de computadores</i>. 5. ed. São Paulo: Pearson Prentice Hall, 2011.<small>Cap. 5: camada de rede, IP, sub-redes, ICMP, ARP e DHCP.</small></li></ol>
     <h3 class="ref-h">Ferramenta e curso</h3>
     <div class="refs refs-2">
       <a class="ref" href="https://www.netacad.com/" target="_blank" rel="noopener"><span class="ref-n">Cisco</span><b>Cisco Networking Academy</b><p>Curso CCNA: Introduction to Networks e download do Cisco Packet Tracer, usado no laboratório.</p><span class="ref-t"><i>Packet Tracer</i><i>CCNA</i></span><span class="ref-go">Abrir netacad.com ↗</span></a>
