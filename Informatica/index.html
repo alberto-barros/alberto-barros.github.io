@@ -78,12 +78,28 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .pc{filter:drop-shadow(0 8px 10px rgba(25,50,110,.2))}
 .pc .bez{fill:#1B2A47}
 .pc .stand{fill:var(--h-stand)}
-.srv{filter:drop-shadow(0 10px 12px rgba(40,60,140,.28))}
-.srv .body{fill:url(#srvg)}
-.srv .slot{fill:rgba(8,16,40,.35);stroke:rgba(255,255,255,.35);stroke-width:1}
-.srv .led{fill:#2B4A86;transition:fill .15s}
-.srv.hit .led{fill:#C6F4FF}
-.globe{fill:none;stroke:var(--blue);stroke-width:1.6}
+.srv{filter:drop-shadow(0 12px 16px rgba(20,60,160,.28))}
+.srv .body{fill:#05070D;stroke:#3B8EEA;stroke-width:3}
+.srv .slot{fill:#0B1222;stroke:#2F6FD0;stroke-width:1}
+.srv .bar{fill:#1E3A6E}
+.srv .led{fill:#3B8EEA;animation:ledb 1.6s steps(1) infinite}
+.srv .led.l2{animation-delay:.5s}.srv .led.l3{animation-delay:1s}
+@keyframes ledb{0%,100%{fill:#3B8EEA;opacity:1}50%{fill:#8FD0FF;opacity:.35}}
+.srv.hit .body{stroke:#8FD0FF}
+.srv.hit .led{fill:#C6F4FF;opacity:1;animation:none}
+.net-globe .gl-bg{fill:var(--blue-soft)}
+.net-globe .gl-ring{fill:none;stroke:var(--blue);stroke-width:2}
+.net-globe .mer{fill:none;stroke:var(--blue);stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:spin 4s linear infinite}
+.net-globe .mer.m2{animation-delay:-2s}
+@keyframes spin{0%{transform:scaleX(1)}50%{transform:scaleX(.04)}100%{transform:scaleX(1)}}
+.net-globe .lat{fill:none;stroke:var(--blue);stroke-width:1.2;opacity:.7}
+.net-globe .pulse{fill:none;stroke:var(--blue);stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:pls 2.8s ease-out infinite}
+.net-globe .pulse.p2{animation-delay:1.4s}
+@keyframes pls{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.9);opacity:0}}
+.net-globe .orbit{transform-box:view-box;transform-origin:370px 27px;animation:orb 6s linear infinite}
+@keyframes orb{to{transform:rotate(360deg)}}
+.net-globe .orb-path{fill:none;stroke:var(--violet);stroke-width:1.2;stroke-dasharray:2 4;opacity:.8}
+.net-globe .orb-dot{fill:var(--violet)}
 .lbl{font-family:var(--font-display);font-weight:600;font-size:10px;text-anchor:middle;fill:var(--ink)}
 .lbl.sub{font-family:var(--font-mono);font-weight:400;font-size:8px;fill:var(--muted)}
 .cur{transition:transform .6s cubic-bezier(.3,.7,.2,1)}
@@ -202,17 +218,18 @@ footer .fb svg{height:26px;width:auto}
           <linearGradient id="srvg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5AA9FF"/><stop offset="1" stop-color="#7A5CE6"/></linearGradient>
           <linearGradient id="vid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B8EEA"/><stop offset="1" stop-color="#8B6CF0"/></linearGradient>
           <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <clipPath id="gclip"><circle cx="370" cy="27" r="22"/></clipPath>
           <clipPath id="scrclip"><rect x="0" y="0" width="206" height="130" rx="4"/></clipPath>
         </defs>
 
         <!-- cabos -->
         <g class="cables">
-          <path id="c0" d="M232 92 C275 55,295 60,336 78"/>
-          <path id="c1" d="M336 128 C295 165,275 150,232 118"/>
+          <path id="c0" d="M232 92 C272 52,290 66,322 84"/>
+          <path id="c1" d="M322 140 C290 172,272 150,232 118"/>
         </g>
         <g class="cables-lit">
-          <path id="l0" d="M232 92 C275 55,295 60,336 78"/>
-          <path id="l1" d="M336 128 C295 165,275 150,232 118"/>
+          <path id="l0" d="M232 92 C272 52,290 66,322 84"/>
+          <path id="l1" d="M322 140 C290 172,272 150,232 118"/>
         </g>
 
         <!-- computador -->
@@ -288,25 +305,34 @@ footer .fb svg{height:26px;width:auto}
           <rect class="stand" x="110" y="156" width="14" height="14"/>
           <rect class="stand" x="88" y="168" width="58" height="7" rx="3.5"/>
         </g>
-        <text class="lbl" x="121" y="198">Computador</text>
-        <text class="lbl sub" x="121" y="211">navegador</text>
+        <text class="lbl" x="121" y="206">Computador</text>
+        <text class="lbl sub" x="121" y="219">navegador</text>
+
+        <!-- internet (globo animado) -->
+        <g class="net-globe">
+          <circle class="pulse" cx="370" cy="27" r="22"/>
+          <circle class="pulse p2" cx="370" cy="27" r="22"/>
+          <circle class="gl-bg" cx="370" cy="27" r="22"/>
+          <g clip-path="url(#gclip)">
+            <ellipse class="mer m1" cx="370" cy="27" rx="22" ry="22"/>
+            <ellipse class="mer m2" cx="370" cy="27" rx="22" ry="22"/>
+            <path class="lat" d="M348 27h44M350 18h40M350 36h40"/>
+          </g>
+          <circle class="gl-ring" cx="370" cy="27" r="22"/>
+          <g class="orbit"><ellipse class="orb-path" cx="370" cy="27" rx="30" ry="10"/><circle class="orb-dot" cx="400" cy="27" r="3.2"/></g>
+        </g>
 
         <!-- servidor -->
-        <g>
-          <circle class="globe" cx="372" cy="36" r="15"/>
-          <ellipse class="globe" cx="372" cy="36" rx="6.5" ry="15"/>
-          <path class="globe" d="M357 36h30M360 28h24M360 44h24"/>
-        </g>
         <g class="srv" id="srv">
-          <rect class="body" x="336" y="62" width="72" height="104" rx="12"/>
+          <rect class="body" x="322" y="58" width="96" height="130" rx="15"/>
           <g>
-            <rect class="slot" x="344" y="72" width="56" height="22" rx="5"/><circle class="led" cx="389" cy="83" r="2.6"/>
-            <rect class="slot" x="344" y="100" width="56" height="22" rx="5"/><circle class="led" cx="389" cy="111" r="2.6"/>
-            <rect class="slot" x="344" y="128" width="56" height="22" rx="5"/><circle class="led" cx="389" cy="139" r="2.6"/>
+            <rect class="slot" x="332" y="69" width="76" height="30" rx="7"/><rect class="bar" x="340" y="81" width="32" height="4" rx="2"/><circle class="led" cx="396" cy="84" r="3"/>
+            <rect class="slot" x="332" y="105" width="76" height="30" rx="7"/><rect class="bar" x="340" y="117" width="32" height="4" rx="2"/><circle class="led l2" cx="396" cy="120" r="3"/>
+            <rect class="slot" x="332" y="141" width="76" height="30" rx="7"/><rect class="bar" x="340" y="153" width="32" height="4" rx="2"/><circle class="led l3" cx="396" cy="156" r="3"/>
           </g>
         </g>
-        <text class="lbl" x="372" y="198">Servidor web</text>
-        <text class="lbl sub" id="host" x="372" y="211">www.google.com</text>
+        <text class="lbl" x="370" y="206">Servidor web</text>
+        <text class="lbl sub" id="host" x="370" y="219">www.google.com</text>
         <g id="pkts"></g>
       </svg>
     </figure>
