@@ -738,20 +738,6 @@ html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 ::selection{background:color-mix(in srgb,var(--green) 28%,transparent)}
 :root{--sh-1:0 1px 2px rgba(15,36,23,.05),0 8px 24px -12px rgba(15,36,23,.12);--sh-2:0 2px 4px rgba(15,36,23,.05),0 22px 44px -22px rgba(30,122,48,.35)}
-/* hero */
-.hero{position:relative;overflow:hidden;background:
-  radial-gradient(60% 80% at 85% 10%,color-mix(in srgb,var(--green) 20%,transparent),transparent 70%),
-  radial-gradient(45% 60% at 0% 100%,color-mix(in srgb,var(--red) 10%,transparent),transparent 70%),
-  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 18%,transparent) 1px,transparent 1.5px) 0 0/24px 24px,
-  linear-gradient(160deg,var(--surface-2),var(--bg) 75%)}
-.hero .wrap{padding-block:72px 64px}
-.hero h1{font-size:clamp(2.4rem,5.8vw,4rem);line-height:1.02}
-.hero h1 em{background:linear-gradient(100deg,var(--green-strong),#4DC262 60%,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
-.eyebrow{background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;box-shadow:var(--sh-1)}
-.eyebrow::before{width:14px}
-.chip{box-shadow:var(--sh-1);transition:transform .2s,border-color .2s}
-.chip:hover{transform:translateY(-2px);border-color:var(--green)}
-.hero-net{background:color-mix(in srgb,var(--surface) 80%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:28px;padding:18px;box-shadow:var(--sh-2)}
 /* seções */
 section.sec{padding-block:80px}
 section.sec:nth-of-type(even):not(.desafio){background:color-mix(in srgb,var(--surface) 55%,var(--bg))}
@@ -788,10 +774,8 @@ th{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
 .quiz{border-radius:28px;box-shadow:var(--sh-2)}
 /* rodapé */
 footer{background:var(--surface);border-top:1px solid var(--line)}
-@media (max-width:600px){section.sec{padding-block:56px}.hero .wrap{padding-block:44px 40px}.hero-net{padding:12px;border-radius:22px}}
+@media (max-width:600px){section.sec{padding-block:56px}}
 
-/* animação do topo sem fundo */
-.hero-net{background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;padding:0!important;border-radius:0!important}
 </style>
 </head>
 <body>
