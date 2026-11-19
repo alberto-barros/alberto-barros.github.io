@@ -229,6 +229,9 @@ section{padding-block:72px 16px}
 .a-rt .w2{animation-delay:.3s}
 @keyframes a-wave{0%,100%{opacity:.25}40%{opacity:1}}
 .a-rt .led{animation:a-led 1.2s steps(1) infinite}
+.a-globe .mer{transform-box:fill-box;transform-origin:center;animation:a-spin 3.2s ease-in-out infinite}
+@keyframes a-spin{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.12)}}
+.a-globe .lat{animation:a-pulse 3.2s ease-in-out infinite}
 .chap:hover .ic svg *{animation-duration:.9s}
 
 footer{margin-top:80px;border-top:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.86rem}
@@ -362,8 +365,18 @@ footer .fb svg{height:26px;width:auto}
       <span class="arr down m-only" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span><span class="arr elbow" aria-hidden="true"><svg class="el-line" viewBox="0 0 100 100" preserveAspectRatio="none"><path class="ln" vector-effect="non-scaling-stroke" d="M100 0V50H0V92"/></svg><svg class="el-head" viewBox="0 0 16 14"><path class="hd" d="M0 0l8 13 8-13z"/></svg><i class="el-pk"></i></span>
     </div>
     <div class="node">
+      <a class="chap reveal" href="https://alberto-barros.github.io/Redes/ipv6.html">
+        <div class="top"><div class="ic"><svg class="i a-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><ellipse class="mer" cx="12" cy="12" rx="4" ry="9"/><path class="lat" d="M5 7.5h14M5 16.5h14"/></svg></div><span class="kind">Teoria</span><span class="num">05</span></div>
+        <h3>Endereço IPv6</h3>
+        <p>O sucessor do IPv4: endereços de 128 bits, notação hexadecimal, abreviação, tipos de endereço e a transição entre os protocolos.</p>
+        <div class="tags"><span class="tag">IPv6</span><span class="tag">128 bits</span><span class="tag">hexadecimal</span></div>
+        <span class="go">Estudar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
+      </a>
+      <span class="arr down" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
+    </div>
+    <div class="node">
       <a class="chap reveal" href="https://alberto-barros.github.io/Redes/subredes.html">
-        <div class="top"><div class="ic"><svg class="i a-grid" viewBox="0 0 24 24"><rect class="q q1" x="3" y="3" width="8" height="8" rx="1.5"/><rect class="q q2" x="13" y="3" width="8" height="8" rx="1.5"/><rect class="q q3" x="3" y="13" width="8" height="8" rx="1.5"/><rect class="q q4" x="13" y="13" width="8" height="8" rx="1.5"/></svg></div><span class="kind">Teoria</span><span class="num">05</span></div>
+        <div class="top"><div class="ic"><svg class="i a-grid" viewBox="0 0 24 24"><rect class="q q1" x="3" y="3" width="8" height="8" rx="1.5"/><rect class="q q2" x="13" y="3" width="8" height="8" rx="1.5"/><rect class="q q3" x="3" y="13" width="8" height="8" rx="1.5"/><rect class="q q4" x="13" y="13" width="8" height="8" rx="1.5"/></svg></div><span class="kind">Teoria</span><span class="num">06</span></div>
         <h3>Sub-redes</h3>
         <p>Máscara, CIDR, endereço de rede, broadcast e como dividir uma rede em sub-redes menores.</p>
         <div class="tags"><span class="tag">máscara</span><span class="tag">CIDR</span><span class="tag">broadcast</span></div>
@@ -373,7 +386,7 @@ footer .fb svg{height:26px;width:auto}
     </div>
     <div class="node lab">
       <a class="chap reveal lab" href="https://alberto-barros.github.io/Redes/sub-redes.html">
-        <div class="top"><div class="ic"><svg class="i a-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L4.3 19a1.4 1.4 0 0 0 1.2 2h13a1.4 1.4 0 0 0 1.2-2L14 9.5V3"/><path class="liq" d="M7 15h10"/><circle class="bub b1" cx="10.5" cy="17.5" r="1" fill="currentColor" stroke="none"/><circle class="bub b2" cx="13.5" cy="18" r="1.2" fill="currentColor" stroke="none"/><circle class="bub b3" cx="12" cy="16.5" r=".8" fill="currentColor" stroke="none"/></svg></div><span class="kind">Prática</span><span class="num">06</span></div>
+        <div class="top"><div class="ic"><svg class="i a-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L4.3 19a1.4 1.4 0 0 0 1.2 2h13a1.4 1.4 0 0 0 1.2-2L14 9.5V3"/><path class="liq" d="M7 15h10"/><circle class="bub b1" cx="10.5" cy="17.5" r="1" fill="currentColor" stroke="none"/><circle class="bub b2" cx="13.5" cy="18" r="1.2" fill="currentColor" stroke="none"/><circle class="bub b3" cx="12" cy="16.5" r=".8" fill="currentColor" stroke="none"/></svg></div><span class="kind">Prática</span><span class="num">07</span></div>
         <h3>Laboratório · Sub-redes</h3>
         <p>Escolha sua faixa, configure os IPs e veja o pacote atravessar (ou não) as sub-redes no Packet Tracer, com DHCP.</p>
         <div class="tags"><span class="tag">prática</span><span class="tag">Packet Tracer</span><span class="tag">DHCP</span></div>
@@ -383,7 +396,7 @@ footer .fb svg{height:26px;width:auto}
     </div>
     <div class="node lab">
       <a class="chap reveal lab" href="https://alberto-barros.github.io/Redes/vlan.html">
-        <div class="top"><div class="ic"><svg class="i a-sw" viewBox="0 0 24 24"><rect x="2.5" y="9" width="19" height="6" rx="1.5"/><path class="wire" d="M6 9V5M12 9V5M18 9V5M6 15v4M12 15v4M18 15v4"/><circle class="led led1" cx="6.5" cy="12" r=".9" fill="currentColor" stroke="none"/><circle class="led led2" cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/><circle class="led led3" cx="17.5" cy="12" r=".9" fill="currentColor" stroke="none"/></svg></div><span class="kind">Prática</span><span class="num">07</span></div>
+        <div class="top"><div class="ic"><svg class="i a-sw" viewBox="0 0 24 24"><rect x="2.5" y="9" width="19" height="6" rx="1.5"/><path class="wire" d="M6 9V5M12 9V5M18 9V5M6 15v4M12 15v4M18 15v4"/><circle class="led led1" cx="6.5" cy="12" r=".9" fill="currentColor" stroke="none"/><circle class="led led2" cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/><circle class="led led3" cx="17.5" cy="12" r=".9" fill="currentColor" stroke="none"/></svg></div><span class="kind">Prática</span><span class="num">08</span></div>
         <h3>Laboratório · VLAN</h3>
         <p>Divida um switch em redes virtuais separadas: crie VLANs, atribua portas e teste a comunicação no Packet Tracer.</p>
         <div class="tags"><span class="tag">prática</span><span class="tag">VLAN</span><span class="tag">switch</span><span class="tag">Packet Tracer</span></div>
@@ -393,7 +406,7 @@ footer .fb svg{height:26px;width:auto}
     </div>
     <div class="node lab">
       <a class="chap reveal lab" href="https://alberto-barros.github.io/Redes/roteamento.html">
-        <div class="top"><div class="ic"><svg class="i a-rt" viewBox="0 0 24 24"><rect x="2.5" y="13" width="19" height="7" rx="2"/><circle class="led" cx="6.5" cy="16.5" r=".9" fill="currentColor" stroke="none"/><circle class="led" cx="10" cy="16.5" r=".9" fill="currentColor" stroke="none" style="animation-delay:.5s"/><path d="M12 13V9"/><path class="w1" d="M8.5 6.5a5 5 0 0 1 7 0"/><path class="w2" d="M6 4a8.5 8.5 0 0 1 12 0"/></svg></div><span class="kind">Prática</span><span class="num">08</span></div>
+        <div class="top"><div class="ic"><svg class="i a-rt" viewBox="0 0 24 24"><rect x="2.5" y="13" width="19" height="7" rx="2"/><circle class="led" cx="6.5" cy="16.5" r=".9" fill="currentColor" stroke="none"/><circle class="led" cx="10" cy="16.5" r=".9" fill="currentColor" stroke="none" style="animation-delay:.5s"/><path d="M12 13V9"/><path class="w1" d="M8.5 6.5a5 5 0 0 1 7 0"/><path class="w2" d="M6 4a8.5 8.5 0 0 1 12 0"/></svg></div><span class="kind">Prática</span><span class="num">09</span></div>
         <h3>Laboratório · Roteamento</h3>
         <p>Como o roteador escolhe o caminho entre redes: rotas estáticas, RIP e um site publicado no Packet Tracer.</p>
         <div class="tags"><span class="tag">prática</span><span class="tag">roteador</span><span class="tag">estático × dinâmico</span><span class="tag">RIP</span></div>
