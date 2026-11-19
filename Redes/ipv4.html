@@ -1008,6 +1008,57 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 @media (prefers-reduced-motion:reduce){.pa-wire,.pa-req,.pa-rep,.pa-c1,.pa-c2{animation:none}.pa-req{opacity:1;transform:translate(204px,53px)}.pa-c1{opacity:1}}
 .gui-lin .shot{justify-items:start}
 .gui-lin .shot figcaption{text-align:left}
+
+/* ===== ferramenta interativa: visual 3D e limpo ===== */
+.finder{border:1px solid color-mix(in srgb,var(--green) 28%,var(--line));border-radius:30px;padding:32px;gap:26px;
+  background:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,var(--green) 16%,var(--surface)),transparent 60%),linear-gradient(180deg,var(--surface),var(--surface-2));
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 40px 80px -48px color-mix(in srgb,var(--green) 70%,transparent),0 2px 0 color-mix(in srgb,var(--green) 18%,transparent)}
+.finder-head{gap:20px}
+.finder-head .ico{--ic:var(--green);position:relative;width:72px;height:72px;border-radius:22px;color:#fff;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--green) 70%,#fff),var(--green) 45%,color-mix(in srgb,var(--green) 70%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 -2px color-mix(in srgb,var(--green) 55%,#000),0 22px 30px -10px color-mix(in srgb,var(--green) 70%,transparent);
+  animation:icoFloat 3.4s ease-in-out infinite}
+.finder-head .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--green);animation:chRing 2.6s ease-out infinite;pointer-events:none}
+.finder-head .ico svg{width:36px;height:36px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.25))}
+.finder .classify{gap:22px;grid-template-columns:340px minmax(0,1fr)}
+.finder .pform{border:1px solid var(--line);border-radius:24px;background:var(--surface);padding:22px;
+  box-shadow:0 1px 0 #fff inset,0 18px 36px -24px rgba(15,36,23,.35)}
+.finder #cip{font-size:1.5rem;padding:14px 16px;border:2px solid color-mix(in srgb,var(--green) 40%,var(--line));border-radius:16px;background:var(--surface-2);box-shadow:inset 0 3px 6px -3px rgba(0,0,0,.18)}
+.finder .presets button{border-radius:12px;padding:6px 10px;background:var(--surface);box-shadow:0 3px 0 var(--line);transition:transform .15s,box-shadow .15s,border-color .15s,color .15s}
+.finder .presets button:hover{transform:translateY(-2px);box-shadow:0 5px 0 color-mix(in srgb,var(--green) 40%,var(--line))}
+.finder .presets button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.finder .field small{color:var(--muted)}
+.finder #cout{--vc:var(--green);border:1px solid color-mix(in srgb,var(--vc) 35%,var(--line));border-radius:26px;padding:24px;gap:20px;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 9%,var(--surface)),var(--surface) 55%);
+  box-shadow:0 1px 0 #fff inset,0 26px 50px -30px var(--vc)}
+.fhead{display:flex;align-items:center;gap:18px}
+.c3d{position:relative;width:76px;height:76px;border-radius:24px;display:grid;place-items:center;color:#fff;font:800 2.6rem/1 var(--f-display);text-shadow:0 3px 0 rgba(0,0,0,.2);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--vc) 65%,#fff),var(--vc) 48%,color-mix(in srgb,var(--vc) 72%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -6px 0 rgba(0,0,0,.18),0 8px 0 -2px color-mix(in srgb,var(--vc) 55%,#000),0 22px 30px -10px var(--vc);
+  animation:icoFloat 3.4s ease-in-out infinite;--ic:var(--vc)}
+.c3d::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--vc);animation:chRing 2.6s ease-out infinite;pointer-events:none}
+.fh-t strong{display:block;font:800 1.6rem var(--f-display);line-height:1.1;letter-spacing:-.02em}
+.fh-t span{color:var(--muted);font-weight:600;font-size:.95rem}
+.fbits{display:grid;gap:8px}
+.fb-row{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;max-width:420px}
+.fb-row i{font-style:normal;display:grid;place-items:center;aspect-ratio:1/1.1;border-radius:10px;font:700 1.05rem var(--f-mono);background:var(--surface-2);color:var(--muted);box-shadow:0 3px 0 var(--line);animation:bitpop .35s both;animation-delay:calc(var(--i) * 30ms)}
+.fb-row i.on{background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 72%,#fff),var(--vc));color:#fff;box-shadow:0 3px 0 color-mix(in srgb,var(--vc) 60%,#000),0 10px 16px -8px var(--vc)}
+.fbits small{color:var(--muted);font-size:.85rem}.fbits small b{color:var(--ink)}
+.ftiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ft{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;border-radius:18px;background:var(--surface);border:1px solid color-mix(in srgb,var(--tc) 22%,var(--line));
+  box-shadow:0 1px 0 #fff inset,0 10px 20px -16px var(--tc);transition:transform .2s,box-shadow .2s,border-color .2s}
+.ft:hover{transform:translateY(-3px);border-color:var(--tc);box-shadow:0 16px 28px -16px var(--tc)}
+.fti{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--tc) 65%,#fff),var(--tc) 50%,color-mix(in srgb,var(--tc) 75%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -3px 0 rgba(0,0,0,.16),0 5px 0 -1px color-mix(in srgb,var(--tc) 55%,#000),0 12px 16px -8px var(--tc)}
+.fti svg{width:21px;height:21px;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}
+.ft small{display:block;font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ft b{display:block;font:600 .88rem var(--f-mono);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;line-height:1.35}
+:root[data-theme="dark"] .c3d,:root[data-theme="dark"] .fti,:root[data-theme="dark"] .finder-head .ico,:root[data-theme="dark"] .fb-row i.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .c3d,:root:not([data-theme="light"]) .fti,:root:not([data-theme="light"]) .finder-head .ico,:root:not([data-theme="light"]) .fb-row i.on{color:#08130C}}
+@media (max-width:920px){.finder .classify{grid-template-columns:1fr}}
+@media (max-width:600px){.finder{padding:18px;border-radius:22px}.ftiles{grid-template-columns:1fr}.c3d{width:62px;height:62px;font-size:2.1rem;border-radius:20px}.fh-t strong{font-size:1.3rem}.finder #cout{padding:18px}.finder-head .ico{width:60px;height:60px}}
+@media (prefers-reduced-motion:reduce){.c3d,.finder-head .ico,.c3d::before,.finder-head .ico::before,.fb-row i{animation:none!important}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1751,22 +1802,26 @@ show mac address-table
     var lead = {A:1,'A*':1,B:2,C:3,D:4,E:4}[cls]||0;
     var c = CL[cls] ? CL[cls].c : (cls==='D'||cls==='E' ? 'var(--s4)' : 'var(--neutral)');
     out.style.setProperty('--vc', c);
-    var html = '<div class="cbadge"><b>'+cls.replace('*','')+'</b><span>'+(CL[cls]?'Classe '+cls+' · unicast':cls==='D'?'Classe D · multicast':cls==='E'?'Classe E · experimental':cls==='A*'?'Faixa de loopback':'Reservado')+'</span></div>';
-    html += '<div class="first-oct" aria-label="Primeiro octeto em binário">1º octeto: '+o1+' = <span class="lead-bits">'+bin.slice(0,lead)+'</span>'+bin.slice(lead)+'</div>';
-    html += '<div class="anat-rows">';
+    var cname = CL[cls]?'Classe '+cls:cls==='D'?'Classe D':cls==='E'?'Classe E':cls==='A*'?'Loopback':'Reservado';
+    var csub = CL[cls]?'unicast':cls==='D'?'multicast':cls==='E'?'experimental':cls==='A*'?'o próprio computador':'esta rede';
+    var html = '<div class="fhead"><div class="c3d" aria-hidden="true">'+cls.replace('*','')+'</div><div class="fh-t"><strong>'+cname+'</strong><span>'+csub+'</span></div></div>';
+    var bits = ''; for (var i=0;i<8;i++){ bits += '<i class="'+(i<lead?'on':'')+'" style="--i:'+i+'">'+bin[i]+'</i>'; }
+    html += '<div class="fbits" aria-label="Primeiro octeto em binário"><div class="fb-row">'+bits+'</div><small>1º octeto: <b>'+o1+'</b> = '+bin+'</small></div>';
+    var T = function(ic, tc, lab, val){ return '<div class="ft" style="--tc:'+tc+'"><span class="fti">'+ICON(ic)+'</span><div><small>'+lab+'</small><b>'+val+'</b></div></div>'; };
+    html += '<div class="ftiles">';
     if (CL[cls]){
       var k = CL[cls], mask = toInt(k.m), net = and(n,mask), bc = (net | (~mask>>>0))>>>0;
       var priv = o1===10 || (o1===172 && ((n>>>16)&255)>=16 && ((n>>>16)&255)<=31) || (o1===192 && ((n>>>16)&255)===168);
-      html += '<div class="anat"><b>Máscara padrão</b><span>'+k.m+' · /'+k.p+'</span></div>';
-      html += '<div class="anat"><b>Endereço de rede</b><span>'+toStr(net)+'</span></div>';
-      html += '<div class="anat"><b>Faixa de hosts</b><span>'+toStr(net+1)+' – '+toStr(bc-1)+'</span></div>';
-      html += '<div class="anat"><b>Broadcast</b><span>'+toStr(bc)+'</span></div>';
-      html += '<div class="anat"><b>Hosts úteis</b><span>2'+['','','',''][0]+'<sup>'+(32-k.p)+'</sup> − 2 = '+fmt(Math.pow(2,32-k.p)-2)+'</span></div>';
-      html += '<div class="anat"><b>Tipo</b><span>'+(priv?'Privado (RFC 1918): uso interno':'Público')+'</span></div>';
+      html += T('i-shield','var(--s1)','Máscara padrão',k.m+' · /'+k.p);
+      html += T('i-route','var(--s3)','Endereço de rede',toStr(net));
+      html += T('i-search','var(--s2)','Faixa de hosts',toStr(net+1)+' – '+toStr(bc-1));
+      html += T('i-alert','var(--s4)','Broadcast',toStr(bc));
+      html += T('i-gauge','var(--green)','Hosts úteis','2<sup>'+(32-k.p)+'</sup> − 2 = '+fmt(Math.pow(2,32-k.p)-2));
+      html += T('i-eye','var(--neutral)','Tipo',priv?'Privado (RFC 1918)':'Público');
       if (n===net) note = 'Este é o endereço da rede: não pode ser usado em um PC.';
       else if (n===bc) note = 'Este é o broadcast da rede: não pode ser usado em um PC.';
     } else {
-      html += '<div class="anat"><b>Máscara padrão</b><span>não se aplica</span></div>';
+      html += T('i-shield','var(--s1)','Máscara padrão','não se aplica');
     }
     html += '</div>';
     out.innerHTML = html;
