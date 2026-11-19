@@ -390,6 +390,63 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 .flow code{font-size:.78rem;overflow-wrap:anywhere}
 @media (max-width:900px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow li::after{display:none}}
 @media (max-width:480px){.flow{grid-template-columns:1fr}.pool-how{padding:16px}}
+/* ---------- tabelas dos PCs em cartões 3D ---------- */
+.tbl-wrap.pc-tbl{border:0;background:none;box-shadow:none;border-radius:0;overflow-x:auto;padding:4px 6px 16px;margin:0 -6px;perspective:1200px}
+.pc-tbl table{display:block;min-width:720px}
+.pc-tbl thead,.pc-tbl tbody{display:grid;gap:10px}
+.pc-tbl tbody{gap:12px;margin-top:10px}
+.pc-tbl tr{display:grid;grid-template-columns:1.05fr 1.25fr 1.25fr 1.15fr 1.25fr 1.1fr;align-items:center}
+.pc-tbl.dh-tbl tr{grid-template-columns:1.05fr 1.25fr 1.2fr 1.25fr 1.1fr .9fr}
+.pc-tbl th{display:flex;align-items:center;gap:7px;border:0;padding:10px 14px;background:none;color:var(--green-strong);font-size:.68rem;letter-spacing:.1em;white-space:nowrap}
+.pc-tbl thead tr{background:linear-gradient(180deg,color-mix(in srgb,var(--green) 16%,var(--surface)),color-mix(in srgb,var(--green) 7%,var(--surface)));border:1px solid color-mix(in srgb,var(--green) 30%,var(--line));border-radius:14px;box-shadow:inset 0 1px 0 var(--gloss),0 3px 0 color-mix(in srgb,var(--green) 25%,var(--line))}
+.pc-tbl th svg{width:16px;height:16px;flex:none;color:var(--green)}
+.pc-tbl tbody tr{position:relative;transform-style:preserve-3d;
+  background:linear-gradient(100deg,color-mix(in srgb,var(--vc) 10%,var(--surface)) 0%,var(--surface) 38%);
+  border:1px solid color-mix(in srgb,var(--vc) 26%,var(--line));border-left:5px solid var(--vc);border-radius:16px;
+  box-shadow:inset 0 1px 0 var(--gloss),0 4px 0 -1px color-mix(in srgb,var(--vc) 30%,var(--line)),0 5px 0 -1px var(--slab),0 14px 24px -18px var(--vc);
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.3),box-shadow .3s}
+.pc-tbl tbody tr:hover{transform:translateY(-4px) rotateX(6deg);box-shadow:inset 0 1px 0 var(--gloss),0 8px 0 -1px color-mix(in srgb,var(--vc) 45%,var(--line)),0 9px 0 -1px var(--slab),0 24px 30px -18px var(--vc)}
+.pc-tbl td,.pc-tbl tbody tr:nth-child(even) td,.pc-tbl tbody tr:hover td{background:none;border:0;padding:10px 14px;min-width:0}
+.pc-tbl td.mono{font-size:.82rem}
+.tbl-wrap.pc-tbl td,.tbl-wrap.pc-tbl th{background:none!important;border:0!important;box-shadow:none}
+.pc-cell{display:flex!important;align-items:center;gap:10px}
+.pc-cell b{display:block;font-family:var(--f-display);font-size:1rem;line-height:1.1}
+.pc-cell small{display:inline-block;margin-top:3px;font:700 .6rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.dh-tbl .pc-cell small{color:var(--ok)}
+.pc3{width:46px;height:42px;flex:none;overflow:visible;transition:transform .45s cubic-bezier(.2,.9,.3,1.5)}
+.pc-tbl tbody tr:hover .pc3{transform:translateY(-3px) scale(1.1) rotate(-4deg)}
+.pc3-sh{fill:color-mix(in srgb,var(--vc) 30%,transparent)}
+.pc3-st{fill:color-mix(in srgb,var(--ink) 75%,var(--vc))}
+.pc3-side{fill:color-mix(in srgb,var(--vc) 55%,#000)}
+.pc3-bz{fill:var(--vc)}
+.pc3-sc{fill:color-mix(in srgb,var(--vc) 25%,#0B1C12)}
+.pc3-gl{fill:#fff;opacity:.13}
+.pc3-bars rect{fill:color-mix(in srgb,var(--vc) 40%,#fff);transform-box:fill-box;transform-origin:bottom}
+.pc-tbl tbody tr:hover .pc3-bars rect{animation:pcBars 1s ease-in-out infinite alternate}
+.pc-tbl tbody tr:hover .pc3-bars rect:nth-child(2){animation-delay:.15s}
+.pc-tbl tbody tr:hover .pc3-bars rect:nth-child(3){animation-delay:.3s}
+@keyframes pcBars{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+.pc3-bd{stroke:var(--surface);stroke-width:2.2}
+.port-chip{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.port-chip i{width:14px;height:11px;border-radius:2px;border:2px solid var(--vc);position:relative;flex:none}
+.port-chip i::after{content:"";position:absolute;left:2px;right:2px;bottom:-5px;height:3px;background:var(--vc);border-radius:0 0 2px 2px}
+.ip-chip{display:inline-block;font-weight:700;color:var(--ink);padding:4px 9px;border-radius:9px;background:var(--surface);border:1px solid color-mix(in srgb,var(--vc) 40%,var(--line));box-shadow:0 2px 0 color-mix(in srgb,var(--vc) 30%,var(--line));white-space:nowrap}
+.gw-cell{color:var(--green-strong)}
+.pc-tbl .vtag{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 2px 0 color-mix(in srgb,var(--vc) 60%,#000)}
+@media (max-width:640px){
+  .tbl-wrap.pc-tbl{overflow:visible;padding:0;margin:0}
+  .pc-tbl table{min-width:0}
+  .tbl-wrap.pc-tbl thead{display:none}
+  .tbl-wrap.pc-tbl td:not(:last-child){border-bottom:1px dashed var(--line)!important}
+  .pc-tbl tbody{margin-top:0}
+  .pc-tbl tr,.pc-tbl.dh-tbl tr{grid-template-columns:1fr;padding:6px 14px 8px}
+  .pc-tbl td,.pc-tbl tbody tr:nth-child(even) td{padding:8px 0;border-bottom:1px dashed var(--line)}
+  .pc-tbl tr td:last-child{border-bottom:0}
+  .pc-tbl td.pc-cell{justify-content:flex-start}
+  .pc-tbl td.pc-cell::before{display:none}
+  .pc-tbl tbody tr:hover{transform:translateY(-2px)}
+}
+@media (prefers-reduced-motion:reduce){.pc-tbl tbody tr,.pc3{transition:none}.pc-tbl tbody tr:hover{transform:none}.pc-tbl tbody tr:hover .pc3{transform:none}.pc-tbl .pc3-bars rect{animation:none!important}}
 /* ---------- cartões 3D do DHCP (DORA + janela IP Configuration) ---------- */
 :root{--gloss:rgba(255,255,255,.75);--slab:rgba(15,36,23,.10)}
 :root[data-theme="dark"]{--gloss:rgba(255,255,255,.07);--slab:rgba(0,0,0,.45)}
@@ -860,6 +917,11 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     <symbol id="i-switch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="2"/><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"/></symbol>
     <symbol id="i-pc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 3.8 5.8 3.8 9s-1.2 6.2-3.8 9c-2.6-2.8-3.8-5.8-3.8-9S9.4 5.8 12 3z"/></symbol>
+    <symbol id="i-mask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M8 5v14M13 5v14" stroke-dasharray="2 2.4"/><path d="M3 12h18" opacity=".5"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="7" width="14" height="11" rx="2"/><path d="M8 7V4h8v3M9 12v2M12 12v2M15 12v2M12 18v3"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.4"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></symbol>
     <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
@@ -1125,9 +1187,9 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
           <h3>Configure o IP de cada PC</h3>
           <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>Static</span></div>
           <p>Preencha IPv4 Address, Subnet Mask e Default Gateway de acordo com o <b>seu</b> plano:</p>
-          <div class="tbl-wrap">
+          <div class="tbl-wrap pc-tbl">
             <table>
-              <thead><tr><th>PC</th><th>Conexão</th><th>Setor</th><th>Endereço IP</th><th>Máscara</th><th>Gateway</th></tr></thead>
+              <thead><tr><th><svg><use href="#i-pc"/></svg>PC</th><th><svg><use href="#i-plug"/></svg>Conexão</th><th><svg><use href="#i-tag"/></svg>Setor</th><th><svg><use href="#i-pin"/></svg>Endereço IP</th><th><svg><use href="#i-mask"/></svg>Máscara</th><th><svg><use href="#i-route"/></svg>Gateway</th></tr></thead>
               <tbody id="pc-body"></tbody>
             </table>
           </div>
@@ -1260,9 +1322,9 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
           <h3>Configure os PCs para receber IP automático</h3>
           <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>DHCP</span></div>
           <p>Troque de <b>Static</b> para <b>DHCP</b> nos 8 PCs. Em poucos segundos aparece <b>“DHCP request successful.”</b> e os campos são preenchidos sozinhos. Os endereços esperados, se você ligar os PCs em ordem, são:</p>
-          <div class="tbl-wrap">
+          <div class="tbl-wrap pc-tbl dh-tbl">
             <table>
-              <thead><tr><th>PC</th><th>Setor</th><th>IP recebido</th><th>Máscara</th><th>Gateway</th><th>DNS</th></tr></thead>
+              <thead><tr><th><svg><use href="#i-pc"/></svg>PC</th><th><svg><use href="#i-tag"/></svg>Setor</th><th><svg><use href="#i-pin"/></svg>IP recebido</th><th><svg><use href="#i-mask"/></svg>Máscara</th><th><svg><use href="#i-route"/></svg>Gateway</th><th><svg><use href="#i-globe"/></svg>DNS</th></tr></thead>
               <tbody id="dhcp-body"></tbody>
             </table>
           </div>
@@ -1501,7 +1563,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       var s = SECT[n.k];
       [0,1].forEach(function(j){
         var pc = n.k*2+j;
-        rows += '<tr><td data-label="PC"><b>PC'+pc+'</b></td><td data-label="Conexão" class="mono">SW-'+s.s+' Fa0/'+(j+1)+'</td><td data-label="Setor"><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td data-label="Endereço IP" class="mono">'+toStr(n.pcs[j])+'</td><td data-label="Máscara" class="mono">'+r.mask+'</td><td data-label="Gateway" class="mono">'+toStr(n.gw)+'</td></tr>';
+        rows += '<tr style="--vc:'+s.c+'"><td data-label="PC" class="pc-cell">'+pcIco(s.c,false)+'<span><b>PC'+pc+'</b><small>Static</small></span></td><td data-label="Conexão" class="mono"><span class="port-chip"><i></i>SW-'+s.s+' · Fa0/'+(j+1)+'</span></td><td data-label="Setor"><span class="vtag" style="--vc:'+s.c+'">'+s.n+'</span></td><td data-label="Endereço IP" class="mono"><span class="ip-chip">'+toStr(n.pcs[j])+'</span></td><td data-label="Máscara" class="mono">'+r.mask+'</td><td data-label="Gateway" class="mono gw-cell">'+toStr(n.gw)+'</td></tr>';
       });
     });
     $('pc-body').innerHTML = rows;
@@ -1563,7 +1625,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     var drows = '';
     r.nets.forEach(function(n){
       [0,1].forEach(function(j){
-        drows += '<tr><td data-label="PC"><b>PC'+(n.k*2+j)+'</b></td><td data-label="Setor"><span class="vtag" style="--vc:'+SECT[n.k].c+'">'+SECT[n.k].n+'</span></td><td data-label="IP recebido" class="mono">'+toStr(n.dh[j])+'</td><td data-label="Máscara" class="mono">'+r.mask+'</td><td data-label="Gateway" class="mono">'+toStr(n.gw)+'</td><td data-label="DNS" class="mono">'+DNS+'</td></tr>';
+        drows += '<tr style="--vc:'+SECT[n.k].c+'"><td data-label="PC" class="pc-cell">'+pcIco(SECT[n.k].c,true)+'<span><b>PC'+(n.k*2+j)+'</b><small>DHCP</small></span></td><td data-label="Setor"><span class="vtag" style="--vc:'+SECT[n.k].c+'">'+SECT[n.k].n+'</span></td><td data-label="IP recebido" class="mono"><span class="ip-chip">'+toStr(n.dh[j])+'</span></td><td data-label="Máscara" class="mono">'+r.mask+'</td><td data-label="Gateway" class="mono gw-cell">'+toStr(n.gw)+'</td><td data-label="DNS" class="mono">'+DNS+'</td></tr>';
       });
     });
     $('dhcp-body').innerHTML = drows;
@@ -1794,6 +1856,21 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 
   // ---------- desenho da topologia ----------
   var tMQ = matchMedia('(max-width: 900px)');
+  // monitor 3D do PC (cor do setor) com selo Static (lápis) ou DHCP (raio)
+  function pcIco(c, auto){
+    var badge = auto
+      ? '<circle cx="41" cy="9" r="8" class="pc3-bd" style="fill:var(--ok)"/><path d="M42.4 3.8 37.6 10h3.4l-1.4 5.2 4.8-6.2h-3.4z" fill="#fff"/>'
+      : '<circle cx="41" cy="9" r="8" class="pc3-bd" style="fill:var(--ink)"/><path d="M37.6 12.4l.6-2.6 4.6-4.6 2 2-4.6 4.6zM41.9 6.1l2 2" stroke="#fff" stroke-width="1.3" fill="none" stroke-linejoin="round"/>';
+    return '<svg class="pc3" viewBox="0 0 50 46" aria-hidden="true" style="--vc:'+c+'">'+
+      '<ellipse cx="24" cy="43" rx="15" ry="2.6" class="pc3-sh"/>'+
+      '<path d="M18 33h12l2.5 7h-17z" class="pc3-st"/><rect x="13" y="39" width="22" height="3.6" rx="1.8" class="pc3-st"/>'+
+      '<rect x="4.5" y="8" width="41" height="27" rx="5" class="pc3-side"/>'+
+      '<rect x="2.5" y="5.5" width="41" height="27" rx="5" class="pc3-bz"/>'+
+      '<rect x="6.5" y="9.5" width="33" height="19" rx="2.2" class="pc3-sc"/>'+
+      '<path d="M6.5 9.5h16l-9 19h-7z" class="pc3-gl"/>'+
+      '<g class="pc3-bars"><rect x="10" y="20" width="3" height="6" rx="1"/><rect x="15" y="16.5" width="3" height="9.5" rx="1"/><rect x="20" y="13" width="3" height="13" rx="1"/></g>'+
+      badge+'</svg>';
+  }
   function drawTopo(){
     if (!plan) return;
     var d = $('draw'), m = tMQ.matches, h = '', r = plan;
