@@ -872,56 +872,6 @@ details.src pre{max-height:360px;overflow:auto}
 .rot-head h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .rot-head .hint{font-size:.82rem;color:var(--muted);margin:0}
 .rot-card .vlist{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
-
-/* ---- acréscimos: guia SSH ---- */
-.sec[id]{scroll-margin-top:64px}
-.wrapc table{min-width:0}
-.wrapc td{white-space:normal}
-@media (max-width:600px){.wrapc table{min-width:520px}}
-.mk{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font:700 .72rem var(--f-display);font-style:normal;flex:none}
-/* VirtualBox desenhado */
-.vb{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface);margin-bottom:32px;box-shadow:0 18px 40px -28px color-mix(in srgb,var(--green) 55%,transparent)}
-.vb-title{display:flex;align-items:center;gap:8px;background:var(--surface-2);border-bottom:1px solid var(--line);padding:10px 16px;font:600 .88rem var(--f-display)}
-.vb-title svg{width:16px;height:16px;color:var(--green-strong)}
-.vb-title span{margin-left:auto;font:400 .76rem var(--f-body);color:var(--muted)}
-.vb-body{display:grid;grid-template-columns:minmax(0,210px) minmax(0,1fr)}
-.vb-tree{list-style:none;margin:0;padding:12px 10px;border-right:1px solid var(--line);font:.8rem var(--f-mono);display:grid;gap:2px;align-content:start;background:var(--bg)}
-.vb-tree li{padding:4px 10px;border-radius:8px;color:var(--muted)}
-.vb-tree li.on{background:var(--green);color:#fff;font-weight:600}
-:root[data-theme="dark"] .vb-tree li.on{color:#08130C}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vb-tree li.on{color:#08130C}}
-.vb-form{padding:18px;display:grid;gap:14px;align-content:start;min-width:0}
-.vb-field{display:grid;gap:6px;min-width:0}
-.vb-lbl{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.85rem;color:var(--muted)}
-.vb-val{font:600 .88rem var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;overflow-wrap:anywhere}
-.vb-val.hl{border:2px solid var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 16%,transparent)}
-.vb-radio{display:flex;align-items:center;gap:8px;font-size:.9rem}
-.vb-radio i{width:16px;height:16px;border-radius:4px;background:var(--green);box-shadow:inset 0 0 0 3px var(--surface);border:2px solid var(--green)}
-.vb-btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
-.vb-btns b{font:600 .82rem var(--f-display);padding:7px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2)}
-.vb-btns b.go{background:var(--green);color:#fff;border-color:var(--green)}
-@media (max-width:620px){.vb-body{grid-template-columns:1fr}.vb-tree{border-right:0;border-bottom:1px solid var(--line);grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
-/* telas do PuTTY com marcadores */
-.pshot{margin:0;display:grid;grid-template-columns:minmax(0,454px) minmax(0,1fr);gap:22px;align-items:center}
-.pshot > *{min-width:0}
-.pshot-img{position:relative;width:100%;max-width:min(454px,100%);border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:0 18px 36px -22px rgba(0,0,0,.45)}
-.pshot-img img{display:block;width:100%;height:auto}
-.pin{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font:700 .8rem var(--f-display);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)}
-.pshot figcaption{display:grid;gap:10px;font-size:.95rem}
-.pshot figcaption div{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
-.pshot figcaption .mk{margin-top:2px}
-@media (max-width:820px){.pshot{grid-template-columns:1fr}}
-@media (max-width:600px){.pin{width:22px;height:22px;font-size:.7rem}}
-/* tabela senha x chave */
-.cmp.sk{--ap:#E0A800;--ng:var(--green)}
-@media (max-width:600px){
-  .cmp.sk td:nth-child(2)::before{content:"● Senha";color:#B8900C}
-  .cmp.sk td:nth-child(3)::before{content:"● Chave";color:var(--green-strong)}
-}
-.desafio .ou{margin-top:36px}
-.desafio .ou:first-of-type{margin-top:8px}
-.desafio .err h3 code{font-size:.85em}
-
 /* barra superior igual à página inicial de Redes */
 .accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
 .topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
@@ -949,11 +899,6 @@ details.src pre{max-height:360px;overflow:auto}
 .tmenu a:hover,.tmenu a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
 @media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
 @media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
-.sec[id]{scroll-margin-top:72px}
-
-.step-body .vb{margin:4px 0 0}
-.step-body .note{margin-top:0}
-
 /* quiz: uma pergunta por vez */
 .deliver{grid-template-columns:1fr}
 .quiz{border-radius:26px;overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--green) 80%,transparent)}
@@ -1021,8 +966,6 @@ details.src pre{max-height:360px;overflow:auto}
 .qz-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;max-width:560px}
 .qz-sum span{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:12px;font:700 .82rem var(--f-display);background:color-mix(in srgb,var(--sc) 12%,var(--surface));color:var(--sc);border:1px solid color-mix(in srgb,var(--sc) 35%,transparent)}
 .qz-sum span small{font:600 .66rem var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
-.btn.ghost{background:transparent;color:var(--green-strong);border:2px solid var(--green)}
-.btn.ghost:hover{background:var(--mint)}
 @media (prefers-reduced-motion: reduce){.qz-card,.qz-card.out,.qz-fb,.qz-end,.qz-opt.wrong{animation:none}.qz-timer{display:none}}
 @media (max-width:600px){.qz-stage{padding:16px;min-height:0}.qz-steps{padding:14px 16px 0;gap:4px}.qz-bar{padding:14px 16px}.qz-opts{grid-template-columns:1fr}.qz-opt{padding:12px;grid-template-columns:32px minmax(0,1fr) 20px}.qz-opt .L{width:32px;height:32px}.qz-sum{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.qz-sum span{padding:8px 2px}.qz-next .btn{flex:1 1 100%;justify-content:center}}
 /* revisão das respostas */
@@ -1050,6 +993,276 @@ details.src pre{max-height:360px;overflow:auto}
 .qz-rexp b{color:var(--ink)}
 @media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
 @media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
+html{scroll-padding-top:84px}
+
+/* ===== terminais padronizados (mesmo visual do terminal da página Linux) ===== */
+:root{--code-bg:#000;--code-fg:#E2E8F0;--code-muted:#7C879A;--code-key:#4ADE80}
+.code,.hero-term,.logline,.fname{background:#000!important;border:1px solid rgba(255,255,255,.08);border-radius:18px}
+.code{color:#E2E8F0}
+.code-top{background:#000;padding:12px 16px;gap:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.dots{gap:7px}.dots i{width:11px;height:11px;font-size:0}.dots i::before{content:none!important}
+.dots i:nth-child(1){background:#FF5F57}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#28C840}
+.code-top span{font:500 .78rem var(--f-mono);color:#7C879A}
+.code pre{font:400 .84rem/1.75 var(--f-mono);color:#E2E8F0;background:#000}
+.code .c{color:#7C879A;font-style:normal}.code .p,.out .ok{color:#4ADE80}.out .w{color:#FBBF24}.out pre{color:#E2E8F0}
+.ht-wrap::before{display:none}
+.hero-term{box-shadow:0 24px 50px -28px rgba(0,0,0,.6);-webkit-backdrop-filter:none;backdrop-filter:none;font-size:.84rem;color:#E2E8F0}
+.hero-term::after{display:none}
+.hero-term .bar{position:relative;background:#000;padding:12px 16px;gap:7px;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-term .dot{width:11px;height:11px}
+.hero-term .ttl{position:absolute;left:0;right:0;text-align:center;font-size:.76rem;color:#7C879A;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 70px}
+.ht-screen{height:300px;background:#000}
+.hero-term pre{padding:16px 18px;line-height:1.75;color:#E2E8F0;background:#000}
+.hero-term .pu{color:#4ADE80}.hero-term .pc{color:#E2E8F0}.hero-term .pd{color:#60A5FA}
+.hero-term .dim{color:#7C879A}.hero-term .ok{color:#4ADE80}.hero-term .w{color:#FBBF24}
+.hero-term .cursor{width:.6em;height:1.1em;background:#4ADE80;box-shadow:none;border-radius:0;vertical-align:-3px}
+.hero-term .foot{display:flex;align-items:center;gap:8px;padding:9px 16px;border-top:1px solid rgba(255,255,255,.08);background:#000;font-size:.7rem;color:#7C879A}
+.hero-term .foot i{width:7px;height:7px;border-radius:50%;background:#4ADE80}
+.hero-term .foot span:last-child{margin-left:auto}
+@media (max-width:600px){.ht-screen{height:300px}.hero-term{font-size:.72rem}.hero-term .foot span:nth-child(3){display:none}}
+
+/* ===== cards modernos com ícones animados (estilo Roteamento) ===== */
+html,body{overflow-x:clip}
+:root{--on:#fff}
+:root[data-theme="dark"]{--on:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--on:#08130C}}
+.hero .eyebrow{background:var(--surface);border:1px solid var(--line);padding:7px 14px;border-radius:999px;box-shadow:0 8px 20px -14px color-mix(in srgb,var(--green) 70%,transparent)}
+.hero .eyebrow::before{width:14px;height:3px}
+.hero h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02}
+.chip{transition:transform .2s,border-color .2s}.chip:hover{transform:translateY(-2px);border-color:var(--green)}
+.chip svg{animation:icoBob 3.2s ease-in-out infinite}
+.chip:nth-child(2n) svg{animation-delay:-.8s}.chip:nth-child(3n) svg{animation-delay:-1.6s}
+
+/* cartões em grade */
+.grid3,.ports,.care,.errs{counter-reset:bn}
+.ben,.port-card,.care .err,.errs .err{--vc:var(--green);position:relative;overflow:hidden;counter-increment:bn;border:1px solid var(--line);border-top:4px solid var(--vc);border-radius:20px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 9%,var(--surface)),var(--surface) 62%);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 16px 32px -26px color-mix(in srgb,var(--vc) 70%,transparent);
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+.ben:hover,.port-card:hover,.care .err:hover,.errs .err:hover{transform:translateY(-5px);border-color:var(--vc);box-shadow:0 26px 40px -26px color-mix(in srgb,var(--vc) 80%,transparent)}
+.ben::after,.care .err::after,.errs .err::after{content:counter(bn,decimal-leading-zero);position:absolute;top:12px;right:16px;font:800 2.1rem/1 var(--f-display);color:color-mix(in srgb,var(--vc) 20%,transparent);pointer-events:none;transition:color .25s,transform .25s}
+.ben:hover::after,.care .err:hover::after,.errs .err:hover::after{color:color-mix(in srgb,var(--vc) 42%,transparent);transform:scale(1.08)}
+.ben:nth-child(6n+1),.port-card:nth-child(6n+1),.care .err:nth-child(6n+1),.errs .err:nth-child(6n+1){--vc:var(--s1)}
+.ben:nth-child(6n+2),.care .err:nth-child(6n+2),.errs .err:nth-child(6n+2){--vc:var(--green)}
+.ben:nth-child(6n+3),.care .err:nth-child(6n+3),.errs .err:nth-child(6n+3){--vc:var(--s2)}
+.ben:nth-child(6n+4),.care .err:nth-child(6n+4),.errs .err:nth-child(6n+4){--vc:var(--s3)}
+.ben:nth-child(6n+5),.care .err:nth-child(6n+5),.errs .err:nth-child(6n+5){--vc:var(--red)}
+.ben:nth-child(6n+6),.care .err:nth-child(6n+6),.errs .err:nth-child(6n+6){--vc:var(--s4)}
+.port-card[style]{--vc:inherit}
+.port-card{border-top-width:4px}
+.port-card b{font-size:2.3rem;animation:portPulse 3.4s ease-in-out infinite}
+.port-card:nth-child(2) b{animation-delay:-.8s}.port-card:nth-child(3) b{animation-delay:-1.6s}.port-card:nth-child(4) b{animation-delay:-2.4s}
+@keyframes portPulse{0%,100%{transform:none}50%{transform:translateY(-3px) scale(1.04)}}
+
+/* bloco de ícone */
+.ben .ico{width:50px;height:50px;border-radius:15px;background:var(--vc);color:var(--on);position:relative;box-shadow:0 10px 20px -10px var(--vc)}
+.ben .ico svg{width:26px;height:26px}
+.ben .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--vc);opacity:0;animation:icoRing 2.8s ease-out infinite;pointer-events:none}
+.ben:nth-child(2n) .ico::before{animation-delay:-1.4s}
+@keyframes icoRing{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.55);opacity:0}}
+.errs .err h3,.care .err h3{padding-right:46px;align-items:flex-start}
+.errs .err h3 svg,.care .err h3 svg{width:38px;height:38px;padding:8px;border-radius:12px;background:var(--vc);color:var(--on);flex:none;box-shadow:0 8px 16px -8px var(--vc)}
+.care .err:hover h3 svg,.errs .err:hover h3 svg{color:var(--on)}
+.errs .err,.care .err{padding:20px 20px 18px}
+
+/* animações por tipo de ícone */
+.ico svg,.err h3 svg{transform-origin:50% 60%}
+.ico:has(use[href="#i-server"]) svg,.err h3:has(use[href="#i-server"]) svg{animation:icoBob 2.6s ease-in-out infinite}
+.ico:has(use[href="#i-route"]) svg{animation:icoNudge 2.2s ease-in-out infinite}
+.ico:has(use[href="#i-pc"]) svg{animation:icoBob 3s ease-in-out infinite}
+.ico:has(use[href="#i-bulb"]) svg{animation:icoGlow 2.2s ease-in-out infinite}
+.ico:has(use[href="#i-swap"]) svg{animation:icoNudge 1.8s ease-in-out infinite}
+.ico:has(use[href="#i-check"]) svg{animation:icoPop 2.4s ease-in-out infinite}
+.ico:has(use[href="#i-term"]) svg{animation:icoBlink 1.6s steps(2) infinite}
+.ico:has(use[href="#i-globe"]) svg{animation:icoSpin 9s linear infinite}
+.err h3:has(use[href="#i-alert"]) svg{animation:icoShake 3s ease-in-out infinite}
+.err h3:has(use[href="#i-lock"]) svg,.ico:has(use[href="#i-lock"]) svg{animation:icoWiggle 3.2s ease-in-out infinite}
+.err h3:has(use[href="#i-shield"]) svg,.ico:has(use[href="#i-shield"]) svg{animation:icoPop 2.6s ease-in-out infinite}
+.err h3:has(use[href="#i-folder"]) svg,.ico:has(use[href="#i-folder"]) svg{animation:icoBob 2.8s ease-in-out infinite}
+@keyframes icoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes icoNudge{0%,100%{transform:translateX(-2px)}50%{transform:translateX(3px)}}
+@keyframes icoGlow{0%,100%{transform:scale(1);filter:none}50%{transform:scale(1.12);filter:drop-shadow(0 0 5px rgba(255,255,255,.9))}}
+@keyframes icoPop{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.22)}90%{transform:scale(.95)}}
+@keyframes icoBlink{0%{opacity:1}50%{opacity:.45}}
+@keyframes icoSpin{to{transform:rotate(360deg)}}
+@keyframes icoShake{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-10deg)}92%{transform:rotate(9deg)}95%{transform:rotate(-6deg)}98%{transform:rotate(4deg)}}
+@keyframes icoWiggle{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-12deg)}90%{transform:rotate(10deg)}95%{transform:rotate(-5deg)}}
+.ben:hover .ico svg,.err:hover h3 svg{animation-duration:.9s}
+
+.care .err:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)));border-color:color-mix(in srgb,var(--red) 45%,var(--line))}
+/* notas */
+.note{border:1px solid var(--line);background:linear-gradient(135deg,var(--surface-2),var(--surface));border-radius:18px;box-shadow:0 14px 28px -24px color-mix(in srgb,var(--green) 70%,transparent)}
+.note .ico{background:var(--green);color:var(--on);border-radius:13px;box-shadow:0 8px 16px -8px var(--green)}
+.note.warn .ico{background:var(--red);color:#fff}
+
+/* roteiro da aula */
+.rot-card{border-radius:24px}
+.vrow{position:relative;overflow:hidden;border:1px solid var(--line);border-top:4px solid var(--vc);border-radius:16px;padding:12px 14px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 9%,var(--surface)),var(--surface));transition:transform .25s,box-shadow .25s,border-color .25s}
+.vrow:hover{transform:translateY(-4px);border-color:var(--vc);box-shadow:0 20px 30px -22px var(--vc)}
+.vrow::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:sheen 6s ease-in-out infinite}
+.vrow:nth-child(2)::after{animation-delay:1s}.vrow:nth-child(3)::after{animation-delay:2s}.vrow:nth-child(4)::after{animation-delay:3s}.vrow:nth-child(5)::after{animation-delay:4s}.vrow:nth-child(6)::after{animation-delay:5s}
+@keyframes sheen{0%,60%{left:-60%}100%{left:130%}}
+:root[data-theme="dark"] .vtag,.vtag{color:var(--on)}
+
+@media (prefers-reduced-motion:reduce){.chip svg,.ico::before,.ico svg,.err h3 svg,.port-card b,.vrow::after{animation:none!important}}
+
+/* referências */
+.ref-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.ref-h::after{content:"";height:1px;flex:1;background:var(--line)}
+.sec-head + .ref-h{margin-top:0}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.refs-2{grid-template-columns:minmax(0,520px)}
+.ref{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}
+.ref:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 12px 26px -18px var(--green)}
+.ref-n{font:700 .78rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;justify-self:start}
+.ref b{font-family:var(--f-display);font-size:.98rem;line-height:1.3}
+.ref p{font-size:.88rem;color:var(--muted)}
+.ref-t{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ref-t i{font:600 .7rem var(--f-mono);font-style:normal;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.ref-go{font-size:.8rem;font-weight:700;color:var(--green-strong);margin-top:4px}
+.books{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:bk}
+.books li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 56px;counter-increment:bk;font-size:.95rem;overflow-wrap:anywhere}
+.books li::before{content:counter(bk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;background:var(--green);color:var(--on);display:grid;place-items:center;font:800 .85rem var(--f-display)}
+:root[data-theme="dark"] .books li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .books li::before{color:#08130C}}
+.ref-a{font-weight:700}
+.books small{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+
+/* citações */
+.cites{white-space:normal}
+.cite{font:inherit;color:var(--ink);background:none;padding:0;border-radius:0;text-decoration:none;white-space:normal}
+.cite:hover,.cite:focus-visible{color:#1D6FD8;background:none;text-decoration:underline}
+#refs .ref,#refs .books li{scroll-margin-top:84px}
+#refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
+
+/* ===== layout do desafio (estilo Roteamento) ===== */
+.desafio .ch-banner{border-radius:28px;box-shadow:0 30px 60px -36px var(--red);position:relative;overflow:hidden}
+.desafio .ch-banner .ico{width:64px;height:64px;border-radius:20px;box-shadow:0 14px 26px -12px var(--red)}
+.desafio .ch-banner .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--red);animation:icoRing 2.4s ease-out infinite}
+.desafio .ch-banner .ico svg{animation:icoWiggle 3s ease-in-out infinite}
+.desafio .def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start;margin-bottom:8px}
+.desafio .def > *{min-width:0}
+.desafio .def p+p{margin-top:14px}
+.desafio .def .big{font-size:1.2rem;line-height:1.55}
+.desafio .def .big strong{color:var(--red)}
+.desafio .ch-ports{grid-template-columns:repeat(2,minmax(0,1fr))}
+.desafio .port-card b{font-size:1.8rem}
+.desafio .sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:40px 0 18px}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red));color:#fff}
+.desafio .btn{background:linear-gradient(135deg,#E5484D,var(--red));box-shadow:0 10px 22px -12px var(--red)}
+.desafio .tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)))}
+.sec-head h2::after{content:"";display:block;width:56px;height:4px;border-radius:4px;margin-top:14px;background:linear-gradient(90deg,var(--green),var(--red))}
+.desafio .sec-head h2::after{background:var(--red)}
+@media (max-width:860px){.desafio .def{grid-template-columns:1fr}}
+@media (max-width:480px){.desafio .ch-ports{grid-template-columns:1fr 1fr}.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
+
+/* ===== seções de conceito (estilo Roteamento) ===== */
+.anat-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:12px;box-shadow:0 18px 40px -30px color-mix(in srgb,var(--green) 60%,transparent)}
+.anat-box h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.anat-rows{display:grid;gap:0}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:12px 0;border-top:1px dashed var(--line)}
+.anat:first-child{border-top:0}
+.anat b{font-family:var(--f-display);font-size:.9rem}
+.anat span{font-size:.9rem;color:var(--muted)}
+.anat i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+#vantagens .grid3{gap:18px}
+
+/* erros comuns: tudo em vermelho padronizado */
+.errs .err,.errs .err:nth-child(n){--vc:var(--red);background:linear-gradient(180deg,color-mix(in srgb,var(--red) 8%,var(--surface)),var(--surface) 62%);border-color:color-mix(in srgb,var(--red) 28%,var(--line))}
+.errs .err h3 svg{background:var(--red);color:#fff;box-shadow:0 8px 16px -8px var(--red)}
+:root[data-theme="dark"] .errs .err h3 svg{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .errs .err h3 svg{color:#1A0505}}
+.errs .err code{color:var(--red);background:color-mix(in srgb,var(--red) 9%,var(--surface))}
+.errs .err:hover{border-color:var(--red);box-shadow:0 26px 40px -26px var(--red)}
+
+/* contorno preto nas janelas do FileZilla */
+:root{--fz-edge:#000}
+:root[data-theme="dark"]{--fz-edge:#E4F3E8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--fz-edge:#E4F3E8}}
+.fz{border:2px solid var(--fz-edge);border-radius:14px;box-shadow:0 18px 36px -26px rgba(0,0,0,.55)}
+.fz-title,.fz-quick,.fz-log,.fz-ph{border-bottom-color:var(--fz-edge)}
+.fz-pane + .fz-pane{border-left:2px solid var(--fz-edge)}
+.fz-queue{border-top:2px solid var(--fz-edge)}
+.fz-path,.fz-f div{border-color:var(--fz-edge)}
+@media (max-width:560px){.fz-pane + .fz-pane{border-left:0;border-top:2px solid var(--fz-edge)}}
+
+/* quadro de download: contorno preto e fundo verde mais fraco */
+.dl{border:2px solid var(--fz-edge);
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 7%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--mint) 35%,var(--surface)),var(--surface) 70%)}
+
+/* tabelas com contorno preto */
+@media (min-width:641px){.tbl-wrap,.desafio .tbl-wrap{border:2px solid var(--fz-edge)}.tbl-wrap th{border-bottom:2px solid var(--fz-edge)}}
+@media (max-width:640px){.tbl-wrap tr{border:2px solid var(--fz-edge)}}
+
+/* cuidados: tudo em amarelo padronizado */
+.care .err,.care .err:nth-child(n){--vc:var(--s2);background:linear-gradient(180deg,color-mix(in srgb,var(--s2) 12%,var(--surface)),var(--surface) 62%);border-color:color-mix(in srgb,var(--s2) 35%,var(--line))}
+.care .err h3 svg{background:var(--s2);color:#fff;box-shadow:0 8px 16px -8px var(--s2)}
+:root[data-theme="dark"] .care .err h3 svg{color:#1A1203}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err h3 svg{color:#1A1203}}
+.care .err code{color:var(--warn);background:color-mix(in srgb,var(--s2) 12%,var(--surface))}
+.care .err:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--s2) 18%,var(--surface)),color-mix(in srgb,var(--s2) 7%,var(--surface)));border-color:var(--s2);box-shadow:0 26px 40px -26px var(--s2)}
+.care .err:hover h3 svg{color:#fff}
+:root[data-theme="dark"] .care .err:hover h3 svg{color:#1A1203}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err:hover h3 svg{color:#1A1203}}
+
+/* menu: Desafio fica vermelho ao passar o mouse */
+.tmenu a.tm-ch:hover,.tmenu a.tm-ch:focus-visible{background:color-mix(in srgb,var(--red) 10%,var(--surface));color:var(--red)}
+.tmenu a.tm-ch:hover b,.tmenu a.tm-ch:focus-visible b{color:var(--red)}
+
+/* ---- acréscimos: guia SSH ---- */
+.sec[id]{scroll-margin-top:64px}
+.wrapc table{min-width:0}
+.wrapc td{white-space:normal}
+@media (max-width:600px){.wrapc table{min-width:520px}}
+.mk{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--red);color:#fff;font:700 .72rem var(--f-display);font-style:normal;flex:none}
+/* VirtualBox desenhado */
+.vb{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface);margin-bottom:32px;box-shadow:0 18px 40px -28px color-mix(in srgb,var(--green) 55%,transparent)}
+.vb-title{display:flex;align-items:center;gap:8px;background:var(--surface-2);border-bottom:1px solid var(--line);padding:10px 16px;font:600 .88rem var(--f-display)}
+.vb-title svg{width:16px;height:16px;color:var(--green-strong)}
+.vb-title span{margin-left:auto;font:400 .76rem var(--f-body);color:var(--muted)}
+.vb-body{display:grid;grid-template-columns:minmax(0,210px) minmax(0,1fr)}
+.vb-tree{list-style:none;margin:0;padding:12px 10px;border-right:1px solid var(--line);font:.8rem var(--f-mono);display:grid;gap:2px;align-content:start;background:var(--bg)}
+.vb-tree li{padding:4px 10px;border-radius:8px;color:var(--muted)}
+.vb-tree li.on{background:var(--green);color:#fff;font-weight:600}
+:root[data-theme="dark"] .vb-tree li.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vb-tree li.on{color:#08130C}}
+.vb-form{padding:18px;display:grid;gap:14px;align-content:start;min-width:0}
+.vb-field{display:grid;gap:6px;min-width:0}
+.vb-lbl{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.85rem;color:var(--muted)}
+.vb-val{font:600 .88rem var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;overflow-wrap:anywhere}
+.vb-val.hl{border:2px solid var(--green);box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 16%,transparent)}
+.vb-radio{display:flex;align-items:center;gap:8px;font-size:.9rem}
+.vb-radio i{width:16px;height:16px;border-radius:4px;background:var(--green);box-shadow:inset 0 0 0 3px var(--surface);border:2px solid var(--green)}
+.vb-btns{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.vb-btns b{font:600 .82rem var(--f-display);padding:7px 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface-2)}
+.vb-btns b.go{background:var(--green);color:#fff;border-color:var(--green)}
+@media (max-width:620px){.vb-body{grid-template-columns:1fr}.vb-tree{border-right:0;border-bottom:1px solid var(--line);grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}}
+/* telas do PuTTY com marcadores */
+.pshot{margin:0;display:grid;grid-template-columns:minmax(0,454px) minmax(0,1fr);gap:22px;align-items:center}
+.pshot > *{min-width:0}
+.pshot-img{position:relative;width:100%;max-width:min(454px,100%);border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:0 18px 36px -22px rgba(0,0,0,.45)}
+.pshot-img img{display:block;width:100%;height:auto}
+.pin{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font:700 .8rem var(--f-display);display:grid;place-items:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.pshot figcaption{display:grid;gap:10px;font-size:.95rem}
+.pshot figcaption div{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.pshot figcaption .mk{margin-top:2px}
+@media (max-width:820px){.pshot{grid-template-columns:1fr}}
+@media (max-width:600px){.pin{width:22px;height:22px;font-size:.7rem}}
+/* tabela senha x chave */
+.cmp.sk{--ap:#E0A800;--ng:var(--green)}
+@media (max-width:600px){
+  .cmp.sk td:nth-child(2)::before{content:"● Senha";color:#B8900C}
+  .cmp.sk td:nth-child(3)::before{content:"● Chave";color:var(--green-strong)}
+}
+.desafio .err h3 code{font-size:.85em}
+
+.sec[id]{scroll-margin-top:72px}
+
+.step-body .vb{margin:4px 0 0}
+.step-body .note{margin-top:0}
 
 /* PuTTY desenhado (mesmo estilo da tela do VirtualBox) */
 .pshot{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
@@ -1079,6 +1292,15 @@ details.src pre{max-height:360px;overflow:auto}
 .vb-btns b.go .mk{box-shadow:0 0 0 2px #fff}
 @media (max-width:980px){.pshot{grid-template-columns:1fr}}
 @media (max-width:620px){.vb-tree li.l2,.vb-tree li.l3,.vb-tree li.l4{padding-left:10px}.vb-hostrow{grid-template-columns:minmax(0,1fr) 70px}}
+
+/* ajustes ao layout atual do FTP */
+.pin,.pshot-img{display:none}
+.vb,.vb.putty{border:2px solid var(--fz-edge);box-shadow:0 18px 36px -26px rgba(0,0,0,.55)}
+.vb-title{border-bottom:2px solid var(--fz-edge)}
+.vb-tree{border-right:2px solid var(--fz-edge)}
+@media (max-width:620px){.vb-tree{border-right:0;border-bottom:2px solid var(--fz-edge)}}
+.desafio .sub-h:first-of-type{margin-top:28px}
+.desafio .anat-box h3{color:var(--muted)}
 
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1113,8 +1335,7 @@ details.src pre{max-height:360px;overflow:auto}
     <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
     <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></symbol>
-    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
-    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6M9 9l6 6"></path></symbol><symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></symbol>
     <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="m10.8 12.2 8.2-8.2M16 7l3 3M14 9l2 2"/></symbol>
   </defs>
 </svg>
@@ -1131,7 +1352,7 @@ details.src pre{max-height:360px;overflow:auto}
       <a class="solid" href="#quiz"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#m0"><b>00</b>Rede da VM</a><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ssh"><b>02</b>O que é o SSH</a><a href="#m1"><b>03</b>Instalar</a><a href="#m2"><b>04</b>Verificar</a><a href="#m3"><b>05</b>IP da VM</a><a href="#m4"><b>06</b>PuTTY</a><a href="#senha-chave"><b>07</b>Senha x chave</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#desafio"><b>09</b>Desafio</a><a href="#problemas"><b>10</b>Se não funcionar</a><a href="#quiz"><b>11</b>Quiz</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#m0"><b>00</b>Rede da VM</a><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ssh"><b>02</b>O que é o SSH</a><a href="#vantagens"><b>03</b>Vantagens</a><a href="#portas"><b>04</b>Porta e cuidados</a><a href="#m1"><b>05</b>Instalar</a><a href="#m2"><b>06</b>Verificar</a><a href="#m3"><b>07</b>IP da VM</a><a href="#m4"><b>08</b>PuTTY</a><a href="#senha-chave"><b>09</b>Senha x chave</a><a href="#checklist-sec"><b>10</b>Checklist</a><a href="#desafio" class="tm-ch"><b>11</b>Desafio</a><a href="#problemas"><b>12</b>Se não funcionar</a><a href="#quiz"><b>13</b>Quiz</a><a href="#refs"><b>14</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1152,7 +1373,7 @@ details.src pre{max-height:360px;overflow:auto}
     </div>
     <div class="ht-wrap">
     <div class="hero-term" aria-label="Terminal do Linux Mint mostrando o login, o neofetch e os comandos da aula">
-      <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="tab"><svg aria-hidden="true"><use href="#i-term"/></svg>aluno@mint: ~</span><span class="sh">bash · 80×24</span></div>
+      <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="ttl">aluno@mint: ~ — bash</span></div>
       <div class="ht-screen"><pre id="ht-pre"><span class="dim">Linux Mint 22 mint tty1</span>
 
 mint login: aluno
@@ -1183,6 +1404,7 @@ Password:
 <span class="pu">aluno@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> sudo grep Accepted /var/log/auth.log | tail -n 1
 <span class="ok">Accepted publickey</span> for aluno from <span class="w">192.168.0.1</span> port 51734 ssh2
 <span class="pu">aluno@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> <span class="cursor"></span></pre></div>
+      <div class="foot"><i></i><span>conectado</span><span>bash</span><span>UTF-8 · 80×24</span></div>
     </div>
     </div>
   </div>
@@ -1244,11 +1466,69 @@ Password:
 <section class="sec" id="ssh">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Conceito</span>
+      <span class="sec-num">Parte 1 · Conceito</span>
       <h2>O que é o SSH</h2>
-      <p>Conheça o serviço antes de instalar.</p>
+      <p>Entenda o protocolo antes de instalar o servidor.</p>
     </div>
-    <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-bulb"/></svg></div><h3>O que é</h3><p>O <b>SSH</b> (Secure Shell) é um protocolo para controlar outro computador pela rede usando o terminal. No Linux, o programa mais usado é o <b>OpenSSH</b>.</p></div><div class="ben"><div class="ico"><svg><use href="#i-globe"/></svg></div><h3>Para que serve</h3><p>O servidor fica esperando conexões na porta <b>22</b>. Quem conecta recebe um terminal da máquina remota, como se estivesse sentado na frente dela.</p></div><div class="ben"><div class="ico"><svg><use href="#i-check"/></svg></div><h3>Vantagens</h3><ul style="margin:0;padding-left:20px;color:var(--muted);display:grid;gap:4px"><li>Tudo é criptografado, até a senha</li><li>Administra servidores sem monitor</li><li>Aceita login por chaves, mais seguro</li><li>Copia arquivos com <code>scp</code> e <code>sftp</code></li><li>Gratuito e já vem em quase todo Linux</li></ul></div></div>
+    <div class="def">
+      <div>
+        <p class="big"><strong>SSH</strong> (Secure Shell) é o protocolo para <strong>controlar outro computador pela rede</strong> usando o terminal, com tudo criptografado <span class="cites">(<a class="cite" href="#ref-4251">YLONEN; LONVICK, 2006a</a>)</span>.</p>
+        <p>Ele funciona no modelo <b>cliente e servidor</b>: o servidor fica esperando conexões na porta <b>22</b>; o cliente se conecta, faz o login e recebe um terminal da máquina remota, como se estivesse sentado na frente dela <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+        <p>Antes do login, as duas máquinas combinam uma chave de criptografia. Por isso a senha, os comandos e as respostas viajam protegidos <span class="cites">(<a class="cite" href="#ref-4253">YLONEN; LONVICK, 2006c</a>)</span>. Nesta aula o servidor é o <b>OpenSSH</b>, na VM, e o cliente é o <b>PuTTY</b>, na máquina real.</p>
+      </div>
+      <div class="anat-box">
+        <h3>Anatomia de uma conexão SSH</h3>
+        <div class="anat-rows">
+          <div class="anat"><b><i style="background:var(--s1)"></i>Cliente</b><span>PuTTY, na máquina real</span></div>
+          <div class="anat"><b><i style="background:var(--green)"></i>Servidor</b><span>OpenSSH (sshd), na VM Linux Mint</span></div>
+          <div class="anat"><b><i style="background:var(--s3)"></i>Porta</b><span>22, a mesma para login, comandos e cópia de arquivos</span></div>
+          <div class="anat"><b><i style="background:var(--s2)"></i>Criptografia</b><span>combinada antes do login: nada passa em texto puro</span></div>
+          <div class="anat"><b><i style="background:var(--s4)"></i>Acesso</b><span>usuário e senha do Linux, ou um par de chaves</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="vantagens">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Por que usar</span>
+      <h2>Vantagens do SSH</h2>
+      <p>É o jeito padrão de administrar servidores Linux, do laboratório até a nuvem <span class="cites">(<a class="cite" href="#ref-openssh">OPENBSD PROJECT, [s.d.]</a>)</span>.</p>
+    </div>
+    <div class="grid3">
+      <article class="ben"><div class="ico"><svg><use href="#i-lock"/></svg></div><h3>Tudo criptografado</h3><p>A senha, os comandos e as respostas viajam protegidos. Quem capturar o tráfego não consegue ler.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-server"/></svg></div><h3>Servidor sem monitor</h3><p>Administra servidores que ficam em outra sala ou em outra cidade, só pela rede.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-shield"/></svg></div><h3>Login por chaves</h3><p>Troca a senha por um par de chaves, que é praticamente impossível de adivinhar.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-swap"/></svg></div><h3>Copia arquivos</h3><p>Com <code>scp</code> e <code>sftp</code> os arquivos vão pela mesma conexão segura.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-check"/></svg></div><h3>Gratuito</h3><p>O OpenSSH e o PuTTY são gratuitos e de código aberto.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-globe"/></svg></div><h3>Está em todo lugar</h3><p>Já vem em quase todo Linux e existe cliente para Windows, macOS e celular.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="portas">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Na prática</span>
+      <h2>Porta, cuidados e funcionamento</h2>
+      <p>O que precisa estar aberto, o que pode dar errado e como as duas máquinas vão conversar nesta aula.</p>
+    </div>
+    <h3 class="sub-h">Portas</h3>
+    <div class="ports">
+      <div class="port-card" style="--vc:var(--green)"><b>22</b><strong>SSH</strong><span>Porta onde o servidor espera a conexão. Por ela passam o login, os comandos e as respostas.</span></div>
+      <div class="port-card" style="--vc:var(--s1)"><b>22</b><strong>SCP e SFTP</strong><span>A cópia de arquivos usa a mesma porta e a mesma criptografia do SSH.</span></div>
+      <div class="port-card" style="--vc:var(--red)"><b>23</b><strong>Telnet</strong><span>O antigo acesso remoto, sem criptografia: a senha passa em texto puro. Não use.</span></div>
+    </div>
+
+    <h3 class="sub-h">Cuidados</h3>
+    <div class="care">
+      <div class="err"><h3><svg><use href="#i-lock"/></svg>Nunca compartilhe a chave privada</h3><p>Quem tiver o arquivo da chave privada entra no servidor no seu lugar. Ela fica só com você. A que vai para o servidor é a <b>pública</b>.</p></div>
+      <div class="err"><h3><svg><use href="#i-alert"/></svg>Confira a impressão digital</h3><p>Na primeira conexão o PuTTY mostra a impressão digital do servidor. Se ela mudar sem motivo, alguém pode estar se passando pelo servidor.</p></div>
+      <div class="err"><h3><svg><use href="#i-shield"/></svg>Senhas fortes</h3><p>Robôs tentam senhas na porta 22 o tempo todo. Use senhas fortes ou, melhor ainda, login por chave <span class="cites">(<a class="cite" href="#ref-4252">YLONEN; LONVICK, 2006b</a>)</span>.</p></div>
+      <div class="err"><h3><svg><use href="#i-folder"/></svg>Root não entra por senha</h3><p>Em produção, deixe <code>PermitRootLogin no</code> no <code>/etc/ssh/sshd_config</code> e entre com um usuário comum, usando <code>sudo</code> quando precisar.</p></div>
+    </div>
 
     <h3 class="sub-h">Como vai funcionar nesta aula</h3>
     <div class="topo">
@@ -1256,6 +1536,7 @@ Password:
       <div class="link" aria-label="Animação: login, resposta da VM e comandos pela porta 22"><b>SSH · porta 22</b><div class="track" aria-hidden="true"><div class="wire"></div><span class="pkt p1"><svg><use href="#i-lock"/></svg>login</span><span class="pkt p2"><svg><use href="#i-term"/></svg>prompt</span><span class="pkt p3"><svg><use href="#i-term"/></svg>comandos</span></div><div class="phase"><span class="ph1"><b>1 · Login</b>usuário e senha criptografados →</span><span class="ph2"><b>2 · Terminal</b>← a VM devolve o prompt</span><span class="ph3"><b>3 · Comandos</b>você digita, a VM executa →</span></div></div>
       <div class="box bx-vm" style="--vc:var(--green)"><div class="bh"><svg><use href="#i-mint"/></svg><div><b>VM Linux Mint</b><span>Servidor SSH</span></div></div><ul><li>openssh-server (porta 22)</li><li><code>/etc/ssh/sshd_config</code></li><li>Log em <code>/var/log/auth.log</code></li></ul></div>
     </div>
+
 
     <h3 class="sub-h">Arquivos e pastas importantes</h3>
     <div class="tbl-wrap files"><table><thead><tr><th>Caminho</th><th>Para que serve</th></tr></thead><tbody><tr><td>/etc/ssh/sshd_config</td><td>Configuração do servidor SSH (porta, tipo de login)</td></tr><tr><td>/etc/ssh/ssh_host_*_key</td><td>Chaves que identificam o servidor (a "impressão digital")</td></tr><tr><td>~/.ssh/</td><td>Pasta SSH de cada usuário</td></tr><tr><td>~/.ssh/authorized_keys</td><td>Chaves públicas que podem entrar nesse usuário</td></tr><tr><td>~/.ssh/id_ed25519</td><td>Sua chave privada (secreta)</td></tr><tr><td>~/.ssh/id_ed25519.pub</td><td>Sua chave pública (pode ser compartilhada)</td></tr><tr><td>/var/log/auth.log</td><td>Registro de logins, com acertos e erros</td></tr><tr><td>/usr/sbin/sshd</td><td>O programa do servidor</td></tr></tbody></table></div>
@@ -1466,12 +1747,21 @@ exit            <span class="c"># fecha a conexão</span></pre></div>
       </div>
     </div>
 
-    <div class="ch-keys">
-      <div class="err"><h3><svg><use href="#i-lock"/></svg>Chave pública <code>.pub</code></h3><p>Funciona como um cadeado. Fica no servidor, dentro de <code>~/.ssh/authorized_keys</code>. Pode ser mostrada para qualquer um.</p></div>
-      <div class="err"><h3><svg><use href="#i-key"/></svg>Chave privada</h3><p>Funciona como a chave do cadeado. Fica só com você, no PuTTY em formato <code>.ppk</code>. Nunca envie para ninguém.</p></div>
+    <div class="def">
+      <div>
+        <p class="big">No login por chave, o servidor não pede a senha do usuário: ele confere se você tem a <strong>chave privada</strong> que combina com uma <strong>chave pública</strong> autorizada <span class="cites">(<a class="cite" href="#ref-4252">YLONEN; LONVICK, 2006b</a>)</span>.</p>
+        <p>A <b>chave pública</b> funciona como um cadeado. Ela fica no servidor, dentro de <code>~/.ssh/authorized_keys</code>, e pode ser mostrada para qualquer um.</p>
+        <p>A <b>chave privada</b> é a chave do cadeado. Fica só com você e, no PuTTY, vai no formato <code>.ppk</code>. Nesta aula usamos o tipo <b>Ed25519</b> <span class="cites">(<a class="cite" href="#ref-8709">HARRIS; VELVINDRON, 2020</a>)</span>.</p>
+      </div>
+      <div class="ports ch-ports">
+        <div class="port-card" style="--vc:var(--s1)"><b>.pub</b><strong>Chave pública</strong><span>Vai para o <code>authorized_keys</code> da VM.</span></div>
+        <div class="port-card" style="--vc:var(--s3)"><b>.ppk</b><strong>Chave privada</strong><span>Formato do PuTTY. Nunca envie para ninguém.</span></div>
+        <div class="port-card" style="--vc:var(--s2)"><b>600</b><strong>Permissão</strong><span>Só o dono lê o <code>authorized_keys</code>.</span></div>
+        <div class="port-card" style="--vc:var(--s4)"><b>22</b><strong>Mesma porta</strong><span>Muda só o jeito de provar quem você é.</span></div>
+      </div>
     </div>
 
-    <p class="ou">Parte A · Criar e autorizar as chaves na VM</p>
+    <h3 class="sub-h">Parte A · Criar e autorizar as chaves na VM</h3>
     <ol class="steps" style="margin-top:20px">
       <li class="step"><div class="step-n">1</div><div class="step-body">
         <h3>Crie o par de chaves <span class="tag">VM</span></h3>
@@ -1501,10 +1791,21 @@ ls -l ~/aluno.ppk</pre></div>
       </div></li>
     </ol>
 
-    <p class="ou">Parte B · Trazer a chave para a máquina real</p>
-    <div class="ch-keys" style="margin:20px 0 16px">
-      <div class="err"><h3><svg><use href="#i-copy"/></svg>O que é o <code>scp</code></h3><p>O <b>scp</b> (secure copy) copia arquivos de um computador para outro pela rede. Funciona como o <code>cp</code>, mas a origem ou o destino pode estar em outra máquina. Já vem no Linux Mint e não precisa de root.</p></div>
-      <div class="err"><h3><svg><use href="#i-lock"/></svg>Como ele copia</h3><p>Ele usa a mesma conexão do SSH: porta <b>22</b>, tudo criptografado. Pede o usuário e a senha da VM, envia o arquivo e fecha a conexão. Por isso o SSH da VM precisa estar ativo.</p></div>
+    <h3 class="sub-h">Parte B · Trazer a chave para a máquina real</h3>
+    <div class="def" style="margin-bottom:24px">
+      <div>
+        <p class="big">O <strong>scp</strong> (secure copy) copia arquivos de um computador para outro pela rede.</p>
+        <p>Funciona como o <code>cp</code>, mas a origem ou o destino pode estar em outra máquina. Já vem no Linux Mint e não precisa de root.</p>
+      </div>
+      <div class="anat-box">
+        <h3>Como ele copia</h3>
+        <div class="anat-rows">
+          <div class="anat"><b><i style="background:var(--s1)"></i>Conexão</b><span>a mesma do SSH, na porta 22</span></div>
+          <div class="anat"><b><i style="background:var(--green)"></i>Login</b><span>usuário e senha da VM</span></div>
+          <div class="anat"><b><i style="background:var(--s3)"></i>Criptografia</b><span>o arquivo viaja protegido</span></div>
+          <div class="anat"><b><i style="background:var(--s2)"></i>Requisito</b><span>o SSH da VM precisa estar ativo</span></div>
+        </div>
+      </div>
     </div>
     <h3 class="sub-h" style="margin-top:8px">Como ler o comando scp ORIGEM DESTINO</h3>
     <div class="logline">scp <span class="seg g1">aluno</span>@<span class="seg g3">192.168.0.101</span><span class="seg g2">:</span><span class="seg g4">/home/aluno/aluno.ppk</span> <span class="seg g5">.</span></div>
@@ -1531,7 +1832,7 @@ ls -l ~/aluno.ppk</pre></div>
       </div></li>
     </ol>
 
-    <p class="ou">Parte C · Incluir a chave no PuTTY</p>
+    <h3 class="sub-h">Parte C · Incluir a chave no PuTTY</h3>
     <figure class="pshot" style="margin-top:20px">
       <div class="vb putty" aria-label="Janela PuTTY Configuration na categoria Connection, SSH, Auth">
         <div class="vb-title"><svg><use href="#i-term"/></svg>PuTTY Configuration<span>Connection › SSH › Auth</span></div>
@@ -1604,10 +1905,33 @@ exit</pre></div>
     </div>
   </div>
 </section>
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Referências</span>
+      <h2>Para estudar mais</h2>
+      <p>Os conceitos desta aula vêm das normas da Internet (RFCs), dos manuais do OpenSSH e do PuTTY e dos livros-texto de redes de computadores. Clique numa citação do texto para ir até a referência.</p>
+    </div>
+    <h3 class="ref-h">Referências bibliográficas</h3>
+    <ol class="books">
+      <li id="ref-8709"><span class="ref-a">HARRIS, B.; VELVINDRON, L.</span> <i>Ed25519 and Ed448 Public Key Algorithms for the Secure Shell (SSH) Protocol</i>. RFC 8709. [S. l.]: IETF, fev. 2020. Disponível em: <a href="https://www.rfc-editor.org/info/rfc8709" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc8709</a>.<small>O tipo de chave Ed25519, usado no desafio.</small></li>
+      <li id="ref-kurose"><span class="ref-a">KUROSE, J. F.; ROSS, K. W.</span> <i>Redes de computadores e a Internet</i>: uma abordagem top-down. 6. ed. São Paulo: Pearson, 2013.<small>Camada de aplicação, modelo cliente-servidor e segurança em redes.</small></li>
+      <li id="ref-openssh"><span class="ref-a">OPENBSD PROJECT.</span> <i>OpenSSH</i>. [S. l.]: [s. n.], [s.d.]. Disponível em: <a href="https://www.openssh.com/" target="_blank" rel="noopener">https://www.openssh.com/</a>.<small>Manual do servidor (<code>sshd</code>, <code>sshd_config</code>), do <code>ssh-keygen</code> e do <code>scp</code>.</small></li>
+      <li id="ref-4251"><span class="ref-a">YLONEN, T.; LONVICK, C.</span> <i>The Secure Shell (SSH) Protocol Architecture</i>. RFC 4251. [S. l.]: IETF, jan. 2006a. Disponível em: <a href="https://www.rfc-editor.org/info/rfc4251" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc4251</a>.<small>Visão geral do SSH: cliente, servidor e camadas do protocolo.</small></li>
+      <li id="ref-4252"><span class="ref-a">YLONEN, T.; LONVICK, C.</span> <i>The Secure Shell (SSH) Authentication Protocol</i>. RFC 4252. [S. l.]: IETF, jan. 2006b. Disponível em: <a href="https://www.rfc-editor.org/info/rfc4252" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc4252</a>.<small>Login por senha e por chave pública, tema do desafio.</small></li>
+      <li id="ref-4253"><span class="ref-a">YLONEN, T.; LONVICK, C.</span> <i>The Secure Shell (SSH) Transport Layer Protocol</i>. RFC 4253. [S. l.]: IETF, jan. 2006c. Disponível em: <a href="https://www.rfc-editor.org/info/rfc4253" target="_blank" rel="noopener">https://www.rfc-editor.org/info/rfc4253</a>.<small>Como as duas máquinas combinam a criptografia antes do login.</small></li>
+    </ol>
+    <h3 class="ref-h">Ferramentas</h3>
+    <div class="refs">
+      <a class="ref" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/" target="_blank" rel="noopener"><span class="ref-n">Cliente</span><b>PuTTY</b><p>Cliente SSH usado na máquina real, com o PuTTYgen e o pscp.</p><span class="ref-t"><i>PuTTY</i><i>puttygen</i></span><span class="ref-go">Abrir página oficial ↗</span></a>
+      <a class="ref" href="https://www.openssh.com/" target="_blank" rel="noopener"><span class="ref-n">Servidor</span><b>OpenSSH</b><p>Servidor e ferramentas SSH instalados na VM.</p><span class="ref-t"><i>sshd</i><i>ssh-keygen</i><i>scp</i></span><span class="ref-go">Abrir openssh.com ↗</span></a>
+    </div>
+  </div>
+</section>
 </main>
 
 <footer>
-  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Câmpus Garopaba</span><span>Acesso Remoto com SSH · OpenSSH e PuTTY</span></div>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Câmpus Garopaba</span></div>
 </footer>
 
 <script>
