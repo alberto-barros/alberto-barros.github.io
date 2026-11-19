@@ -1207,6 +1207,10 @@ html,body{overflow-x:clip}
 .care .err:hover h3 svg{color:#fff}
 :root[data-theme="dark"] .care .err:hover h3 svg{color:#1A1203}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err:hover h3 svg{color:#1A1203}}
+
+/* menu: Desafio fica vermelho ao passar o mouse */
+.tmenu a.tm-ch:hover,.tmenu a.tm-ch:focus-visible{background:color-mix(in srgb,var(--red) 10%,var(--surface));color:var(--red)}
+.tmenu a.tm-ch:hover b,.tmenu a.tm-ch:focus-visible b{color:var(--red)}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1256,7 +1260,7 @@ html,body{overflow-x:clip}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#serve"><b>03</b>Para que serve</a><a href="#vantagens"><b>04</b>Vantagens</a><a href="#m1"><b>05</b>Instalar o vsftpd</a><a href="#m2"><b>06</b>Configurar</a><a href="#m5"><b>07</b>FileZilla</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#desafio"><b>09</b>Desafio</a><a href="#entrega"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#ftp"><b>02</b>O que é FTP</a><a href="#serve"><b>03</b>Para que serve</a><a href="#vantagens"><b>04</b>Vantagens</a><a href="#m1"><b>05</b>Instalar o vsftpd</a><a href="#m2"><b>06</b>Configurar</a><a href="#m5"><b>07</b>FileZilla</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#desafio" class="tm-ch"><b>09</b>Desafio</a><a href="#entrega"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
   </div>
 </nav>
 
