@@ -946,6 +946,16 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 @media (max-width:480px){.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
 #tmenu a.nav-ch:hover,#tmenu a.nav-ch:focus-visible{background:var(--red)!important;color:#fff!important}
 #tmenu a.nav-ch:hover b,#tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.85}
+
+/* ícones das classes A B C animados (mesmo padrão dos ícones de "por que usamos o ping") */
+.cls{--ic:var(--vc)}
+.cls-top b{position:relative;display:grid;place-items:center;width:52px;height:52px;border-radius:15px;background:var(--vc);color:#fff;font:800 1.7rem/1 var(--f-display);box-shadow:0 12px 22px -12px var(--vc);animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite;transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.cls:nth-child(2) .cls-top b{animation-delay:-1.1s,-.9s}
+.cls:nth-child(3) .cls-top b{animation-delay:-2.2s,-1.8s}
+.cls:hover .cls-top b{transform:scale(1.12) rotate(-8deg)}
+:root[data-theme="dark"] .cls-top b{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cls-top b{color:#08130C}}
+@media (prefers-reduced-motion:reduce){.cls-top b{animation:none!important}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
