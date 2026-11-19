@@ -872,8 +872,7 @@ details.src pre{max-height:360px;overflow:auto}
 .rot-head h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .rot-head .hint{font-size:.82rem;color:var(--muted);margin:0}
 .rot-card .vlist{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
-
-/* barra superior igual às aulas de Redes */
+/* barra superior igual à página inicial de Redes */
 .accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
 .topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;position:relative}
@@ -900,9 +899,8 @@ details.src pre{max-height:360px;overflow:auto}
 .tmenu a:hover,.tmenu a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
 @media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
 @media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
-/* quiz igual à aula de IPv4 */
-.deliver{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
-.deliver > *{min-width:0}
+/* quiz: uma pergunta por vez */
+.deliver{grid-template-columns:1fr}
 .quiz{border-radius:26px;overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--green) 80%,transparent)}
 .qz-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:18px 22px;background:var(--code-bg);color:var(--code-fg)}
 .qz-brand{display:flex;align-items:center;gap:12px}
@@ -994,6 +992,226 @@ details.src pre{max-height:360px;overflow:auto}
 .qz-rexp{font-size:.93rem;color:var(--muted);background:var(--surface-2);border-radius:12px;padding:10px 12px}
 .qz-rexp b{color:var(--ink)}
 @media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
+@media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
+html{scroll-padding-top:84px}
+
+/* ===== terminais padronizados (mesmo visual do terminal da página Linux) ===== */
+:root{--code-bg:#000;--code-fg:#E2E8F0;--code-muted:#7C879A;--code-key:#4ADE80}
+.code,.hero-term,.logline,.fname{background:#000!important;border:1px solid rgba(255,255,255,.08);border-radius:18px}
+.code{color:#E2E8F0}
+.code-top{background:#000;padding:12px 16px;gap:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.dots{gap:7px}.dots i{width:11px;height:11px;font-size:0}.dots i::before{content:none!important}
+.dots i:nth-child(1){background:#FF5F57}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#28C840}
+.code-top span{font:500 .78rem var(--f-mono);color:#7C879A}
+.code pre{font:400 .84rem/1.75 var(--f-mono);color:#E2E8F0;background:#000}
+.code .c{color:#7C879A;font-style:normal}.code .p,.out .ok{color:#4ADE80}.out .w{color:#FBBF24}.out pre{color:#E2E8F0}
+.ht-wrap::before{display:none}
+.hero-term{box-shadow:0 24px 50px -28px rgba(0,0,0,.6);-webkit-backdrop-filter:none;backdrop-filter:none;font-size:.84rem;color:#E2E8F0}
+.hero-term::after{display:none}
+.hero-term .bar{position:relative;background:#000;padding:12px 16px;gap:7px;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-term .dot{width:11px;height:11px}
+.hero-term .ttl{position:absolute;left:0;right:0;text-align:center;font-size:.76rem;color:#7C879A;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 70px}
+.ht-screen{height:300px;background:#000}
+.hero-term pre{padding:16px 18px;line-height:1.75;color:#E2E8F0;background:#000}
+.hero-term .pu{color:#4ADE80}.hero-term .pc{color:#E2E8F0}.hero-term .pd{color:#60A5FA}
+.hero-term .dim{color:#7C879A}.hero-term .ok{color:#4ADE80}.hero-term .w{color:#FBBF24}
+.hero-term .cursor{width:.6em;height:1.1em;background:#4ADE80;box-shadow:none;border-radius:0;vertical-align:-3px}
+.hero-term .foot{display:flex;align-items:center;gap:8px;padding:9px 16px;border-top:1px solid rgba(255,255,255,.08);background:#000;font-size:.7rem;color:#7C879A}
+.hero-term .foot i{width:7px;height:7px;border-radius:50%;background:#4ADE80}
+.hero-term .foot span:last-child{margin-left:auto}
+@media (max-width:600px){.ht-screen{height:300px}.hero-term{font-size:.72rem}.hero-term .foot span:nth-child(3){display:none}}
+
+/* ===== cards modernos com ícones animados (estilo Roteamento) ===== */
+html,body{overflow-x:clip}
+:root{--on:#fff}
+:root[data-theme="dark"]{--on:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--on:#08130C}}
+.hero .eyebrow{background:var(--surface);border:1px solid var(--line);padding:7px 14px;border-radius:999px;box-shadow:0 8px 20px -14px color-mix(in srgb,var(--green) 70%,transparent)}
+.hero .eyebrow::before{width:14px;height:3px}
+.hero h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02}
+.chip{transition:transform .2s,border-color .2s}.chip:hover{transform:translateY(-2px);border-color:var(--green)}
+.chip svg{animation:icoBob 3.2s ease-in-out infinite}
+.chip:nth-child(2n) svg{animation-delay:-.8s}.chip:nth-child(3n) svg{animation-delay:-1.6s}
+
+/* cartões em grade */
+.grid3,.ports,.care,.errs{counter-reset:bn}
+.ben,.port-card,.care .err,.errs .err{--vc:var(--green);position:relative;overflow:hidden;counter-increment:bn;border:1px solid var(--line);border-top:4px solid var(--vc);border-radius:20px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 9%,var(--surface)),var(--surface) 62%);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 16px 32px -26px color-mix(in srgb,var(--vc) 70%,transparent);
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+.ben:hover,.port-card:hover,.care .err:hover,.errs .err:hover{transform:translateY(-5px);border-color:var(--vc);box-shadow:0 26px 40px -26px color-mix(in srgb,var(--vc) 80%,transparent)}
+.ben::after,.care .err::after,.errs .err::after{content:counter(bn,decimal-leading-zero);position:absolute;top:12px;right:16px;font:800 2.1rem/1 var(--f-display);color:color-mix(in srgb,var(--vc) 20%,transparent);pointer-events:none;transition:color .25s,transform .25s}
+.ben:hover::after,.care .err:hover::after,.errs .err:hover::after{color:color-mix(in srgb,var(--vc) 42%,transparent);transform:scale(1.08)}
+.ben:nth-child(6n+1),.port-card:nth-child(6n+1),.care .err:nth-child(6n+1),.errs .err:nth-child(6n+1){--vc:var(--s1)}
+.ben:nth-child(6n+2),.care .err:nth-child(6n+2),.errs .err:nth-child(6n+2){--vc:var(--green)}
+.ben:nth-child(6n+3),.care .err:nth-child(6n+3),.errs .err:nth-child(6n+3){--vc:var(--s2)}
+.ben:nth-child(6n+4),.care .err:nth-child(6n+4),.errs .err:nth-child(6n+4){--vc:var(--s3)}
+.ben:nth-child(6n+5),.care .err:nth-child(6n+5),.errs .err:nth-child(6n+5){--vc:var(--red)}
+.ben:nth-child(6n+6),.care .err:nth-child(6n+6),.errs .err:nth-child(6n+6){--vc:var(--s4)}
+.port-card[style]{--vc:inherit}
+.port-card{border-top-width:4px}
+.port-card b{font-size:2.3rem;animation:portPulse 3.4s ease-in-out infinite}
+.port-card:nth-child(2) b{animation-delay:-.8s}.port-card:nth-child(3) b{animation-delay:-1.6s}.port-card:nth-child(4) b{animation-delay:-2.4s}
+@keyframes portPulse{0%,100%{transform:none}50%{transform:translateY(-3px) scale(1.04)}}
+
+/* bloco de ícone */
+.ben .ico{width:50px;height:50px;border-radius:15px;background:var(--vc);color:var(--on);position:relative;box-shadow:0 10px 20px -10px var(--vc)}
+.ben .ico svg{width:26px;height:26px}
+.ben .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--vc);opacity:0;animation:icoRing 2.8s ease-out infinite;pointer-events:none}
+.ben:nth-child(2n) .ico::before{animation-delay:-1.4s}
+@keyframes icoRing{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.55);opacity:0}}
+.errs .err h3,.care .err h3{padding-right:46px;align-items:flex-start}
+.errs .err h3 svg,.care .err h3 svg{width:38px;height:38px;padding:8px;border-radius:12px;background:var(--vc);color:var(--on);flex:none;box-shadow:0 8px 16px -8px var(--vc)}
+.care .err:hover h3 svg,.errs .err:hover h3 svg{color:var(--on)}
+.errs .err,.care .err{padding:20px 20px 18px}
+
+/* animações por tipo de ícone */
+.ico svg,.err h3 svg{transform-origin:50% 60%}
+.ico:has(use[href="#i-server"]) svg,.err h3:has(use[href="#i-server"]) svg{animation:icoBob 2.6s ease-in-out infinite}
+.ico:has(use[href="#i-route"]) svg{animation:icoNudge 2.2s ease-in-out infinite}
+.ico:has(use[href="#i-pc"]) svg{animation:icoBob 3s ease-in-out infinite}
+.ico:has(use[href="#i-bulb"]) svg{animation:icoGlow 2.2s ease-in-out infinite}
+.ico:has(use[href="#i-swap"]) svg{animation:icoNudge 1.8s ease-in-out infinite}
+.ico:has(use[href="#i-check"]) svg{animation:icoPop 2.4s ease-in-out infinite}
+.ico:has(use[href="#i-term"]) svg{animation:icoBlink 1.6s steps(2) infinite}
+.ico:has(use[href="#i-globe"]) svg{animation:icoSpin 9s linear infinite}
+.err h3:has(use[href="#i-alert"]) svg{animation:icoShake 3s ease-in-out infinite}
+.err h3:has(use[href="#i-lock"]) svg,.ico:has(use[href="#i-lock"]) svg{animation:icoWiggle 3.2s ease-in-out infinite}
+.err h3:has(use[href="#i-shield"]) svg,.ico:has(use[href="#i-shield"]) svg{animation:icoPop 2.6s ease-in-out infinite}
+.err h3:has(use[href="#i-folder"]) svg,.ico:has(use[href="#i-folder"]) svg{animation:icoBob 2.8s ease-in-out infinite}
+@keyframes icoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes icoNudge{0%,100%{transform:translateX(-2px)}50%{transform:translateX(3px)}}
+@keyframes icoGlow{0%,100%{transform:scale(1);filter:none}50%{transform:scale(1.12);filter:drop-shadow(0 0 5px rgba(255,255,255,.9))}}
+@keyframes icoPop{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.22)}90%{transform:scale(.95)}}
+@keyframes icoBlink{0%{opacity:1}50%{opacity:.45}}
+@keyframes icoSpin{to{transform:rotate(360deg)}}
+@keyframes icoShake{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-10deg)}92%{transform:rotate(9deg)}95%{transform:rotate(-6deg)}98%{transform:rotate(4deg)}}
+@keyframes icoWiggle{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-12deg)}90%{transform:rotate(10deg)}95%{transform:rotate(-5deg)}}
+.ben:hover .ico svg,.err:hover h3 svg{animation-duration:.9s}
+
+.care .err:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)));border-color:color-mix(in srgb,var(--red) 45%,var(--line))}
+/* notas */
+.note{border:1px solid var(--line);background:linear-gradient(135deg,var(--surface-2),var(--surface));border-radius:18px;box-shadow:0 14px 28px -24px color-mix(in srgb,var(--green) 70%,transparent)}
+.note .ico{background:var(--green);color:var(--on);border-radius:13px;box-shadow:0 8px 16px -8px var(--green)}
+.note.warn .ico{background:var(--red);color:#fff}
+
+/* roteiro da aula */
+.rot-card{border-radius:24px}
+.vrow{position:relative;overflow:hidden;border:1px solid var(--line);border-top:4px solid var(--vc);border-radius:16px;padding:12px 14px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 9%,var(--surface)),var(--surface));transition:transform .25s,box-shadow .25s,border-color .25s}
+.vrow:hover{transform:translateY(-4px);border-color:var(--vc);box-shadow:0 20px 30px -22px var(--vc)}
+.vrow::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:sheen 6s ease-in-out infinite}
+.vrow:nth-child(2)::after{animation-delay:1s}.vrow:nth-child(3)::after{animation-delay:2s}.vrow:nth-child(4)::after{animation-delay:3s}.vrow:nth-child(5)::after{animation-delay:4s}.vrow:nth-child(6)::after{animation-delay:5s}
+@keyframes sheen{0%,60%{left:-60%}100%{left:130%}}
+:root[data-theme="dark"] .vtag,.vtag{color:var(--on)}
+
+@media (prefers-reduced-motion:reduce){.chip svg,.ico::before,.ico svg,.err h3 svg,.port-card b,.vrow::after{animation:none!important}}
+
+/* referências */
+.ref-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.ref-h::after{content:"";height:1px;flex:1;background:var(--line)}
+.sec-head + .ref-h{margin-top:0}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.refs-2{grid-template-columns:minmax(0,520px)}
+.ref{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}
+.ref:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 12px 26px -18px var(--green)}
+.ref-n{font:700 .78rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;justify-self:start}
+.ref b{font-family:var(--f-display);font-size:.98rem;line-height:1.3}
+.ref p{font-size:.88rem;color:var(--muted)}
+.ref-t{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ref-t i{font:600 .7rem var(--f-mono);font-style:normal;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.ref-go{font-size:.8rem;font-weight:700;color:var(--green-strong);margin-top:4px}
+.books{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:bk}
+.books li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 56px;counter-increment:bk;font-size:.95rem;overflow-wrap:anywhere}
+.books li::before{content:counter(bk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;background:var(--green);color:var(--on);display:grid;place-items:center;font:800 .85rem var(--f-display)}
+:root[data-theme="dark"] .books li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .books li::before{color:#08130C}}
+.ref-a{font-weight:700}
+.books small{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+
+/* citações */
+.cites{white-space:normal}
+.cite{font:inherit;color:var(--ink);background:none;padding:0;border-radius:0;text-decoration:none;white-space:normal}
+.cite:hover,.cite:focus-visible{color:#1D6FD8;background:none;text-decoration:underline}
+#refs .ref,#refs .books li{scroll-margin-top:84px}
+#refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
+
+/* ===== layout do desafio (estilo Roteamento) ===== */
+.desafio .ch-banner{border-radius:28px;box-shadow:0 30px 60px -36px var(--red);position:relative;overflow:hidden}
+.desafio .ch-banner .ico{width:64px;height:64px;border-radius:20px;box-shadow:0 14px 26px -12px var(--red)}
+.desafio .ch-banner .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--red);animation:icoRing 2.4s ease-out infinite}
+.desafio .ch-banner .ico svg{animation:icoWiggle 3s ease-in-out infinite}
+.desafio .def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start;margin-bottom:8px}
+.desafio .def > *{min-width:0}
+.desafio .def p+p{margin-top:14px}
+.desafio .def .big{font-size:1.2rem;line-height:1.55}
+.desafio .def .big strong{color:var(--red)}
+.desafio .ch-ports{grid-template-columns:repeat(2,minmax(0,1fr))}
+.desafio .port-card b{font-size:1.8rem}
+.desafio .sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:40px 0 18px}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red));color:#fff}
+.desafio .btn{background:linear-gradient(135deg,#E5484D,var(--red));box-shadow:0 10px 22px -12px var(--red)}
+.desafio .tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)))}
+.sec-head h2::after{content:"";display:block;width:56px;height:4px;border-radius:4px;margin-top:14px;background:linear-gradient(90deg,var(--green),var(--red))}
+.desafio .sec-head h2::after{background:var(--red)}
+@media (max-width:860px){.desafio .def{grid-template-columns:1fr}}
+@media (max-width:480px){.desafio .ch-ports{grid-template-columns:1fr 1fr}.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
+
+/* ===== seções de conceito (estilo Roteamento) ===== */
+.anat-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:12px;box-shadow:0 18px 40px -30px color-mix(in srgb,var(--green) 60%,transparent)}
+.anat-box h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.anat-rows{display:grid;gap:0}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:12px 0;border-top:1px dashed var(--line)}
+.anat:first-child{border-top:0}
+.anat b{font-family:var(--f-display);font-size:.9rem}
+.anat span{font-size:.9rem;color:var(--muted)}
+.anat i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+#vantagens .grid3{gap:18px}
+
+/* erros comuns: tudo em vermelho padronizado */
+.errs .err,.errs .err:nth-child(n){--vc:var(--red);background:linear-gradient(180deg,color-mix(in srgb,var(--red) 8%,var(--surface)),var(--surface) 62%);border-color:color-mix(in srgb,var(--red) 28%,var(--line))}
+.errs .err h3 svg{background:var(--red);color:#fff;box-shadow:0 8px 16px -8px var(--red)}
+:root[data-theme="dark"] .errs .err h3 svg{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .errs .err h3 svg{color:#1A0505}}
+.errs .err code{color:var(--red);background:color-mix(in srgb,var(--red) 9%,var(--surface))}
+.errs .err:hover{border-color:var(--red);box-shadow:0 26px 40px -26px var(--red)}
+
+/* contorno preto nas janelas do FileZilla */
+:root{--fz-edge:#000}
+:root[data-theme="dark"]{--fz-edge:#E4F3E8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--fz-edge:#E4F3E8}}
+.fz{border:2px solid var(--fz-edge);border-radius:14px;box-shadow:0 18px 36px -26px rgba(0,0,0,.55)}
+.fz-title,.fz-quick,.fz-log,.fz-ph{border-bottom-color:var(--fz-edge)}
+.fz-pane + .fz-pane{border-left:2px solid var(--fz-edge)}
+.fz-queue{border-top:2px solid var(--fz-edge)}
+.fz-path,.fz-f div{border-color:var(--fz-edge)}
+@media (max-width:560px){.fz-pane + .fz-pane{border-left:0;border-top:2px solid var(--fz-edge)}}
+
+/* quadro de download: contorno preto e fundo verde mais fraco */
+.dl{border:2px solid var(--fz-edge);
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 7%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--mint) 35%,var(--surface)),var(--surface) 70%)}
+
+/* tabelas com contorno preto */
+@media (min-width:641px){.tbl-wrap,.desafio .tbl-wrap{border:2px solid var(--fz-edge)}.tbl-wrap th{border-bottom:2px solid var(--fz-edge)}}
+@media (max-width:640px){.tbl-wrap tr{border:2px solid var(--fz-edge)}}
+
+/* cuidados: tudo em amarelo padronizado */
+.care .err,.care .err:nth-child(n){--vc:var(--s2);background:linear-gradient(180deg,color-mix(in srgb,var(--s2) 12%,var(--surface)),var(--surface) 62%);border-color:color-mix(in srgb,var(--s2) 35%,var(--line))}
+.care .err h3 svg{background:var(--s2);color:#fff;box-shadow:0 8px 16px -8px var(--s2)}
+:root[data-theme="dark"] .care .err h3 svg{color:#1A1203}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err h3 svg{color:#1A1203}}
+.care .err code{color:var(--warn);background:color-mix(in srgb,var(--s2) 12%,var(--surface))}
+.care .err:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--s2) 18%,var(--surface)),color-mix(in srgb,var(--s2) 7%,var(--surface)));border-color:var(--s2);box-shadow:0 26px 40px -26px var(--s2)}
+.care .err:hover h3 svg{color:#fff}
+:root[data-theme="dark"] .care .err:hover h3 svg{color:#1A1203}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err:hover h3 svg{color:#1A1203}}
+
+/* menu: Desafio fica vermelho ao passar o mouse */
+.tmenu a.tm-ch:hover,.tmenu a.tm-ch:focus-visible{background:color-mix(in srgb,var(--red) 10%,var(--surface));color:var(--red)}
+.tmenu a.tm-ch:hover b,.tmenu a.tm-ch:focus-visible b{color:var(--red)}
+.tmenu a.tm-ch,.tmenu a.tm-ch b{color:var(--red)}
 /* extras da aula de MySQL */
 .cmp-head{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px}
 .cmp-card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--vc);border-radius:var(--r);padding:18px;display:grid;gap:6px;align-content:start}
@@ -1085,11 +1303,9 @@ table.rel tr.hl td{background:var(--mint);color:var(--ink)}
     <symbol id="i-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
     <symbol id="i-swap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6M9 9l6 6"></path></symbol><symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></symbol>
     <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></symbol>
     <symbol id="i-table" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 10v10"/></symbol>
-    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></symbol>
-    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6M9 9l6 6"></path></symbol>
-    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></symbol>
   </defs>
 </svg>
 
@@ -1105,7 +1321,7 @@ table.rel tr.hl td{background:var(--mint);color:var(--ink)}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#mysql"><b>01</b>MySQL</a><a href="#m1"><b>02</b>Instalar</a><a href="#m2"><b>03</b>Proteger</a><a href="#m3"><b>04</b>Acessar e criar usuário</a><a href="#m4"><b>05</b>Criar tabelas</a><a href="#m5"><b>06</b>Inserir dados</a><a href="#m6"><b>07</b>Consultas</a><a href="#m7"><b>08</b>Backup</a><a href="#m8"><b>09</b>Instalar phpMyAdmin</a><a href="#m9"><b>10</b>Usar o phpMyAdmin</a><a href="#checklist-sec"><b>11</b>Checklist</a><a href="#entrega"><b>12</b>Quiz</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#mysql"><b>01</b>O que é MySQL</a><a href="#serve"><b>02</b>Para que serve</a><a href="#estrutura"><b>03</b>Bancos e tabelas</a><a href="#vantagens"><b>04</b>Vantagens</a><a href="#portas"><b>05</b>Portas e MariaDB</a><a href="#m1"><b>06</b>Instalar o MySQL</a><a href="#m8"><b>07</b>phpMyAdmin</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#desafio" class="tm-ch"><b>09</b>Desafio</a><a href="#entrega"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1125,9 +1341,25 @@ table.rel tr.hl td{background:var(--mint);color:var(--ink)}
       </div>
     </div>
     <div class="ht-wrap">
-    <div class="hero-term" aria-label="Terminal do Linux Mint mostrando a instalação do MySQL e uma consulta SQL">
-      <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="tab"><svg aria-hidden="true"><use href="#i-term"/></svg>ifsc@mint: ~</span><span class="sh">bash · 80×24</span></div>
-      <div class="ht-screen"><pre id="ht-pre"><span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> sudo apt install -y mysql-server
+    <div class="hero-term" aria-label="Terminal do Linux Mint mostrando o login, o neofetch, a instalação do MySQL e uma consulta SQL">
+      <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="ttl">ifsc@mint: ~ — bash</span></div>
+      <div class="ht-screen"><pre id="ht-pre"><span class="dim">Linux Mint 22 mint tty1</span>
+
+mint login: ifsc
+Password: 
+<span class="dim">Last login: Mon Nov 16 10:12:03 on tty1</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> neofetch
+<span class="lg"> ___________  </span><span class="nu">ifsc</span>@<span class="nu">mint</span>
+<span class="lg">|_          \ </span><span class="nd">----------</span>
+<span class="lg">  | | _____ | </span><span class="nk">OS</span>: Linux Mint 22 x86_64
+<span class="lg">  | | | | | | </span><span class="nk">Host</span>: VirtualBox 1.2
+<span class="lg">  | | | | | | </span><span class="nk">Kernel</span>: 6.8.0-45-generic
+<span class="lg">  | \_____/ | </span><span class="nk">Shell</span>: bash 5.2.21
+<span class="lg">  \_________/ </span><span class="nk">DE</span>: Cinnamon 6.2
+<span class="lg">              </span><span class="nk">Memory</span>: 1024MiB / 3923MiB
+<span class="lg">              </span>
+<span class="lg">              </span><span class="cb c1"></span><span class="cb c2"></span><span class="cb c3"></span><span class="cb c4"></span><span class="cb c5"></span><span class="cb c6"></span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> sudo apt install -y mysql-server
 <span class="dim">Configurando mysql-server-8.0 ...</span>
 <span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> systemctl is-active mysql
 <span class="ok">active</span>
@@ -1145,8 +1377,10 @@ Enter password:
 | Administração | Noturno    |
 +---------------+------------+
 <span class="ok">3 rows in set (0.00 sec)</span>
-
-<span class="pd">mysql&gt;</span> <span class="cursor"></span></pre></div>
+<span class="pd">mysql&gt;</span> exit
+Bye
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> <span class="cursor"></span></pre></div>
+      <div class="foot"><i></i><span>conectado</span><span>bash</span><span>UTF-8 · 80×24</span></div>
     </div>
     </div>
   </div>
@@ -1156,7 +1390,7 @@ Enter password:
   <div class="wrap">
     <div class="rot-card">
       <div class="rot-head"><h3>Roteiro da aula</h3><p class="hint">Todos os passos são feitos na VM. Os passos 1 a 7 no terminal; os passos 8 e 9 no navegador da VM.</p></div>
-      <div class="vlist"><div class="vrow" style="--vc:var(--s1)"><span class="vtag">PASSOS 1–3</span><b>Instalar, proteger e acessar</b><span class="net">mysql-server</span></div><div class="vrow" style="--vc:var(--green)"><span class="vtag">PASSOS 4–6</span><b>Tabelas, dados e consultas</b><span class="net">SQL</span></div><div class="vrow" style="--vc:var(--s3)"><span class="vtag">PASSO 7</span><b>Backup do banco</b><span class="net">mysqldump</span></div><div class="vrow" style="--vc:var(--s4)"><span class="vtag">PASSOS 8–9</span><b>Interface gráfica</b><span class="net">phpMyAdmin</span></div></div>
+      <div class="vlist"><div class="vrow" style="--vc:var(--s1)"><span class="vtag">PASSOS 1–3</span><b>Instalar, proteger e acessar</b><span class="net">mysql-server</span></div><div class="vrow" style="--vc:var(--green)"><span class="vtag">PASSOS 4–6</span><b>Tabelas, dados e consultas</b><span class="net">SQL</span></div><div class="vrow" style="--vc:var(--s3)"><span class="vtag">PASSO 7</span><b>Backup do banco</b><span class="net">mysqldump</span></div><div class="vrow" style="--vc:var(--s4)"><span class="vtag">PASSOS 8–9</span><b>Interface gráfica</b><span class="net">phpMyAdmin</span></div><div class="vrow" style="--vc:var(--red)"><span class="vtag">DESAFIO</span><b>Acesso remoto pela hospedeira</b><span class="net">porta 3306</span></div></div>
     </div>
   </div>
 </div>
@@ -1165,17 +1399,66 @@ Enter password:
 <section class="sec" id="mysql">
   <div class="wrap">
     <div class="sec-head">
-      <span class="sec-num">Conceito</span>
+      <span class="sec-num">Parte 1 · Conceito</span>
       <h2>O que é MySQL</h2>
       <p>Entenda o que é um servidor de banco de dados antes de instalar.</p>
     </div>
-    <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-bulb"/></svg></div><h3>O que é</h3><p><b>MySQL</b> é um <b>SGBD</b> (Sistema Gerenciador de Banco de Dados) relacional. Ele guarda os dados em tabelas e responde a comandos na linguagem <b>SQL</b>. Criado em 1995, hoje pertence à Oracle. O <b>MariaDB</b> é uma versão derivada dele e usa os mesmos comandos.</p></div><div class="ben"><div class="ico"><svg><use href="#i-db"/></svg></div><h3>Para que serve</h3><p>Guardar e organizar informações que um sistema precisa consultar rápido: alunos e notas de uma escola, produtos e pedidos de uma loja, posts e usuários de um site. WordPress e Moodle, por exemplo, guardam tudo em MySQL.</p></div><div class="ben"><div class="ico"><svg><use href="#i-swap"/></svg></div><h3>Como funciona</h3><p>No modelo <b>cliente e servidor</b>. O servidor (<code>mysqld</code>) fica rodando e cuidando dos arquivos do banco. O cliente (terminal, phpMyAdmin, um site em PHP) conecta, faz login e envia comandos SQL. O servidor devolve o resultado.</p></div></div>
-
-    <h3 class="sub-h">Vocabulário do banco</h3>
     <div class="def">
       <div>
-        <p class="big">Um <strong>servidor</strong> guarda vários <strong>bancos</strong>. Cada banco tem <strong>tabelas</strong>, e cada tabela tem <strong>colunas</strong> (campos) e <strong>linhas</strong> (registros).</p>
-        <p>A <b>chave primária</b> (PK) é a coluna que identifica cada linha sem repetir, como a matrícula de um aluno. A <b>chave estrangeira</b> (FK) é uma coluna que aponta para a chave primária de outra tabela. É ela que liga um aluno ao seu curso.</p>
+        <p class="big"><strong>MySQL</strong> é um <strong>SGBD</strong> (Sistema Gerenciador de Banco de Dados) <strong>relacional</strong>: guarda os dados em tabelas e responde a comandos na linguagem <strong>SQL</strong> <span class="cites">(<a class="cite" href="#ref-oracle">ORACLE, [s.d.]</a>)</span>.</p>
+        <p>Foi criado em 1995 e hoje pertence à Oracle. Funciona no modelo <b>cliente e servidor</b>: o servidor (<code>mysqld</code>) fica rodando e cuidando dos arquivos do banco; o cliente se conecta, faz o login e envia comandos SQL. O servidor devolve o resultado.</p>
+        <p>Nesta aula o servidor e os clientes ficam na mesma <b>VM Linux Mint</b>: o cliente de terminal <code>mysql</code> e, no fim, o <b>phpMyAdmin</b> no navegador <span class="cites">(<a class="cite" href="#ref-ubuntu">CANONICAL, [s.d.]</a>)</span>.</p>
+      </div>
+      <div class="anat-box">
+        <h3>Anatomia de uma conexão MySQL</h3>
+        <div class="anat-rows">
+          <div class="anat"><b><i style="background:var(--s1)"></i>Cliente</b><span>terminal (<code>mysql</code>) ou phpMyAdmin</span></div>
+          <div class="anat"><b><i style="background:var(--green)"></i>Servidor</b><span><code>mysqld</code>, na VM Linux Mint</span></div>
+          <div class="anat"><b><i style="background:var(--s3)"></i>Porta</b><span>3306: login e comandos SQL</span></div>
+          <div class="anat"><b><i style="background:var(--s2)"></i>Linguagem</b><span>SQL: <code>CREATE</code>, <code>INSERT</code>, <code>SELECT</code></span></div>
+          <div class="anat"><b><i style="background:var(--s4)"></i>Acesso</b><span>usuário e senha do MySQL, como <code>ifsc</code></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="serve">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Uso</span>
+      <h2>Para que serve o MySQL</h2>
+      <p>Sempre que um sistema precisa guardar informações e encontrá-las rápido.</p>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big">O MySQL serve para <strong>guardar</strong>, <strong>organizar</strong> e <strong>consultar</strong> dados que um sistema usa o tempo todo.</p>
+        <p>Alunos e notas de uma escola, produtos e pedidos de uma loja, posts e usuários de um site: tudo isso fica em tabelas. WordPress e Moodle, por exemplo, guardam todo o conteúdo em MySQL. Nesta aula você vai montar o banco <code>escola</code>.</p>
+      </div>
+      <div class="anat-box">
+        <h3>Usos mais comuns do MySQL</h3>
+        <div class="anat-rows">
+          <div class="anat"><b><i style="background:var(--s1)"></i>Sites e blogs</b><span>WordPress, Moodle e lojas virtuais em PHP</span></div>
+          <div class="anat"><b><i style="background:var(--green)"></i>Sistemas escolares</b><span>alunos, cursos, turmas e notas</span></div>
+          <div class="anat"><b><i style="background:var(--s3)"></i>Comércio</b><span>produtos, estoque, clientes e pedidos</span></div>
+          <div class="anat"><b><i style="background:var(--s2)"></i>Cadastros e logins</b><span>usuários e senhas de aplicativos</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="estrutura">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Estrutura</span>
+      <h2>Bancos, tabelas e chaves</h2>
+      <p>O vocabulário que você vai usar em todos os passos da aula.</p>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big">Um <strong>servidor</strong> guarda vários <strong>bancos</strong>. Cada banco tem <strong>tabelas</strong>, e cada tabela tem <strong>colunas</strong> (campos) e <strong>linhas</strong> (registros) <span class="cites">(<a class="cite" href="#ref-codd">CODD, 1970</a>)</span>.</p>
+        <p>A <b>chave primária</b> (PK) é a coluna que identifica cada linha sem repetir, como a matrícula de um aluno. A <b>chave estrangeira</b> (FK) é uma coluna que aponta para a chave primária de outra tabela. É ela que liga um aluno ao seu curso <span class="cites">(<a class="cite" href="#ref-elmasri">ELMASRI; NAVATHE, 2018</a>)</span>.</p>
         <p>Neste roteiro você vai montar o banco <code>escola</code>, com as tabelas <code>cursos</code> e <code>alunos</code>, exatamente como ao lado.</p>
       </div>
       <div class="ip-anatomy">
@@ -1188,17 +1471,34 @@ Enter password:
         </div>
       </div>
     </div>
+  </div>
+</section>
 
+<section class="sec" id="vantagens">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Por que usar</span>
+      <h2>Vantagens e benefícios do MySQL</h2>
+      <p>Gratuito, rápido e presente em boa parte dos sites da internet <span class="cites">(<a class="cite" href="#ref-oracle">ORACLE, [s.d.]</a>)</span>.</p>
+    </div>
+    <div class="grid3"><article class="ben"><div class="ico"><svg><use href="#i-shield"/></svg></div><h3>Gratuito e aberto</h3><p>A edição Community tem código aberto (licença GPL) e não custa nada, nem para uso comercial em servidores próprios.</p></article><article class="ben"><div class="ico"><svg><use href="#i-pulse"/></svg></div><h3>Rápido e estável</h3><p>Aguenta de um site pequeno a sistemas com milhões de registros, com pouco uso de memória.</p></article><article class="ben"><div class="ico"><svg><use href="#i-globe"/></svg></div><h3>Muito usado</h3><p>Faz parte da pilha <b>LAMP</b> (Linux, Apache, MySQL, PHP). Tem muita documentação, tutoriais e vagas de emprego.</p></article><article class="ben"><div class="ico"><svg><use href="#i-table"/></svg></div><h3>SQL padrão</h3><p>O que você aprende aqui serve para PostgreSQL, SQL Server e outros bancos relacionais, com poucas diferenças.</p></article><article class="ben"><div class="ico"><svg><use href="#i-route"/></svg></div><h3>Conversa com tudo</h3><p>PHP, Python, Java, Node.js e quase toda linguagem têm biblioteca pronta para conectar no MySQL.</p></article><article class="ben"><div class="ico"><svg><use href="#i-pc"/></svg></div><h3>Interfaces gráficas</h3><p>Dá para gerenciar pelo terminal ou por programas visuais como phpMyAdmin, DBeaver e MySQL Workbench.</p></article></div>
+  </div>
+</section>
+
+<section class="sec" id="portas">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Parte 1 · Na prática</span>
+      <h2>Portas, comparativo e funcionamento</h2>
+      <p>O que fica aberto, como os clientes conversam com o servidor nesta aula e a diferença entre MySQL e MariaDB.</p>
+    </div>
     <h3 class="sub-h">Portas usadas</h3>
     <div class="ports">
-      <div class="port-card" style="--vc:var(--green)"><b>3306</b><strong>MySQL clássico</strong><span>Porta padrão onde o servidor espera os clientes: terminal, sites em PHP, DBeaver, Workbench.</span></div>
+      <div class="port-card" style="--vc:var(--green)"><b>3306</b><strong>MySQL clássico</strong><span>Porta padrão onde o servidor espera os clientes: terminal, sites em PHP, DBeaver, Workbench <span class="cites">(<a class="cite" href="#ref-oracle">ORACLE, [s.d.]</a>)</span>.</span></div>
       <div class="port-card" style="--vc:var(--s1)"><b>33060</b><strong>X Protocol</strong><span>Porta extra do MySQL 8 para clientes modernos (MySQL Shell, documentos JSON). Não vamos usar.</span></div>
       <div class="port-card" style="--vc:var(--s3)"><b>80</b><strong>phpMyAdmin</strong><span>A interface gráfica é um site. Você abre pelo navegador e o Apache atende na porta 80.</span></div>
       <div class="port-card" style="--vc:var(--s4)"><b>127.0.0.1</b><strong>Só local</strong><span>No Linux Mint o MySQL vem ouvindo só no próprio computador. Outras máquinas não conseguem conectar.</span></div>
     </div>
-
-    <h3 class="sub-h">Vantagens</h3>
-    <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-shield"/></svg></div><h3>Gratuito e aberto</h3><p>A edição Community tem código aberto (licença GPL) e não custa nada, nem para uso comercial em servidores próprios.</p></div><div class="ben"><div class="ico"><svg><use href="#i-pulse"/></svg></div><h3>Rápido e estável</h3><p>Aguenta de um site pequeno a sistemas com milhões de registros, com pouco uso de memória.</p></div><div class="ben"><div class="ico"><svg><use href="#i-globe"/></svg></div><h3>Muito usado</h3><p>Faz parte da pilha <b>LAMP</b> (Linux, Apache, MySQL, PHP). Tem muita documentação, tutoriais e vagas de emprego.</p></div><div class="ben"><div class="ico"><svg><use href="#i-table"/></svg></div><h3>SQL padrão</h3><p>O que você aprende aqui serve para PostgreSQL, SQL Server e outros bancos relacionais, com poucas diferenças.</p></div><div class="ben"><div class="ico"><svg><use href="#i-route"/></svg></div><h3>Conversa com tudo</h3><p>PHP, Python, Java, Node.js e quase toda linguagem têm biblioteca pronta para conectar no MySQL.</p></div><div class="ben"><div class="ico"><svg><use href="#i-pc"/></svg></div><h3>Interfaces gráficas</h3><p>Dá para gerenciar pelo terminal ou por programas visuais como phpMyAdmin, DBeaver e MySQL Workbench.</p></div></div>
 
     <h3 class="sub-h">Como vai funcionar nesta aula</h3>
     <div class="topo">
@@ -1217,7 +1517,7 @@ Enter password:
       <tr><td>Licença</td><td>Community gratuita (GPL); recursos extras só na Enterprise, que é paga</td><td>Tudo gratuito e aberto (GPL), sem edição paga separada do servidor</td></tr>
       <tr><td>Pacote no Linux Mint</td><td><code>mysql-server</code> (versão 8.0)</td><td><code>mariadb-server</code> (versão 10.11)</td></tr>
       <tr><td>Porta padrão</td><td>3306</td><td>3306</td></tr>
-      <tr><td>Comandos SQL</td><td colspan="2">Praticamente os mesmos: tudo o que você vai fazer nesta aula funciona nos dois</td></tr>
+      <tr><td>Comandos SQL</td><td colspan="2">Praticamente os mesmos: tudo o que você vai fazer nesta aula funciona nos dois <span class="cites">(<a class="cite" href="#ref-mariadb">MARIADB, [s.d.]</a>)</span></td></tr>
       <tr><td>Cliente no terminal</td><td><code>mysql</code></td><td><code>mariadb</code>, e o nome <code>mysql</code> continua funcionando</td></tr>
       <tr><td>Login do root</td><td><code>auth_socket</code>: entra com <code>sudo mysql</code></td><td><code>unix_socket</code>: entra com <code>sudo mariadb</code></td></tr>
       <tr><td>Motores de armazenamento</td><td>InnoDB (padrão) e poucos outros</td><td>InnoDB (padrão) e outros extras, como Aria, ColumnStore e Spider</td></tr>
@@ -1237,7 +1537,7 @@ Enter password:
     <div class="sec-head">
       <span class="sec-num">Passo 01 · Terminal</span>
       <h2>Instalar o MySQL</h2>
-      <p>O pacote <b>mysql-server</b> instala o servidor, o cliente de linha de comando e já deixa o serviço ligado.</p>
+      <p>O pacote <b>mysql-server</b> instala o servidor, o cliente de linha de comando e já deixa o serviço ligado <span class="cites">(<a class="cite" href="#ref-ubuntu">CANONICAL, [s.d.]</a>)</span>.</p>
     </div>
     <ol class="steps">
       <li class="step">
@@ -1274,7 +1574,7 @@ LISTEN 0  151  <span class="ok">127.0.0.1:3306</span>   0.0.0.0:*  users:(("mysq
     <div class="sec-head">
       <span class="sec-num">Passo 02 · Terminal</span>
       <h2>Proteger a instalação</h2>
-      <p>O script <code>mysql_secure_installation</code> remove o que vem aberto por padrão: usuários anônimos, banco de teste e login do root pela rede.</p>
+      <p>O script <code>mysql_secure_installation</code> remove o que vem aberto por padrão: usuários anônimos, banco de teste e login do root pela rede. <span class="cites">(<a class="cite" href="#ref-oracle">ORACLE, [s.d.]</a>)</span></p>
     </div>
     <ol class="steps">
       <li class="step">
@@ -1602,7 +1902,7 @@ ORDER BY a.nome;</pre></div><div class="code out"><div class="code-top"><div cla
     <div class="sec-head">
       <span class="sec-num">Passo 08 · Terminal</span>
       <h2>Instalar o phpMyAdmin</h2>
-      <p>O <b>phpMyAdmin</b> é uma interface gráfica para o MySQL que roda como um site, dentro do Apache. Você gerencia o banco clicando, pelo navegador.</p>
+      <p>O <b>phpMyAdmin</b> é uma interface gráfica para o MySQL que roda como um site, dentro do Apache. Você gerencia o banco clicando, pelo navegador <span class="cites">(<a class="cite" href="#ref-phpmyadmin">PHPMYADMIN, [s.d.]</a>)</span>.</p>
     </div>
     <ol class="steps">
       <li class="step">
@@ -1740,8 +2040,117 @@ FROM alunos a JOIN cursos c ON a.curso_id = c.id;</pre></div>
       <div class="progress" role="progressbar" aria-label="Progresso da aula" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="prog-bar"></i></div>
       <div class="check"><p class="ck-group">Passos da aula</p><label for="ck1"><input type="checkbox" id="ck1" data-w="10"><span>Passo 1 · MySQL instalado e porta 3306 aberta</span><em>10%</em></label><label for="ck2"><input type="checkbox" id="ck2" data-w="10"><span>Passo 2 · <code>mysql_secure_installation</code> concluído com <b>All done!</b></span><em>10%</em></label><label for="ck3"><input type="checkbox" id="ck3" data-w="12"><span>Passo 3 · Banco <code>escola</code> e usuário <code>ifsc</code> criados; login com <code>mysql -u ifsc -p</code></span><em>12%</em></label><label for="ck4"><input type="checkbox" id="ck4" data-w="12"><span>Passo 4 · Tabelas <code>cursos</code> e <code>alunos</code> criadas com chave primária e estrangeira</span><em>12%</em></label><label for="ck5"><input type="checkbox" id="ck5" data-w="10"><span>Passo 5 · 3 cursos e 5 alunos cadastrados</span><em>10%</em></label><label for="ck6"><input type="checkbox" id="ck6" data-w="15"><span>Passo 6 · Consultas com <code>WHERE</code> e <code>JOIN</code></span><em>15%</em></label><label for="ck7"><input type="checkbox" id="ck7" data-w="8"><span>Passo 7 · Backup <code>escola.sql</code> gerado com <code>mysqldump</code></span><em>8%</em></label><label for="ck8"><input type="checkbox" id="ck8" data-w="13"><span>Passo 8 · phpMyAdmin instalado e respondendo <b>200 OK</b></span><em>13%</em></label><label for="ck9"><input type="checkbox" id="ck9" data-w="10"><span>Passo 9 · Login no phpMyAdmin e consulta pela aba SQL</span><em>10%</em></label>
       </div>
-      <div class="ck-foot"><span>9 passos · total 100%</span><button class="linkbtn" type="button" id="ck-reset">Desmarcar tudo</button></div>
+      <div class="ck-foot"><span>9 passos · 100%</span><button class="linkbtn" type="button" id="ck-reset">Desmarcar tudo</button></div>
     </div>
+  </div>
+</section>
+
+<section class="sec desafio" id="desafio">
+  <div class="wrap">
+    <div class="ch-banner">
+      <div class="ico"><svg><use href="#i-route"/></svg></div>
+      <div>
+        <span class="sec-num">Desafio · VM e hospedeira · Acesso remoto</span>
+        <h2>Acessar o MySQL pela máquina hospedeira</h2>
+        <p>Hoje o MySQL só aceita conexões da própria VM. Neste desafio você abre a porta 3306 para a rede interna, cria um usuário que pode entrar a partir da hospedeira e conecta com o <b>DBeaver</b>, um gerenciador gráfico instalado no Windows.</p>
+      </div>
+    </div>
+
+    <div class="def">
+      <div>
+        <p class="big">O <strong>bind-address</strong> é a linha do <code>mysqld.cnf</code> que diz em qual endereço o servidor ouve: <code>127.0.0.1</code> é só a VM; <code>0.0.0.0</code> são todas as placas de rede <span class="cites">(<a class="cite" href="#ref-oracle">ORACLE, [s.d.]</a>)</span>.</p>
+        <p>No MySQL o usuário é o <b>nome</b> mais o <b>endereço de onde ele conecta</b>. Por isso <code>'ifsc'@'localhost'</code> e <code>'ifsc'@'192.168.56.%'</code> são dois usuários diferentes, cada um com as suas permissões.</p>
+        <p>O <code>%</code> funciona como coringa: vale qualquer número. Assim qualquer máquina da rede <code>192.168.56.x</code>, como a hospedeira, consegue entrar, mas só no banco <code>escola</code>.</p>
+      </div>
+      <div class="ports ch-ports">
+        <div class="port-card" style="--vc:var(--s1)"><b>3306</b><strong>Mesma porta</strong><span>O DBeaver conecta na porta padrão do MySQL.</span></div>
+        <div class="port-card" style="--vc:var(--s3)"><b>0.0.0.0</b><strong>bind-address</strong><span>O servidor passa a ouvir em todas as placas de rede.</span></div>
+        <div class="port-card" style="--vc:var(--s2)"><b>%</b><strong>Coringa</strong><span><code>192.168.56.%</code> libera só a rede interna.</span></div>
+        <div class="port-card" style="--vc:var(--s4)"><b>ufw</b><strong>Firewall</strong><span>Libere a 3306 só para <code>192.168.56.0/24</code>.</span></div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">Passo a passo do desafio</h3>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Guarde a configuração atual <span class="tag">VM</span></h3>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo cp /etc/mysql/mysql.conf.d/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf.original</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Mude o bind-address <span class="tag">VM</span></h3>
+          <p>Abra o arquivo, procure com <kbd>Ctrl</kbd>+<kbd>W</kbd> a linha <code>bind-address</code> e troque o valor. Salve com <kbd>Ctrl</kbd>+<kbd>O</kbd>, <kbd>Enter</kbd> e saia com <kbd>Ctrl</kbd>+<kbd>X</kbd>.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf</pre></div><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>mysqld.cnf · como deve ficar</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>bind-address = 0.0.0.0</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Reinicie e confira a porta <span class="tag">VM</span></h3>
+          <p>Agora deve aparecer <code>0.0.0.0:3306</code>. Anote também o IP da VM que começa com <code>192.168.56</code>.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo systemctl restart mysql
+sudo ss -tlnp | grep 3306
+hostname -I</pre></div><div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>saída esperada</span></div><pre>LISTEN 0  151  <span class="ok">0.0.0.0:3306</span>  0.0.0.0:*  users:(("mysqld",pid=3381,fd=23))
+10.0.2.15 <span class="w">192.168.56.101</span></pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Crie o usuário da rede interna <span class="tag">VM</span></h3>
+          <p>Entre com <code>sudo mysql</code> e rode. Esse usuário só entra a partir de máquinas da rede <code>192.168.56.x</code>, e só no banco escola.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>mysql (como root)</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>CREATE USER 'ifsc'@'192.168.56.%' IDENTIFIED BY 'ifsc';
+GRANT ALL PRIVILEGES ON escola.* TO 'ifsc'@'192.168.56.%';
+FLUSH PRIVILEGES;
+SELECT user, host FROM mysql.user WHERE user = 'ifsc';</pre></div><div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>saída esperada</span></div><pre>+------+--------------+
+| user | host         |
++------+--------------+
+| ifsc | 192.168.56.% |
+| ifsc | localhost    |
++------+--------------+
+<span class="ok">2 rows in set (0.00 sec)</span></pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <h3>Firewall, se estiver ligado <span class="tag">VM</span></h3>
+          <p>Se <code>sudo ufw status</code> disser <b>Status: active</b>, libere a porta 3306 só para a rede interna.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>sudo ufw allow from 192.168.56.0/24 to any port 3306 proto tcp</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">6</div>
+        <div class="step-body">
+          <h3>Teste a porta pela hospedeira <span class="tag">Hospedeira</span></h3>
+          <p>No PowerShell do Windows, troque pelo IP da sua VM. Procure <b>TcpTestSucceeded : True</b>.</p><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>PowerShell</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre>Test-NetConnection 192.168.56.101 -Port 3306</pre></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">7</div>
+        <div class="step-body">
+          <h3>Conecte com o DBeaver <span class="tag">Hospedeira</span></h3>
+          <p>Instale o <b>DBeaver Community</b> (gratuito, em <code>dbeaver.io</code>) se ainda não tiver. Clique em <b>Nova conexão</b> (ícone de tomada), escolha <b>MySQL</b> e preencha:</p>
+          <div class="tbl-wrap cfg"><table><thead><tr><th>Campo</th><th>O que digitar</th></tr></thead><tbody><tr><td>Server Host</td><td>IP da VM, por exemplo <code>192.168.56.101</code></td></tr><tr><td>Port</td><td><code>3306</code></td></tr><tr><td>Database</td><td><code>escola</code></td></tr><tr><td>Username · Password</td><td><code>ifsc</code> · <code>ifsc</code></td></tr></tbody></table></div>
+          <p>Clique em <b>Testar conexão</b>. Na primeira vez o DBeaver pede para baixar o driver do MySQL: aceite.</p>
+          <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p>Se aparecer <b>Public Key Retrieval is not allowed</b>, vá na aba <b>Propriedades do driver</b>, procure <code>allowPublicKeyRetrieval</code> e mude para <code>true</code>.</p></div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">8</div>
+        <div class="step-body">
+          <h3>Prove que está conectado <span class="tag">Hospedeira e VM</span></h3>
+          <ul>
+            <li>No DBeaver, abra <b>escola › Tabelas › alunos</b> e veja os dados na aba <b>Dados</b>.</li>
+            <li>Abra o <b>Editor SQL</b> (<kbd>Ctrl</kbd>+<kbd>]</kbd>) e rode a consulta com <code>JOIN</code> do Passo 6.</li>
+            <li>Na VM, com <code>sudo mysql</code>, rode <code>SHOW PROCESSLIST;</code> e procure o usuário <b>ifsc</b> vindo de <code>192.168.56.1</code>.</li>
+          </ul>
+        </div>
+      </li>
+    </ol>
+    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Para desfazer o desafio</b>: <code>sudo cp /etc/mysql/mysql.conf.d/mysqld.cnf.original /etc/mysql/mysql.conf.d/mysqld.cnf</code>, <code>sudo systemctl restart mysql</code> e, no <code>sudo mysql</code>, <code>DROP USER 'ifsc'@'192.168.56.%';</code></p></div>
+  
   </div>
 </section>
 
@@ -1762,9 +2171,35 @@ FROM alunos a JOIN cursos c ON a.curso_id = c.id;</pre></div>
     </div>
   </div>
 </section>
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Referências</span>
+      <h2>Para estudar mais</h2>
+      <p>Os conceitos desta aula vêm do manual oficial do MySQL, da documentação do Ubuntu, do MariaDB e do phpMyAdmin, e dos livros-texto de banco de dados. Clique numa citação do texto para ir até a referência.</p>
+    </div>
+    <h3 class="ref-h">Referências bibliográficas</h3>
+    <ol class="books">
+      <li id="ref-ubuntu"><span class="ref-a">CANONICAL.</span> <i>Install and configure a MySQL server</i>. Ubuntu Server documentation. [S. l.]: Canonical, [s.d.]. Disponível em: <a href="https://documentation.ubuntu.com/server/how-to/databases/install-mysql/" target="_blank" rel="noopener">https://documentation.ubuntu.com/server/how-to/databases/install-mysql/</a>.<small>Instalação do pacote <code>mysql-server</code>, serviço e configuração no Ubuntu, base do Linux Mint.</small></li>
+      <li id="ref-codd"><span class="ref-a">CODD, E. F.</span> A relational model of data for large shared data banks. <i>Communications of the ACM</i>, New York, v. 13, n. 6, p. 377-387, jun. 1970.<small>O artigo que criou o modelo relacional: dados organizados em tabelas, linhas e colunas.</small></li>
+      <li id="ref-elmasri"><span class="ref-a">ELMASRI, R.; NAVATHE, S. B.</span> <i>Sistemas de banco de dados</i>. 7. ed. São Paulo: Pearson, 2018.<small>Modelo relacional, chave primária, chave estrangeira e linguagem SQL.</small></li>
+      <li id="ref-mariadb"><span class="ref-a">MARIADB.</span> <i>MariaDB versus MySQL: compatibility</i>. [S. l.]: MariaDB, [s.d.]. Disponível em: <a href="https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/" target="_blank" rel="noopener">https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/</a>.<small>O que é igual e o que muda entre MariaDB e MySQL, usado no comparativo.</small></li>
+      <li id="ref-oracle"><span class="ref-a">ORACLE.</span> <i>MySQL 8.0 Reference Manual</i>. [S. l.]: Oracle, [s.d.]. Disponível em: <a href="https://dev.mysql.com/doc/refman/8.0/en/" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/</a>.<small>Manual oficial: o que é o MySQL, porta 3306, <code>mysql_secure_installation</code>, <code>mysqldump</code> e comandos SQL da aula.</small></li>
+      <li id="ref-phpmyadmin"><span class="ref-a">PHPMYADMIN.</span> <i>phpMyAdmin documentation</i>. [S. l.]: phpMyAdmin, [s.d.]. Disponível em: <a href="https://docs.phpmyadmin.net/" target="_blank" rel="noopener">https://docs.phpmyadmin.net/</a>.<small>Instalação, login e uso da interface gráfica nos Passos 8 e 9.</small></li>
+    </ol>
+    <h3 class="ref-h">Ferramentas</h3>
+    <div class="refs">
+      <a class="ref" href="https://dev.mysql.com/downloads/mysql/" target="_blank" rel="noopener"><span class="ref-n">Servidor</span><b>MySQL Community Server</b><p>Edição gratuita do MySQL instalada na VM.</p><span class="ref-t"><i>MySQL</i><i>Linux</i></span><span class="ref-go">Abrir dev.mysql.com ↗</span></a>
+      <a class="ref" href="https://www.phpmyadmin.net/" target="_blank" rel="noopener"><span class="ref-n">Interface gráfica</span><b>phpMyAdmin</b><p>Gerenciador do MySQL pelo navegador, usado no fim da aula.</p><span class="ref-t"><i>PHP</i><i>Apache</i></span><span class="ref-go">Abrir phpmyadmin.net ↗</span></a>
+      <a class="ref" href="https://mariadb.org/" target="_blank" rel="noopener"><span class="ref-n">Alternativa</span><b>MariaDB</b><p>Banco derivado do MySQL, citado no comparativo.</p><span class="ref-t"><i>MariaDB</i><i>Linux</i></span><span class="ref-go">Abrir mariadb.org ↗</span></a>
+      <a class="ref" href="https://dbeaver.io/" target="_blank" rel="noopener"><span class="ref-n">Desafio</span><b>DBeaver</b><p>Gerenciador de banco de dados usado na hospedeira no desafio.</p><span class="ref-t"><i>Windows</i><i>MySQL</i></span><span class="ref-go">Abrir dbeaver.io ↗</span></a>
+    </div>
+  </div>
+</section>
 </main>
+
 <footer>
-  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Câmpus Garopaba</span><span>Servidor de banco de dados no Linux · MySQL e phpMyAdmin</span></div>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Câmpus Garopaba</span></div>
 </footer>
 
 <script>
@@ -1800,48 +2235,37 @@ FROM alunos a JOIN cursos c ON a.curso_id = c.id;</pre></div>
     var pre=document.getElementById('ht-pre'); if(!pre) return;
     var scr=pre.parentNode; scr.scrollTop=scr.scrollHeight;
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var SH='<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> ';
-    var MY='<span class="pd">mysql&gt;</span> ';
-    var CMDS=[
-      [SH,'sudo apt install -y mysql-server',['<span class="dim">Lendo listas de pacotes... Pronto</span>','<span class="dim">Configurando mysql-server-8.0 ...</span>']],
-      [SH,'systemctl is-active mysql',['<span class="ok">active</span>']],
-      [SH,'sudo ss -tlnp | grep 3306',['LISTEN 0 151 <span class="w">127.0.0.1:3306</span> 0.0.0.0:* "mysqld"']],
-      [SH,'mysql -u ifsc -p escola',['Enter password:','<span class="dim">Server version: 8.0 (Ubuntu)</span>','']],
-      [MY,'SELECT nome, turno FROM cursos;',['+---------------+------------+','| nome          | turno      |','+---------------+------------+','| Informática   | Matutino   |','| Turismo       | Vespertino |','| Administração | Noturno    |','+---------------+------------+','<span class="ok">3 rows in set (0.00 sec)</span>','']],
-      [MY,'SELECT COUNT(*) AS total FROM alunos;',['+-------+','| total |','+-------+','|     5 |','+-------+','<span class="ok">1 row in set (0.00 sec)</span>','']]
-    ];
+    var PR="<span class=\"pu\">ifsc@mint</span><span class=\"pc\">:</span><span class=\"pd\">~</span><span class=\"pc\">$</span> ", LOGIN=["<span class=\"dim\">Linux Mint 22 mint tty1</span>", "", "mint login: ifsc", "Password: ", "<span class=\"dim\">Last login: Mon Nov 16 10:12:03 on tty1</span>"], CMDS=[["<span class=\"pu\">ifsc@mint</span><span class=\"pc\">:</span><span class=\"pd\">~</span><span class=\"pc\">$</span> ", "neofetch", ["<span class=\"lg\"> ___________  </span><span class=\"nu\">ifsc</span>@<span class=\"nu\">mint</span>", "<span class=\"lg\">|_          \\ </span><span class=\"nd\">----------</span>", "<span class=\"lg\">  | | _____ | </span><span class=\"nk\">OS</span>: Linux Mint 22 x86_64", "<span class=\"lg\">  | | | | | | </span><span class=\"nk\">Host</span>: VirtualBox 1.2", "<span class=\"lg\">  | | | | | | </span><span class=\"nk\">Kernel</span>: 6.8.0-45-generic", "<span class=\"lg\">  | \\_____/ | </span><span class=\"nk\">Shell</span>: bash 5.2.21", "<span class=\"lg\">  \\_________/ </span><span class=\"nk\">DE</span>: Cinnamon 6.2", "<span class=\"lg\">              </span><span class=\"nk\">Memory</span>: 1024MiB / 3923MiB", "<span class=\"lg\">              </span>", "<span class=\"lg\">              </span><span class=\"cb c1\"></span><span class=\"cb c2\"></span><span class=\"cb c3\"></span><span class=\"cb c4\"></span><span class=\"cb c5\"></span><span class=\"cb c6\"></span>"]], ["<span class=\"pu\">ifsc@mint</span><span class=\"pc\">:</span><span class=\"pd\">~</span><span class=\"pc\">$</span> ", "sudo apt install -y mysql-server", ["<span class=\"dim\">Configurando mysql-server-8.0 ...</span>"]], ["<span class=\"pu\">ifsc@mint</span><span class=\"pc\">:</span><span class=\"pd\">~</span><span class=\"pc\">$</span> ", "systemctl is-active mysql", ["<span class=\"ok\">active</span>"]], ["<span class=\"pu\">ifsc@mint</span><span class=\"pc\">:</span><span class=\"pd\">~</span><span class=\"pc\">$</span> ", "sudo ss -tlnp | grep 3306", ["LISTEN 0 151 <span class=\"w\">127.0.0.1:3306</span> 0.0.0.0:* \"mysqld\""]], ["<span class=\"pu\">ifsc@mint</span><span class=\"pc\">:</span><span class=\"pd\">~</span><span class=\"pc\">$</span> ", "mysql -u ifsc -p escola", ["Enter password:", "<span class=\"dim\">Server version: 8.0 (Ubuntu)</span>"]], ["<span class=\"pd\">mysql&gt;</span> ", "SELECT nome, turno FROM cursos;", ["+---------------+------------+", "| nome          | turno      |", "+---------------+------------+", "| Informática   | Matutino   |", "| Turismo       | Vespertino |", "| Administração | Noturno    |", "+---------------+------------+", "<span class=\"ok\">3 rows in set (0.00 sec)</span>"]], ["<span class=\"pd\">mysql&gt;</span> ", "exit", ["Bye"]]];
     var done='', timer;
     function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
     function show(tail){ pre.innerHTML=done+tail+'<span class="cursor"></span>'; scr.scrollTop=scr.scrollHeight; }
     function typeText(prefix,text,cb){
       var n=0;
-      (function t(){ if(n<=text.length){ show(prefix+esc(text.slice(0,n))); n++; timer=setTimeout(t,40+Math.random()*45); } else timer=setTimeout(cb,300); })();
+      (function t(){ if(n<=text.length){ show(prefix+esc(text.slice(0,n))); n++; timer=setTimeout(t,45+Math.random()*45); } else timer=setTimeout(cb,300); })();
     }
     function wait(ms,cb){ timer=setTimeout(cb,ms); }
+    function login(cb){
+      done=LOGIN[0]+'\n\n'; show('');
+      wait(700,function(){ typeText('mint login: ','ifsc',function(){
+        done+='mint login: ifsc\n'; show('Password: ');
+        wait(1100,function(){ done+='Password: \n'+LOGIN[4]+'\n'; show(PR); wait(600,cb); });
+      }); });
+    }
     function run(i){
-      if(i>=CMDS.length){ wait(3600,function(){ typeText(MY,'exit',function(){ start(); }); }); return; }
-      var c=CMDS[i];
+      if(i>=CMDS.length){ wait(3200,function(){ typeText(PR,'clear',function(){ start(); }); }); return; }
+      var c=CMDS[i], nx=CMDS[i+1];
       typeText(c[0],c[1],function(){
         done+=c[0]+esc(c[1])+'\n';
-        var k=0;
-        (function line(){ if(k<c[2].length){ done+=c[2][k++]+'\n'; show(''); timer=setTimeout(line,60); } else { var nx=CMDS[i+1]; show(nx?nx[0]:MY); wait(1000,function(){ run(i+1); }); } })();
+        var k=0, gap=c[1]==='neofetch'?70:45;
+        (function line(){ if(k<c[2].length){ done+=c[2][k++]+'\n'; show(''); timer=setTimeout(line,gap); } else { show(nx?nx[0]:PR); wait(c[1]==='neofetch'?2600:(c[2].length?1000:500),function(){ run(i+1); }); } })();
       });
     }
-    function start(){ clearTimeout(timer); done=''; show(SH); wait(600,function(){ run(0); }); }
-    wait(1500,start);
+    function start(){ clearTimeout(timer); done=''; login(function(){ run(0); }); }
+    wait(900,start);
   })();
-
-  (function(){
-    var btn = document.getElementById('tb-topics'), menu = document.getElementById('tmenu');
-    function setOpen(o){ menu.hidden = !o; btn.setAttribute('aria-expanded', o); }
-    btn.addEventListener('click', function(e){ e.stopPropagation(); setOpen(menu.hidden); });
-    menu.addEventListener('click', function(e){ if (e.target.closest('a')) setOpen(false); });
-    document.addEventListener('click', function(e){ if (!menu.hidden && !menu.contains(e.target)) setOpen(false); });
-    document.addEventListener('keydown', function(e){ if (e.key==='Escape' && !menu.hidden){ setOpen(false); btn.focus(); } });
-  })();
-  var $ = function(id){ return document.getElementById(id); };
   // ---------- quiz ----------
   (function(){
+    var $ = function(id){ return document.getElementById(id); };
     var BANK = [{"t": "Conceito", "q": "O que é o MySQL?", "o": ["Um sistema gerenciador de banco de dados relacional (SGBD)", "Um servidor web, como o Apache", "Uma linguagem de programação para sites", "Um sistema operacional baseado em Linux"], "e": "O MySQL é um <b>SGBD relacional</b>: guarda dados em tabelas e responde a comandos em SQL."}, {"t": "Conceito", "q": "Qual linguagem usamos para conversar com o MySQL?", "o": ["SQL", "HTML", "PHP", "Bash"], "e": "Todos os comandos que o servidor entende são escritos em <b>SQL</b> (Structured Query Language)."}, {"t": "Conceito", "q": "No MySQL, como funciona a comunicação entre o terminal e o banco?", "o": ["Modelo cliente e servidor: o cliente envia SQL e o servidor mysqld responde", "O terminal abre os arquivos do banco direto no disco", "O Apache traduz cada comando para o banco", "Cada usuário tem uma cópia separada do banco"], "e": "O servidor <b>mysqld</b> fica rodando e cuidando dos dados. Clientes (terminal, phpMyAdmin, sites) conectam e enviam SQL."}, {"t": "Conceito", "q": "Em uma tabela, o que é uma linha?", "o": ["Um registro, como os dados de um aluno", "Um campo, como o nome", "O nome da tabela", "O tipo de dado da coluna"], "e": "Cada <b>linha</b> é um registro completo. As <b>colunas</b> são os campos, como nome e email."}, {"t": "Conceito", "q": "O que é a chave primária (PRIMARY KEY)?", "o": ["A coluna que identifica cada linha sem repetir", "A senha do usuário root", "A primeira coluna de texto da tabela", "A coluna que liga a tabela a outra tabela"], "e": "A <b>chave primária</b> identifica cada registro de forma única, como a matrícula de um aluno."}, {"t": "Conceito", "q": "O que é a chave estrangeira (FOREIGN KEY)?", "o": ["Uma coluna que aponta para a chave primária de outra tabela", "Uma chave usada só por usuários de fora do Brasil", "Uma senha extra para acessar o banco", "A coluna com AUTO_INCREMENT"], "e": "A <b>chave estrangeira</b> liga as tabelas. No banco escola, <code>alunos.curso_id</code> aponta para <code>cursos.id</code>."}, {"t": "Conceito", "q": "Qual empresa é dona do MySQL hoje?", "o": ["Oracle", "Microsoft", "Google", "Canonical"], "e": "O MySQL pertence à <b>Oracle</b> desde 2010, quando ela comprou a Sun Microsystems."}, {"t": "Conceito", "q": "Qual destas vantagens é do MySQL?", "o": ["É gratuito na edição Community e muito usado na pilha LAMP", "Só funciona no Windows", "Não precisa de usuário e senha", "Guarda os dados em planilhas do Excel"], "e": "A edição <b>Community</b> é gratuita e o MySQL faz parte da pilha <b>LAMP</b> (Linux, Apache, MySQL, PHP)."}, {"t": "Portas", "q": "Qual é a porta padrão do MySQL?", "o": ["3306", "21", "80", "22"], "e": "O MySQL espera conexões na porta <b>3306</b>. A 21 é do FTP, a 80 do HTTP e a 22 do SSH."}, {"t": "Portas", "q": "Por que o phpMyAdmin é aberto pela porta 80?", "o": ["Porque ele é um site servido pelo Apache", "Porque o MySQL muda de porta depois da instalação", "Porque a porta 3306 fica bloqueada", "Porque o navegador só usa a porta 22"], "e": "O phpMyAdmin é um site em PHP. Quem atende o navegador é o <b>Apache</b>, na porta <b>80</b>."}, {"t": "Portas", "q": "Na saída do <code>ss -tlnp</code> aparece <code>127.0.0.1:3306</code>. O que isso indica?", "o": ["O MySQL só aceita conexões do próprio computador", "O MySQL aceita conexões de qualquer máquina", "O MySQL está desligado", "O MySQL está usando a porta do Apache"], "e": "<b>127.0.0.1</b> é o próprio computador. Assim o MySQL fica protegido de acessos pela rede."}, {"t": "MySQL x MariaDB", "q": "O que é o MariaDB?", "o": ["Uma versão derivada do MySQL, criada pelo mesmo criador", "Uma interface gráfica para o MySQL", "Um plugin do phpMyAdmin", "Um sistema de backup do MySQL"], "e": "O <b>MariaDB</b> nasceu em 2009 a partir do código do MySQL, criado por Michael Widenius."}, {"t": "MySQL x MariaDB", "q": "Os comandos SQL desta aula funcionam no MariaDB?", "o": ["Sim, os comandos são praticamente os mesmos", "Não, o MariaDB usa outra linguagem", "Só os comandos SELECT", "Só se instalar um tradutor"], "e": "MySQL e MariaDB usam <b>praticamente o mesmo SQL</b>. Tudo o que fizemos funciona nos dois."}, {"t": "MySQL x MariaDB", "q": "Por que não instalar MySQL e MariaDB na mesma VM?", "o": ["Porque usam a mesma porta e os mesmos arquivos em /var/lib/mysql", "Porque o Linux Mint aceita só um programa por vez", "Porque o phpMyAdmin para de funcionar para sempre", "Porque o MariaDB apaga o Apache"], "e": "Os dois usam a porta <b>3306</b> e a pasta <b>/var/lib/mysql</b>. O apt remove um para instalar o outro."}, {"t": "Instalação", "q": "Qual comando instala o servidor MySQL no Linux Mint?", "o": ["sudo apt install -y mysql-server", "sudo apt install -y mysql-client-web", "sudo install mysql", "sudo apt get mysqld"], "e": "O pacote <b>mysql-server</b> traz o servidor, o cliente <code>mysql</code> e já deixa o serviço ligado."}, {"t": "Instalação", "q": "Qual comando mostra se o MySQL está rodando?", "o": ["systemctl status mysql", "mysql --status-web", "ps mysql", "service list"], "e": "O <b>systemctl status mysql</b> mostra <b>active (running)</b> quando o serviço está no ar."}, {"t": "Segurança", "q": "Para que serve o <code>mysql_secure_installation</code>?", "o": ["Remover usuários anônimos, o banco de teste e o login remoto do root", "Instalar o phpMyAdmin", "Criar o banco escola", "Liberar a porta 3306 para a internet"], "e": "O script tira o que vem <b>aberto por padrão</b> e deixa a instalação mais segura."}, {"t": "Segurança", "q": "No Linux Mint, como o root do MySQL faz login?", "o": ["Com sudo mysql, pelo auth_socket, sem senha do MySQL", "Com mysql -u root e a senha 123456", "Só pelo phpMyAdmin", "Ele não consegue fazer login"], "e": "O root usa o <b>auth_socket</b>: quem tem <code>sudo</code> no Linux entra como root no MySQL."}, {"t": "Segurança", "q": "Por que não usar o root no phpMyAdmin?", "o": ["Porque o root pode apagar qualquer banco; usamos um usuário com menos poder", "Porque o root não sabe SQL", "Porque o phpMyAdmin é só para leitura", "Porque o root só funciona no Windows"], "e": "O root tem poder total. Cada sistema deve usar um usuário com acesso <b>só ao banco que precisa</b>."}, {"t": "Usuários", "q": "O que significa <code>'ifsc'@'localhost'</code>?", "o": ["Usuário ifsc que conecta a partir da própria máquina", "Usuário localhost dentro do banco ifsc", "Banco ifsc no servidor localhost", "Tabela ifsc do banco localhost"], "e": "No MySQL o usuário é <b>nome + de onde conecta</b>. <code>localhost</code> é o próprio computador."}, {"t": "Usuários", "q": "O que faz <code>GRANT ALL PRIVILEGES ON escola.* TO 'ifsc'@'localhost';</code>?", "o": ["Dá todos os direitos ao usuário ifsc, só nas tabelas do banco escola", "Dá ao ifsc acesso total a todos os bancos", "Cria o banco escola", "Muda a senha do usuário ifsc"], "e": "O <b>escola.*</b> limita o acesso às tabelas do banco escola. É o <b>privilégio mínimo</b>."}, {"t": "Usuários", "q": "Qual comando entra no MySQL com o usuário ifsc pedindo a senha?", "o": ["mysql -u ifsc -p", "mysql ifsc password", "sudo mysql ifsc", "mysql -user=ifsc"], "e": "O <b>-u</b> informa o usuário e o <b>-p</b> faz o MySQL pedir a senha."}, {"t": "SQL", "q": "Como todo comando SQL termina no terminal do MySQL?", "o": ["Com ponto e vírgula ;", "Com dois pontos :", "Com ponto final .", "Com a tecla Tab"], "e": "Sem o <b>;</b> o prompt vira <code>-&gt;</code> e fica esperando o resto do comando."}, {"t": "SQL", "q": "Qual comando lista os bancos de dados do servidor?", "o": ["SHOW DATABASES;", "LIST DATABASES;", "SELECT DATABASES;", "DESCRIBE DATABASES;"], "e": "<b>SHOW DATABASES;</b> lista os bancos que o seu usuário pode ver."}, {"t": "SQL", "q": "Qual comando cria o banco escola?", "o": ["CREATE DATABASE escola;", "NEW DATABASE escola;", "MAKE escola;", "INSERT DATABASE escola;"], "e": "<b>CREATE DATABASE</b> cria o banco. Usamos <code>utf8mb4</code> para aceitar acentos."}, {"t": "SQL", "q": "Para que serve <code>USE escola;</code>?", "o": ["Escolher o banco escola para os próximos comandos", "Criar o banco escola", "Apagar o banco escola", "Fazer backup do banco escola"], "e": "O <b>USE</b> seleciona o banco. Sem ele aparece o erro <b>1046 No database selected</b>."}, {"t": "SQL", "q": "Qual comando mostra as colunas e os tipos da tabela alunos?", "o": ["DESCRIBE alunos;", "SHOW alunos;", "SELECT TYPES FROM alunos;", "OPEN alunos;"], "e": "<b>DESCRIBE</b> mostra campo, tipo, se aceita vazio e as chaves (PRI, UNI, MUL)."}, {"t": "Tipos", "q": "O tipo <code>VARCHAR(80)</code> guarda o quê?", "o": ["Texto de até 80 caracteres", "Número com até 80 dígitos", "Data com 80 dias", "Exatamente 80 linhas"], "e": "<b>VARCHAR(n)</b> é texto de tamanho variável, com no máximo n caracteres."}, {"t": "Tipos", "q": "Em que formato o tipo <code>DATE</code> guarda a data?", "o": ["AAAA-MM-DD, como 2008-03-14", "DD/MM/AAAA, como 14/03/2008", "MM-DD-AAAA, como 03-14-2008", "Por extenso, como 14 de março"], "e": "O MySQL usa o formato <b>AAAA-MM-DD</b>. Por isso cadastramos <code>'2008-03-14'</code>."}, {"t": "Tipos", "q": "O que faz o <code>AUTO_INCREMENT</code>?", "o": ["O MySQL numera a coluna sozinho: 1, 2, 3…", "Aumenta o tamanho do texto automaticamente", "Faz backup automático", "Apaga os registros antigos"], "e": "Com <b>AUTO_INCREMENT</b> não informamos o id no INSERT: o MySQL preenche."}, {"t": "Tipos", "q": "O que garante a opção <code>NOT NULL</code>?", "o": ["O campo é obrigatório e não pode ficar vazio", "O campo não pode ter números", "O campo pode repetir", "O campo é a chave primária"], "e": "<b>NOT NULL</b> torna o campo obrigatório."}, {"t": "Tipos", "q": "O que a opção <code>UNIQUE</code> na coluna email impede?", "o": ["Dois alunos com o mesmo e-mail", "Alunos sem e-mail", "E-mails com letras maiúsculas", "Mais de um aluno por curso"], "e": "<b>UNIQUE</b> não deixa o mesmo valor aparecer em duas linhas."}, {"t": "Dados", "q": "Qual comando cadastra dados em uma tabela?", "o": ["INSERT INTO", "SELECT FROM", "CREATE TABLE", "SHOW TABLES"], "e": "<b>INSERT INTO tabela (colunas) VALUES (...)</b> grava novos registros."}, {"t": "Dados", "q": "Por que cadastramos os cursos antes dos alunos?", "o": ["Porque o curso_id do aluno precisa apontar para um curso que já existe", "Porque a tabela cursos é maior", "Porque o MySQL grava em ordem alfabética", "Porque os alunos são cadastrados pelo phpMyAdmin"], "e": "A <b>chave estrangeira</b> só aceita um <code>curso_id</code> que exista em <code>cursos.id</code>."}, {"t": "Dados", "q": "No SQL, como escrevemos um texto dentro de um comando?", "o": ["Entre aspas simples, como 'Ana Souza'", "Entre colchetes, como [Ana Souza]", "Sem nada, como Ana Souza", "Entre chaves, como {Ana Souza}"], "e": "Textos e datas vão entre <b>aspas simples</b>."}, {"t": "Consultas", "q": "O que faz <code>SELECT * FROM cursos;</code>?", "o": ["Mostra todas as colunas e todas as linhas da tabela cursos", "Apaga a tabela cursos", "Mostra só a primeira linha", "Mostra a estrutura da tabela"], "e": "O <b>*</b> quer dizer todas as colunas. Sem WHERE, vêm todas as linhas."}, {"t": "Consultas", "q": "Para que serve o <code>WHERE</code>?", "o": ["Filtrar as linhas que atendem a uma condição", "Escolher o banco", "Juntar duas tabelas", "Criar uma coluna nova"], "e": "<code>WHERE curso_id = 1</code> traz só as linhas que atendem à condição."}, {"t": "Consultas", "q": "Para que serve o <code>JOIN</code>?", "o": ["Juntar dados de duas tabelas usando a chave estrangeira", "Apagar linhas repetidas", "Somar os valores de uma coluna", "Copiar uma tabela para outro banco"], "e": "O <b>JOIN</b> usa <code>a.curso_id = c.id</code> para mostrar o nome do curso ao lado de cada aluno."}, {"t": "Backup", "q": "Qual comando faz o backup do banco escola?", "o": ["mysqldump -u ifsc -p --no-tablespaces escola &gt; ~/escola.sql", "mysql backup escola", "cp /var/lib/mysql escola.sql", "SELECT * INTO BACKUP escola;"], "e": "O <b>mysqldump</b> gera um arquivo <code>.sql</code> com os comandos para recriar o banco."}, {"t": "Backup", "q": "Como restaurar o banco a partir do <code>escola.sql</code>?", "o": ["mysql -u ifsc -p escola &lt; ~/escola.sql", "mysqldump --restore escola.sql", "RESTORE escola.sql;", "cp escola.sql /var/lib/mysql"], "e": "O <b>&lt;</b> manda o conteúdo do arquivo para o cliente <code>mysql</code>, que executa os comandos."}, {"t": "phpMyAdmin", "q": "O que é o phpMyAdmin?", "o": ["Uma interface gráfica para o MySQL que roda no navegador", "Um novo servidor de banco de dados", "Um editor de código PHP", "O firewall do Linux Mint"], "e": "O <b>phpMyAdmin</b> é um site em PHP para gerenciar o MySQL clicando, pelo navegador."}, {"t": "phpMyAdmin", "q": "Quais pacotes instalamos antes do phpMyAdmin?", "o": ["php, libapache2-mod-php e php-mysql", "mysql-gui e apache-php", "nginx e php-fpm", "python3 e flask"], "e": "O <b>php</b>, o módulo do Apache (<b>libapache2-mod-php</b>) e a extensão <b>php-mysql</b>."}, {"t": "phpMyAdmin", "q": "Na tela azul da instalação do phpMyAdmin, como marcar o apache2?", "o": ["Apertando Espaço até aparecer o *", "Apertando Enter direto", "Digitando apache2 e Enter", "Clicando com o mouse"], "e": "É preciso marcar com <b>Espaço</b>. Só Enter deixa o apache2 desmarcado e dá <b>404</b>."}, {"t": "phpMyAdmin", "q": "Qual endereço abre o phpMyAdmin no navegador da VM?", "o": ["http://localhost/phpmyadmin", "http://localhost:3306", "ftp://localhost/phpmyadmin", "http://phpmyadmin.mysql"], "e": "O Apache publica o phpMyAdmin em <b>/phpmyadmin</b>, na porta 80."}, {"t": "phpMyAdmin", "q": "Ao tentar entrar no phpMyAdmin com o root aparece <b>#1698 Access denied</b>. Por quê?", "o": ["O root usa auth_socket e só entra com sudo no terminal", "A senha do root expirou", "O phpMyAdmin não foi instalado", "A porta 80 está fechada"], "e": "Está certo assim: o root entra só com <code>sudo mysql</code>. No phpMyAdmin use o usuário <b>ifsc</b>."}, {"t": "Erros", "q": "O erro <b>ERROR 1045 Access denied</b> com o usuário ifsc indica o quê?", "o": ["Senha errada ou faltou o -p", "O banco escola não existe", "O MySQL está desligado", "Falta ponto e vírgula"], "e": "<b>1045</b> é falha de login: confira a senha e se usou <code>-p</code>."}, {"t": "Erros", "q": "O erro <b>ERROR 1064</b> indica o quê?", "o": ["Erro de digitação no SQL", "Usuário sem permissão", "Banco não selecionado", "Disco cheio"], "e": "<b>1064</b> é erro de sintaxe. O trecho depois de <b>near</b> mostra onde o MySQL se perdeu."}, {"t": "Arquivos", "q": "Em qual pasta ficam os arquivos dos bancos do MySQL?", "o": ["/var/lib/mysql", "/var/www/html", "/etc/apache2", "/home/ifsc/mysql"], "e": "Os dados ficam em <b>/var/lib/mysql</b>. Só o MySQL deve mexer nessa pasta."}, {"t": "Arquivos", "q": "Qual arquivo guarda a configuração do servidor MySQL?", "o": ["/etc/mysql/mysql.conf.d/mysqld.cnf", "/etc/vsftpd.conf", "/var/www/html/index.html", "/etc/phpmyadmin/apache.conf"], "e": "Porta, endereço e memória são definidos no <b>mysqld.cnf</b>."}];
     var Q = [];
     var stage = $('q-stage'), steps = $('q-steps'), cur = 0, ans = [], picks = [], timer = null, lastSet = [];
@@ -1909,8 +2333,8 @@ FROM alunos a JOIN cursos c ON a.curso_id = c.id;</pre></div>
       var ok = ans.filter(function(a){return a;}).length, nota = ok/Q.length*10, c, t, m;
       if (nota>=9){ c='var(--ok)'; t='Excelente!'; m='Você domina a instalação do MySQL, os comandos SQL e o phpMyAdmin.'; }
       else if (nota>=7){ c='var(--green)'; t='Muito bem!'; m='Bom resultado. Revise as perguntas marcadas em vermelho.'; }
-      else if (nota>=5){ c='var(--warn)'; t='Quase lá'; m='Releia a seção O que é MySQL e os Passos 3 a 6, e tente de novo.'; }
-      else { c='var(--bad)'; t='Vamos revisar'; m='Volte ao início da aula, refaça os passos no terminal e tente o quiz de novo.'; }
+      else if (nota>=5){ c='var(--warn)'; t='Quase lá'; m='Releia as seções O que é MySQL e Bancos, tabelas e chaves e tente de novo.'; }
+      else { c='var(--bad)'; t='Vamos revisar'; m='Volte ao início da aula, refaça os passos com calma e tente o quiz de novo.'; }
       swap('<div class="qz-end"><div class="qz-ring" style="--gc:'+c+';--p:'+(nota*10)+'"><span>Sua nota</span><b>'+nota.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'</b><small>de 10</small></div>'+
         '<div><h3>'+t+'</h3><p style="color:var(--muted);margin-top:6px">'+ok+' de '+Q.length+' acertos. '+m+'</p></div>'+
         '<div class="qz-sumwrap"><p class="qz-hint">Clique em um card para rever a pergunta e a resposta.</p><div class="qz-sum">'+Q.map(function(x,i){ return '<button type="button" data-r="'+i+'" aria-pressed="false" style="--sc:'+(ans[i]?'var(--ok)':'var(--bad)')+'">'+(ans[i]?'✓':'✗')+' '+(i+1)+'<small>'+x.t+'</small></button>'; }).join('')+'</div><div class="qz-review" id="q-review" hidden></div></div>'+
@@ -1924,8 +2348,15 @@ FROM alunos a JOIN cursos c ON a.curso_id = c.id;</pre></div>
     });
     Q = draw(); chips(); show(0);
   })();
+  (function(){
+    var btn = document.getElementById('tb-topics'), menu = document.getElementById('tmenu');
+    function setOpen(o){ menu.hidden = !o; btn.setAttribute('aria-expanded', o); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); setOpen(menu.hidden); });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) setOpen(false); });
+    document.addEventListener('click', function(e){ if (!menu.hidden && !menu.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function(e){ if (e.key==='Escape' && !menu.hidden){ setOpen(false); btn.focus(); } });
+  })();
 })();
-
 </script>
 
 </body>
