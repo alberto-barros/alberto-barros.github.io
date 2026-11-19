@@ -906,6 +906,44 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 .port-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px var(--vc)}
 @media (prefers-reduced-motion:reduce){.ben .ico,.vs-card .ico,.obs .ico,.note .ico,.vs-card .ico svg,.err h3 svg,.err-g::before{animation:none!important}}
 
+
+/* ===== desafio no layout do FTP ===== */
+.desafio{--green:var(--red);--green-strong:var(--red);--mint:color-mix(in srgb,var(--red) 16%,var(--surface));--surface-2:color-mix(in srgb,var(--red) 7%,var(--surface));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--red) 6%,var(--bg)),var(--bg) 70%)!important;border-top:4px solid var(--red)}
+.desafio .step-n{color:#fff}
+:root[data-theme="dark"] .desafio .step-n{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .desafio .step-n{color:#1A0505}}
+.ch-banner{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;border:2px solid var(--red);border-radius:28px;padding:24px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 30px 60px -36px var(--red);
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--red) 18%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--red) 14%,var(--surface)),var(--surface) 70%)}
+.ch-banner .ico{width:64px;height:64px;border-radius:20px;background:var(--red);color:#fff;position:relative;box-shadow:0 14px 26px -12px var(--red)}
+.ch-banner .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--red);animation:chRing 2.4s ease-out infinite}
+.ch-banner .ico svg{width:32px;height:32px;animation:icoWiggle 3s ease-in-out infinite}
+@keyframes chRing{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.55);opacity:0}}
+.ch-banner h2{color:var(--red);margin-top:6px}
+.ch-banner p{color:var(--muted);margin-top:8px;max-width:70ch}
+.desafio .def{margin-bottom:8px}
+.desafio .def > *{min-width:0}
+.desafio .def p+p{margin-top:14px}
+.desafio .def .big{font-size:1.2rem;line-height:1.55}
+.desafio .def .big strong{color:var(--red)}
+.desafio .ports.ch-ports{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.desafio .port-card{border-top:5px solid var(--vc);display:grid;gap:6px;align-content:start}
+.desafio .port-card b{font:800 1.8rem var(--f-display);color:var(--vc);line-height:1}
+.desafio .port-card strong{font-family:var(--f-display);font-size:.95rem}
+.desafio .port-card span{font-size:.88rem;color:var(--muted)}
+.desafio .sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:40px 0 18px}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red))}
+.desafio .step.test .step-n{background:var(--surface);color:var(--red);border:2px dashed var(--red)}
+.desafio .step-body h3 .tag{background:var(--red);color:#fff}
+.desafio .tbl-wrap{border-color:color-mix(in srgb,var(--red) 25%,var(--line))}
+.desafio .note.warn{margin-top:20px;background:color-mix(in srgb,var(--red) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--red) 28%,transparent)}
+.desafio .note.warn .ico{background:color-mix(in srgb,var(--red) 14%,var(--surface));color:var(--red)}
+.desafio .test-row{border-color:color-mix(in srgb,var(--red) 22%,var(--line))}
+.desafio .test-row summary{color:var(--red)}
+.nav a.nav-ch,#tmenu a.nav-ch{color:var(--red)}
+@media (max-width:860px){.desafio .def{grid-template-columns:1fr}}
+@media (max-width:600px){.ch-banner{grid-template-columns:1fr;padding:18px}}
+@media (max-width:480px){.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -919,6 +957,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       </g>
     </symbol>
     <symbol id="i-split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M12 3v18M3 12h18"></path></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path><path d="m9 12 2 2 4-4"></path></symbol>
     <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-4"></path><path d="M3.3 19a10 10 0 1 1 17.4 0"></path></symbol>
     <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"></circle><path d="M2 21v-1a6 6 0 0 1 12 0v1"></path><path d="M16 4a4 4 0 0 1 0 8"></path><path d="M22 21v-1a6 6 0 0 0-4-5.6"></path></symbol>
@@ -952,7 +991,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#osi"><b>02</b>Modelo OSI</a><a href="#classes"><b>03</b>Classes</a><a href="#configurar"><b>04</b>Configurar</a><a href="#ping"><b>05</b>Ping</a><a href="#animacao"><b>06</b>Animação</a><a href="#topologia"><b>07</b>Topologia</a><a href="#passos"><b>08</b>Atividade</a><a href="#checklist-sec"><b>09</b>Checklist</a><a href="#erros"><b>10</b>Erros comuns</a><a href="#entrega"><b>11</b>Quiz</a><a href="#refs"><b>12</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#osi"><b>02</b>Modelo OSI</a><a href="#classes"><b>03</b>Classes</a><a href="#configurar"><b>04</b>Configurar</a><a href="#ping"><b>05</b>Ping</a><a href="#animacao"><b>06</b>Animação</a><a href="#topologia"><b>07</b>Topologia</a><a href="#passos"><b>08</b>Atividade</a><a href="#desafio" class="nav-ch"><b>09</b>Desafio</a><a href="#checklist-sec"><b>10</b>Checklist</a><a href="#erros"><b>11</b>Erros comuns</a><a href="#entrega"><b>12</b>Quiz</a><a href="#refs"><b>13</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1424,36 +1463,8 @@ Ping statistics for 172.16.0.10:
         </div>
       </li>
 
-      <li class="step">
+      <li class="step test">
         <div class="step-n">5</div>
-        <div class="step-body">
-          <h3>Configure os PCs do desafio <span class="tag">Desafio</span></h3>
-          <p>Os dois últimos PCs mostram que <b>a classe sozinha não decide</b> a comunicação. O que vale é a rede que a máscara revela.</p>
-          <div class="tbl-wrap">
-            <table>
-              <thead><tr><th>PC</th><th>Porta SW1</th><th>Classe</th><th>Endereço IP</th><th>Máscara</th><th>Rede</th></tr></thead>
-              <tbody>
-                <tr><td data-label="PC">PC6</td><td data-label="Porta SW1" class="mono">Fa0/7</td><td data-label="Classe"><span class="vtag" style="--vc:var(--s3)">C</span></td><td data-label="Endereço IP" class="mono">192.168.20.10</td><td data-label="Máscara" class="mono">255.255.255.0</td><td data-label="Rede" class="mono">192.168.20.0/24</td></tr>
-                <tr><td data-label="PC">PC7</td><td data-label="Porta SW1" class="mono">Fa0/8</td><td data-label="Classe"><span class="vtag" style="--vc:var(--s1)">A</span></td><td data-label="Endereço IP" class="mono">10.200.5.7</td><td data-label="Máscara" class="mono">255.0.0.0</td><td data-label="Rede" class="mono">10.0.0.0/8</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </li>
-
-      <li class="step test">
-        <div class="step-n">6</div>
-        <div class="step-body">
-          <h3>Teste 3: mesma classe é o mesmo que mesma rede? <span class="tag">Observe</span></h3>
-          <div class="tests">
-            <div class="test-row"><div class="test-head"><span class="kind same">Classe A</span><b>PC7 › ping 10.0.0.10</b><small>A → A, IPs bem diferentes</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>Com 255.0.0.0, só o 1º octeto é rede. 10.200.5.7 e 10.0.0.10 estão na mesma rede 10.0.0.0, mesmo parecendo distantes.</span></p></details></div>
-            <div class="test-row"><div class="test-head"><span class="kind cross">Classe C</span><b>PC6 › ping 192.168.1.10</b><small>C → C, IPs parecidos</small></div><details><summary>Ver resultado esperado</summary><p class="r-bad"><svg><use href="#i-x"></use></svg><span style="color:var(--muted)"><b class="r-bad">Falha. </b>Com 255.255.255.0, os 3 primeiros octetos são rede: 192.168.20.0 é diferente de 192.168.1.0. Mesma classe, redes diferentes.</span></p></details></div>
-          </div>
-        </div>
-      </li>
-
-      <li class="step test">
-        <div class="step-n">7</div>
         <div class="step-body">
           <h3>Observe no modo Simulation e na tabela MAC <span class="tag">Observe</span></h3>
           <p>Clique em <b>Simulation</b> (canto inferior direito), em <i>Edit Filters</i> deixe só <code>ARP</code> e <code>ICMP</code> e repita um ping que funciona e um que falha. Use <b>Capture / Forward</b> para avançar.</p>
@@ -1470,6 +1481,70 @@ show mac address-table
       </li>
 
     </ol>
+  </div>
+</section>
+
+<section class="sec desafio" id="desafio">
+  <div class="wrap">
+    <div class="ch-banner">
+      <div class="ico"><svg><use href="#i-lock"/></svg></div>
+      <div>
+        <span class="sec-num">Desafio · PC6 e PC7 · mesma classe, redes diferentes</span>
+        <h2>A classe sozinha não decide</h2>
+        <p>Dois PCs podem ser da mesma classe e mesmo assim não se falar. Neste desafio você configura PC6 e PC7 e descobre por que a máscara é quem define a rede.</p>
+      </div>
+    </div>
+
+    <div class="def">
+      <div>
+        <p class="big">Estar no <strong>mesmo switch</strong> garante só a ligação física. Para conversar, os PCs precisam estar na <strong>mesma rede IP</strong>, e quem revela a rede é a <strong>máscara</strong>.</p>
+        <p>O <b>PC7</b> (10.200.5.7) é da classe A e fala com o 10.0.0.10, mesmo com IPs bem diferentes, porque com <code>255.0.0.0</code> só o 1º octeto é rede.</p>
+        <p>O <b>PC6</b> (192.168.20.10) é da classe C, parece vizinho do 192.168.1.10 e mesmo assim falha, porque com <code>255.255.255.0</code> os 3 primeiros octetos são rede.</p>
+      </div>
+      <div class="ports ch-ports">
+        <div class="port-card" style="--vc:var(--s1)"><b>/8</b><strong>Classe A</strong><span>1º octeto é rede: 10.x.x.x fala com 10.x.x.x.</span></div>
+        <div class="port-card" style="--vc:var(--s3)"><b>/24</b><strong>Classe C</strong><span>3 octetos de rede: 192.168.20.x é outra rede que 192.168.1.x.</span></div>
+        <div class="port-card" style="--vc:var(--s2)"><b>PC6</b><strong>Fa0/7</strong><span>192.168.20.10 · 255.255.255.0</span></div>
+        <div class="port-card" style="--vc:var(--s4)"><b>PC7</b><strong>Fa0/8</strong><span>10.200.5.7 · 255.0.0.0</span></div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">Passo a passo do desafio</h3>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Configure os PCs do desafio <span class="tag">PC6 e PC7</span></h3>
+          <p>Os dois últimos PCs mostram que <b>a classe sozinha não decide</b> a comunicação. O que vale é a rede que a máscara revela.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>PC</th><th>Porta SW1</th><th>Classe</th><th>Endereço IP</th><th>Máscara</th><th>Rede</th></tr></thead>
+              <tbody>
+                <tr><td data-label="PC">PC6</td><td data-label="Porta SW1" class="mono">Fa0/7</td><td data-label="Classe"><span class="vtag" style="--vc:var(--s3)">C</span></td><td data-label="Endereço IP" class="mono">192.168.20.10</td><td data-label="Máscara" class="mono">255.255.255.0</td><td data-label="Rede" class="mono">192.168.20.0/24</td></tr>
+                <tr><td data-label="PC">PC7</td><td data-label="Porta SW1" class="mono">Fa0/8</td><td data-label="Classe"><span class="vtag" style="--vc:var(--s1)">A</span></td><td data-label="Endereço IP" class="mono">10.200.5.7</td><td data-label="Máscara" class="mono">255.0.0.0</td><td data-label="Rede" class="mono">10.0.0.0/8</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </li>
+
+
+      <li class="step test">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Teste: mesma classe é o mesmo que mesma rede? <span class="tag">Observe</span></h3>
+          <div class="tests">
+            <div class="test-row"><div class="test-head"><span class="kind same">Classe A</span><b>PC7 › ping 10.0.0.10</b><small>A → A, IPs bem diferentes</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>Com 255.0.0.0, só o 1º octeto é rede. 10.200.5.7 e 10.0.0.10 estão na mesma rede 10.0.0.0, mesmo parecendo distantes.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind cross">Classe C</span><b>PC6 › ping 192.168.1.10</b><small>C → C, IPs parecidos</small></div><details><summary>Ver resultado esperado</summary><p class="r-bad"><svg><use href="#i-x"></use></svg><span style="color:var(--muted)"><b class="r-bad">Falha. </b>Com 255.255.255.0, os 3 primeiros octetos são rede: 192.168.20.0 é diferente de 192.168.1.0. Mesma classe, redes diferentes.</span></p></details></div>
+          </div>
+        </div>
+      </li>
+
+
+    </ol>
+
+    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Dica:</b> se o ping falhar, confira primeiro a máscara e depois o IP. A diferença está sempre no octeto que a máscara marca como rede.</p></div>
   </div>
 </section>
 
