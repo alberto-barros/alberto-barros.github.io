@@ -984,7 +984,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     <div class="def">
       <div>
         <p class="big">O <strong>DHCP</strong> (Dynamic Host Configuration Protocol) entrega automaticamente a cada máquina o <strong>IP</strong>, a <strong>máscara</strong>, o <strong>gateway padrão</strong> e o <strong>DNS</strong>.</p>
-        <p>O servidor guarda um <b>pool</b> (faixa de endereços) para cada sub-rede. Quando um PC liga, ele ainda não tem IP, então grita em <b>broadcast</b> na própria rede pedindo um endereço. O servidor responde com um IP livre e o “empresta” por um tempo, chamado <b>concessão</b> (lease). No Cisco, a concessão padrão é de 1 dia; antes de vencer, o PC pede para renovar <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+        <p>O servidor guarda um <b>pool</b> (faixa de endereços) para cada sub-rede. Quando um PC liga, ele ainda não tem IP, então grita em <b>broadcast</b> na própria rede pedindo um endereço. O servidor responde com um IP livre e o “empresta” por um tempo, chamado <b>concessão</b> (lease).</p>
         <p>O broadcast do DHCP <b>não atravessa o roteador</b>. No nosso laboratório isso não é problema: o L3-IFSC tem uma porta em cada sub-rede, então recebe o pedido de todos os setores e escolhe o pool pela porta em que o pedido chegou. Se o servidor ficasse em outra rede, seria preciso um <i>relay</i> com <code>ip helper-address</code>.</p>
       </div>
       <div class="ports">
