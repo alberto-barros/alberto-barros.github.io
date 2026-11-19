@@ -979,6 +979,33 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 :root[data-theme="dark"] .tbl-wrap:has(.ping-tbl){border-color:#E4F3E8}
 }
 @media (min-width:641px) and (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tbl-wrap:has(.ping-tbl){border-color:#E4F3E8}}
+
+/* ping: animação de dois computadores trocando pacotes */
+.ping-anim{margin:18px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px 14px 12px;display:grid;gap:8px;box-shadow:var(--sh-1)}
+.ping-anim svg{display:block;width:100%;height:auto}
+.pa-wire{stroke:var(--line);stroke-width:3;stroke-dasharray:6 8;animation:paDash 1s linear infinite}
+@keyframes paDash{to{stroke-dashoffset:-14}}
+.pa-mon{fill:var(--code-bg,#000);stroke:var(--ink);stroke-width:2}
+.pa-scr{fill:#0b1a12}
+.pa-scrt{fill:var(--code-key,#8BE39B);font:700 15px var(--f-mono)}
+.pa-st{fill:var(--ink)}
+.pa-n{fill:var(--ink);font:700 14px var(--f-display)}
+.pa-ip{fill:var(--muted);font:600 11px var(--f-mono)}
+.pa-pk{transform-box:fill-box;opacity:0}
+.pa-pk rect{stroke:none}
+.pa-pk text{fill:#fff;font:700 12px var(--f-body)}
+.pa-req rect{fill:var(--green)}
+.pa-rep rect{fill:var(--s1)}
+.pa-req{animation:paReq 6s ease-in-out infinite}
+.pa-rep{animation:paRep 6s ease-in-out infinite}
+@keyframes paReq{0%{transform:translate(112px,53px);opacity:0}4%{opacity:1}40%{transform:translate(296px,53px);opacity:1}44%,100%{transform:translate(296px,53px);opacity:0}}
+@keyframes paRep{0%,50%{transform:translate(296px,53px);opacity:0}54%{opacity:1}90%{transform:translate(112px,53px);opacity:1}94%,100%{transform:translate(112px,53px);opacity:0}}
+.pa-cap{display:grid;min-height:2.2em;justify-items:center}
+.pa-cap span{grid-area:1/1;font:600 .85rem var(--f-mono);display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;opacity:0}
+.pa-c1{animation:paC1 6s infinite}.pa-c2{animation:paC2 6s infinite}
+@keyframes paC1{0%{opacity:0}4%,44%{opacity:1}48%,100%{opacity:0}}
+@keyframes paC2{0%,50%{opacity:0}54%,94%{opacity:1}98%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.pa-wire,.pa-req,.pa-rep,.pa-c1,.pa-c2{animation:none}.pa-req{opacity:1;transform:translate(204px,53px)}.pa-c1{opacity:1}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1310,11 +1337,15 @@ sudo nmcli con up "Wired connection 1"</pre></div>
         <p class="big">O <strong>ping</strong> é um comando que pergunta a outro dispositivo: “você está aí?” e espera a resposta.</p>
         <p>Ele envia uma mensagem <b>ICMP Echo Request</b> (pedido de eco) ao endereço IP de destino. Se o destino recebe, devolve um <b>ICMP Echo Reply</b> (resposta de eco). O nome vem do som do sonar: manda um sinal e escuta o retorno <span class="cites">(<a class="cite" href="#ref-tanenbaum">TANENBAUM; WETHERALL, 2011</a>)</span>.</p>
         <p>O ICMP viaja dentro de um pacote IP, com <code>Protocolo = 1</code> no cabeçalho que você viu acima. Por isso o ping testa justamente a <b>camada 3</b>, a camada do endereçamento IP.</p>
-        <div class="ping-io">
-          <div class="pio"><span class="pio-tag req">Echo Request</span><span>PC0 → 10.0.0.11</span></div>
-          <div class="pio-arrow" aria-hidden="true">⇄</div>
-          <div class="pio"><span class="pio-tag rep">Echo Reply</span><span>10.0.0.11 → PC0</span></div>
-        </div>
+        <figure class="ping-anim" aria-label="Animação: PC0 envia um Echo Request ao PC1 e recebe um Echo Reply">
+          <svg viewBox="0 0 520 140" role="img" aria-hidden="true">
+            <line class="pa-wire" x1="112" y1="53" x2="408" y2="53"/>
+            <g transform="translate(20 22)"><rect class="pa-mon" x="0" y="0" width="92" height="62" rx="9"/><rect class="pa-scr" x="7" y="7" width="78" height="48" rx="4"/><text class="pa-scrt" x="46" y="37" text-anchor="middle">PC0</text><rect class="pa-st" x="38" y="62" width="16" height="10"/><rect class="pa-st" x="22" y="72" width="48" height="7" rx="3"/><text class="pa-n" x="46" y="102" text-anchor="middle">PC0</text><text class="pa-ip" x="46" y="119" text-anchor="middle">10.0.0.10</text></g><g transform="translate(408 22)"><rect class="pa-mon" x="0" y="0" width="92" height="62" rx="9"/><rect class="pa-scr" x="7" y="7" width="78" height="48" rx="4"/><text class="pa-scrt" x="46" y="37" text-anchor="middle">PC1</text><rect class="pa-st" x="38" y="62" width="16" height="10"/><rect class="pa-st" x="22" y="72" width="48" height="7" rx="3"/><text class="pa-n" x="46" y="102" text-anchor="middle">PC1</text><text class="pa-ip" x="46" y="119" text-anchor="middle">10.0.0.11</text></g>
+            <g class="pa-pk pa-req"><rect x="0" y="-15" width="112" height="30" rx="15"/><text x="56" y="5" text-anchor="middle">Echo Request</text></g>
+            <g class="pa-pk pa-rep"><rect x="0" y="-15" width="112" height="30" rx="15"/><text x="56" y="5" text-anchor="middle">Echo Reply</text></g>
+          </svg>
+          <figcaption class="pa-cap"><span class="pa-c1"><b class="pio-tag req">Echo Request</b> PC0 → 10.0.0.11</span><span class="pa-c2"><b class="pio-tag rep">Echo Reply</b> 10.0.0.11 → PC0</span></figcaption>
+        </figure>
         <h3 class="ping-h3">Como usar</h3>
         <div class="tbl-wrap">
           <table class="ping-tbl">
