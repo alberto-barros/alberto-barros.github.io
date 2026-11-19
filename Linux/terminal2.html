@@ -871,7 +871,7 @@ details.src pre{max-height:360px;overflow:auto}
 .rot-head h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .rot-head .hint{font-size:.82rem;color:var(--muted);margin:0}
 .rot-card .vlist{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
-/* ---- acréscimos: barra superior (igual à aula de IPv4) ---- */
+/* barra superior igual à página inicial de Redes */
 .accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
 .topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;position:relative}
@@ -889,32 +889,15 @@ details.src pre{max-height:360px;overflow:auto}
 .topnav .ghost[aria-expanded="true"] .chev{transform:rotate(180deg)}
 .topnav .solid{background:#32A041;color:#fff;box-shadow:0 4px 12px rgba(50,160,65,.28)}
 .topnav .solid:hover{background:#247A30}
-.topnav .back{margin-left:0!important;border-radius:10px;background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
-.topnav .back:hover{background:#A51418}
-.tmenu{position:absolute;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:min(300px,calc(100vw - 32px));max-height:calc(100vh - 100px);overflow-y:auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.35);padding:8px;display:grid;gap:2px}
+.topnav .tb-back{background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
+.topnav .tb-back:hover{background:#A51418}
+.tmenu{position:absolute;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:min(300px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.35);padding:8px;display:grid;gap:2px}
 .tmenu[hidden]{display:none}
 .tmenu a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:600;font-size:.95rem}
-.tmenu a b{font:600 .75rem var(--f-mono);color:var(--green-strong);min-width:3ch}
+.tmenu a b{font:600 .75rem var(--f-mono);color:var(--green-strong);min-width:2ch}
 .tmenu a:hover,.tmenu a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
 @media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
 @media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
-/* ---- acréscimos: bolinhas iguais às do terminal do topo ---- */
-.dots{gap:7px}
-.dots i{width:11px;height:11px;display:inline-block;font-size:0}
-.dots i::before{content:none!important}
-.dots i:nth-child(1){background:#ff5f57}
-.dots i:nth-child(2){background:#febc2e}
-.dots i:nth-child(3){background:#28c840}
-/* ---- acréscimos: PARTE 2 ---- */
-.step-body{min-width:0}.note code,.err code,.ben code{overflow-wrap:anywhere;white-space:normal}
-/* ---- acréscimos: QUIZ ---- */
-/* quiz */
-.deliver{display:grid}
-.btn{border:0;background:var(--green);color:#fff;font:700 .9rem var(--f-body);padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
-.btn:hover{background:var(--green-strong)}
-:root[data-theme="dark"] .btn{color:#08130C}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#08130C}}
-.btn svg{width:16px;height:16px}
 /* quiz: uma pergunta por vez */
 .deliver{grid-template-columns:1fr}
 .quiz{border-radius:26px;overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--green) 80%,transparent)}
@@ -982,8 +965,6 @@ details.src pre{max-height:360px;overflow:auto}
 .qz-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;max-width:560px}
 .qz-sum span{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:12px;font:700 .82rem var(--f-display);background:color-mix(in srgb,var(--sc) 12%,var(--surface));color:var(--sc);border:1px solid color-mix(in srgb,var(--sc) 35%,transparent)}
 .qz-sum span small{font:600 .66rem var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
-.btn.ghost{background:transparent;color:var(--green-strong);border:2px solid var(--green)}
-.btn.ghost:hover{background:var(--mint)}
 @media (prefers-reduced-motion: reduce){.qz-card,.qz-card.out,.qz-fb,.qz-end,.qz-opt.wrong{animation:none}.qz-timer{display:none}}
 @media (max-width:600px){.qz-stage{padding:16px;min-height:0}.qz-steps{padding:14px 16px 0;gap:4px}.qz-bar{padding:14px 16px}.qz-opts{grid-template-columns:1fr}.qz-opt{padding:12px;grid-template-columns:32px minmax(0,1fr) 20px}.qz-opt .L{width:32px;height:32px}.qz-sum{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.qz-sum span{padding:8px 2px}.qz-next .btn{flex:1 1 100%;justify-content:center}}
 /* revisão das respostas */
@@ -1011,14 +992,234 @@ details.src pre{max-height:360px;overflow:auto}
 .qz-rexp b{color:var(--ink)}
 @media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
 @media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
+html{scroll-padding-top:84px}
 
+/* ===== terminais padronizados (mesmo visual do terminal da página Linux) ===== */
+:root{--code-bg:#000;--code-fg:#E2E8F0;--code-muted:#7C879A;--code-key:#4ADE80}
+.code,.hero-term,.logline,.fname{background:#000!important;border:1px solid rgba(255,255,255,.08);border-radius:18px}
+.code{color:#E2E8F0}
+.code-top{background:#000;padding:12px 16px;gap:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.dots{gap:7px}.dots i{width:11px;height:11px;font-size:0}.dots i::before{content:none!important}
+.dots i:nth-child(1){background:#FF5F57}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#28C840}
+.code-top span{font:500 .78rem var(--f-mono);color:#7C879A}
+.code pre{font:400 .84rem/1.75 var(--f-mono);color:#E2E8F0;background:#000}
+.code .c{color:#7C879A;font-style:normal}.code .p,.out .ok{color:#4ADE80}.out .w{color:#FBBF24}.out pre{color:#E2E8F0}
+.ht-wrap::before{display:none}
+.hero-term{box-shadow:0 24px 50px -28px rgba(0,0,0,.6);-webkit-backdrop-filter:none;backdrop-filter:none;font-size:.84rem;color:#E2E8F0}
+.hero-term::after{display:none}
+.hero-term .bar{position:relative;background:#000;padding:12px 16px;gap:7px;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-term .dot{width:11px;height:11px}
+.hero-term .ttl{position:absolute;left:0;right:0;text-align:center;font-size:.76rem;color:#7C879A;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 70px}
+.ht-screen{height:300px;background:#000}
+.hero-term pre{padding:16px 18px;line-height:1.75;color:#E2E8F0;background:#000}
+.hero-term .pu{color:#4ADE80}.hero-term .pc{color:#E2E8F0}.hero-term .pd{color:#60A5FA}
+.hero-term .dim{color:#7C879A}.hero-term .ok{color:#4ADE80}.hero-term .w{color:#FBBF24}
+.hero-term .cursor{width:.6em;height:1.1em;background:#4ADE80;box-shadow:none;border-radius:0;vertical-align:-3px}
+.hero-term .foot{display:flex;align-items:center;gap:8px;padding:9px 16px;border-top:1px solid rgba(255,255,255,.08);background:#000;font-size:.7rem;color:#7C879A}
+.hero-term .foot i{width:7px;height:7px;border-radius:50%;background:#4ADE80}
+.hero-term .foot span:last-child{margin-left:auto}
+@media (max-width:600px){.ht-screen{height:300px}.hero-term{font-size:.72rem}.hero-term .foot span:nth-child(3){display:none}}
+
+/* ===== cards modernos com ícones animados (estilo Roteamento) ===== */
+html,body{overflow-x:clip}
+:root{--on:#fff}
+:root[data-theme="dark"]{--on:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--on:#08130C}}
+.hero .eyebrow{background:var(--surface);border:1px solid var(--line);padding:7px 14px;border-radius:999px;box-shadow:0 8px 20px -14px color-mix(in srgb,var(--green) 70%,transparent)}
+.hero .eyebrow::before{width:14px;height:3px}
+.hero h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02}
+.chip{transition:transform .2s,border-color .2s}.chip:hover{transform:translateY(-2px);border-color:var(--green)}
+.chip svg{animation:icoBob 3.2s ease-in-out infinite}
+.chip:nth-child(2n) svg{animation-delay:-.8s}.chip:nth-child(3n) svg{animation-delay:-1.6s}
+
+/* cartões em grade */
+.grid3,.ports,.care,.errs{counter-reset:bn}
+.ben,.port-card,.care .err,.errs .err{--vc:var(--green);position:relative;overflow:hidden;counter-increment:bn;border:1px solid var(--line);border-top:4px solid var(--vc);border-radius:20px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 9%,var(--surface)),var(--surface) 62%);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 16px 32px -26px color-mix(in srgb,var(--vc) 70%,transparent);
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+.ben:hover,.port-card:hover,.care .err:hover,.errs .err:hover{transform:translateY(-5px);border-color:var(--vc);box-shadow:0 26px 40px -26px color-mix(in srgb,var(--vc) 80%,transparent)}
+.ben::after,.care .err::after,.errs .err::after{content:counter(bn,decimal-leading-zero);position:absolute;top:12px;right:16px;font:800 2.1rem/1 var(--f-display);color:color-mix(in srgb,var(--vc) 20%,transparent);pointer-events:none;transition:color .25s,transform .25s}
+.ben:hover::after,.care .err:hover::after,.errs .err:hover::after{color:color-mix(in srgb,var(--vc) 42%,transparent);transform:scale(1.08)}
+.ben:nth-child(6n+1),.port-card:nth-child(6n+1),.care .err:nth-child(6n+1),.errs .err:nth-child(6n+1){--vc:var(--s1)}
+.ben:nth-child(6n+2),.care .err:nth-child(6n+2),.errs .err:nth-child(6n+2){--vc:var(--green)}
+.ben:nth-child(6n+3),.care .err:nth-child(6n+3),.errs .err:nth-child(6n+3){--vc:var(--s2)}
+.ben:nth-child(6n+4),.care .err:nth-child(6n+4),.errs .err:nth-child(6n+4){--vc:var(--s3)}
+.ben:nth-child(6n+5),.care .err:nth-child(6n+5),.errs .err:nth-child(6n+5){--vc:var(--red)}
+.ben:nth-child(6n+6),.care .err:nth-child(6n+6),.errs .err:nth-child(6n+6){--vc:var(--s4)}
+.port-card[style]{--vc:inherit}
+.port-card{border-top-width:4px}
+.port-card b{font-size:2.3rem;animation:portPulse 3.4s ease-in-out infinite}
+.port-card:nth-child(2) b{animation-delay:-.8s}.port-card:nth-child(3) b{animation-delay:-1.6s}.port-card:nth-child(4) b{animation-delay:-2.4s}
+@keyframes portPulse{0%,100%{transform:none}50%{transform:translateY(-3px) scale(1.04)}}
+
+/* bloco de ícone */
+.ben .ico{width:50px;height:50px;border-radius:15px;background:var(--vc);color:var(--on);position:relative;box-shadow:0 10px 20px -10px var(--vc)}
+.ben .ico svg{width:26px;height:26px}
+.ben .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--vc);opacity:0;animation:icoRing 2.8s ease-out infinite;pointer-events:none}
+.ben:nth-child(2n) .ico::before{animation-delay:-1.4s}
+@keyframes icoRing{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.55);opacity:0}}
+.errs .err h3,.care .err h3{padding-right:46px;align-items:flex-start}
+.errs .err h3 svg,.care .err h3 svg{width:38px;height:38px;padding:8px;border-radius:12px;background:var(--vc);color:var(--on);flex:none;box-shadow:0 8px 16px -8px var(--vc)}
+.care .err:hover h3 svg,.errs .err:hover h3 svg{color:var(--on)}
+.errs .err,.care .err{padding:20px 20px 18px}
+
+/* animações por tipo de ícone */
+.ico svg,.err h3 svg{transform-origin:50% 60%}
+.ico:has(use[href="#i-server"]) svg,.err h3:has(use[href="#i-server"]) svg{animation:icoBob 2.6s ease-in-out infinite}
+.ico:has(use[href="#i-route"]) svg{animation:icoNudge 2.2s ease-in-out infinite}
+.ico:has(use[href="#i-pc"]) svg{animation:icoBob 3s ease-in-out infinite}
+.ico:has(use[href="#i-bulb"]) svg{animation:icoGlow 2.2s ease-in-out infinite}
+.ico:has(use[href="#i-swap"]) svg{animation:icoNudge 1.8s ease-in-out infinite}
+.ico:has(use[href="#i-check"]) svg{animation:icoPop 2.4s ease-in-out infinite}
+.ico:has(use[href="#i-term"]) svg{animation:icoBlink 1.6s steps(2) infinite}
+.ico:has(use[href="#i-globe"]) svg{animation:icoSpin 9s linear infinite}
+.err h3:has(use[href="#i-alert"]) svg{animation:icoShake 3s ease-in-out infinite}
+.err h3:has(use[href="#i-lock"]) svg,.ico:has(use[href="#i-lock"]) svg{animation:icoWiggle 3.2s ease-in-out infinite}
+.err h3:has(use[href="#i-shield"]) svg,.ico:has(use[href="#i-shield"]) svg{animation:icoPop 2.6s ease-in-out infinite}
+.err h3:has(use[href="#i-folder"]) svg,.ico:has(use[href="#i-folder"]) svg{animation:icoBob 2.8s ease-in-out infinite}
+@keyframes icoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes icoNudge{0%,100%{transform:translateX(-2px)}50%{transform:translateX(3px)}}
+@keyframes icoGlow{0%,100%{transform:scale(1);filter:none}50%{transform:scale(1.12);filter:drop-shadow(0 0 5px rgba(255,255,255,.9))}}
+@keyframes icoPop{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.22)}90%{transform:scale(.95)}}
+@keyframes icoBlink{0%{opacity:1}50%{opacity:.45}}
+@keyframes icoSpin{to{transform:rotate(360deg)}}
+@keyframes icoShake{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-10deg)}92%{transform:rotate(9deg)}95%{transform:rotate(-6deg)}98%{transform:rotate(4deg)}}
+@keyframes icoWiggle{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-12deg)}90%{transform:rotate(10deg)}95%{transform:rotate(-5deg)}}
+.ben:hover .ico svg,.err:hover h3 svg{animation-duration:.9s}
+
+.care .err:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)));border-color:color-mix(in srgb,var(--red) 45%,var(--line))}
+/* notas */
+.note{border:1px solid var(--line);background:linear-gradient(135deg,var(--surface-2),var(--surface));border-radius:18px;box-shadow:0 14px 28px -24px color-mix(in srgb,var(--green) 70%,transparent)}
+.note .ico{background:var(--green);color:var(--on);border-radius:13px;box-shadow:0 8px 16px -8px var(--green)}
+.note.warn .ico{background:var(--red);color:#fff}
+
+/* roteiro da aula */
+.rot-card{border-radius:24px}
+.vrow{position:relative;overflow:hidden;border:1px solid var(--line);border-top:4px solid var(--vc);border-radius:16px;padding:12px 14px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 9%,var(--surface)),var(--surface));transition:transform .25s,box-shadow .25s,border-color .25s}
+.vrow:hover{transform:translateY(-4px);border-color:var(--vc);box-shadow:0 20px 30px -22px var(--vc)}
+.vrow::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-18deg);animation:sheen 6s ease-in-out infinite}
+.vrow:nth-child(2)::after{animation-delay:1s}.vrow:nth-child(3)::after{animation-delay:2s}.vrow:nth-child(4)::after{animation-delay:3s}.vrow:nth-child(5)::after{animation-delay:4s}.vrow:nth-child(6)::after{animation-delay:5s}
+@keyframes sheen{0%,60%{left:-60%}100%{left:130%}}
+:root[data-theme="dark"] .vtag,.vtag{color:var(--on)}
+
+@media (prefers-reduced-motion:reduce){.chip svg,.ico::before,.ico svg,.err h3 svg,.port-card b,.vrow::after{animation:none!important}}
+
+/* referências */
+.ref-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.ref-h::after{content:"";height:1px;flex:1;background:var(--line)}
+.sec-head + .ref-h{margin-top:0}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.refs-2{grid-template-columns:minmax(0,520px)}
+.ref{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}
+.ref:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 12px 26px -18px var(--green)}
+.ref-n{font:700 .78rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;justify-self:start}
+.ref b{font-family:var(--f-display);font-size:.98rem;line-height:1.3}
+.ref p{font-size:.88rem;color:var(--muted)}
+.ref-t{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ref-t i{font:600 .7rem var(--f-mono);font-style:normal;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.ref-go{font-size:.8rem;font-weight:700;color:var(--green-strong);margin-top:4px}
+.books{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:bk}
+.books li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 56px;counter-increment:bk;font-size:.95rem;overflow-wrap:anywhere}
+.books li::before{content:counter(bk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;background:var(--green);color:var(--on);display:grid;place-items:center;font:800 .85rem var(--f-display)}
+:root[data-theme="dark"] .books li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .books li::before{color:#08130C}}
+.ref-a{font-weight:700}
+.books small{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+
+/* citações */
+.cites{white-space:normal}
+.cite{font:inherit;color:var(--ink);background:none;padding:0;border-radius:0;text-decoration:none;white-space:normal}
+.cite:hover,.cite:focus-visible{color:#1D6FD8;background:none;text-decoration:underline}
+#refs .ref,#refs .books li{scroll-margin-top:84px}
+#refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
+
+/* ===== layout do desafio (estilo Roteamento) ===== */
+.desafio .ch-banner{border-radius:28px;box-shadow:0 30px 60px -36px var(--red);position:relative;overflow:hidden}
+.desafio .ch-banner .ico{width:64px;height:64px;border-radius:20px;box-shadow:0 14px 26px -12px var(--red)}
+.desafio .ch-banner .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--red);animation:icoRing 2.4s ease-out infinite}
+.desafio .ch-banner .ico svg{animation:icoWiggle 3s ease-in-out infinite}
+.desafio .def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start;margin-bottom:8px}
+.desafio .def > *{min-width:0}
+.desafio .def p+p{margin-top:14px}
+.desafio .def .big{font-size:1.2rem;line-height:1.55}
+.desafio .def .big strong{color:var(--red)}
+.desafio .ch-ports{grid-template-columns:repeat(2,minmax(0,1fr))}
+.desafio .port-card b{font-size:1.8rem}
+.desafio .sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:40px 0 18px}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red));color:#fff}
+.desafio .btn{background:linear-gradient(135deg,#E5484D,var(--red));box-shadow:0 10px 22px -12px var(--red)}
+.desafio .tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)))}
+.sec-head h2::after{content:"";display:block;width:56px;height:4px;border-radius:4px;margin-top:14px;background:linear-gradient(90deg,var(--green),var(--red))}
+.desafio .sec-head h2::after{background:var(--red)}
+@media (max-width:860px){.desafio .def{grid-template-columns:1fr}}
+@media (max-width:480px){.desafio .ch-ports{grid-template-columns:1fr 1fr}.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
+
+/* ===== seções de conceito (estilo Roteamento) ===== */
+.anat-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:12px;box-shadow:0 18px 40px -30px color-mix(in srgb,var(--green) 60%,transparent)}
+.anat-box h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.anat-rows{display:grid;gap:0}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:12px 0;border-top:1px dashed var(--line)}
+.anat:first-child{border-top:0}
+.anat b{font-family:var(--f-display);font-size:.9rem}
+.anat span{font-size:.9rem;color:var(--muted)}
+.anat i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px}
+
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+#vantagens .grid3{gap:18px}
+
+/* erros comuns: tudo em vermelho padronizado */
+.errs .err,.errs .err:nth-child(n){--vc:var(--red);background:linear-gradient(180deg,color-mix(in srgb,var(--red) 8%,var(--surface)),var(--surface) 62%);border-color:color-mix(in srgb,var(--red) 28%,var(--line))}
+.errs .err h3 svg{background:var(--red);color:#fff;box-shadow:0 8px 16px -8px var(--red)}
+:root[data-theme="dark"] .errs .err h3 svg{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .errs .err h3 svg{color:#1A0505}}
+.errs .err code{color:var(--red);background:color-mix(in srgb,var(--red) 9%,var(--surface))}
+.errs .err:hover{border-color:var(--red);box-shadow:0 26px 40px -26px var(--red)}
+
+/* contorno preto nas janelas do FileZilla */
+:root{--fz-edge:#000}
+:root[data-theme="dark"]{--fz-edge:#E4F3E8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--fz-edge:#E4F3E8}}
+.fz{border:2px solid var(--fz-edge);border-radius:14px;box-shadow:0 18px 36px -26px rgba(0,0,0,.55)}
+.fz-title,.fz-quick,.fz-log,.fz-ph{border-bottom-color:var(--fz-edge)}
+.fz-pane + .fz-pane{border-left:2px solid var(--fz-edge)}
+.fz-queue{border-top:2px solid var(--fz-edge)}
+.fz-path,.fz-f div{border-color:var(--fz-edge)}
+@media (max-width:560px){.fz-pane + .fz-pane{border-left:0;border-top:2px solid var(--fz-edge)}}
+
+/* quadro de download: contorno preto e fundo verde mais fraco */
+.dl{border:2px solid var(--fz-edge);
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 7%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--mint) 35%,var(--surface)),var(--surface) 70%)}
+
+/* tabelas com contorno preto */
+@media (min-width:641px){.tbl-wrap,.desafio .tbl-wrap{border:2px solid var(--fz-edge)}.tbl-wrap th{border-bottom:2px solid var(--fz-edge)}}
+@media (max-width:640px){.tbl-wrap tr{border:2px solid var(--fz-edge)}}
+
+/* cuidados: tudo em amarelo padronizado */
+.care .err,.care .err:nth-child(n){--vc:var(--s2);background:linear-gradient(180deg,color-mix(in srgb,var(--s2) 12%,var(--surface)),var(--surface) 62%);border-color:color-mix(in srgb,var(--s2) 35%,var(--line))}
+.care .err h3 svg{background:var(--s2);color:#fff;box-shadow:0 8px 16px -8px var(--s2)}
+:root[data-theme="dark"] .care .err h3 svg{color:#1A1203}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err h3 svg{color:#1A1203}}
+.care .err code{color:var(--warn);background:color-mix(in srgb,var(--s2) 12%,var(--surface))}
+.care .err:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--s2) 18%,var(--surface)),color-mix(in srgb,var(--s2) 7%,var(--surface)));border-color:var(--s2);box-shadow:0 26px 40px -26px var(--s2)}
+.care .err:hover h3 svg{color:#fff}
+:root[data-theme="dark"] .care .err:hover h3 svg{color:#1A1203}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err:hover h3 svg{color:#1A1203}}
+
+/* menu: Desafio fica vermelho ao passar o mouse */
+.tmenu a.tm-ch:hover,.tmenu a.tm-ch:focus-visible{background:color-mix(in srgb,var(--red) 10%,var(--surface));color:var(--red)}
+.tmenu a.tm-ch:hover b,.tmenu a.tm-ch:focus-visible b{color:var(--red)}
+
+/* ---- acréscimos: Terminal Linux Parte 2 ---- */
+.topnav .back{margin-left:0!important;border-radius:10px;background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
+.topnav .back:hover{background:#A51418}
+.note code,.err code,.ben code{overflow-wrap:anywhere;white-space:normal}
 #quiz-sec .sec-head{margin-bottom:24px}
 .qz-hint,.qz-tip{color:var(--muted)}
 .qz-q code,.qz-rq code{display:inline-block;max-width:100%;overflow-x:auto;white-space:nowrap;vertical-align:bottom;scrollbar-width:thin}
 .qz-opt code,.qz-rl code,.qz-fb code,.qz-rexp code{white-space:normal;overflow-wrap:anywhere}
 .qz-opt>span:nth-child(2){min-width:0;overflow-wrap:anywhere}
-.qz-stage{grid-template-columns:minmax(0,1fr)}
-.qz-card,.qz-end,.qz-q,.qz-rq,.qz-review{min-width:0}
 </style>
 </head>
 <body>
@@ -1099,9 +1300,48 @@ details.src pre{max-height:360px;overflow:auto}
     </div>
     <div class="ht-wrap">
       <div class="hero-term" aria-label="Terminal do Linux Mint mostrando o login, o neofetch e os comandos da aula">
-        <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="tab"><svg aria-hidden="true"><use href="#i-term"/></svg><span id="ht-tab">ifsc@mint: ~</span></span><span class="sh">bash · 80×24</span></div>
-        <div class="ht-screen"><pre id="ht-pre"></pre></div>
-      </div>
+      <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="ttl">ifsc@mint: ~ — bash</span></div>
+      <div class="ht-screen"><pre id="ht-pre"><span class="dim">Linux Mint 22 mint tty1</span>
+
+mint login: ifsc
+Password: 
+<span class="dim">Last login: Mon Nov  9 10:12:03 on tty1</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> neofetch
+<span class="lg"> ___________  </span><span class="nu">ifsc</span>@<span class="nu">mint</span>
+<span class="lg">|_          \ </span><span class="nd">----------</span>
+<span class="lg">  | | _____ | </span><span class="nk">OS</span>: Linux Mint 22 x86_64
+<span class="lg">  | | | | | | </span><span class="nk">Host</span>: VirtualBox 1.2
+<span class="lg">  | | | | | | </span><span class="nk">Kernel</span>: 6.8.0-45-generic
+<span class="lg">  | \_____/ | </span><span class="nk">Shell</span>: bash 5.2.21
+<span class="lg">  \_________/ </span><span class="nk">DE</span>: Cinnamon 6.2
+<span class="lg">              </span><span class="nk">Memory</span>: 1024MiB / 3923MiB
+<span class="lg">              </span>
+<span class="lg">              </span><span class="cb c1"></span><span class="cb c2"></span><span class="cb c3"></span><span class="cb c4"></span><span class="cb c5"></span><span class="cb c6"></span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> chmod +x info.sh &amp;&amp; ./info.sh
+<span class="ok">Olá, ifsc!</span>
+Hoje é 16/11/2026 e são 10:40.
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> id
+uid=1000(ifsc) gid=1000(ifsc) grupos=1000(ifsc),24(cdrom),<span class="w">1002(projeto)</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> tar -czf aula2.tar.gz aula2/ &amp;&amp; ls -lh aula2.tar.gz
+-rw-r--r-- 1 ifsc ifsc <span class="ok">4,2K</span> nov 16 10:50 aula2.tar.gz
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> pgrep -o firefox
+<span class="w">3127</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> kill 3127
+<span class="dim">(a janela do Firefox fecha)</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> cowsay Aprendi Linux
+ _______________
+&lt; Aprendi Linux &gt;
+ ---------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> crontab -l
+<span class="ok">* * * * * /usr/games/cowsay "Aprendi crontab no IFSC!" &gt; /dev/pts/0</span>
+<span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> <span class="cursor"></span></pre></div>
+      <div class="foot"><i></i><span>conectado</span><span>bash</span><span>UTF-8 · 80×24</span></div>
+    </div>
     </div>
   </div>
 </div>
@@ -1112,11 +1352,11 @@ details.src pre{max-height:360px;overflow:auto}
       <div class="rot-head"><h3>Roteiro da aula</h3><p class="hint">Tudo é feito na VM Linux Mint. A tag <b>sudo</b> marca os passos que pedem <code>sudo</code> e a sua senha.</p></div>
       <div class="vlist">
         <div class="vrow" style="--vc:var(--s1)"><span class="vtag">PASSOS 1–2</span><b>Arquivos e texto</b><span class="net">mv · cp · nano · grep</span></div>
-        <div class="vrow" style="--vc:var(--green)"><span class="vtag">PASSOS 3–4</span><b>Usuários e permissões</b><span class="net">adduser · usermod · chmod</span></div>
-        <div class="vrow" style="--vc:var(--s3)"><span class="vtag">PASSOS 5–7</span><b>Scripts, compactar e processos</b><span class="net">bash · tar · kill</span></div>
-        <div class="vrow" style="--vc:var(--s4)"><span class="vtag">PASSOS 8–10</span><b>Programas, agenda e verificação</b><span class="net">flatpak · cron · dmesg</span></div>
-        <div class="vrow" style="--vc:var(--s2)"><span class="vtag">ENTREGA</span><b>Histórico no SIGAA</b><span class="net">history &gt; exercicios.txt</span></div>
-        <div class="vrow" style="--vc:var(--red)"><span class="vtag">DESAFIO + QUIZ</span><b>Backup a cada 30 s e quiz</b><span class="net">cron + tar · 10 perguntas</span></div>
+        <div class="vrow" style="--vc:var(--green)"><span class="vtag">PASSOS 3–4</span><b>Usuários e chmod</b><span class="net">adduser · chmod</span></div>
+        <div class="vrow" style="--vc:var(--s3)"><span class="vtag">PASSOS 5–7</span><b>Scripts e processos</b><span class="net">bash · tar · kill</span></div>
+        <div class="vrow" style="--vc:var(--s4)"><span class="vtag">PASSOS 8–10</span><b>Agenda e verificação</b><span class="net">cron · flatpak</span></div>
+        <div class="vrow" style="--vc:var(--s2)"><span class="vtag">ENTREGA</span><b>Histórico no SIGAA</b><span class="net">history</span></div>
+        <div class="vrow" style="--vc:var(--red)"><span class="vtag">DESAFIO + QUIZ</span><b>Backup e quiz</b><span class="net">cron · tar</span></div>
       </div>
     </div>
   </div>
@@ -1437,30 +1677,24 @@ var TERM = {
     update();
   })();
 
-  /* terminal animado do topo, montado a partir de TERM */
   (function(){
-    var pre=document.getElementById('ht-pre'); if(!pre || typeof TERM==='undefined') return;
-    var scr=pre.parentNode, U=TERM.user||'ifsc', H=TERM.host||'mint';
-    var tab=document.getElementById('ht-tab'); if(tab) tab.textContent=U+'@'+H+': ~';
-    function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
-    var PR='<span class="pu">'+esc(U)+'@'+esc(H)+'</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> ';
-    var NEO=["<span class=\"lg\"> ___________  </span><span class=\"nu\">"+esc(U)+"</span>@<span class=\"nu\">"+esc(H)+"</span>", "<span class=\"lg\">|_          \\ </span><span class=\"nd\">----------</span>", "<span class=\"lg\">  | | _____ | </span><span class=\"nk\">OS</span>: Linux Mint 22 x86_64", "<span class=\"lg\">  | | | | | | </span><span class=\"nk\">Host</span>: VirtualBox 1.2", "<span class=\"lg\">  | | | | | | </span><span class=\"nk\">Kernel</span>: 6.8.0-45-generic", "<span class=\"lg\">  | \\_____/ | </span><span class=\"nk\">Shell</span>: bash 5.2.21", "<span class=\"lg\">  \\_________/ </span><span class=\"nk\">DE</span>: Cinnamon 6.2", "<span class=\"lg\">              </span><span class=\"nk\">Memory</span>: 1024MiB / 3923MiB", "<span class=\"lg\">              </span>", "<span class=\"lg\">              </span><span class=\"cb c1\"></span><span class=\"cb c2\"></span><span class=\"cb c3\"></span><span class=\"cb c4\"></span><span class=\"cb c5\"></span><span class=\"cb c6\"></span>"];
-    var LOGIN0='<span class="dim">Linux Mint 22 '+esc(H)+' tty1</span>', LAST='<span class="dim">Last login: Mon Nov  9 10:12:03 on tty1</span>';
-    var CMDS=[["neofetch",NEO]].concat(TERM.cmds||[]);
-    /* estado final estático (também é o que aparece sem animação) */
-    var full=LOGIN0+'\n\n'+esc(H)+' login: '+esc(U)+'\nPassword: \n'+LAST+'\n';
-    CMDS.forEach(function(c){ full+=PR+esc(c[0])+'\n'+c[1].map(function(l){return l+'\n';}).join(''); });
-    pre.innerHTML=full+PR+'<span class="cursor"></span>'; scr.scrollTop=scr.scrollHeight;
+    var pre=document.getElementById('ht-pre'); if(!pre) return;
+    var scr=pre.parentNode; scr.scrollTop=scr.scrollHeight;
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var PR="<span class=\"pu\">ifsc@mint</span><span class=\"pc\">:</span><span class=\"pd\">~</span><span class=\"pc\">$</span> ", LOGIN=["<span class=\"dim\">Linux Mint 22 mint tty1</span>", "", "mint login: ifsc", "Password: ", "<span class=\"dim\">Last login: Mon Nov  9 10:12:03 on tty1</span>"], CMDS=[["neofetch", ["<span class=\"lg\"> ___________  </span><span class=\"nu\">ifsc</span>@<span class=\"nu\">mint</span>", "<span class=\"lg\">|_          \\ </span><span class=\"nd\">----------</span>", "<span class=\"lg\">  | | _____ | </span><span class=\"nk\">OS</span>: Linux Mint 22 x86_64", "<span class=\"lg\">  | | | | | | </span><span class=\"nk\">Host</span>: VirtualBox 1.2", "<span class=\"lg\">  | | | | | | </span><span class=\"nk\">Kernel</span>: 6.8.0-45-generic", "<span class=\"lg\">  | \\_____/ | </span><span class=\"nk\">Shell</span>: bash 5.2.21", "<span class=\"lg\">  \\_________/ </span><span class=\"nk\">DE</span>: Cinnamon 6.2", "<span class=\"lg\">              </span><span class=\"nk\">Memory</span>: 1024MiB / 3923MiB", "<span class=\"lg\">              </span>", "<span class=\"lg\">              </span><span class=\"cb c1\"></span><span class=\"cb c2\"></span><span class=\"cb c3\"></span><span class=\"cb c4\"></span><span class=\"cb c5\"></span><span class=\"cb c6\"></span>"]], ["chmod +x info.sh && ./info.sh", ["<span class=\"ok\">Olá, ifsc!</span>", "Hoje é 16/11/2026 e são 10:40."]], ["id", ["uid=1000(ifsc) gid=1000(ifsc) grupos=1000(ifsc),24(cdrom),<span class=\"w\">1002(projeto)</span>"]], ["tar -czf aula2.tar.gz aula2/ && ls -lh aula2.tar.gz", ["-rw-r--r-- 1 ifsc ifsc <span class=\"ok\">4,2K</span> nov 16 10:50 aula2.tar.gz"]], ["pgrep -o firefox", ["<span class=\"w\">3127</span>"]], ["kill 3127", ["<span class=\"dim\">(a janela do Firefox fecha)</span>"]], ["cowsay Aprendi Linux", [" _______________", "&lt; Aprendi Linux &gt;", " ---------------", "        \\   ^__^", "         \\  (oo)\\_______", "            (__)\\       )\\/\\", "                ||----w |", "                ||     ||"]], ["crontab -l", ["<span class=\"ok\">* * * * * /usr/games/cowsay \"Aprendi crontab no IFSC!\" &gt; /dev/pts/0</span>"]]];
     var done='', timer;
+    function esc(t){ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
     function show(tail){ pre.innerHTML=done+tail+'<span class="cursor"></span>'; scr.scrollTop=scr.scrollHeight; }
-    function typeText(prefix,text,cb){ var n=0; (function t(){ if(n<=text.length){ show(prefix+esc(text.slice(0,n))); n++; timer=setTimeout(t,45+Math.random()*45); } else timer=setTimeout(cb,300); })(); }
+    function typeText(prefix,text,cb){
+      var n=0;
+      (function t(){ if(n<=text.length){ show(prefix+esc(text.slice(0,n))); n++; timer=setTimeout(t,45+Math.random()*45); } else timer=setTimeout(cb,300); })();
+    }
     function wait(ms,cb){ timer=setTimeout(cb,ms); }
     function login(cb){
-      done=LOGIN0+'\n\n'; show('');
-      wait(700,function(){ typeText(H+' login: ',U,function(){
-        done+=esc(H)+' login: '+esc(U)+'\n'; show('Password: ');
-        wait(1100,function(){ done+='Password: \n'+LAST+'\n'; show(PR); wait(600,cb); });
+      done=LOGIN[0]+'\n\n'; show('');
+      wait(700,function(){ typeText('mint login: ','ifsc',function(){
+        done+='mint login: ifsc\n'; show('Password: ');
+        wait(1100,function(){ done+='Password: \n'+LOGIN[4]+'\n'; show(PR); wait(600,cb); });
       }); });
     }
     function run(i){
@@ -1468,15 +1702,14 @@ var TERM = {
       var c=CMDS[i];
       typeText(PR,c[0],function(){
         done+=PR+esc(c[0])+'\n';
-        if(i===0){ var k=0; (function line(){ if(k<c[1].length){ done+=c[1][k++]+'\n'; show(''); timer=setTimeout(line,70); } else { show(PR); wait(2600,function(){ run(i+1); }); } })(); return; }
+        if(c[0]==='neofetch'){ var k=0; (function line(){ if(k<c[1].length){ done+=c[1][k++]+'\n'; show(''); timer=setTimeout(line,70); } else { show(PR); wait(2600,function(){ run(i+1); }); } })(); return; }
         done+=c[1].map(function(l){return l+'\n';}).join(''); show(PR);
         wait(c[1].length?900:500,function(){ run(i+1); });
       });
     }
     function start(){ clearTimeout(timer); done=''; login(function(){ run(0); }); }
-    wait(1500,start);
+    wait(900,start);
   })();
-
   /* menu de tópicos */
   var btn = document.getElementById('tb-topics'), menu = document.getElementById('tmenu');
   function setOpen(o){ menu.hidden = !o; btn.setAttribute('aria-expanded', o); }
@@ -1491,7 +1724,7 @@ var TERM = {
 (function(){
   var $ = function(id){ return document.getElementById(id); };
   (function(){
-    var BANK = [{"t": "Arquivos", "q": "Qual comando <b>move e também renomeia</b> arquivos e pastas?", "o": ["<code>mv</code>", "<code>cp -r</code>", "<code>rmdir</code>", "<code>find</code>"], "e": "O <b>mv</b> faz as duas coisas: <code>mv a.txt docs/</code> move e <code>mv b.txt relatorio.txt</code> renomeia. O <code>cp -r</code> só copia."}, {"t": "Texto", "q": "O arquivo <code>alunos.txt</code> tinha 4 nomes. Você rodou <code>echo \"Eva\" &gt; alunos.txt</code>. O que aconteceu?", "o": ["O arquivo ficou só com \"Eva\": o conteúdo anterior foi substituído", "\"Eva\" foi acrescentada no fim do arquivo", "Deu erro, porque o arquivo já existia", "\"Eva\" foi acrescentada no começo do arquivo"], "e": "Um <b>&gt;</b> cria ou <b>substitui</b> tudo. Para acrescentar no fim use dois: <code>&gt;&gt;</code>."}, {"t": "Texto", "q": "Como salvar e sair do <code>nano</code>?", "o": ["<kbd>Ctrl</kbd>+<kbd>O</kbd>, <kbd>Enter</kbd> e depois <kbd>Ctrl</kbd>+<kbd>X</kbd>", "Digitar <code>:wq</code> e <kbd>Enter</kbd>", "<kbd>Ctrl</kbd>+<kbd>C</kbd> e <kbd>Ctrl</kbd>+<kbd>V</kbd>", "<kbd>Ctrl</kbd>+<kbd>Z</kbd> e fechar a janela"], "e": "No nano, <b>Ctrl+O</b> grava (confirme o nome com Enter) e <b>Ctrl+X</b> sai. O <code>:wq</code> é do editor vim."}, {"t": "Texto", "q": "O que faz o comando <code>grep -i \"carla\" alunos.txt</code>?", "o": ["Mostra as linhas do arquivo que têm \"carla\", sem diferenciar maiúsculas", "Apaga a linha que tem \"carla\"", "Copia \"carla\" para o arquivo alunos.txt", "Lista todos os arquivos chamados carla"], "e": "O <b>grep</b> filtra linhas com a palavra procurada e o <b>-i</b> ignora maiúsculas e minúsculas. Ele só mostra, não altera o arquivo."}, {"t": "Usuários", "q": "Qual comando adiciona a <code>maria</code> ao grupo <code>projeto</code> <b>sem tirá-la dos outros grupos</b>?", "o": ["<code>usermod -aG projeto maria</code>", "<code>usermod -G projeto maria</code>", "<code>groupadd projeto maria</code>", "<code>passwd -g projeto maria</code>"], "e": "O <b>-a</b> (append) acrescenta. Sem ele, o <code>-G</code> substitui a lista de grupos e a maria sai de todos os outros."}, {"t": "Usuários", "q": "O usuário <code>ifsc</code> rodou <code>adduser joao</code> (sem sudo) e recebeu erro de permissão. Qual a solução?", "o": ["Repetir o comando com <code>sudo</code> na frente", "Digitar a senha do joao antes do comando", "Criar antes o grupo <code>projeto</code>", "Reiniciar o Linux Mint"], "e": "Criar usuários é tarefa de administrador. No Linux Mint use o <code>sudo</code>: <code>sudo adduser joao</code>. Ele pede a <b>sua</b> senha."}, {"t": "Usuários", "q": "O que faz <code>su - maria</code>?", "o": ["Abre uma sessão como maria, com o ambiente e a pasta pessoal dela", "Apaga a usuária maria", "Dá a maria os poderes de root", "Troca a senha da maria"], "e": "O <code>su -</code> com um nome troca de usuário por completo: <code>whoami</code> mostra maria e <code>pwd</code> mostra <code>/home/maria</code>. O <code>exit</code> volta."}, {"t": "Usuários", "q": "O que faz <code>deluser --remove-home maria</code>?", "o": ["Apaga a usuária e a pasta <code>/home/maria</code>", "Só remove a senha da maria", "Remove o grupo <code>projeto</code>", "Apaga todos os usuários do sistema"], "e": "O <code>deluser</code> remove a conta. Com <b>--remove-home</b>, apaga também a pasta pessoal. Cuidado: os arquivos da usuária se perdem."}, {"t": "Permissões", "q": "O que significa <code>chmod 640 arquivo</code>?", "o": ["Dono lê e escreve, grupo só lê, outros não têm acesso", "Dono lê e escreve, grupo lê e escreve, outros leem", "Dono tem tudo, grupo lê, outros nada", "Todos leem e só o dono escreve"], "e": "Some r=4, w=2, x=1 para cada parte. <b>6</b> = 4+2 (ler e escrever), <b>4</b> = só ler, <b>0</b> = nada. O de todos lerem é o <code>644</code>."}, {"t": "Permissões", "q": "No <code>ls -l</code>, o que significa <code>drwxr-x---</code> no começo da linha?", "o": ["É uma pasta: o dono tem tudo, o grupo lê e entra, outros não acessam", "É um arquivo comum com todas as permissões para todos", "É um atalho (link) que só o grupo pode ler", "É uma pasta: o dono lê, o grupo escreve e os outros executam"], "e": "O <b>d</b> indica pasta. Depois vêm três grupos de 3: <code>rwx</code> (dono), <code>r-x</code> (grupo) e <code>---</code> (outros). Em pasta, o <b>x</b> permite entrar com <code>cd</code>."}, {"t": "Permissões", "q": "Qual permissão deixa um script legível, editável e executável <b>só pelo dono</b>?", "o": ["<code>chmod 700</code>", "<code>chmod 644</code>", "<code>chmod 077</code>", "<code>chmod 111</code>"], "e": "<b>7</b> (4+2+1) para o dono e <b>0</b> para grupo e outros. O <code>644</code> não executa, e o <code>077</code> deixaria o dono sem nada."}, {"t": "Scripts", "q": "Você rodou <code>./info.sh</code> e apareceu \"Permissão negada\". Qual a solução?", "o": ["<code>chmod +x info.sh</code> e rodar de novo", "<code>chown +x info.sh</code>", "<code>mv info.sh /bin</code>", "<code>sudo</code> e rodar de novo"], "e": "O arquivo não tem a permissão <b>x</b> (executar). O <code>chmod +x</code> resolve. Nem o root executa um arquivo sem o <b>x</b>."}, {"t": "Scripts", "q": "Qual é a função da primeira linha <code>#!/bin/bash</code> de um script?", "o": ["Diz qual programa vai executar o script, no caso o bash", "Cria uma pasta chamada bash", "Dá permissão de execução ao arquivo", "Instala o bash no sistema"], "e": "Essa linha (o \"shebang\") avisa ao sistema qual interpretador deve rodar o arquivo. A permissão de execução ainda é dada à parte, com <code>chmod +x</code>."}, {"t": "Compactar", "q": "Qual comando cria o arquivo <code>aula2.tar.gz</code> com a pasta <code>aula2</code>?", "o": ["<code>tar -czvf aula2.tar.gz aula2/</code>", "<code>tar -xzvf aula2.tar.gz aula2/</code>", "<code>tar -tzvf aula2.tar.gz aula2/</code>", "<code>tar -czvf aula2/ aula2.tar.gz</code>"], "e": "<b>-c</b> cria, <b>-x</b> extrai e <b>-t</b> lista. O nome do arquivo vem logo depois do <b>-f</b>, e só depois o que será compactado."}, {"t": "Compactar", "q": "Qual opção do <code>tar</code> extrai o conteúdo <b>dentro de outra pasta</b>?", "o": ["<code>-C pasta</code>", "<code>-v</code>", "<code>-t</code>", "<code>-z</code>"], "e": "Exemplo: <code>tar -xzvf aula2.tar.gz -C ~/restaura</code>. O <b>-v</b> só mostra os arquivos, o <b>-t</b> lista e o <b>-z</b> trata o gzip."}, {"t": "Compactar", "q": "O que o <code>gzip servicos.txt</code> faz com o arquivo original?", "o": ["Troca o original pelo <code>servicos.txt.gz</code>; o <code>gunzip</code> desfaz", "Mantém os dois arquivos na pasta", "Move o original para a lixeira", "Cria uma cópia em <code>/tmp</code>"], "e": "O <b>gzip</b> substitui o arquivo pela versão compactada. Para voltar ao original, use <code>gunzip servicos.txt.gz</code>."}, {"t": "Processos", "q": "O que faz <code>kill 3127</code>?", "o": ["Pede ao processo de PID 3127 que se encerre", "Apaga o arquivo chamado 3127", "Mata o processo na hora, sem chance de salvar", "Pausa o processo 2482"], "e": "O <b>kill</b> comum envia o sinal 15 (SIGTERM), um pedido educado para encerrar. Matar na hora é o <code>kill -9</code>."}, {"t": "Processos", "q": "Quando usar <code>kill -9</code>?", "o": ["Quando o programa travou e não responde ao <code>kill</code> comum", "Sempre, porque é mais rápido e seguro", "Para pausar e continuar depois", "Para encerrar todos os processos com o mesmo nome"], "e": "O <b>-9</b> (SIGKILL) força o fim e o programa não consegue salvar nada. Tente sempre o <code>kill</code> comum primeiro."}, {"t": "Programas", "q": "Qual a diferença principal entre <code>apt</code> e <code>flatpak</code>?", "o": ["O apt instala do repositório do Linux Mint; o flatpak instala do Flathub, com tudo que o app precisa", "O flatpak só funciona no Fedora", "O apt só instala programas gráficos", "São o mesmo programa com nomes diferentes"], "e": "Os dois instalam programas. O apt usa os pacotes do Mint, mais enxutos. O Flatpak traz o <b>runtime</b> junto, pesa mais e costuma ter versões mais novas."}, {"t": "Programas", "q": "Qual comando faz a vaca falar uma frase aleatória?", "o": ["<code>fortune | cowsay</code>", "<code>cowsay | fortune</code>", "<code>fortune &gt; cowsay</code>", "<code>cowsay -l</code>"], "e": "O pipe manda a saída do <b>fortune</b> (a frase) para a entrada do <b>cowsay</b>. O <code>&gt; cowsay</code> gravaria a frase num arquivo, e o <code>-l</code> só lista os bichos."}, {"t": "Crontab", "q": "O que significa a linha <code>*/5 * * * * comando</code> no crontab?", "o": ["Roda o comando a cada 5 minutos", "Roda às 5h da manhã todos os dias", "Roda no dia 5 de cada mês", "Roda uma vez, às 5 da tarde"], "e": "Os 5 campos são minuto, hora, dia do mês, mês e dia da semana. O <b>*/5</b> no primeiro campo significa \"de 5 em 5 minutos\"."}, {"t": "Crontab", "q": "Qual linha do crontab roda o script <b>todo dia às 22h</b>?", "o": ["<code>0 22 * * * /home/ifsc/script.sh</code>", "<code>22 0 * * * /home/ifsc/script.sh</code>", "<code>* 22 * * * /home/ifsc/script.sh</code>", "<code>0 0 22 * * /home/ifsc/script.sh</code>"], "e": "A ordem é minuto e depois hora: <b>0 22</b> = 22h00. A segunda roda à 0h22, a terceira roda todo minuto entre 22h e 22h59, e a quarta no dia 22 à meia-noite."}, {"t": "Crontab", "q": "Por que usar caminhos completos, como <code>/home/ifsc/...</code>, dentro do crontab?", "o": ["O cron não sabe em qual pasta você está e tem um PATH reduzido", "O cron só aceita comandos do root", "Caminhos relativos não existem no Linux", "É só convenção, funciona igual sem"], "e": "O cron roda fora do seu terminal, sem a sua pasta atual. Com caminho completo, o comando acha o arquivo sempre."}, {"t": "Crontab", "q": "Qual comando apaga <b>todas</b> as suas tarefas do crontab de uma vez?", "o": ["<code>crontab -r</code>", "<code>crontab -l</code>", "<code>crontab -e</code>", "<code>rm crontab</code>"], "e": "O <b>-r</b> remove tudo, sem perguntar. O <b>-l</b> lista e o <b>-e</b> edita. Para desligar só uma tarefa, comente a linha com <b>#</b>."}, {"t": "Sistema", "q": "Qual comando mostra o <b>gateway</b> (rota padrão) da rede?", "o": ["<code>ip route</code>", "<code>ip -br a</code>", "<code>ping -c 4 8.8.8.8</code>", "<code>lsblk</code>"], "e": "Procure a linha <code>default via ...</code>. O <code>ip -br a</code> mostra os endereços IP e o <code>ping</code> testa se há resposta."}, {"t": "Crontab", "q": "O cron só chega a 1 minuto. Como rodar um script <b>a cada 30 segundos</b>?", "o": ["Duas linhas: uma normal e outra com <code>sleep 30 &amp;&amp;</code> antes do comando", "Escrever <code>*/0.5 * * * *</code>", "Usar <code>30 * * * *</code>", "Trocar o campo dos minutos por <code>s30</code>"], "e": "<code>30 * * * *</code> roda no minuto 30 de cada hora. O truque é uma linha <code>* * * * * script</code> e outra <code>* * * * * sleep 30 &amp;&amp; script</code>."}, {"t": "Crontab", "q": "Para que serve o comando <code>tty</code> na tarefa da vaquinha?", "o": ["Mostra o nome do seu terminal (como <code>/dev/pts/0</code>) para a saída do cron aparecer nele", "Lista as tarefas do crontab", "Instala o cowsay", "Reinicia o serviço cron"], "e": "O cron roda fora do terminal. Com <code>&gt; /dev/pts/N</code> a saída do comando é enviada à sua tela."}, {"t": "Programas", "q": "O que o <code>sudo</code> pede ao rodar um comando no Linux Mint?", "o": ["A senha do seu próprio usuário", "A senha do root", "A senha de outro usuário qualquer", "Nenhuma senha, nunca"], "e": "No Mint o root vem bloqueado. O <code>sudo</code> usa a <b>sua</b> senha, e nada aparece enquanto você digita."}, {"t": "Processos", "q": "Para achar o PID do processo principal do Firefox aberto, qual comando você usa?", "o": ["<code>pgrep -o firefox</code>", "<code>ls firefox</code>", "<code>cat firefox</code>", "<code>pid firefox</code>"], "e": "O <b>pgrep</b> procura processos pelo nome. O <b>-o</b> mostra só o mais antigo, que é o principal (o <b>-a</b> lista todos). Depois use <code>kill PID</code>."}, {"t": "Processos", "q": "Qual comando encerra <b>todos</b> os processos do Firefox de uma vez, sem usar o PID?", "o": ["<code>pkill firefox</code>", "<code>kill firefox</code>", "<code>ps firefox</code>", "<code>pgrep -9 firefox</code>"], "e": "O <b>pkill</b> trabalha pelo nome. O <code>kill</code> pede PID ou número de job, e o <code>pgrep</code> só procura."}, {"t": "Programas", "q": "Qual comando instala o Visual Studio Code pelo Flathub?", "o": ["<code>flatpak install flathub com.visualstudio.code</code>", "<code>apt flatpak code</code>", "<code>flatpak get code.deb</code>", "<code>sudo install vscode</code>"], "e": "O <b>flatpak install</b> recebe o repositório (flathub) e o identificador do app, como <code>com.visualstudio.code</code>."}, {"t": "Terminal", "q": "Para que serve o <code>echo \"neofetch\" &gt;&gt; ~/.bashrc</code>?", "o": ["Faz o neofetch rodar toda vez que um terminal novo abre", "Instala o neofetch no sistema", "Apaga o conteúdo do .bashrc", "Roda o neofetch uma única vez"], "e": "O <b>&gt;&gt;</b> acrescenta a linha no fim do <code>.bashrc</code>, arquivo que o bash lê ao abrir. Para instalar, o comando é <code>sudo apt install neofetch</code>."}];
+    var BANK = [{"t": "Arquivos", "q": "Qual comando <b>move e também renomeia</b> arquivos e pastas?", "o": ["<code>mv</code>", "<code>cp -r</code>", "<code>rmdir</code>", "<code>find</code>"], "e": "O <b>mv</b> faz as duas coisas: <code>mv a.txt docs/</code> move e <code>mv b.txt relatorio.txt</code> renomeia. O <code>cp -r</code> só copia."}, {"t": "Texto", "q": "O arquivo <code>alunos.txt</code> tinha 4 nomes. Você rodou <code>echo \"Eva\" &gt; alunos.txt</code>. O que aconteceu?", "o": ["O arquivo ficou só com \"Eva\": o conteúdo anterior foi substituído", "\"Eva\" foi acrescentada no fim do arquivo", "Deu erro, porque o arquivo já existia", "\"Eva\" foi acrescentada no começo do arquivo"], "e": "Um <b>&gt;</b> cria ou <b>substitui</b> tudo. Para acrescentar no fim use dois: <code>&gt;&gt;</code>."}, {"t": "Texto", "q": "Como salvar e sair do <code>nano</code>?", "o": ["<kbd>Ctrl</kbd>+<kbd>O</kbd>, <kbd>Enter</kbd> e depois <kbd>Ctrl</kbd>+<kbd>X</kbd>", "Digitar <code>:wq</code> e <kbd>Enter</kbd>", "<kbd>Ctrl</kbd>+<kbd>C</kbd> e <kbd>Ctrl</kbd>+<kbd>V</kbd>", "<kbd>Ctrl</kbd>+<kbd>Z</kbd> e fechar a janela"], "e": "No nano, <b>Ctrl+O</b> grava (confirme o nome com Enter) e <b>Ctrl+X</b> sai. O <code>:wq</code> é do editor vim."}, {"t": "Texto", "q": "O que faz o comando <code>grep -i \"carla\" alunos.txt</code>?", "o": ["Mostra as linhas do arquivo que têm \"carla\", sem diferenciar maiúsculas", "Apaga a linha que tem \"carla\"", "Copia \"carla\" para o arquivo alunos.txt", "Lista todos os arquivos chamados carla"], "e": "O <b>grep</b> filtra linhas com a palavra procurada e o <b>-i</b> ignora maiúsculas e minúsculas. Ele só mostra, não altera o arquivo."}, {"t": "Usuários", "q": "Qual comando adiciona a <code>maria</code> ao grupo <code>projeto</code> <b>sem tirá-la dos outros grupos</b>?", "o": ["<code>usermod -aG projeto maria</code>", "<code>usermod -G projeto maria</code>", "<code>groupadd projeto maria</code>", "<code>passwd -g projeto maria</code>"], "e": "O <b>-a</b> (append) acrescenta. Sem ele, o <code>-G</code> substitui a lista de grupos e a maria sai de todos os outros."}, {"t": "Usuários", "q": "O usuário <code>ifsc</code> rodou <code>adduser joao</code> (sem sudo) e recebeu erro de permissão. Qual a solução?", "o": ["Repetir o comando com <code>sudo</code> na frente", "Digitar a senha do joao antes do comando", "Criar antes o grupo <code>projeto</code>", "Reiniciar o Linux Mint"], "e": "Criar usuários é tarefa de administrador. No Linux Mint use o <code>sudo</code>: <code>sudo adduser joao</code>. Ele pede a <b>sua</b> senha."}, {"t": "Usuários", "q": "O que faz <code>su - maria</code>?", "o": ["Abre uma sessão como maria, com o ambiente e a pasta pessoal dela", "Apaga a usuária maria", "Dá a maria os poderes de root", "Troca a senha da maria"], "e": "O <code>su -</code> com um nome troca de usuário por completo: <code>whoami</code> mostra maria e <code>pwd</code> mostra <code>/home/maria</code>. O <code>exit</code> volta."}, {"t": "Usuários", "q": "O que faz <code>deluser --remove-home maria</code>?", "o": ["Apaga a usuária e a pasta <code>/home/maria</code>", "Só remove a senha da maria", "Remove o grupo <code>projeto</code>", "Apaga todos os usuários do sistema"], "e": "O <code>deluser</code> remove a conta. Com <b>--remove-home</b>, apaga também a pasta pessoal. Cuidado: os arquivos da usuária se perdem."}, {"t": "Permissões", "q": "O que significa <code>chmod 640 arquivo</code>?", "o": ["Dono lê e escreve, grupo só lê, outros não têm acesso", "Dono lê e escreve, grupo lê e escreve, outros leem", "Dono tem tudo, grupo lê, outros nada", "Todos leem e só o dono escreve"], "e": "Some r=4, w=2, x=1 para cada parte. <b>6</b> = 4+2 (ler e escrever), <b>4</b> = só ler, <b>0</b> = nada. O de todos lerem é o <code>644</code>."}, {"t": "Permissões", "q": "No <code>ls -l</code>, o que significa <code>drwxr-x---</code> no começo da linha?", "o": ["É uma pasta: o dono tem tudo, o grupo lê e entra, outros não acessam", "É um arquivo comum com todas as permissões para todos", "É um atalho (link) que só o grupo pode ler", "É uma pasta: o dono lê, o grupo escreve e os outros executam"], "e": "O <b>d</b> indica pasta. Depois vêm três grupos de 3: <code>rwx</code> (dono), <code>r-x</code> (grupo) e <code>---</code> (outros). Em pasta, o <b>x</b> permite entrar com <code>cd</code>."}, {"t": "Permissões", "q": "Qual permissão deixa um script legível, editável e executável <b>só pelo dono</b>?", "o": ["<code>chmod 700</code>", "<code>chmod 644</code>", "<code>chmod 077</code>", "<code>chmod 111</code>"], "e": "<b>7</b> (4+2+1) para o dono e <b>0</b> para grupo e outros. O <code>644</code> não executa, e o <code>077</code> deixaria o dono sem nada."}, {"t": "Scripts", "q": "Você rodou <code>./info.sh</code> e apareceu \"Permissão negada\". Qual a solução?", "o": ["<code>chmod +x info.sh</code> e rodar de novo", "<code>chown +x info.sh</code>", "<code>mv info.sh /bin</code>", "<code>sudo</code> e rodar de novo"], "e": "O arquivo não tem a permissão <b>x</b> (executar). O <code>chmod +x</code> resolve. Nem o root executa um arquivo sem o <b>x</b>."}, {"t": "Scripts", "q": "Qual é a função da primeira linha <code>#!/bin/bash</code> de um script?", "o": ["Diz qual programa vai executar o script, no caso o bash", "Cria uma pasta chamada bash", "Dá permissão de execução ao arquivo", "Instala o bash no sistema"], "e": "Essa linha (o \"shebang\") avisa ao sistema qual interpretador deve rodar o arquivo. A permissão de execução ainda é dada à parte, com <code>chmod +x</code>."}, {"t": "Compactar", "q": "Qual comando cria o arquivo <code>aula2.tar.gz</code> com a pasta <code>aula2</code>?", "o": ["<code>tar -czvf aula2.tar.gz aula2/</code>", "<code>tar -xzvf aula2.tar.gz aula2/</code>", "<code>tar -tzvf aula2.tar.gz aula2/</code>", "<code>tar -czvf aula2/ aula2.tar.gz</code>"], "e": "<b>-c</b> cria, <b>-x</b> extrai e <b>-t</b> lista. O nome do arquivo vem logo depois do <b>-f</b>, e só depois o que será compactado."}, {"t": "Compactar", "q": "Qual opção do <code>tar</code> extrai o conteúdo <b>dentro de outra pasta</b>?", "o": ["<code>-C pasta</code>", "<code>-v</code>", "<code>-t</code>", "<code>-z</code>"], "e": "Exemplo: <code>tar -xzvf aula2.tar.gz -C ~/restaura</code>. O <b>-v</b> só mostra os arquivos, o <b>-t</b> lista e o <b>-z</b> trata o gzip."}, {"t": "Compactar", "q": "O que o <code>gzip servicos.txt</code> faz com o arquivo original?", "o": ["Troca o original pelo <code>servicos.txt.gz</code>; o <code>gunzip</code> desfaz", "Mantém os dois arquivos na pasta", "Move o original para a lixeira", "Cria uma cópia em <code>/tmp</code>"], "e": "O <b>gzip</b> substitui o arquivo pela versão compactada. Para voltar ao original, use <code>gunzip servicos.txt.gz</code>."}, {"t": "Processos", "q": "O que faz <code>kill 3127</code>?", "o": ["Pede ao processo de PID 3127 que se encerre", "Apaga o arquivo chamado 3127", "Mata o processo na hora, sem chance de salvar", "Pausa o processo 3127"], "e": "O <b>kill</b> comum envia o sinal 15 (SIGTERM), um pedido educado para encerrar. Matar na hora é o <code>kill -9</code>."}, {"t": "Processos", "q": "Quando usar <code>kill -9</code>?", "o": ["Quando o programa travou e não responde ao <code>kill</code> comum", "Sempre, porque é mais rápido e seguro", "Para pausar e continuar depois", "Para encerrar todos os processos com o mesmo nome"], "e": "O <b>-9</b> (SIGKILL) força o fim e o programa não consegue salvar nada. Tente sempre o <code>kill</code> comum primeiro."}, {"t": "Programas", "q": "Qual a diferença principal entre <code>apt</code> e <code>flatpak</code>?", "o": ["O apt instala do repositório do Linux Mint; o flatpak instala do Flathub, com tudo que o app precisa", "O flatpak só funciona no Fedora", "O apt só instala programas gráficos", "São o mesmo programa com nomes diferentes"], "e": "Os dois instalam programas. O apt usa os pacotes do Mint, mais enxutos. O Flatpak traz o <b>runtime</b> junto, pesa mais e costuma ter versões mais novas."}, {"t": "Programas", "q": "Qual comando faz a vaca falar uma frase aleatória?", "o": ["<code>fortune | cowsay</code>", "<code>cowsay | fortune</code>", "<code>fortune &gt; cowsay</code>", "<code>cowsay -l</code>"], "e": "O pipe manda a saída do <b>fortune</b> (a frase) para a entrada do <b>cowsay</b>. O <code>&gt; cowsay</code> gravaria a frase num arquivo, e o <code>-l</code> só lista os bichos."}, {"t": "Crontab", "q": "O que significa a linha <code>*/5 * * * * comando</code> no crontab?", "o": ["Roda o comando a cada 5 minutos", "Roda às 5h da manhã todos os dias", "Roda no dia 5 de cada mês", "Roda uma vez, às 5 da tarde"], "e": "Os 5 campos são minuto, hora, dia do mês, mês e dia da semana. O <b>*/5</b> no primeiro campo significa \"de 5 em 5 minutos\"."}, {"t": "Crontab", "q": "Qual linha do crontab roda o script <b>todo dia às 22h</b>?", "o": ["<code>0 22 * * * /home/ifsc/script.sh</code>", "<code>22 0 * * * /home/ifsc/script.sh</code>", "<code>* 22 * * * /home/ifsc/script.sh</code>", "<code>0 0 22 * * /home/ifsc/script.sh</code>"], "e": "A ordem é minuto e depois hora: <b>0 22</b> = 22h00. A segunda roda à 0h22, a terceira roda todo minuto entre 22h e 22h59, e a quarta no dia 22 à meia-noite."}, {"t": "Crontab", "q": "Por que usar caminhos completos, como <code>/home/ifsc/...</code>, dentro do crontab?", "o": ["O cron não sabe em qual pasta você está e tem um PATH reduzido", "O cron só aceita comandos do root", "Caminhos relativos não existem no Linux", "É só convenção, funciona igual sem"], "e": "O cron roda fora do seu terminal, sem a sua pasta atual. Com caminho completo, o comando acha o arquivo sempre."}, {"t": "Crontab", "q": "Qual comando apaga <b>todas</b> as suas tarefas do crontab de uma vez?", "o": ["<code>crontab -r</code>", "<code>crontab -l</code>", "<code>crontab -e</code>", "<code>rm crontab</code>"], "e": "O <b>-r</b> remove tudo, sem perguntar. O <b>-l</b> lista e o <b>-e</b> edita. Para desligar só uma tarefa, comente a linha com <b>#</b>."}, {"t": "Sistema", "q": "Qual comando mostra o <b>gateway</b> (rota padrão) da rede?", "o": ["<code>ip route</code>", "<code>ip -br a</code>", "<code>ping -c 4 8.8.8.8</code>", "<code>lsblk</code>"], "e": "Procure a linha <code>default via ...</code>. O <code>ip -br a</code> mostra os endereços IP e o <code>ping</code> testa se há resposta."}, {"t": "Crontab", "q": "O cron só chega a 1 minuto. Como rodar um script <b>a cada 30 segundos</b>?", "o": ["Duas linhas: uma normal e outra com <code>sleep 30 &amp;&amp;</code> antes do comando", "Escrever <code>*/0.5 * * * *</code>", "Usar <code>30 * * * *</code>", "Trocar o campo dos minutos por <code>s30</code>"], "e": "<code>30 * * * *</code> roda no minuto 30 de cada hora. O truque é uma linha <code>* * * * * script</code> e outra <code>* * * * * sleep 30 &amp;&amp; script</code>."}, {"t": "Crontab", "q": "Para que serve o comando <code>tty</code> na tarefa da vaquinha?", "o": ["Mostra o nome do seu terminal (como <code>/dev/pts/0</code>) para a saída do cron aparecer nele", "Lista as tarefas do crontab", "Instala o cowsay", "Reinicia o serviço cron"], "e": "O cron roda fora do terminal. Com <code>&gt; /dev/pts/N</code> a saída do comando é enviada à sua tela."}, {"t": "Programas", "q": "O que o <code>sudo</code> pede ao rodar um comando no Linux Mint?", "o": ["A senha do seu próprio usuário", "A senha do root", "A senha de outro usuário qualquer", "Nenhuma senha, nunca"], "e": "No Mint o root vem bloqueado. O <code>sudo</code> usa a <b>sua</b> senha, e nada aparece enquanto você digita."}, {"t": "Processos", "q": "Para achar o PID do processo principal do Firefox aberto, qual comando você usa?", "o": ["<code>pgrep -o firefox</code>", "<code>ls firefox</code>", "<code>cat firefox</code>", "<code>pid firefox</code>"], "e": "O <b>pgrep</b> procura processos pelo nome. O <b>-o</b> mostra só o mais antigo, que é o principal (o <b>-a</b> lista todos). Depois use <code>kill PID</code>."}, {"t": "Processos", "q": "Qual comando encerra <b>todos</b> os processos do Firefox de uma vez, sem usar o PID?", "o": ["<code>pkill firefox</code>", "<code>kill firefox</code>", "<code>ps firefox</code>", "<code>pgrep -9 firefox</code>"], "e": "O <b>pkill</b> trabalha pelo nome. O <code>kill</code> pede PID ou número de job, e o <code>pgrep</code> só procura."}, {"t": "Programas", "q": "Qual comando instala o Visual Studio Code pelo Flathub?", "o": ["<code>flatpak install flathub com.visualstudio.code</code>", "<code>apt flatpak code</code>", "<code>flatpak get code.deb</code>", "<code>sudo install vscode</code>"], "e": "O <b>flatpak install</b> recebe o repositório (flathub) e o identificador do app, como <code>com.visualstudio.code</code>."}, {"t": "Terminal", "q": "Para que serve o <code>echo \"neofetch\" &gt;&gt; ~/.bashrc</code>?", "o": ["Faz o neofetch rodar toda vez que um terminal novo abre", "Instala o neofetch no sistema", "Apaga o conteúdo do .bashrc", "Roda o neofetch uma única vez"], "e": "O <b>&gt;&gt;</b> acrescenta a linha no fim do <code>.bashrc</code>, arquivo que o bash lê ao abrir. Para instalar, o comando é <code>sudo apt install neofetch</code>."}];
     var Q = [];
     var stage = $('q-stage'), steps = $('q-steps'), cur = 0, ans = [], picks = [], timer = null, lastSet = [];
     function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
