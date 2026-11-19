@@ -956,6 +956,16 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 :root[data-theme="dark"] .cls-top b{color:#08130C}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cls-top b{color:#08130C}}
 @media (prefers-reduced-motion:reduce){.cls-top b{animation:none!important}}
+
+/* ícones A B C ? da rede montada: mesmo padrão dos ícones de "por que usamos o ping" */
+.addr{--ic:var(--vc);transition:transform .25s,border-color .25s,box-shadow .25s}
+.addr:hover{transform:translateY(-4px);border-color:var(--vc);box-shadow:0 22px 44px -24px var(--vc)}
+.addr-head .ic{position:relative;width:48px;height:48px;border-radius:14px;font-size:1.4rem;box-shadow:0 12px 22px -12px var(--vc);animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite;transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.addr:nth-child(2) .addr-head .ic{animation-delay:-1.1s,-.9s}
+.addr:nth-child(3) .addr-head .ic{animation-delay:-2.2s,-1.8s}
+.addr:nth-child(4) .addr-head .ic{animation-delay:-.5s,-2.4s}
+.addr:hover .addr-head .ic{transform:scale(1.15) rotate(-8deg)}
+@media (prefers-reduced-motion:reduce){.addr-head .ic{animation:none!important}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
