@@ -716,10 +716,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     </div>
     <div class="def">
       <div>
-        <p class="big">Uma <strong>sub-rede</strong> é um pedaço de uma rede IP maior. A <strong>máscara</strong> diz quantos bits do endereço identificam a rede e quantos sobram para os hosts <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>; <a class="cite" href="#ref-rfc950">RFC 950</a>)</span>.</p>
-        <p>Todo endereço IPv4 tem 32 bits. Na notação <code>/26</code> (CIDR), os 26 primeiros bits são da rede e os 6 últimos são dos hosts. Dois computadores só se comunicam diretamente se estiverem na mesma sub-rede, ou seja, se a parte de rede dos seus endereços for igual <span class="cites">(<a class="cite" href="#ref-rfc791">RFC 791</a>; <a class="cite" href="#ref-rfc4632">RFC 4632</a>)</span>.</p>
-        <p>Quando o destino está em outra sub-rede, o PC entrega o pacote ao seu <strong>gateway padrão</strong> (um roteador ou switch de camada 3), que encaminha para a rede certa. Sem gateway, as sub-redes ficam isoladas, mesmo ligadas ao mesmo cabo <span class="cites">(<a class="cite" href="#ref-tanenbaum">TANENBAUM; WETHERALL, 2011</a>; <a class="cite" href="#ref-rfc1812">RFC 1812</a>)</span>.</p>
-        <p>Em cada sub-rede, dois endereços são reservados: o <strong>endereço de rede</strong> (todos os bits de host em 0) e o <strong>broadcast</strong> (todos em 1). Por isso a conta de hosts úteis é <code>2<sup>h</sup> − 2</code> <span class="cites">(<a class="cite" href="#ref-forouzan">FOROUZAN, 2010</a>; <a class="cite" href="#ref-rfc950">RFC 950</a>)</span>.</p>
+        <p class="big">Uma <strong>sub-rede</strong> é um pedaço de uma rede IP maior. A <strong>máscara</strong> diz quantos bits do endereço identificam a rede e quantos sobram para os hosts <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+        <p>Todo endereço IPv4 tem 32 bits. Na notação <code>/26</code> (CIDR), os 26 primeiros bits são da rede e os 6 últimos são dos hosts. Dois computadores só se comunicam diretamente se estiverem na mesma sub-rede, ou seja, se a parte de rede dos seus endereços for igual.</p>
+        <p>Quando o destino está em outra sub-rede, o PC entrega o pacote ao seu <strong>gateway padrão</strong> (um roteador ou switch de camada 3), que encaminha para a rede certa. Sem gateway, as sub-redes ficam isoladas, mesmo ligadas ao mesmo cabo <span class="cites">(<a class="cite" href="#ref-tanenbaum">TANENBAUM; WETHERALL, 2011</a>)</span>.</p>
+        <p>Em cada sub-rede, dois endereços são reservados: o <strong>endereço de rede</strong> (todos os bits de host em 0) e o <strong>broadcast</strong> (todos em 1). Por isso a conta de hosts úteis é <code>2<sup>h</sup> − 2</code> <span class="cites">(<a class="cite" href="#ref-forouzan">FOROUZAN, 2010</a>)</span>.</p>
       </div>
       <div class="ip-anatomy">
         <h3>Anatomia de 192.168.10.70 /26</h3>
@@ -785,7 +785,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
             <button type="button" data-base="172.16.10.0">172.16.x.0</button>
             <button type="button" data-base="10.10.0.0">10.x.0.0</button>
           </div>
-          <small>Faixas privadas: 10.0.0.0/8, 172.16.0.0/12 e 192.168.0.0/16 <span class="cites">(<a class="cite" href="#ref-rfc1918">RFC 1918</a>)</span>.</small>
+          <small>Faixas privadas: 10.0.0.0/8, 172.16.0.0/12 e 192.168.0.0/16.</small>
         </div>
         <div class="field">
           <label for="prefix">Máscara de cada sub-rede</label>
@@ -936,7 +936,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
         <div class="step-n">4</div>
         <div class="step-body">
           <h3>Teste 1: antes do roteamento <span class="tag">Observe</span></h3>
-          <p>Abra <b>Desktop › Command Prompt</b> no PC de origem e faça os pings abaixo. Depois repita no <b>modo Simulation</b> (canto inferior direito), filtrando por <code>ARP</code> e <code>ICMP</code>, e acompanhe os envelopes passo a passo <span class="cites">(<a class="cite" href="#ref-rfc826">RFC 826</a>; <a class="cite" href="#ref-rfc792">RFC 792</a>)</span>.</p>
+          <p>Abra <b>Desktop › Command Prompt</b> no PC de origem e faça os pings abaixo. Depois repita no <b>modo Simulation</b> (canto inferior direito), filtrando por <code>ARP</code> e <code>ICMP</code>, e acompanhe os envelopes passo a passo.</p>
           <div class="tests" id="tests1"></div>
           <div class="observe">
             <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>O que observar</b><span>Para qual IP o PC manda o ARP quando o destino é de outra sub-rede? Alguém responde?</span></div></div>
@@ -983,9 +983,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 
     <div class="def">
       <div>
-        <p class="big">O <strong>DHCP</strong> (Dynamic Host Configuration Protocol) entrega automaticamente a cada máquina o <strong>IP</strong>, a <strong>máscara</strong>, o <strong>gateway padrão</strong> e o <strong>DNS</strong> <span class="cites">(<a class="cite" href="#ref-rfc2131">RFC 2131</a>; <a class="cite" href="#ref-rfc2132">RFC 2132</a>)</span>.</p>
-        <p>O servidor guarda um <b>pool</b> (faixa de endereços) para cada sub-rede. Quando um PC liga, ele ainda não tem IP, então grita em <b>broadcast</b> na própria rede pedindo um endereço. O servidor responde com um IP livre e o “empresta” por um tempo, chamado <b>concessão</b> (lease). No Cisco, a concessão padrão é de 1 dia; antes de vencer, o PC pede para renovar <span class="cites">(<a class="cite" href="#ref-rfc2131">RFC 2131</a>; <a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
-        <p>O broadcast do DHCP <b>não atravessa o roteador</b>. No nosso laboratório isso não é problema: o L3-IFSC tem uma porta em cada sub-rede, então recebe o pedido de todos os setores e escolhe o pool pela porta em que o pedido chegou. Se o servidor ficasse em outra rede, seria preciso um <i>relay</i> com <code>ip helper-address</code> <span class="cites">(<a class="cite" href="#ref-rfc2131">RFC 2131</a>)</span>.</p>
+        <p class="big">O <strong>DHCP</strong> (Dynamic Host Configuration Protocol) entrega automaticamente a cada máquina o <strong>IP</strong>, a <strong>máscara</strong>, o <strong>gateway padrão</strong> e o <strong>DNS</strong>.</p>
+        <p>O servidor guarda um <b>pool</b> (faixa de endereços) para cada sub-rede. Quando um PC liga, ele ainda não tem IP, então grita em <b>broadcast</b> na própria rede pedindo um endereço. O servidor responde com um IP livre e o “empresta” por um tempo, chamado <b>concessão</b> (lease). No Cisco, a concessão padrão é de 1 dia; antes de vencer, o PC pede para renovar <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+        <p>O broadcast do DHCP <b>não atravessa o roteador</b>. No nosso laboratório isso não é problema: o L3-IFSC tem uma porta em cada sub-rede, então recebe o pedido de todos os setores e escolhe o pool pela porta em que o pedido chegou. Se o servidor ficasse em outra rede, seria preciso um <i>relay</i> com <code>ip helper-address</code>.</p>
       </div>
       <div class="ports">
         <div class="port-card" style="--vc:var(--s1)"><b>UDP 67</b><strong>Porta do servidor</strong><span>O L3-IFSC escuta os pedidos nesta porta.</span></div>
@@ -1046,7 +1046,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
             <li><b>ip dhcp pool</b>: cria o pool com um nome, um por setor.</li>
             <li><b>network</b>: a rede e a máscara que o pool atende.</li>
             <li><b>default-router</b>: o gateway que o PC vai receber (a porta do L3-IFSC naquele setor).</li>
-            <li><b>dns-server</b>: o servidor DNS entregue aos PCs <span class="cites">(<a class="cite" href="#ref-rfc2132">RFC 2132</a>)</span>.</li>
+            <li><b>dns-server</b>: o servidor DNS entregue aos PCs.</li>
           </ul>
           <p>Confira com <code>show running-config | section dhcp</code>.</p>
         </div>
@@ -1147,7 +1147,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
     </div>
     <h3 class="err-g ch">Parte 2 · Servidor DHCP</h3>
     <div class="errs">
-      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu 169.254.x.x</h3><p>É o APIPA: o PC não recebeu resposta do DHCP. Confira se existe pool para a rede do setor, se o <code>network</code> está certo e se a porta do L3-IFSC está <i>up</i>. Depois clique de novo em DHCP no PC <span class="cites">(<a class="cite" href="#ref-rfc3927">RFC 3927</a>)</span>.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu 169.254.x.x</h3><p>É o APIPA: o PC não recebeu resposta do DHCP. Confira se existe pool para a rede do setor, se o <code>network</code> está certo e se a porta do L3-IFSC está <i>up</i>. Depois clique de novo em DHCP no PC.</p></article>
       <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu IP de outro setor</h3><p>O servidor escolhe o pool pela porta onde o pedido chega. A porta do L3-IFSC daquele setor está com o IP de outra rede, ou o cabo do switch está na porta errada.</p></article>
       <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu o IP do gateway ou um IP repetido</h3><p>Faltou o <code>ip dhcp excluded-address</code>. Reserve o gateway e os IPs fixos, rode <code>clear ip dhcp binding *</code> e peça o IP de novo nos PCs.</p></article>
       <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>PC recebeu IP, mas sem gateway ou DNS</h3><p>Faltou <code>default-router</code> ou <code>dns-server</code> no pool. Corrija o pool e troque o PC para Static e de volta para DHCP.</p></article>
