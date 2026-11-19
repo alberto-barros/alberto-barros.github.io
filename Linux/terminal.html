@@ -1240,7 +1240,6 @@ html,body{overflow-x:clip}
 </style>
 </head>
 <body>
-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <symbol id="ifsc-mark" viewBox="0 0 410 555">
@@ -1289,7 +1288,7 @@ html,body{overflow-x:clip}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#prompt"><b>02</b>O prompt</a><a href="#sintaxe"><b>03</b>Sintaxe</a><a href="#pastas"><b>04</b>Pastas</a><a href="#comandos"><b>05</b>Comandos</a><a href="#atalhos"><b>06</b>Atalhos</a><a href="#m1"><b>07</b>Passo a passo</a><a href="#exercicios"><b>08</b>Exercícios</a><a href="#erros"><b>09</b>Problemas</a><a href="#checklist-sec"><b>10</b>Checklist</a><a href="#entrega"><b>11</b>Quiz</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#inicio"><b>01</b>Antes de começar</a><a href="#prompt"><b>02</b>O prompt</a><a href="#sintaxe"><b>03</b>Sintaxe</a><a href="#pastas"><b>04</b>Pastas</a><a href="#comandos"><b>05</b>Comandos</a><a href="#atalhos"><b>06</b>Atalhos</a><a href="#m1"><b>07</b>Passo a passo</a><a href="#exercicios"><b>08</b>Exercícios</a><a href="#erros"><b>09</b>Problemas</a><a href="#checklist-sec"><b>10</b>Checklist</a><a href="#entrega"><b>11</b>Quiz</a><a href="#refs"><b>12</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1402,7 +1401,7 @@ Mem.:  <span class="w">3,8Gi</span>   412Mi   3,1Gi
     <div class="sec-head">
       <span class="sec-num">Parte 1 · Sintaxe</span>
       <h2>Como um comando é escrito</h2>
-      <p>Primeiro o <b>comando</b>, depois as <b>opções</b> que mudam o jeito dele trabalhar e, por último, o <b>caminho</b> onde ele vai agir. As partes são separadas por <b>espaço</b>.</p>
+      <p>Primeiro o <b>comando</b>, depois as <b>opções</b> que mudam o jeito dele trabalhar e, por último, o <b>caminho</b> onde ele vai agir. As partes são separadas por <b>espaço</b> <span class="cites">(<a class="cite" href="#ref-shotts">SHOTTS, 2019</a>)</span>.</p>
     </div>
     <div class="def">
       <div style="display:grid;gap:12px">
@@ -1436,7 +1435,7 @@ man ls<span class="c">               # manual completo (q sai)</span></pre></div
     <div class="sec-head">
       <span class="sec-num">Parte 1 · Sistema de arquivos</span>
       <h2>As principais pastas do Linux</h2>
-      <p>No Linux não existe <code>C:\</code>. Tudo começa na <b>raiz</b>, escrita como uma barra <code>/</code>.</p>
+      <p>No Linux não existe <code>C:\</code>. Tudo começa na <b>raiz</b>, escrita como uma barra <code>/</code>, e cada pasta tem uma função definida pelo padrão FHS <span class="cites">(<a class="cite" href="#ref-fhs">LINUX FOUNDATION, 2015</a>)</span>.</p>
     </div>
     <div class="def">
       <div class="code out"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>árvore de diretórios</span></div><pre><span class="ok">/</span>
@@ -1623,7 +1622,7 @@ rm -r linux/lab1<span class="c">                 # apaga lab1 com tudo dentro</s
     <div class="sec-head">
       <span class="sec-num">Passo 04 · VM · root</span>
       <h2>Vire superusuário (root) com su -</h2>
-      <p>O <b>root</b> é o superusuário: pode instalar programas, mudar configurações e mexer em qualquer pasta. O <code>ifsc</code> troca para o root com <code>su -</code> e volta quando terminar.</p>
+      <p>O <b>root</b> é o superusuário: pode instalar programas, mudar configurações e mexer em qualquer pasta. O <code>ifsc</code> troca para o root com <code>su -</code> e volta quando terminar <span class="cites">(<a class="cite" href="#ref-hertzog">HERTZOG; MAS, 2020</a>)</span>.</p>
     </div>
     <ol class="steps">
       <li class="step">
@@ -1657,7 +1656,7 @@ whoami<span class="c">        # mostra: ifsc de novo</span></pre></div>
     <div class="sec-head">
       <span class="sec-num">Passo 05 · VM · root</span>
       <h2>Instale pacotes com apt-get</h2>
-      <p>O <code>apt-get</code> baixa programas dos repositórios do Debian já com tudo o que eles precisam. Primeiro atualize a lista, depois instale.</p>
+      <p>O <code>apt-get</code> baixa programas dos repositórios do Debian já com tudo o que eles precisam. Primeiro atualize a lista, depois instale <span class="cites">(<a class="cite" href="#ref-aoki">AOKI, 2024</a>)</span>.</p>
     </div>
     <ol class="steps">
       <li class="step">
@@ -1759,7 +1758,7 @@ ls --help<span class="c">      # ajuda rápida</span></pre></div>
     <div class="sec-head">
       <span class="sec-num">Passo 08 · VM</span>
       <h2>Faça o fastfetch abrir junto com o terminal</h2>
-      <p>Toda vez que o terminal abre, o Bash lê o arquivo oculto <code>~/.bashrc</code>. Basta acrescentar o <code>fastfetch</code> no final dele. Faça isto como <b>ifsc</b>, não como root.</p>
+      <p>Toda vez que o terminal abre, o Bash lê o arquivo oculto <code>~/.bashrc</code> <span class="cites">(<a class="cite" href="#ref-bash">FREE SOFTWARE FOUNDATION, 2022</a>)</span>. Basta acrescentar o <code>fastfetch</code> no final dele. Faça isto como <b>ifsc</b>, não como root.</p>
     </div>
     <ol class="steps">
       <li class="step">
@@ -1904,6 +1903,31 @@ htop<span class="c">   # F3, digite bash, F10 para sair</span></pre></div></deta
         <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
         <div class="qz-stage" id="q-stage" aria-live="polite"></div>
       </div>
+    </div>
+  </div>
+</section>
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Referências</span>
+      <h2>Para estudar mais</h2>
+      <p>Os comandos e conceitos desta aula vêm dos manuais oficiais do Debian e do Bash, do padrão de pastas do Linux e de um livro sobre a linha de comando. Clique numa citação do texto para ir até a referência.</p>
+    </div>
+    <h3 class="ref-h">Referências bibliográficas</h3>
+    <ol class="books">
+      <li id="ref-aoki"><span class="ref-a">AOKI, O.</span> <i>Debian Reference</i>. [S. l.]: Debian Project, 2024. Disponível em: <a href="https://www.debian.org/doc/manuals/debian-reference/" target="_blank" rel="noopener">https://www.debian.org/doc/manuals/debian-reference/</a>.<small>Manual de referência do Debian: terminal, pastas, usuários e gerenciamento de pacotes com o apt.</small></li>
+      <li id="ref-bash"><span class="ref-a">FREE SOFTWARE FOUNDATION.</span> <i>GNU Bash Reference Manual</i>. Boston: FSF, 2022. Disponível em: <a href="https://www.gnu.org/software/bash/manual/" target="_blank" rel="noopener">https://www.gnu.org/software/bash/manual/</a>.<small>Manual do Bash: prompt, histórico, autocompletar com Tab e o arquivo <code>~/.bashrc</code>.</small></li>
+      <li id="ref-coreutils"><span class="ref-a">FREE SOFTWARE FOUNDATION.</span> <i>GNU Coreutils</i>: core GNU utilities. Boston: FSF, [s.d.]. Disponível em: <a href="https://www.gnu.org/software/coreutils/manual/" target="_blank" rel="noopener">https://www.gnu.org/software/coreutils/manual/</a>.<small>Manual de <code>ls</code>, <code>mkdir</code>, <code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>pwd</code> e <code>df</code>.</small></li>
+      <li id="ref-hertzog"><span class="ref-a">HERTZOG, R.; MAS, R.</span> <i>O Manual do Administrador Debian</i>. [S. l.]: Freexian, 2020. Disponível em: <a href="https://debian-handbook.info/" target="_blank" rel="noopener">https://debian-handbook.info/</a>.<small>Usuário root, instalação de pacotes com apt e tarefas do tasksel.</small></li>
+      <li id="ref-fhs"><span class="ref-a">LINUX FOUNDATION.</span> <i>Filesystem Hierarchy Standard</i>: versão 3.0. [S. l.]: The Linux Foundation, 2015. Disponível em: <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html" target="_blank" rel="noopener">https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html</a>.<small>O padrão que define as pastas <code>/etc</code>, <code>/home</code>, <code>/usr</code>, <code>/var</code> e <code>/tmp</code>.</small></li>
+      <li id="ref-shotts"><span class="ref-a">SHOTTS, W.</span> <i>The Linux Command Line</i>. 2. ed. San Francisco: No Starch Press, 2019. Disponível em: <a href="https://linuxcommand.org/tlcl.php" target="_blank" rel="noopener">https://linuxcommand.org/tlcl.php</a>.<small>Livro gratuito para iniciantes: navegação, arquivos, sintaxe dos comandos e atalhos do teclado.</small></li>
+    </ol>
+    <h3 class="ref-h">Ferramentas</h3>
+    <div class="refs">
+      <a class="ref" href="https://htop.dev/" target="_blank" rel="noopener"><span class="ref-n">Processos</span><b>htop</b><p>Monitor de processos interativo usado no Passo 6.</p><span class="ref-t"><i>htop</i></span><span class="ref-go">Abrir htop.dev ↗</span></a>
+      <a class="ref" href="https://github.com/fastfetch-cli/fastfetch" target="_blank" rel="noopener"><span class="ref-n">Sistema</span><b>fastfetch</b><p>Mostra o logo do Debian e o resumo do sistema ao abrir o terminal.</p><span class="ref-t"><i>fastfetch</i></span><span class="ref-go">Abrir no GitHub ↗</span></a>
+      <a class="ref" href="https://wiki.debian.org/tasksel" target="_blank" rel="noopener"><span class="ref-n">Pacotes</span><b>tasksel</b><p>Página do wiki do Debian sobre as tarefas do tasksel.</p><span class="ref-t"><i>Debian Wiki</i></span><span class="ref-go">Abrir wiki.debian.org ↗</span></a>
+      <a class="ref" href="https://kde.org/plasma-desktop/" target="_blank" rel="noopener"><span class="ref-n">Interface</span><b>KDE Plasma</b><p>Página oficial da interface gráfica instalada no Passo 9.</p><span class="ref-t"><i>KDE</i></span><span class="ref-go">Abrir kde.org ↗</span></a>
     </div>
   </div>
 </section>
