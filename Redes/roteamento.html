@@ -805,6 +805,20 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 #beneficios .ben:hover{border-color:var(--bc);box-shadow:0 22px 44px -24px var(--bc)}
 :root[data-theme="dark"] #beneficios .ben .ico{color:#08130C}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #beneficios .ben .ico{color:#08130C}}
+
+/* cards estático × dinâmico */
+.vs{gap:18px}
+.vs-card{position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--vc) 24%,var(--line));border-top:0;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 11%,var(--surface)),var(--surface) 60%);padding:28px 26px 24px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.vs-card::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--vc)}
+.vs-card:hover{transform:translateY(-4px);border-color:var(--vc);box-shadow:0 22px 44px -24px var(--vc)}
+.vs-card h3{font-size:1.3rem}
+.vs-card .ico{width:48px;height:48px;border-radius:14px;background:var(--vc);color:#fff;box-shadow:0 12px 22px -12px var(--vc)}
+.vs-card .ico svg{width:24px;height:24px}
+.vs-card ul{list-style:none;padding:0;display:grid;gap:8px}
+.vs-card li{position:relative;margin:0;padding:9px 12px 9px 34px;border-radius:12px;background:color-mix(in srgb,var(--vc) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 14%,transparent)}
+.vs-card li::before{content:"";position:absolute;left:12px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--vc)}
+:root[data-theme="dark"] .vs-card .ico{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vs-card .ico{color:#08130C}}
 </style>
 </head>
 <body>
