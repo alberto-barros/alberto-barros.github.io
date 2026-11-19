@@ -83,23 +83,10 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .srv .slot{fill:#0B1222;stroke:#2F6FD0;stroke-width:1}
 .srv .bar{fill:#1E3A6E}
 .srv .led{fill:#2FD661;filter:drop-shadow(0 0 3px #2FD661);animation:ledb 1.6s steps(1) infinite}
-.srv .led.l2{animation-delay:.5s}.srv .led.l3{animation-delay:1s}
+.srv .led.l2{animation-delay:.4s}.srv .led.l3{animation-delay:.8s}.srv .led.l4{animation-delay:1.2s}
 @keyframes ledb{0%,100%{fill:#2FD661;opacity:1}50%{fill:#7CF5A0;opacity:.4}}
 .srv.hit .body{stroke:#8FD0FF}
 .srv.hit .led{fill:#C8FFD8;opacity:1;animation:none}
-.net-globe .gl-bg{fill:var(--blue-soft)}
-.net-globe .gl-ring{fill:none;stroke:var(--blue);stroke-width:2}
-.net-globe .mer{fill:none;stroke:var(--blue);stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:spin 4s linear infinite}
-.net-globe .mer.m2{animation-delay:-2s}
-@keyframes spin{0%{transform:scaleX(1)}50%{transform:scaleX(.04)}100%{transform:scaleX(1)}}
-.net-globe .lat{fill:none;stroke:var(--blue);stroke-width:1.2;opacity:.7}
-.net-globe .pulse{fill:none;stroke:var(--blue);stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:pls 2.8s ease-out infinite}
-.net-globe .pulse.p2{animation-delay:1.4s}
-@keyframes pls{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.9);opacity:0}}
-.net-globe .orbit{transform-box:view-box;transform-origin:370px 27px;animation:orb 6s linear infinite}
-@keyframes orb{to{transform:rotate(360deg)}}
-.net-globe .orb-path{fill:none;stroke:var(--violet);stroke-width:1.2;stroke-dasharray:2 4;opacity:.8}
-.net-globe .orb-dot{fill:var(--violet)}
 .lbl{font-family:var(--font-display);font-weight:600;font-size:10px;text-anchor:middle;fill:var(--ink)}
 .lbl.sub{font-family:var(--font-mono);font-weight:400;font-size:8px;fill:var(--muted)}
 .cur{transition:transform .6s cubic-bezier(.3,.7,.2,1)}
@@ -218,7 +205,6 @@ footer .fb svg{height:26px;width:auto}
           <linearGradient id="srvg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5AA9FF"/><stop offset="1" stop-color="#7A5CE6"/></linearGradient>
           <linearGradient id="vid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B8EEA"/><stop offset="1" stop-color="#8B6CF0"/></linearGradient>
           <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <clipPath id="gclip"><circle cx="370" cy="27" r="22"/></clipPath>
           <clipPath id="scrclip"><rect x="0" y="0" width="206" height="130" rx="4"/></clipPath>
         </defs>
 
@@ -308,27 +294,14 @@ footer .fb svg{height:26px;width:auto}
         <text class="lbl" x="121" y="198">Computador</text>
         <text class="lbl sub" x="121" y="211">navegador</text>
 
-        <!-- internet (globo animado) -->
-        <g class="net-globe">
-          <circle class="pulse" cx="370" cy="27" r="22"/>
-          <circle class="pulse p2" cx="370" cy="27" r="22"/>
-          <circle class="gl-bg" cx="370" cy="27" r="22"/>
-          <g clip-path="url(#gclip)">
-            <ellipse class="mer m1" cx="370" cy="27" rx="22" ry="22"/>
-            <ellipse class="mer m2" cx="370" cy="27" rx="22" ry="22"/>
-            <path class="lat" d="M348 27h44M350 18h40M350 36h40"/>
-          </g>
-          <circle class="gl-ring" cx="370" cy="27" r="22"/>
-          <g class="orbit"><ellipse class="orb-path" cx="370" cy="27" rx="30" ry="10"/><circle class="orb-dot" cx="400" cy="27" r="3.2"/></g>
-        </g>
-
         <!-- servidor -->
         <g class="srv" id="srv">
-          <rect class="body" x="322" y="58" width="96" height="104" rx="15"/>
+          <rect class="body" x="322" y="16" width="96" height="146" rx="15"/>
           <g>
-            <rect class="slot" x="332" y="66" width="76" height="27" rx="7"/><rect class="bar" x="340" y="78" width="32" height="4" rx="2"/><circle class="led" cx="396" cy="80" r="3.2"/>
-            <rect class="slot" x="332" y="97" width="76" height="27" rx="7"/><rect class="bar" x="340" y="109" width="32" height="4" rx="2"/><circle class="led l2" cx="396" cy="111" r="3.2"/>
-            <rect class="slot" x="332" y="128" width="76" height="27" rx="7"/><rect class="bar" x="340" y="140" width="32" height="4" rx="2"/><circle class="led l3" cx="396" cy="142" r="3.2"/>
+            <rect class="slot" x="332" y="24" width="76" height="28" rx="7"/><rect class="bar" x="340" y="36" width="32" height="4" rx="2"/><circle class="led l1" cx="396" cy="38" r="3.2"/>
+            <rect class="slot" x="332" y="58" width="76" height="28" rx="7"/><rect class="bar" x="340" y="70" width="32" height="4" rx="2"/><circle class="led l2" cx="396" cy="72" r="3.2"/>
+            <rect class="slot" x="332" y="92" width="76" height="28" rx="7"/><rect class="bar" x="340" y="104" width="32" height="4" rx="2"/><circle class="led l3" cx="396" cy="106" r="3.2"/>
+            <rect class="slot" x="332" y="126" width="76" height="28" rx="7"/><rect class="bar" x="340" y="138" width="32" height="4" rx="2"/><circle class="led l4" cx="396" cy="140" r="3.2"/>
           </g>
         </g>
         <text class="lbl" x="370" y="198">Servidor web</text>
