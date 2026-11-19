@@ -605,6 +605,28 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 @media (max-width:760px){.tb-brand .div,.tb-brand .site{display:none}}
 @media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
 @media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
+
+/* referências */
+.ref-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.ref-h::after{content:"";height:1px;flex:1;background:var(--line)}
+.sec-head + .ref-h{margin-top:0}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.refs-2{grid-template-columns:minmax(0,520px)}
+.ref{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}
+.ref:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 12px 26px -18px var(--green)}
+.ref-n{font:700 .78rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;justify-self:start}
+.ref b{font-family:var(--f-display);font-size:.98rem;line-height:1.3}
+.ref p{font-size:.88rem;color:var(--muted)}
+.ref-t{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ref-t i{font:600 .7rem var(--f-mono);font-style:normal;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.ref-go{font-size:.8rem;font-weight:700;color:var(--green-strong);margin-top:4px}
+.books{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:bk}
+.books li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 56px;counter-increment:bk;font-size:.95rem}
+.books li::before{content:counter(bk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;background:var(--green);color:#fff;display:grid;place-items:center;font:800 .85rem var(--f-display)}
+:root[data-theme="dark"] .books li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .books li::before{color:#08130C}}
+.ref-a{font-weight:700}
+.books small{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
 </style>
 </head>
 <body>
@@ -654,7 +676,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       <a class="solid" href="#quiz-sec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Sub-rede</a><a href="#beneficios"><b>02</b>Benefícios</a><a href="#planejador"><b>03</b>Planejador</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Atividade</a><a href="#dhcp" class="ch"><b>06</b>Desafio DHCP</a><a href="#checklist-sec"><b>07</b>Checklist</a><a href="#erros"><b>08</b>Erros comuns</a><a href="#quiz-sec"><b>09</b>Quiz</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Sub-rede</a><a href="#beneficios"><b>02</b>Benefícios</a><a href="#planejador"><b>03</b>Planejador</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Atividade</a><a href="#dhcp" class="ch"><b>06</b>Desafio DHCP</a><a href="#checklist-sec"><b>07</b>Checklist</a><a href="#erros"><b>08</b>Erros comuns</a><a href="#quiz-sec"><b>09</b>Quiz</a><a href="#refs"><b>10</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1137,6 +1159,54 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
       </div>
       <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
       <div class="qz-stage" id="q-stage" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Referências</span>
+      <h2>Para estudar mais</h2>
+      <p>Os conceitos desta aula vêm das normas oficiais da Internet (RFCs) e dos livros-texto de redes. Cada cartão mostra em que parte da aula a norma aparece.</p>
+    </div>
+    <h3 class="ref-h">Normas da Internet · RFCs</h3>
+    <div class="refs">
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc791" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 791</span><b>Internet Protocol</b><p>Protocolo IP versão 4: formato do endereço de 32 bits e do pacote.</p><span class="ref-t"><i>IPv4</i><i>endereço</i><i>pacote</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc950" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 950</span><b>Internet Standard Subnetting Procedure</b><p>Define a divisão de uma rede em sub-redes com a máscara.</p><span class="ref-t"><i>sub-rede</i><i>máscara</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc4632" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 4632</span><b>Classless Inter-domain Routing (CIDR)</b><p>Notação /prefixo e endereçamento sem classes.</p><span class="ref-t"><i>CIDR</i><i>/26</i><i>prefixo</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc1918" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 1918</span><b>Address Allocation for Private Internets</b><p>Faixas privadas 10/8, 172.16/12 e 192.168/16.</p><span class="ref-t"><i>IP privado</i><i>planejador</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc826" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 826</span><b>An Ethernet Address Resolution Protocol</b><p>ARP: descobrir o MAC a partir do IP.</p><span class="ref-t"><i>ARP</i><i>Teste 1</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc792" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 792</span><b>Internet Control Message Protocol</b><p>ICMP: base do ping (Echo Request e Echo Reply).</p><span class="ref-t"><i>ping</i><i>tracert</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc1812" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 1812</span><b>Requirements for IP Version 4 Routers</b><p>Como um roteador encaminha pacotes entre redes.</p><span class="ref-t"><i>gateway</i><i>roteamento</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc2131" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 2131</span><b>Dynamic Host Configuration Protocol</b><p>DHCP: processo DORA, portas UDP 67 e 68, concessão.</p><span class="ref-t"><i>DHCP</i><i>DORA</i><i>relay</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc2132" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 2132</span><b>DHCP Options and BOOTP Vendor Extensions</b><p>Opções entregues pelo DHCP: máscara, gateway e DNS.</p><span class="ref-t"><i>default-router</i><i>dns-server</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc3927" target="_blank" rel="noopener">
+        <span class="ref-n">RFC 3927</span><b>Dynamic Configuration of IPv4 Link-Local Addresses</b><p>Endereços 169.254.x.x usados quando o DHCP não responde.</p><span class="ref-t"><i>APIPA</i><i>169.254</i></span><span class="ref-go">Abrir no RFC Editor ↗</span>
+      </a>
+    </div>
+    <h3 class="ref-h">Livros</h3>
+    <ol class="books"><li><span class="ref-a">KUROSE, J. F.; ROSS, K. W.</span> <i>Redes de computadores e a Internet</i>: uma abordagem top-down. 6. ed. São Paulo: Pearson, 2013.<small>Cap. 4: camada de rede, endereçamento IPv4, sub-redes, DHCP.</small></li><li><span class="ref-a">TANENBAUM, A. S.; WETHERALL, D.</span> <i>Redes de computadores</i>. 5. ed. São Paulo: Pearson Prentice Hall, 2011.<small>Cap. 5: camada de rede, IP, sub-redes, ICMP, ARP e DHCP.</small></li><li><span class="ref-a">FOROUZAN, B. A.</span> <i>Comunicação de dados e redes de computadores</i>. 4. ed. Porto Alegre: AMGH, 2010.<small>Endereçamento IPv4, máscaras, CIDR e protocolos de apoio.</small></li></ol>
+    <h3 class="ref-h">Ferramenta e curso</h3>
+    <div class="refs refs-2">
+      <a class="ref" href="https://www.netacad.com/" target="_blank" rel="noopener"><span class="ref-n">Cisco</span><b>Cisco Networking Academy</b><p>Curso CCNA: Introduction to Networks e download do Cisco Packet Tracer, usado no laboratório.</p><span class="ref-t"><i>Packet Tracer</i><i>CCNA</i></span><span class="ref-go">Abrir netacad.com ↗</span></a>
     </div>
   </div>
 </section>
