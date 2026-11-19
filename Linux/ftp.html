@@ -1196,6 +1196,17 @@ html,body{overflow-x:clip}
 /* tabelas com contorno preto */
 @media (min-width:641px){.tbl-wrap,.desafio .tbl-wrap{border:2px solid var(--fz-edge)}.tbl-wrap th{border-bottom:2px solid var(--fz-edge)}}
 @media (max-width:640px){.tbl-wrap tr{border:2px solid var(--fz-edge)}}
+
+/* cuidados: tudo em amarelo padronizado */
+.care .err,.care .err:nth-child(n){--vc:var(--s2);background:linear-gradient(180deg,color-mix(in srgb,var(--s2) 12%,var(--surface)),var(--surface) 62%);border-color:color-mix(in srgb,var(--s2) 35%,var(--line))}
+.care .err h3 svg{background:var(--s2);color:#fff;box-shadow:0 8px 16px -8px var(--s2)}
+:root[data-theme="dark"] .care .err h3 svg{color:#1A1203}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err h3 svg{color:#1A1203}}
+.care .err code{color:var(--warn);background:color-mix(in srgb,var(--s2) 12%,var(--surface))}
+.care .err:hover{background:linear-gradient(180deg,color-mix(in srgb,var(--s2) 18%,var(--surface)),color-mix(in srgb,var(--s2) 7%,var(--surface)));border-color:var(--s2);box-shadow:0 26px 40px -26px var(--s2)}
+.care .err:hover h3 svg{color:#fff}
+:root[data-theme="dark"] .care .err:hover h3 svg{color:#1A1203}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .care .err:hover h3 svg{color:#1A1203}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
