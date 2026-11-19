@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+/* ---- acréscimos: aula IPv6 ---- */
+.cls{min-width:0}
+.cls .range{font-size:clamp(.95rem,1.5vw,1.1rem);overflow-wrap:anywhere;word-break:break-word}
+.cls dd{min-width:0;overflow-wrap:anywhere;word-break:break-word}
+#escrita .cls dl{grid-template-columns:1fr;gap:2px}
+#escrita .cls dd{text-align:left;margin-bottom:8px}
+#tipos .cls-top b{font-size:1rem;letter-spacing:-.02em}
+#tipos .cls .oct4{font-size:.62rem}
+#tipos .cls .oct4 span{padding:7px 0;overflow:hidden;text-overflow:ellipsis}
+</style></head><body>
+<title>IPv6: conceitos, endereçamento e sub-redes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;800&family=Sora:wght@600;700;800&display=swap">
+<style>
+/* Layout: barra IFSC fixa, hero com cartão das 3 sub-redes, seções em coluna de 1080px; o planejador alimenta tabelas, comandos do roteador, testes e animação */
+:root{
+  --bg:#F3F9F4; --surface:#FFFFFF; --surface-2:#E7F5EA; --ink:#0F2417; --muted:#4A6353; --line:#D2E6D7;
+  --green:#2F9E41; --green-strong:#1E7A30; --mint:#C6EECD; --red:#C8191E;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#7FA88B; --code-key:#8BE39B;
+  --s1:#1C7EC0; --s2:#C98204; --s3:#8250C8; --s4:#D1407A; --neutral:#8A9A90;
+  --ok:#1E7A30; --bad:#C8191E; --warn:#A86A00;
+  --f-display:"Sora","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1510; --surface:#10211A; --surface-2:#163024; --ink:#E4F3E8; --muted:#9BB7A4; --line:#244332;
+  --green:#4DC262; --green-strong:#86DD94; --mint:#1C4A2A; --red:#F0585C;
+  --code-bg:#000000; --code-fg:#D7F2DD; --code-muted:#6E9479; --code-key:#8BE39B;
+  --s1:#4AA8E8; --s2:#F0B23B; --s3:#A57DEA; --s4:#EC6FA0; --neutral:#6E8577;
+  --ok:#6FD982; --bad:#F0585C; --warn:#F0B23B; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:700;letter-spacing:-.02em}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);padding:.1em .4em;border-radius:6px;color:var(--green-strong)}
+a{color:var(--green-strong)}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:6px}
+
+/* barra */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.ifsc-logo{height:40px;width:auto;flex:none;overflow:visible}
+.brand-txt{display:flex;flex-direction:column;line-height:1.05}
+.brand-txt .b1{font-family:"Open Sans",var(--f-body);font-weight:800;font-size:.95rem;letter-spacing:.01em}
+.brand-txt .b2{font-family:"Open Sans",var(--f-body);font-weight:400;font-size:.88rem}
+.brand-sep{width:1px;height:28px;background:var(--line)}
+.brand-course{font-weight:600;color:var(--muted);font-size:.8rem}
+@media (max-width:520px){.brand-sep,.brand-course{display:none}}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{text-decoration:none;color:var(--muted);font-weight:600;font-size:.85rem;padding:6px 10px;border-radius:999px}
+.nav a:hover{background:var(--surface-2);color:var(--green-strong)}
+.back{display:inline-flex;align-items:center;gap:6px;text-decoration:none;background:#C8191E;color:#fff;font-weight:700;font-size:.85rem;padding:7px 14px 7px 10px;border-radius:999px;box-shadow:0 6px 16px -8px #C8191E;transition:background .2s,transform .2s}
+.back:hover{background:#A51318;transform:translateY(-1px)}
+.back svg{width:16px;height:16px}
+@media (max-width:860px){.back{margin-left:auto}}
+
+/* hero */
+.hero{background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding-block:56px 48px}
+.hero .wrap > *{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green-strong)}
+.eyebrow::before{content:"";width:22px;height:3px;border-radius:3px;background:var(--green)}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.5rem);font-weight:800;letter-spacing:-.035em;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--green)}
+.lead{font-size:1.12rem;color:var(--muted);max-width:56ch;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:600}
+.chip svg{width:16px;height:16px;color:var(--green)}
+.hero-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 40px -24px color-mix(in srgb,var(--green) 55%,transparent)}
+.hero-card h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.hero-card .hint{font-size:.8rem;color:var(--muted);margin-top:12px}
+.vlist{display:grid;gap:8px}
+.vrow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--surface-2)}
+.vtag{font-family:var(--f-mono);font-weight:600;font-size:.78rem;color:#fff;background:var(--vc);padding:3px 8px;border-radius:7px;white-space:nowrap}
+:root[data-theme="dark"] .vtag{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vtag{color:#08130C}}
+.vrow b{font-family:var(--f-display);font-size:.9rem}
+.vrow span.net{font-family:var(--f-mono);font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* seções */
+section.sec{padding-block:64px;border-bottom:1px solid var(--line)}
+.sec-head{display:grid;gap:10px;margin-bottom:32px}
+.sec-head p{color:var(--muted);font-size:1.05rem;max-width:70ch}
+.sec-num{font-family:var(--f-mono);font-size:.8rem;color:var(--green-strong);font-weight:600}
+
+.def{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+.def > *{min-width:0}
+.def p+p{margin-top:14px}
+.def .big{font-size:1.2rem;line-height:1.55}
+.def .big strong{color:var(--green-strong)}
+.ip-anatomy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:16px}
+.ip-anatomy h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ipline{font-family:var(--f-mono);font-size:clamp(1.05rem,2.6vw,1.5rem);font-weight:600;display:flex;flex-wrap:wrap;gap:2px;font-variant-numeric:tabular-nums}
+.ipline .n{color:var(--green-strong)} .ipline .h{color:var(--s3)}
+.anat-rows{display:grid;gap:8px}
+.anat{display:grid;grid-template-columns:150px 1fr;gap:10px;font-size:.92rem;padding:8px 0;border-top:1px dashed var(--line)}
+.anat b{font-family:var(--f-display);font-size:.88rem}
+.anat span{font-family:var(--f-mono);font-size:.85rem;color:var(--muted)}
+@media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
+
+.ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--mint);color:var(--green-strong);flex:none}
+.ico svg{width:22px;height:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ben{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:grid;gap:10px;align-content:start;transition:transform .2s,border-color .2s}
+.ben:hover{transform:translateY(-3px);border-color:var(--green)}
+.ben p{color:var(--muted);font-size:.95rem}
+.note{margin-top:20px;display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;background:var(--surface-2);border-radius:var(--r);padding:18px 20px}
+.note p{font-size:.98rem}
+
+/* planejador */
+.planner{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+.pform{background:var(--surface);border:2px solid var(--green);border-radius:22px;padding:20px;display:grid;gap:18px}
+.field{display:grid;gap:6px}
+.field > label,.field > .lbl{font-weight:700;font-size:.88rem}
+.field small{color:var(--muted);font-size:.8rem;line-height:1.4}
+.field input[type=text],.field input[type=number],.field select{font:600 1rem var(--f-mono);padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);width:100%}
+.field input:focus{border-color:var(--green)}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.presets button{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .78rem var(--f-mono);padding:5px 9px;border-radius:999px;cursor:pointer}
+.presets button:hover{border-color:var(--green);color:var(--green-strong)}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg button{border:0;background:transparent;font:600 .85rem var(--f-body);color:var(--muted);padding:7px 12px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--green);color:#fff}
+:root[data-theme="dark"] .seg button[aria-pressed="true"]{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .seg button[aria-pressed="true"]{color:#08130C}}
+.msg{font-size:.85rem;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:start}
+.msg svg{width:18px;height:18px;margin-top:2px}
+.msg.ok{background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok)}
+.msg.warn{background:color-mix(in srgb,var(--warn) 14%,transparent);color:var(--warn)}
+.msg.bad{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+.msg span{color:var(--ink)}
+
+.pout{display:grid;gap:16px;min-width:0}
+.bits{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:10px}
+.bits-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline}
+.bits-top b{font-family:var(--f-mono);font-size:1rem}
+.bits-top span{font-size:.82rem;color:var(--muted)}
+.bitrow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.oct{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:2px}
+.bit{aspect-ratio:1/1.3;max-width:100%;border-radius:4px;display:grid;place-items:center;font:600 .68rem var(--f-mono);background:var(--surface-2);color:var(--muted)}
+.bit.on{background:var(--green);color:#fff}
+:root[data-theme="dark"] .bit.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .bit.on{color:#08130C}}
+.bitleg{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);font-weight:600}
+.bitleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.stat b{font-family:var(--f-display);font-size:1.5rem;display:block;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.76rem;color:var(--muted);font-weight:600}
+
+/* tabelas */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:.9rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+td{font-variant-numeric:tabular-nums}
+td.mono{font-family:var(--f-mono);font-size:.84rem}
+tr:last-child td{border-bottom:0}
+
+/* animação */
+.anim{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.anim-ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:var(--surface-2)}
+.anim-ctl .seg{background:var(--surface)}
+.anim-ctl label{font-size:.85rem;font-weight:600;color:var(--muted);display:flex;gap:8px;align-items:center}
+.anim-ctl select{font:600 .85rem var(--f-body);padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn{border:0;background:var(--green);color:#fff;font:700 .9rem var(--f-body);padding:10px 18px;border-radius:999px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.btn:hover{background:var(--green-strong)}
+:root[data-theme="dark"] .btn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn{color:#08130C}}
+.btn svg{width:16px;height:16px}
+.stage{overflow-x:auto}
+.stage svg{display:block;width:100%;min-width:600px;height:auto}
+.status{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;padding:14px 18px;border-top:1px solid var(--line);font-size:.92rem}
+.pill{font:700 .8rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
+.pill.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.pill.bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}
+.status .desc{color:var(--muted);flex:1;min-width:240px}
+
+/* passos */
+.steps{display:grid;list-style:none;padding:0;margin:0}
+.step{display:grid;grid-template-columns:56px minmax(0,1fr);gap:20px;position:relative;padding-bottom:40px}
+.step::before{content:"";position:absolute;left:27px;top:56px;bottom:0;width:2px;background:linear-gradient(var(--green),var(--line))}
+.step:last-child::before{display:none}
+.step-n{width:56px;height:56px;border-radius:18px;background:var(--green);color:#fff;font-family:var(--f-display);font-weight:800;font-size:1.3rem;display:grid;place-items:center;box-shadow:0 10px 24px -12px var(--green);position:relative;z-index:1}
+:root[data-theme="dark"] .step-n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .step-n{color:#08130C}}
+.step.test .step-n{background:var(--surface);color:var(--green-strong);border:2px dashed var(--green)}
+.step-body{display:grid;gap:12px;min-width:0;padding-top:4px}
+.step-body h3{font-size:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--mint);color:var(--green-strong)}
+.step-body > p{color:var(--muted);max-width:70ch}
+.step-body ul{margin:0;padding-left:20px;color:var(--muted)}
+.step-body li{margin-block:4px}
+.step-body li b{color:var(--ink)}
+.pt-ui{display:flex;flex-wrap:wrap;gap:8px}
+.pt-ui span{font-size:.82rem;font-weight:600;background:var(--surface);border:1px solid var(--line);padding:5px 10px;border-radius:8px}
+.pt-ui span::after{content:"›";margin-left:8px;color:var(--green)}
+.pt-ui span:last-child::after{content:none}
+
+.code{background:var(--code-bg);color:var(--code-fg);border-radius:14px;overflow:hidden;min-width:0}
+.code-top{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-bottom:1px solid color-mix(in srgb,var(--code-fg) 12%,transparent)}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:#3b5a46}.dots i:first-child{background:#5BC46D}
+.code-top span{font:600 .75rem var(--f-mono);color:var(--code-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy{border:1px solid color-mix(in srgb,var(--code-fg) 25%,transparent);background:transparent;color:var(--code-fg);font:600 .75rem var(--f-body);padding:5px 10px;border-radius:8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.copy:hover{background:color-mix(in srgb,var(--code-fg) 10%,transparent)}
+.copy svg{width:14px;height:14px}
+.code pre{margin:0;padding:14px 16px;overflow-x:auto;font:400 .86rem/1.65 var(--f-mono);white-space:pre}
+.code .c{color:var(--code-muted);font-style:italic}
+.code .p{color:var(--code-key);font-weight:600}
+
+/* testes */
+.tests{display:grid;gap:10px}
+.test-row{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:8px}
+.test-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.test-head .kind{font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.kind.same{background:var(--mint);color:var(--green-strong)}
+.kind.cross{background:color-mix(in srgb,var(--s1) 15%,transparent);color:var(--s1)}
+.test-head b{font-family:var(--f-mono);font-size:.88rem}
+.test-head small{color:var(--muted);font-size:.85rem}
+.test-row details{font-size:.88rem;color:var(--muted)}
+.test-row summary{cursor:pointer;font-weight:600;color:var(--green-strong);width:fit-content}
+.test-row details p{margin-top:6px;display:flex;gap:8px;align-items:flex-start}
+.test-row details svg{width:18px;height:18px;flex:none;margin-top:2px}
+.r-ok{color:var(--ok)} .r-bad{color:var(--bad)}
+.observe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.obs{background:var(--surface-2);border-radius:14px;padding:14px;display:grid;grid-template-columns:40px 1fr;gap:12px;font-size:.92rem}
+.obs b{display:block;font-family:var(--f-display)}
+.obs span{color:var(--muted)}
+
+/* entrega */
+.deliver.solo{grid-template-columns:minmax(0,720px)}
+.deliver{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:start}
+.deliver > *{min-width:0}
+.dcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;display:grid;gap:16px}
+.dcard.hl{border:2px solid var(--green);background:linear-gradient(180deg,var(--surface-2),var(--surface) 60%)}
+.fname{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--code-bg);color:var(--code-key);font:600 1.15rem var(--f-mono);padding:14px 16px;border-radius:14px;word-break:break-all}
+.fname span{flex:1;min-width:0}
+.check{display:grid;gap:8px}
+.check label{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-size:.95rem;cursor:pointer;padding:8px 10px;border-radius:10px}
+.check label:hover{background:var(--surface-2)}
+.check input{width:18px;height:18px;accent-color:var(--green);margin-top:3px}
+.check input:checked + span{color:var(--muted);text-decoration:line-through}
+.progress{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+.qs{margin:0;padding-left:22px;display:grid;gap:8px;color:var(--ink)}
+.qs li::marker{font-family:var(--f-display);font-weight:700;color:var(--green-strong)}
+
+.errs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.err{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:8px}
+.err h3{font-size:1rem;display:flex;gap:10px;align-items:center}
+.err h3 svg{width:20px;height:20px;color:var(--red);flex:none}
+.err p{font-size:.92rem;color:var(--muted)}
+
+footer{padding-block:36px;color:var(--muted);font-size:.88rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand svg{height:52px;width:auto}
+
+@media (max-width:920px){.planner{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .hero .wrap,.def,.deliver{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr 1fr}
+  .nav{display:none}
+}
+@media (max-width:600px){
+  .grid3,.errs,.observe,.stats{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .step{grid-template-columns:44px minmax(0,1fr);gap:14px}
+  .step-n{width:44px;height:44px;border-radius:14px;font-size:1.1rem}
+  .step::before{left:21px;top:44px}
+  section.sec{padding-block:48px}
+  .bit{font-size:.55rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.fixed{display:flex;align-items:baseline;gap:10px;padding:10px 12px;border-radius:12px;border:1px dashed var(--green);background:var(--surface-2)}
+.fixed b{font:700 1.2rem var(--f-mono);color:var(--green-strong)}
+.fixed span{font:600 .85rem var(--f-mono);color:var(--muted)}
+.bit{animation:bitpop .35s both;animation-delay:calc(var(--i,0) * 22ms)}
+.r-ring{transform-box:view-box;transform-origin:360px 62px;animation:rring 2.4s ease-out infinite}
+@keyframes rring{from{transform:scale(1);opacity:.7}to{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion:reduce){.r-ring{animation:none;opacity:0}}
+.step-body h4.sub{font-family:var(--f-display);font-size:1.02rem;font-weight:700;margin:10px 0 0;display:flex;align-items:center;gap:10px}
+.step-body h4.sub::before{content:"";width:16px;height:3px;border-radius:3px;background:var(--green)}
+@keyframes bitpop{from{transform:scale(.6);opacity:.35}}
+@media (prefers-reduced-motion:reduce){.bit{animation:none}}
+
+/* ---- acréscimos desta aula ---- */
+.osi-wrap{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+.osi-wrap > *{min-width:0}
+.osi{display:grid;gap:6px}
+.layer{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.layer .ln{font:800 1.15rem var(--f-display);color:var(--muted);text-align:center}
+.layer b{font-family:var(--f-display);font-size:.95rem}
+.layer small{display:block;color:var(--muted);font-size:.8rem;line-height:1.35}
+.layer .pdu{font:600 .72rem var(--f-mono);color:var(--muted);background:var(--surface-2);padding:3px 8px;border-radius:7px;white-space:nowrap}
+.layer.hl{border:2px solid var(--green);background:linear-gradient(90deg,var(--mint),var(--surface) 75%);padding:14px}
+.layer.hl .ln{color:var(--green-strong);font-size:1.4rem}
+.layer.hl b{font-size:1.05rem}
+.layer.hl .pdu{background:var(--green);color:#fff}
+:root[data-theme="dark"] .layer.hl .pdu{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .layer.hl .pdu{color:#08130C}}
+.layer.sw{border-style:dashed;border-color:var(--s1)}
+.layer .dev{font:700 .66rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--s1);margin-left:6px}
+.encap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:14px}
+.encap h3{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.hdr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;font:600 .74rem var(--f-mono)}
+.hdr span{background:var(--surface-2);padding:8px 4px;border-radius:8px;text-align:center;color:var(--muted)}
+.hdr .w2{grid-column:span 2}.hdr .w4{grid-column:span 4}
+.hdr .ip{background:var(--mint);color:var(--green-strong);font-size:.84rem}
+.hdr .ip em{font-style:normal;display:block;font-size:.66rem;opacity:.8;letter-spacing:.06em;text-transform:uppercase}
+.nest{display:grid;gap:0;font:600 .78rem var(--f-mono)}
+.nest div{border-radius:10px;padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nest .f{background:color-mix(in srgb,var(--s1) 14%,transparent);color:var(--s1)}
+.nest .p{background:var(--mint);color:var(--green-strong)}
+.nest .s{background:var(--surface-2);color:var(--muted)}
+.nest i{font-style:normal;padding:3px 7px;border-radius:6px;background:var(--surface)}
+
+.cls-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.cls{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--vc);border-radius:var(--r);padding:20px;display:grid;gap:12px;align-content:start}
+.cls-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.cls-top b{font:800 2.2rem var(--f-display);color:var(--vc);line-height:1}
+.cls-top span{font:600 .8rem var(--f-mono);color:var(--muted)}
+.cls .range{font:600 1.05rem var(--f-mono)}
+.cls .oct4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;font:600 .72rem var(--f-mono);text-align:center}
+.cls .oct4 span{padding:7px 2px;border-radius:7px;background:var(--surface-2);color:var(--muted)}
+.cls .oct4 span.n{background:var(--vc);color:#fff}
+:root[data-theme="dark"] .cls .oct4 span.n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cls .oct4 span.n{color:#08130C}}
+.cls dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.88rem}
+.cls dt{color:var(--muted)}
+.cls dd{margin:0;font-family:var(--f-mono);font-size:.84rem;text-align:right;font-variant-numeric:tabular-nums}
+.minor{margin-top:16px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.minor div{background:var(--surface-2);border-radius:14px;padding:14px 16px;font-size:.9rem}
+.minor b{font-family:var(--f-display);display:block}
+.minor code{background:var(--surface)}
+.minor span{color:var(--muted)}
+
+.classify{margin-top:28px;display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
+.cbadge{display:flex;align-items:center;gap:14px}
+.cbadge b{font:800 2.6rem var(--f-display);color:var(--vc,var(--muted));line-height:1}
+.cbadge span{font-size:.95rem;color:var(--muted)}
+.first-oct{font:600 1.2rem var(--f-mono);letter-spacing:.04em}
+.first-oct .lead-bits{color:var(--vc,var(--green-strong));text-decoration:underline;text-underline-offset:4px}
+
+.panel{display:grid;gap:16px}
+.cfg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+.cfg-grid > *{min-width:0}
+.cfg-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;min-width:0}
+.cfg-card > p{color:var(--muted);font-size:.93rem}
+.os-tabs{margin-bottom:20px}
+
+.anim-body{display:grid;grid-template-columns:minmax(0,1fr) 270px}
+.anim-body > *{min-width:0}
+.mac{border-left:1px solid var(--line);padding:16px;display:grid;gap:10px;align-content:start;background:var(--surface)}
+.mac h3{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mac table{min-width:0;font-size:.8rem}
+.mac th,.mac td{padding:7px 8px}
+.mac td{font-family:var(--f-mono);font-size:.76rem}
+.mac .empty{font-size:.84rem;color:var(--muted)}
+.mac tr.new td{animation:flash 1.2s}
+@keyframes flash{from{background:var(--mint)}}
+.linkbtn{border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .8rem var(--f-body);padding:6px 10px;border-radius:999px;cursor:pointer;justify-self:start}
+.linkbtn:hover{border-color:var(--green);color:var(--green-strong)}
+.log{margin:0;padding:12px 18px 16px 38px;border-top:1px solid var(--line);display:grid;gap:6px;font-size:.9rem;color:var(--muted);min-height:58px}
+.log li::marker{font-family:var(--f-mono);font-weight:600;color:var(--green-strong)}
+.log li b{color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted);font-weight:600}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.btn[disabled]{opacity:.55;cursor:wait}
+.term{font-family:var(--f-mono)}
+@media (max-width:920px){.classify{grid-template-columns:1fr}}
+@media (max-width:860px){.osi-wrap,.cfg-grid,.anim-body{grid-template-columns:1fr}.cls-grid,.minor{grid-template-columns:1fr}.mac{border-left:0;border-top:1px solid var(--line)}}
+
+/* desenho da topologia + endereçamento */
+.drawing{margin:0 0 18px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px 18px 12px;display:grid;gap:8px}
+.draw-scroll{overflow-x:auto}
+#draw{display:block;width:100%;min-width:680px;height:auto}
+.drawing figcaption{font-size:.86rem;color:var(--muted);text-align:center}
+#draw .grp-l{font-family:var(--f-display);font-weight:700;font-size:12px;letter-spacing:.1em}
+#draw .grp-n{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+#draw .cab{stroke-width:2.2;fill:none}
+#draw .sw-body{fill:var(--code-bg)}
+#draw .sw-top{fill:var(--green)}
+#draw .led{fill:var(--code-key)}
+#draw .sw-t{fill:var(--code-fg);font-family:var(--f-display);font-weight:700;font-size:15px;text-anchor:middle}
+#draw .sw-s{fill:var(--code-muted);font-family:var(--f-mono);font-size:10px;text-anchor:middle}
+#draw .mon{fill:var(--surface);stroke-width:2}
+#draw .stand{fill:var(--ink)}
+#draw .pc-t{fill:var(--ink);font-family:var(--f-display);font-weight:700;font-size:14px;text-anchor:middle}
+#draw .pc-ip{fill:var(--muted);font-family:var(--f-mono);font-size:11px;text-anchor:middle}
+#draw .port{fill:var(--muted);font-family:var(--f-mono);font-size:10px;text-anchor:middle}
+.addr-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.addr{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;min-width:0}
+.addr-head{display:flex;align-items:center;gap:12px;padding:14px 16px;background:linear-gradient(90deg,color-mix(in srgb,var(--vc) 16%,var(--surface)),var(--surface))}
+.addr-head .ic{width:40px;height:40px;border-radius:11px;background:var(--vc);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.1rem;flex:none}
+:root[data-theme="dark"] .addr-head .ic{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .addr-head .ic{color:#08130C}}
+.addr-head strong{font-family:var(--f-display);font-size:1.05rem;display:block}
+.addr-head span{font-size:.85rem;color:var(--muted)}
+.addr table{min-width:0}
+.addr td,.addr th{padding:8px 14px}
+.uplink{margin-top:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border:1px dashed var(--green);border-radius:var(--r);padding:12px 16px;font-size:.9rem;color:var(--muted)}
+@media (max-width:700px){.addr-grid{grid-template-columns:1fr}}
+.prog-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+#prog-txt{font-size:.9rem;color:var(--muted);font-variant-numeric:tabular-nums}
+#prog-txt b{font:800 1.5rem var(--f-display);color:var(--green-strong)}
+#prog-txt.done{color:var(--ok);font-weight:700}
+.progress{height:12px}
+.progress i{background:linear-gradient(90deg,var(--green),var(--green-strong))}
+.dots{gap:7px}
+.dots i{width:13px;height:13px;border-radius:50%;display:grid;place-items:center;font:700 10px/1 var(--f-body);font-style:normal;color:rgba(0,0,0,.6)}
+.dots i:nth-child(1){background:#28C840}
+.dots i:nth-child(2){background:#FEBC2E}
+.dots i:nth-child(3){background:#FF5F57}
+.dots i:nth-child(1)::before{content:"+"}
+.dots i:nth-child(2)::before{content:"−"}
+.dots i:nth-child(3)::before{content:"×";font-size:12px}
+.shot{margin:0;display:grid;gap:8px;justify-items:center}
+.shot img{display:block;width:100%;max-width:340px;height:auto;border-radius:12px;border:1px solid var(--line);box-shadow:0 14px 30px -20px rgba(0,0,0,.45)}
+.shot figcaption{font-size:.8rem;color:var(--muted);text-align:center}
+.cfg-grid.one{grid-template-columns:minmax(0,1fr)}
+.shot.ncpa img{max-width:100%}
+.gui-lin{grid-column:1/-1}
+.gui-lin .shot img{max-width:560px}
+.hdr{gap:3px}
+.hdr span{border:1px solid transparent;font-weight:600}
+.hdr .f-fmt,.hdr-leg .f-fmt{background:color-mix(in srgb,var(--s1) 14%,var(--surface));color:var(--s1);border-color:color-mix(in srgb,var(--s1) 30%,transparent)}
+.hdr .f-frag,.hdr-leg .f-frag{background:color-mix(in srgb,var(--s2) 16%,var(--surface));color:var(--warn);border-color:color-mix(in srgb,var(--s2) 35%,transparent)}
+.hdr .f-ttl,.hdr-leg .f-ttl{background:color-mix(in srgb,var(--s4) 15%,var(--surface));color:var(--s4);border-color:color-mix(in srgb,var(--s4) 35%,transparent)}
+.hdr .f-proto,.hdr-leg .f-proto{background:color-mix(in srgb,var(--s3) 15%,var(--surface));color:var(--s3);border-color:color-mix(in srgb,var(--s3) 35%,transparent)}
+.hdr .f-chk{background:var(--surface-2);color:var(--muted)}
+.hdr .ip,.hdr-leg .ip{background:var(--green);color:#fff;border-color:var(--green-strong)}
+.hdr .ip.dst{background:var(--green-strong)}
+.hdr .ip{font-size:.95rem;padding:10px 4px}
+.hdr .ip em{opacity:.85}
+:root[data-theme="dark"] .hdr .ip{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .hdr .ip{color:#08130C}}
+.hdr-ruler{display:flex;justify-content:space-between;font:600 .66rem var(--f-mono);color:var(--muted);margin-bottom:-8px;padding-inline:2px}
+.hdr-leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.78rem;color:var(--muted);font-weight:600}
+.hdr-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px;border:1px solid}
+/* ---- responsivo ---- */
+#draw .sw-s{text-anchor:middle}
+/* barra: logo, botões das seções e Voltar na mesma linha */
+.bar .wrap{flex-wrap:nowrap;gap:12px}
+.brand{flex:none}
+.nav{display:flex;flex:1 1 auto;min-width:0;margin-left:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-block:2px}
+.nav::-webkit-scrollbar{display:none}
+.nav a:first-child{margin-left:auto}
+.nav a{white-space:nowrap;flex:none}
+.back{flex:none;margin-left:0!important}
+@media (max-width:1100px){.nav a{background:var(--surface);border:1px solid var(--line)}}
+.burger{display:none}
+@media (max-width:700px){
+  .bar .wrap{gap:10px}
+  .brand{margin-right:auto}
+  .burger{order:3;display:inline-grid;place-content:center;gap:4px;width:42px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;flex:none;padding:0}
+  .burger span{display:block;width:18px;height:2.5px;border-radius:2px;background:var(--ink);transition:transform .25s,opacity .2s}
+  .burger[aria-expanded="true"]{background:var(--green);border-color:var(--green)}
+  .burger[aria-expanded="true"] span{background:var(--surface)}
+  .burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+  .burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:4px;overflow:visible;
+    background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 18px 30px -18px rgba(0,0,0,.35);
+    padding:10px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px))}
+  .nav.open{display:flex}
+  .nav a:first-child{margin-left:0}
+  .nav a{background:transparent;border:0;border-radius:12px;font-size:1rem;padding:12px 14px;color:var(--ink)}
+  .nav a:hover,.nav a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
+  .back{padding:7px 12px 7px 10px}
+}
+@media (max-width:400px){.brand-txt{display:none}}
+@media (max-width:600px){
+  .stage svg{min-width:0}
+  #draw{min-width:0}
+  .drawing{padding:12px 10px 10px}
+  .hero .wrap{padding-block:36px 32px;gap:28px}
+  .anim-ctl{gap:10px}
+  .anim-ctl label{flex:1 1 100%;justify-content:space-between}
+  .anim-ctl select{flex:1;max-width:220px}
+  .anim-ctl .btn{flex:1 1 100%;justify-content:center}
+  table{min-width:0;font-size:.8rem}
+  th,td{padding:9px 8px}
+  th{font-size:.64rem}
+  .addr{overflow-x:auto}
+  .addr td,.addr th{padding:8px 8px}
+  .code pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.78rem}
+  .hdr{font-size:.66rem}
+  .hdr span{padding:7px 2px}
+  .cls-top b{font-size:1.9rem}
+  .classify .ip-anatomy{padding:16px}
+  .first-oct{font-size:1rem}
+  .test-head b{font-size:.8rem;overflow-wrap:anywhere}
+  .layer{grid-template-columns:30px minmax(0,1fr);row-gap:4px}
+  .layer .pdu{grid-column:2;justify-self:start}
+  .uplink{font-size:.84rem}
+  .dcard{padding:18px}
+  .err{padding:16px}
+  h2{font-size:1.55rem}
+  .lead{font-size:1.02rem}
+}
+/* destaque: descubra a classe */
+.finder{margin-top:40px;border:2px solid var(--green);border-radius:26px;padding:28px;display:grid;gap:22px;
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 18%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,var(--mint),var(--surface) 70%);
+  box-shadow:0 24px 50px -30px color-mix(in srgb,var(--green) 70%,transparent)}
+.finder-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center}
+.finder-head .ico{width:64px;height:64px;border-radius:18px;background:var(--green);color:#fff}
+.finder-head .ico svg{width:34px;height:34px}
+:root[data-theme="dark"] .finder-head .ico{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .finder-head .ico{color:#08130C}}
+.finder-head h3{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em;margin-top:6px}
+.finder-head p{color:var(--muted);margin-top:6px;max-width:62ch}
+.finder .classify{margin-top:0}
+.finder #cip{font-size:1.6rem;padding:14px 16px;border:2px solid var(--green);background:var(--surface)}
+.finder #cip:focus{box-shadow:0 0 0 4px color-mix(in srgb,var(--green) 25%,transparent);outline:none}
+.finder .pform{border-width:1px;border-color:var(--line)}
+.finder #cout{border:2px solid var(--vc,var(--line));box-shadow:0 12px 30px -22px var(--vc,#000)}
+.finder .cbadge b{font-size:3.4rem}
+@media (max-width:600px){.finder{padding:18px;border-radius:20px;margin-top:28px}.finder-head{grid-template-columns:1fr}.finder-head .ico{width:52px;height:52px}.finder #cip{font-size:1.3rem}}
+/* cabeçalho IPv4 redesenhado */
+.pkt-scroll{overflow-x:auto}
+.pkt{min-width:440px;display:grid;gap:4px}
+.pkt-ruler{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));font:600 .68rem var(--f-mono);color:var(--muted);position:relative;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+.pkt-ruler span{position:relative;padding-left:3px}
+.pkt-ruler span::before{content:"";position:absolute;left:0;bottom:-8px;width:2px;height:8px;background:var(--ink)}
+.pkt-ruler .end{position:absolute;right:0;padding:0 3px 0 0}
+.pkt-ruler .end::before{left:auto;right:0}
+.pkt-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:2px;background:var(--ink);border:2px solid var(--ink);border-radius:0 0 12px 12px;overflow:hidden;margin-top:-4px}
+.pkt .c{grid-column:span var(--w);background:var(--surface);padding:8px 6px;display:grid;gap:1px;align-content:center;justify-items:center;text-align:center;min-width:0}
+.pkt .c small{font:700 .64rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);line-height:1.2}
+.pkt .c b{font:600 .86rem var(--f-mono);color:var(--ink);line-height:1.3}
+.pkt .c i{font:500 .62rem var(--f-mono);font-style:normal;color:var(--muted);opacity:.8}
+.pkt .c.hot{background:var(--surface-2)}
+.pkt .c.ip{background:var(--mint);padding:12px 8px}
+.pkt .c.ip small{color:var(--green-strong)}
+.pkt .c.ip b{font-size:1.15rem;font-weight:700;color:var(--green-strong)}
+.pkt-note{font-size:.85rem;color:var(--muted)}
+.pkt-note .g{color:var(--green-strong)}
+@media (max-width:600px){.pkt{min-width:0}.pkt .c{padding:7px 3px}.pkt .c b{font-size:.76rem}.pkt .c small{font-size:.52rem;letter-spacing:0}.pkt .c[style*="--w:1"] i{display:none}.pkt .c[style*="--w:1"]{padding-inline:1px}}
+/* seção ping */
+.ping-io{margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center}
+.pio{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:6px;justify-items:start;font:600 .85rem var(--f-mono);min-width:0}
+.pio-tag{font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px;color:#fff}
+.pio-tag.req{background:var(--green)}.pio-tag.rep{background:var(--s1)}
+:root[data-theme="dark"] .pio-tag{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pio-tag{color:#08130C}}
+.pio-arrow{font-size:1.6rem;color:var(--green-strong)}
+.ping-h3{font-size:1.15rem;margin:26px 0 12px}
+.ping-tbl{min-width:520px}
+.ping-tbl td{white-space:normal}.ping-tbl td.mono{white-space:nowrap}
+.ping-out{display:grid;gap:14px;min-width:0}
+.code .ok{color:#6FD982}.code .bad{color:#FF6B6B}
+.read-ping{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:8px;font-size:.9rem}
+.read-ping div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px}
+.read-ping b{font-family:var(--f-mono);font-size:.84rem;color:var(--ok)}
+.read-ping b.bad-t{color:var(--bad)}
+.read-ping span{color:var(--muted)}
+.why h3{font-size:1.02rem}
+@media (max-width:860px){.grid3.why{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.grid3.why{grid-template-columns:1fr}.ping-io{grid-template-columns:1fr}.pio-arrow{justify-self:center;transform:rotate(90deg)}.read-ping div{grid-template-columns:1fr;gap:0}.ping-tbl{min-width:0}}
+.binpair{display:grid;gap:2px;overflow-x:auto}
+.binpair .bl{font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.binpair .bl:nth-of-type(2){margin-top:10px}
+.binpair .ipline{flex-wrap:nowrap;white-space:nowrap;gap:0;font-size:clamp(.74rem,3.4vw,1.05rem)}
+.ipline.mask .m1{color:var(--green-strong)}
+.ipline.mask .m0{color:var(--s3)}
+.sub-h{margin-top:40px}
+#checklist-sec .sec-head{margin-bottom:10px}
+/* quiz: uma pergunta por vez */
+.deliver{grid-template-columns:1fr}
+.quiz{border-radius:26px;overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:0 30px 60px -40px color-mix(in srgb,var(--green) 80%,transparent)}
+.qz-bar{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;padding:18px 22px;background:var(--code-bg);color:var(--code-fg)}
+.qz-brand{display:flex;align-items:center;gap:12px}
+.qz-ico{width:42px;height:42px;border-radius:13px;background:var(--green);display:grid;place-items:center;color:#fff;flex:none}
+.qz-ico svg{width:22px;height:22px}
+.qz-brand b{font:700 1.08rem var(--f-display);display:block}
+.qz-brand small{color:var(--code-muted);font-size:.8rem}
+.qz-chips{display:flex;gap:8px}
+.qz-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font:700 .95rem var(--f-display);font-variant-numeric:tabular-nums}
+.qz-chip svg{width:16px;height:16px}
+.qz-chip.ok{background:color-mix(in srgb,#6FD982 18%,transparent);color:#8BE39B}
+.qz-chip.bad{background:color-mix(in srgb,#FF6B6B 18%,transparent);color:#FF8A8A}
+.qz-steps{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px;padding:16px 22px 0}
+.qz-steps i{height:7px;border-radius:99px;background:var(--surface-2);transition:background .3s,transform .3s}
+.qz-steps i.cur{background:var(--green);transform:scaleY(1.5)}
+.qz-steps i.ok{background:var(--ok)}
+.qz-steps i.bad{background:var(--bad)}
+.qz-stage{padding:22px;min-height:420px;display:grid}
+.qz-card{display:grid;gap:18px;align-content:start;animation:qzIn .45s cubic-bezier(.2,.8,.2,1)}
+.qz-card.out{animation:qzOut .3s ease-in forwards}
+@keyframes qzIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes qzOut{to{opacity:0;transform:translateX(-40px)}}
+.qz-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qz-num{font:800 .8rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:5px 10px;border-radius:999px}
+.qz-tag{font:700 .72rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.qz-q{font:700 clamp(1.2rem,2.6vw,1.6rem)/1.35 var(--f-display);letter-spacing:-.01em;text-wrap:pretty;max-width:none}
+.qz-q code{font-size:.85em}
+.qz-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.qz-opt{position:relative;text-align:left;border:2px solid var(--line);background:var(--surface);color:var(--ink);font:600 1rem var(--f-body);padding:16px 16px;border-radius:16px;cursor:pointer;display:grid;grid-template-columns:38px minmax(0,1fr) 22px;gap:12px;align-items:center;transition:transform .15s,border-color .15s,background .15s,box-shadow .15s}
+.qz-opt .L{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--surface-2);font:800 .95rem var(--f-display);color:var(--muted);transition:background .15s,color .15s}
+.qz-opt .st{display:grid;place-items:center;width:22px;height:22px}
+.qz-opt .st svg{width:22px;height:22px}
+.qz-opt:hover:not([disabled]){border-color:var(--green);transform:translateY(-2px);box-shadow:0 10px 22px -16px var(--green)}
+.qz-opt:hover:not([disabled]) .L{background:var(--green);color:#fff}
+.qz-opt[disabled]{cursor:default}
+.qz-opt.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.qz-opt.right .L{background:var(--ok);color:var(--surface)}
+.qz-opt.right .st{color:var(--ok)}
+.qz-opt.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface));animation:shake .4s}
+.qz-opt.wrong .L{background:var(--bad);color:var(--surface)}
+.qz-opt.wrong .st{color:var(--bad)}
+.qz-opt.dim{opacity:.45}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+.qz-fb{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;border-radius:18px;padding:16px 18px;background:color-mix(in srgb,var(--fc) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--fc) 40%,transparent);animation:qzIn .35s ease-out}
+.qz-fb .fi{width:44px;height:44px;border-radius:13px;background:var(--fc);color:var(--surface);display:grid;place-items:center}
+.qz-fb .fi svg{width:24px;height:24px}
+.qz-fb h4{margin:0;font:700 1.05rem var(--f-display);color:var(--fc)}
+.qz-fb p{color:var(--muted);font-size:.95rem;margin-top:2px}
+.qz-fb p b{color:var(--ink)}
+.qz-next{display:flex;justify-content:flex-end;align-items:center;gap:14px;flex-wrap:wrap}
+.qz-timer{flex:1;min-width:120px;height:4px;border-radius:9px;background:var(--surface-2);overflow:hidden}
+.qz-timer i{display:block;height:100%;width:0;background:var(--green);animation:qzT var(--dur,4s) linear forwards}
+@keyframes qzT{to{width:100%}}
+.qz-end{display:grid;gap:22px;justify-items:center;text-align:center;align-content:center;animation:qzIn .5s cubic-bezier(.2,.8,.2,1)}
+.qz-ring{width:170px;height:170px;border-radius:50%;display:grid;place-content:center;justify-items:center;position:relative;background:conic-gradient(var(--gc) calc(var(--p)*1%),var(--surface-2) 0)}
+.qz-ring::before{content:"";position:absolute;inset:13px;border-radius:50%;background:var(--surface)}
+.qz-ring > *{position:relative}
+.qz-ring span{font:700 .72rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.qz-ring b{font:800 3.2rem/1 var(--f-display);color:var(--gc);font-variant-numeric:tabular-nums}
+.qz-ring small{color:var(--muted);font-size:.85rem}
+.qz-end h3{font-size:1.6rem}
+.qz-end > p{color:var(--muted);max-width:52ch}
+.qz-sum{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;max-width:560px}
+.qz-sum span{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:12px;font:700 .82rem var(--f-display);background:color-mix(in srgb,var(--sc) 12%,var(--surface));color:var(--sc);border:1px solid color-mix(in srgb,var(--sc) 35%,transparent)}
+.qz-sum span small{font:600 .66rem var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.btn.ghost{background:transparent;color:var(--green-strong);border:2px solid var(--green)}
+.btn.ghost:hover{background:var(--mint)}
+@media (prefers-reduced-motion: reduce){.qz-card,.qz-card.out,.qz-fb,.qz-end,.qz-opt.wrong{animation:none}.qz-timer{display:none}}
+@media (max-width:600px){.qz-stage{padding:16px;min-height:0}.qz-steps{padding:14px 16px 0;gap:4px}.qz-bar{padding:14px 16px}.qz-opts{grid-template-columns:1fr}.qz-opt{padding:12px;grid-template-columns:32px minmax(0,1fr) 20px}.qz-opt .L{width:32px;height:32px}.qz-sum{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.qz-sum span{padding:8px 2px}.qz-next .btn{flex:1 1 100%;justify-content:center}}
+/* revisão das respostas */
+.qz-sumwrap{display:grid;gap:12px;justify-items:center;width:100%}
+.qz-hint{font-size:.88rem;color:var(--muted)}
+.qz-sum button{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:12px;font:700 .82rem var(--f-display);background:color-mix(in srgb,var(--sc) 12%,var(--surface));color:var(--sc);border:1.5px solid color-mix(in srgb,var(--sc) 35%,transparent);cursor:pointer;transition:transform .15s,box-shadow .15s}
+.qz-sum button small{font:600 .66rem var(--f-body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.qz-sum button:hover{transform:translateY(-2px);box-shadow:0 8px 18px -12px var(--sc)}
+.qz-sum button[aria-pressed="true"]{border-color:var(--sc);border-width:2.5px;background:color-mix(in srgb,var(--sc) 22%,var(--surface))}
+.qz-review{width:100%;max-width:720px;text-align:left;display:grid;gap:12px;border-radius:18px;padding:18px;border:2px solid color-mix(in srgb,var(--fc) 45%,transparent);background:color-mix(in srgb,var(--fc) 6%,var(--surface));animation:qzIn .35s ease-out}
+.qz-review[hidden]{display:none}
+.qz-res{margin-left:auto;font:700 .78rem var(--f-body);color:var(--fc)}
+.qz-rq{font:700 1.15rem/1.4 var(--f-display)}
+.qz-rl{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.qz-rl li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-size:.95rem;color:var(--muted)}
+.qz-rl .L{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--surface-2);font:800 .85rem var(--f-display)}
+.qz-rl em{font:700 .72rem var(--f-body);font-style:normal;letter-spacing:.04em;text-transform:uppercase}
+.qz-rl li.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,var(--surface));color:var(--ink);font-weight:600}
+.qz-rl li.right .L{background:var(--ok);color:var(--surface)}
+.qz-rl li.right em{color:var(--ok)}
+.qz-rl li.wrong{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface));color:var(--ink)}
+.qz-rl li.wrong .L{background:var(--bad);color:var(--surface)}
+.qz-rl li.wrong em{color:var(--bad)}
+.qz-rexp{font-size:.93rem;color:var(--muted);background:var(--surface-2);border-radius:12px;padding:10px 12px}
+.qz-rexp b{color:var(--ink)}
+@media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
+@media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
+html{scroll-padding-top:84px}
+/* animação do topo */
+.hero-net{margin:0;min-width:0;max-width:470px;width:100%;justify-self:center;display:grid;gap:10px}
+#hero-svg{display:block;width:100%;height:auto;overflow:visible}
+#hero-svg .hl{stroke-width:2.5;stroke-dasharray:4 7;animation:flow 1.2s linear infinite;opacity:.7;fill:none}
+@keyframes flow{to{stroke-dashoffset:-22}}
+#hero-svg .hr-ring{fill:none;stroke:#4DC262;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:rring 2.8s ease-out infinite}
+#hero-svg .hr-ring.b{animation-delay:1.4s}
+@keyframes rring{from{transform:scale(1);opacity:.55}to{transform:scale(1.45);opacity:0}}
+.hn-leg{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:.8rem;font-weight:600;color:var(--muted)}
+.hn-leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.hn-leg i.ok{background:var(--ok)}.hn-leg i.no{background:var(--bad)}
+@media (prefers-reduced-motion:reduce){#hero-svg .hl,#hero-svg .hr-ring{animation:none}}
+/* barra superior igual à página inicial de Redes */
+.accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
+.topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;position:relative}
+.tb-brand{display:flex;align-items:center;gap:14px;text-decoration:none;min-width:0;color:var(--ink)}
+.tb-brand .mark{height:40px;width:auto;flex:none}
+.tb-brand .inst{display:grid;line-height:1.12}
+.tb-brand b{font-weight:800;white-space:nowrap}
+.tb-brand .inst b{font-size:.84rem;letter-spacing:.01em}
+.tb-brand span span{font-size:.72rem;color:var(--muted);white-space:nowrap}
+.topnav{display:flex;align-items:center;gap:6px;flex:none}
+.topnav a,.topnav button{display:inline-flex;align-items:center;gap:6px;font:700 .82rem var(--f-top);padding:8px 14px;border-radius:10px;text-decoration:none;border:0;background:transparent;color:var(--ink);cursor:pointer;transition:background .2s}
+.topnav svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.topnav .ghost:hover,.topnav .ghost[aria-expanded="true"]{background:var(--surface-2)}
+.topnav .ghost .chev{transition:transform .2s}
+.topnav .ghost[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.topnav .solid{background:#32A041;color:#fff;box-shadow:0 4px 12px rgba(50,160,65,.28)}
+.topnav .solid:hover{background:#247A30}
+.topnav .tb-back{background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
+.topnav .tb-back:hover{background:#A51418}
+.tmenu{position:absolute;top:calc(100% + 8px);right:max(16px,env(safe-area-inset-right,0px));width:min(300px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 50px -20px rgba(0,0,0,.35);padding:8px;display:grid;gap:2px}
+.tmenu[hidden]{display:none}
+.tmenu a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--ink);font-weight:600;font-size:.95rem}
+.tmenu a b{font:600 .75rem var(--f-mono);color:var(--green-strong);min-width:2ch}
+.tmenu a:hover,.tmenu a:focus-visible{background:var(--surface-2);color:var(--green-strong)}
+@media (max-width:560px){.topnav .solid{display:none}.tb-brand .inst span{display:none}}
+@media (max-width:420px){.tb-brand .inst{display:none}.topnav a,.topnav button{padding:8px 11px}}
+@media (max-width:640px){
+  .tbl-wrap{border:0;background:transparent;overflow:visible;border-radius:0}
+  .tbl-wrap table{display:block;min-width:0}
+  .tbl-wrap thead{display:none}
+  .tbl-wrap tbody{display:grid;gap:10px}
+  .tbl-wrap tr{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+  .tbl-wrap td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;white-space:normal;text-align:right;border-bottom:1px dashed var(--line);min-width:0;overflow-wrap:anywhere}
+  .tbl-wrap td::before{content:attr(data-label);font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;flex:none}
+  .tbl-wrap tr td:last-child{border-bottom:0}
+}
+
+/* referências */
+.ref-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--green-strong);margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+.ref-h::after{content:"";height:1px;flex:1;background:var(--line)}
+.sec-head + .ref-h{margin-top:0}
+.refs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.refs-2{grid-template-columns:minmax(0,520px)}
+.ref{display:grid;gap:6px;align-content:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;transition:transform .2s,border-color .2s,box-shadow .2s;min-width:0}
+.ref:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 12px 26px -18px var(--green)}
+.ref-n{font:700 .78rem var(--f-mono);color:var(--green-strong);background:var(--mint);padding:3px 9px;border-radius:999px;justify-self:start}
+.ref b{font-family:var(--f-display);font-size:.98rem;line-height:1.3}
+.ref p{font-size:.88rem;color:var(--muted)}
+.ref-t{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.ref-t i{font:600 .7rem var(--f-mono);font-style:normal;padding:2px 7px;border-radius:6px;background:var(--surface-2);color:var(--muted)}
+.ref-go{font-size:.8rem;font-weight:700;color:var(--green-strong);margin-top:4px}
+.books{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:bk}
+.books li{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 56px;counter-increment:bk;font-size:.95rem}
+.books li::before{content:counter(bk);position:absolute;left:14px;top:14px;width:28px;height:28px;border-radius:9px;background:var(--green);color:#fff;display:grid;place-items:center;font:800 .85rem var(--f-display)}
+:root[data-theme="dark"] .books li::before{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .books li::before{color:#08130C}}
+.ref-a{font-weight:700}
+.books small{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+
+/* citações */
+.cites{white-space:normal}
+.cite{font:inherit;color:var(--ink);background:none;padding:0;border-radius:0;text-decoration:none;white-space:normal}
+.cite:hover,.cite:focus-visible{color:#1D6FD8;background:none;text-decoration:underline}
+#refs .ref,#refs .books li{scroll-margin-top:84px}
+#refs .ref:target,#refs .books li:target{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 30%,transparent)}
+
+/* terminais: preto puro, bolinhas sem símbolo */
+.code,.code pre,.code-top{background:#000!important}
+.code{border:1px solid #1c1c1c}
+.code-top{border-bottom-color:#1c1c1c}
+.dots i::before{content:none!important}
+
+/* ===== acabamento moderno ===== */
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+::selection{background:color-mix(in srgb,var(--green) 28%,transparent)}
+:root{--sh-1:0 1px 2px rgba(15,36,23,.05),0 8px 24px -12px rgba(15,36,23,.12);--sh-2:0 2px 4px rgba(15,36,23,.05),0 22px 44px -22px rgba(30,122,48,.35)}
+/* hero */
+.hero{position:relative;overflow:hidden;background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%)}
+.hero .wrap{padding-block:72px 64px}
+.hero h1{font-size:clamp(2.4rem,5.8vw,4rem);line-height:1.02}
+.hero h1 em{background:linear-gradient(100deg,var(--green-strong),#4DC262 60%,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;box-shadow:var(--sh-1)}
+.eyebrow::before{width:14px}
+.chip{box-shadow:var(--sh-1);transition:transform .2s,border-color .2s}
+.chip:hover{transform:translateY(-2px);border-color:var(--green)}
+.hero-net{background:none;border:0;box-shadow:none;padding:0;border-radius:0}
+/* seções */
+section.sec{padding-block:80px}
+section.sec:nth-of-type(even):not(.desafio){background:color-mix(in srgb,var(--surface) 55%,var(--bg))}
+.sec-head{margin-bottom:40px}
+.sec-head h2::after{content:"";display:block;width:56px;height:4px;border-radius:4px;margin-top:14px;background:linear-gradient(90deg,var(--green),var(--red))}
+.desafio .sec-head h2::after{background:var(--red)}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+/* cartões */
+.ben,.err,.dcard,.anim,.drawing,.stat,.test-row,.port-card,.vs-card,.quiz{box-shadow:var(--sh-1)}
+.ben{border-radius:20px;padding:26px;transition:transform .25s,border-color .25s,box-shadow .25s}
+.ben:hover{transform:translateY(-4px);box-shadow:var(--sh-2)}
+.ico{background:linear-gradient(135deg,var(--mint),color-mix(in srgb,var(--green) 28%,var(--mint)));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 20%,transparent)}
+.anim,.drawing,.dcard,.err{border-radius:22px}
+.note{border:1px solid var(--line);box-shadow:var(--sh-1)}
+.tbl-wrap{box-shadow:var(--sh-1);border-radius:18px}
+th{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+/* passos */
+.step-n{background:linear-gradient(135deg,#4DC262,var(--green-strong));box-shadow:0 12px 26px -12px var(--green)}
+.step.test .step-n{background:var(--surface);box-shadow:none}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red))}
+.step::before{background:linear-gradient(var(--green),transparent);opacity:.5}
+/* botões e menu */
+.btn{background:linear-gradient(135deg,#3DB04F,var(--green-strong));box-shadow:0 10px 22px -12px var(--green-strong);transition:transform .2s,box-shadow .2s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 14px 26px -12px var(--green-strong)}
+.desafio .btn{background:linear-gradient(135deg,#E5484D,var(--red));box-shadow:0 10px 22px -12px var(--red)}
+.topbar{box-shadow:0 8px 30px -22px rgba(15,36,23,.5)}
+/* terminal */
+.code{border-radius:18px;box-shadow:0 24px 48px -26px rgba(0,0,0,.7)}
+.code-top{padding:11px 14px}
+/* banner do desafio */
+.ch-banner{border-radius:28px;box-shadow:0 30px 60px -36px var(--red)}
+/* quiz */
+.quiz{border-radius:28px;box-shadow:var(--sh-2)}
+/* rodapé */
+footer{background:var(--surface);border-top:1px solid var(--line)}
+@media (max-width:600px){.hero .wrap{padding-block:44px 40px}section.sec{padding-block:56px}}
+
+
+/* cards de vantagens coloridos */
+.grid3.why{counter-reset:bn;gap:18px}
+.why .ben{--bc:var(--green);counter-increment:bn;position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--bc) 22%,var(--line));background:linear-gradient(160deg,color-mix(in srgb,var(--bc) 11%,var(--surface)),var(--surface) 62%);padding:26px 24px 24px}
+.why .ben::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--bc)}
+.why .ben::after{content:"0" counter(bn);position:absolute;right:18px;top:14px;font:800 2.6rem/1 var(--f-display);color:color-mix(in srgb,var(--bc) 16%,transparent);letter-spacing:-.04em}
+.why .ben:nth-child(1){--bc:var(--s1)}
+.why .ben:nth-child(2){--bc:var(--green)}
+.why .ben:nth-child(3){--bc:var(--s2)}
+.why .ben:nth-child(4){--bc:var(--s3)}
+.why .ben:nth-child(5){--bc:var(--red)}
+.why .ben:nth-child(6){--bc:var(--s4)}
+.why .ben .ico{width:48px;height:48px;border-radius:14px;background:var(--bc);color:#fff;box-shadow:0 12px 22px -12px var(--bc)}
+.why .ben .ico svg{width:24px;height:24px}
+.why .ben h3{font-size:1.12rem}
+.why .ben:hover{border-color:var(--bc);box-shadow:0 22px 44px -24px var(--bc)}
+:root[data-theme="dark"] .why .ben .ico{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .why .ben .ico{color:#08130C}}
+
+/* cards estático × dinâmico */
+.vs{gap:18px}
+.vs-card{position:relative;overflow:hidden;border:1px solid color-mix(in srgb,var(--vc) 24%,var(--line));border-top:0;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 11%,var(--surface)),var(--surface) 60%);padding:28px 26px 24px;transition:transform .25s,box-shadow .25s,border-color .25s}
+.vs-card::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:var(--vc)}
+.vs-card:hover{transform:translateY(-4px);border-color:var(--vc);box-shadow:0 22px 44px -24px var(--vc)}
+.vs-card h3{font-size:1.3rem}
+.vs-card .ico{width:48px;height:48px;border-radius:14px;background:var(--vc);color:#fff;box-shadow:0 12px 22px -12px var(--vc)}
+.vs-card .ico svg{width:24px;height:24px}
+.vs-card ul{list-style:none;padding:0;display:grid;gap:8px}
+.vs-card li{position:relative;margin:0;padding:9px 12px 9px 34px;border-radius:12px;background:color-mix(in srgb,var(--vc) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 14%,transparent)}
+.vs-card li::before{content:"";position:absolute;left:12px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--vc)}
+:root[data-theme="dark"] .vs-card .ico{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vs-card .ico{color:#08130C}}
+
+/* imagens sem fundo branco */
+.drawing{background:none;border:0;box-shadow:none;padding:6px 0 0}
+.anim{background:none;border:0;box-shadow:none;overflow:visible}
+.anim-ctl{border:1px solid var(--line);border-radius:18px;background:var(--surface)}
+.anim .stage{background:none}
+.anim .status{border:1px solid var(--line);border-radius:18px;background:var(--surface);margin-top:12px}
+.anim .dh-panel{background:none;border-left:0}
+.dh-win{box-shadow:var(--sh-1)}
+/* tabelas modernas */
+.tbl-wrap{border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:var(--sh-1);overflow:hidden}
+.tbl-wrap table{border-collapse:separate;border-spacing:0}
+.tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--green) 14%,var(--surface)),color-mix(in srgb,var(--green) 6%,var(--surface)));color:var(--green-strong);font-size:.7rem;letter-spacing:.1em;padding:14px 16px;border-bottom:2px solid color-mix(in srgb,var(--green) 35%,var(--line))}
+.tbl-wrap td{padding:13px 16px;border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);transition:background .15s}
+.tbl-wrap tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--surface-2) 45%,var(--surface))}
+.tbl-wrap tbody tr:hover td{background:color-mix(in srgb,var(--green) 9%,var(--surface))}
+.tbl-wrap td:first-child{font-weight:700}
+.tbl-wrap tr:last-child td{border-bottom:0}
+.desafio .tbl-wrap th{background:linear-gradient(180deg,color-mix(in srgb,var(--red) 12%,var(--surface)),color-mix(in srgb,var(--red) 5%,var(--surface)));border-bottom-color:color-mix(in srgb,var(--red) 35%,var(--line))}
+@media (max-width:640px){
+  .tbl-wrap{border:0;background:transparent;box-shadow:none;overflow:visible;border-radius:0}
+  .tbl-wrap tr{box-shadow:var(--sh-1);border-radius:16px}
+  .tbl-wrap tbody tr:nth-child(even) td,.tbl-wrap tbody tr:hover td{background:transparent}
+  .tbl-wrap td{padding:8px 0}
+}
+
+/* ===== cards melhores + ícones animados ===== */
+@keyframes icoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes icoPulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ic,var(--green)) 45%,transparent)}70%,100%{box-shadow:0 0 0 14px transparent}}
+@keyframes icoSpin{to{transform:rotate(360deg)}}
+@keyframes icoWiggle{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-14deg)}93%{transform:rotate(12deg)}97%{transform:rotate(-6deg)}}
+@keyframes icoGlow{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 6px var(--ic,var(--green)))}}
+.ben .ico,.vs-card .ico,.obs .ico,.note .ico{position:relative;animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite}
+.ben:nth-child(2n) .ico,.vs-card:nth-child(2) .ico,.obs:nth-child(2n) .ico{animation-delay:-1.1s,-.9s}
+.ben:nth-child(3n) .ico{animation-delay:-2.2s,-1.8s}
+.why .ben .ico,.vs-card .ico{--ic:var(--bc,var(--vc))}
+.ben .ico svg,.vs-card .ico svg,.obs .ico svg,.note .ico svg{transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.ben:hover .ico svg,.vs-card:hover .ico svg,.obs:hover .ico svg,.note:hover .ico svg{transform:scale(1.22) rotate(-10deg)}
+.vs-card:nth-child(2) .ico svg{animation:icoSpin 7s linear infinite}
+.vs-card:nth-child(2):hover .ico svg{transform:none}
+/* erros */
+.err{position:relative;overflow:hidden;padding:20px 20px 20px 22px;border-left:5px solid var(--red);background:linear-gradient(160deg,color-mix(in srgb,var(--red) 6%,var(--surface)),var(--surface) 55%);transition:transform .25s,box-shadow .25s,border-color .25s}
+.err:hover{transform:translateY(-3px);box-shadow:0 20px 40px -26px var(--red)}
+.err h3 svg{width:34px;height:34px;padding:7px;border-radius:11px;background:color-mix(in srgb,var(--red) 14%,var(--surface));animation:icoWiggle 5s ease-in-out infinite}
+.errs .err:nth-child(2n) h3 svg{animation-delay:-1.7s}
+.errs .err:nth-child(3n) h3 svg{animation-delay:-3.1s}
+.err:hover h3 svg{animation-duration:1.2s}
+.err-g::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;animation:icoPulse 2s ease-out infinite;--ic:currentColor}
+/* observações */
+.obs{border:1px solid var(--line);background:linear-gradient(160deg,color-mix(in srgb,var(--green) 9%,var(--surface)),var(--surface));box-shadow:var(--sh-1);border-radius:18px;transition:transform .25s,box-shadow .25s}
+.obs:hover{transform:translateY(-3px);box-shadow:var(--sh-2)}
+.obs:nth-child(2n) .ico{background:linear-gradient(135deg,#FFE9A8,#F5C451);color:#7A4B00}
+/* portas (DHCP/servidor) */
+.port-card{position:relative;overflow:hidden;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 10%,var(--surface)),var(--surface) 65%);transition:transform .25s,box-shadow .25s}
+.port-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px var(--vc)}
+@media (prefers-reduced-motion:reduce){.ben .ico,.vs-card .ico,.obs .ico,.note .ico,.vs-card .ico svg,.err h3 svg,.err-g::before{animation:none!important}}
+
+
+/* ===== desafio no layout do FTP ===== */
+.desafio{--green:var(--red);--green-strong:var(--red);--mint:color-mix(in srgb,var(--red) 16%,var(--surface));--surface-2:color-mix(in srgb,var(--red) 7%,var(--surface));
+  background:linear-gradient(180deg,color-mix(in srgb,var(--red) 6%,var(--bg)),var(--bg) 70%)!important;border-top:4px solid var(--red)}
+.desafio .step-n{color:#fff}
+:root[data-theme="dark"] .desafio .step-n{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .desafio .step-n{color:#1A0505}}
+.ch-banner{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;border:2px solid var(--red);border-radius:28px;padding:24px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:0 30px 60px -36px var(--red);
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--red) 18%,transparent) 1px,transparent 1.5px) 0 0/20px 20px,linear-gradient(135deg,color-mix(in srgb,var(--red) 14%,var(--surface)),var(--surface) 70%)}
+.ch-banner .ico{width:64px;height:64px;border-radius:20px;background:var(--red);color:#fff;position:relative;box-shadow:0 14px 26px -12px var(--red)}
+.ch-banner .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--red);animation:chRing 2.4s ease-out infinite}
+.ch-banner .ico svg{width:32px;height:32px;animation:icoWiggle 3s ease-in-out infinite}
+@keyframes chRing{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.55);opacity:0}}
+.ch-banner h2{color:var(--red);margin-top:6px}
+.ch-banner p{color:var(--muted);margin-top:8px;max-width:70ch}
+.desafio .def{margin-bottom:8px}
+.desafio .def > *{min-width:0}
+.desafio .def p+p{margin-top:14px}
+.desafio .def .big{font-size:1.2rem;line-height:1.55}
+.desafio .def .big strong{color:var(--red)}
+.desafio .ports.ch-ports{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.desafio .port-card{border-top:5px solid var(--vc);display:grid;gap:6px;align-content:start}
+.desafio .port-card b{font:800 1.8rem var(--f-display);color:var(--vc);line-height:1}
+.desafio .port-card strong{font-family:var(--f-display);font-size:.95rem}
+.desafio .port-card span{font-size:.88rem;color:var(--muted)}
+.desafio .sub-h{font:700 .8rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:40px 0 18px}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red))}
+.desafio .step.test .step-n{background:var(--surface);color:var(--red);border:2px dashed var(--red)}
+.desafio .step-body h3 .tag{background:var(--red);color:#fff}
+.desafio .tbl-wrap{border-color:color-mix(in srgb,var(--red) 25%,var(--line))}
+.desafio .note.warn{margin-top:20px;background:color-mix(in srgb,var(--red) 8%,var(--surface));border:1px solid color-mix(in srgb,var(--red) 28%,transparent)}
+.desafio .note.warn .ico{background:color-mix(in srgb,var(--red) 14%,var(--surface));color:var(--red)}
+.desafio .test-row{border-color:color-mix(in srgb,var(--red) 22%,var(--line))}
+.desafio .test-row summary{color:var(--red)}
+.nav a.nav-ch,#tmenu a.nav-ch{color:var(--red)}
+@media (max-width:860px){.desafio .def{grid-template-columns:1fr}}
+@media (max-width:600px){.ch-banner{grid-template-columns:1fr;padding:18px}}
+@media (max-width:480px){.desafio .port-card{padding:14px}.desafio .port-card b{font-size:1.4rem}}
+#tmenu a.nav-ch:hover,#tmenu a.nav-ch:focus-visible{background:var(--red)!important;color:#fff!important}
+#tmenu a.nav-ch:hover b,#tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.85}
+
+/* ícones das classes A B C animados (mesmo padrão dos ícones de "por que usamos o ping") */
+.cls{--ic:var(--vc)}
+.cls-top b{position:relative;display:grid;place-items:center;width:52px;height:52px;border-radius:15px;background:var(--vc);color:#fff;font:800 1.7rem/1 var(--f-display);box-shadow:0 12px 22px -12px var(--vc);animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite;transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.cls:nth-child(2) .cls-top b{animation-delay:-1.1s,-.9s}
+.cls:nth-child(3) .cls-top b{animation-delay:-2.2s,-1.8s}
+.cls:hover .cls-top b{transform:scale(1.12) rotate(-8deg)}
+:root[data-theme="dark"] .cls-top b{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cls-top b{color:#08130C}}
+@media (prefers-reduced-motion:reduce){.cls-top b{animation:none!important}}
+
+/* ícones A B C ? da rede montada: mesmo padrão dos ícones de "por que usamos o ping" */
+.addr{--ic:var(--vc);transition:transform .25s,border-color .25s,box-shadow .25s}
+.addr:hover{transform:translateY(-4px);border-color:var(--vc);box-shadow:0 22px 44px -24px var(--vc)}
+.addr-head .ic{position:relative;width:48px;height:48px;border-radius:14px;font-size:1.4rem;box-shadow:0 12px 22px -12px var(--vc);animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite;transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.addr:nth-child(2) .addr-head .ic{animation-delay:-1.1s,-.9s}
+.addr:nth-child(3) .addr-head .ic{animation-delay:-2.2s,-1.8s}
+.addr:nth-child(4) .addr-head .ic{animation-delay:-.5s,-2.4s}
+.addr:hover .addr-head .ic{transform:scale(1.15) rotate(-8deg)}
+@media (prefers-reduced-motion:reduce){.addr-head .ic{animation:none!important}}
+
+/* desafio: cards com mais respiro */
+.desafio .port-card{padding:22px 24px 20px;gap:10px}
+.desafio .port-card b{margin-bottom:2px}
+.desafio .port-card span{line-height:1.5}
+.desafio .ports.ch-ports{gap:16px}
+@media (max-width:480px){.desafio .port-card{padding:18px 18px 16px}}
+
+/* "Como usar": borda preta só por fora da tabela */
+@media (min-width:641px){.tbl-wrap:has(.ping-tbl){border:2px solid #000}
+:root[data-theme="dark"] .tbl-wrap:has(.ping-tbl){border-color:#E4F3E8}
+}
+@media (min-width:641px) and (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tbl-wrap:has(.ping-tbl){border-color:#E4F3E8}}
+
+/* ping: animação de dois computadores trocando pacotes */
+.ping-anim{margin:18px 0 0;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px 14px 12px;display:grid;gap:8px;box-shadow:var(--sh-1)}
+.ping-anim svg{display:block;width:100%;height:auto}
+.pa-wire{stroke:var(--line);stroke-width:3;stroke-dasharray:6 8;animation:paDash 1s linear infinite}
+@keyframes paDash{to{stroke-dashoffset:-14}}
+.pa-mon{fill:var(--code-bg,#000);stroke:var(--ink);stroke-width:2}
+.pa-scr{fill:#0b1a12}
+.pa-scrt{fill:var(--code-key,#8BE39B);font:700 15px var(--f-mono)}
+.pa-st{fill:var(--ink)}
+.pa-n{fill:var(--ink);font:700 14px var(--f-display)}
+.pa-ip{fill:var(--muted);font:600 11px var(--f-mono)}
+.pa-pk{transform-box:fill-box;opacity:0}
+.pa-pk rect{stroke:none}
+.pa-pk text{fill:#fff;font:700 12px var(--f-body)}
+.pa-req rect{fill:var(--green)}
+.pa-rep rect{fill:var(--s1)}
+.pa-req{animation:paReq 6s ease-in-out infinite}
+.pa-rep{animation:paRep 6s ease-in-out infinite}
+@keyframes paReq{0%{transform:translate(112px,53px);opacity:0}4%{opacity:1}40%{transform:translate(296px,53px);opacity:1}44%,100%{transform:translate(296px,53px);opacity:0}}
+@keyframes paRep{0%,50%{transform:translate(296px,53px);opacity:0}54%{opacity:1}90%{transform:translate(112px,53px);opacity:1}94%,100%{transform:translate(112px,53px);opacity:0}}
+.pa-cap{display:grid;min-height:2.2em;justify-items:center}
+.pa-cap span{grid-area:1/1;font:600 .85rem var(--f-mono);display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;opacity:0}
+.pa-c1{animation:paC1 6s infinite}.pa-c2{animation:paC2 6s infinite}
+@keyframes paC1{0%{opacity:0}4%,44%{opacity:1}48%,100%{opacity:0}}
+@keyframes paC2{0%,50%{opacity:0}54%,94%{opacity:1}98%,100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.pa-wire,.pa-req,.pa-rep,.pa-c1,.pa-c2{animation:none}.pa-req{opacity:1;transform:translate(204px,53px)}.pa-c1{opacity:1}}
+.gui-lin .shot{justify-items:start}
+.gui-lin .shot figcaption{text-align:left}
+
+/* ===== ferramenta interativa: visual 3D e limpo ===== */
+.finder{border:1px solid color-mix(in srgb,var(--green) 28%,var(--line));border-radius:30px;padding:32px;gap:26px;
+  background:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,var(--green) 16%,var(--surface)),transparent 60%),linear-gradient(180deg,var(--surface),var(--surface-2));
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 40px 80px -48px color-mix(in srgb,var(--green) 70%,transparent),0 2px 0 color-mix(in srgb,var(--green) 18%,transparent)}
+.finder-head{gap:20px}
+.finder-head .ico{--ic:var(--green);position:relative;width:72px;height:72px;border-radius:22px;color:#fff;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--green) 70%,#fff),var(--green) 45%,color-mix(in srgb,var(--green) 70%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 -2px color-mix(in srgb,var(--green) 55%,#000),0 22px 30px -10px color-mix(in srgb,var(--green) 70%,transparent);
+  animation:icoFloat 3.4s ease-in-out infinite}
+.finder-head .ico::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--green);animation:chRing 2.6s ease-out infinite;pointer-events:none}
+.finder-head .ico svg{width:36px;height:36px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.25))}
+.finder .classify{gap:22px;grid-template-columns:340px minmax(0,1fr)}
+.finder .pform{border:1px solid var(--line);border-radius:24px;background:var(--surface);padding:22px;
+  box-shadow:0 1px 0 #fff inset,0 18px 36px -24px rgba(15,36,23,.35)}
+.finder #cip{font-size:1.5rem;padding:14px 16px;border:2px solid color-mix(in srgb,var(--green) 40%,var(--line));border-radius:16px;background:var(--surface-2);box-shadow:inset 0 3px 6px -3px rgba(0,0,0,.18)}
+.finder .presets button{border-radius:12px;padding:6px 10px;background:var(--surface);box-shadow:0 3px 0 var(--line);transition:transform .15s,box-shadow .15s,border-color .15s,color .15s}
+.finder .presets button:hover{transform:translateY(-2px);box-shadow:0 5px 0 color-mix(in srgb,var(--green) 40%,var(--line))}
+.finder .presets button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.finder .field small{color:var(--muted)}
+.finder #cout{--vc:var(--green);border:1px solid color-mix(in srgb,var(--vc) 35%,var(--line));border-radius:26px;padding:24px;gap:20px;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 9%,var(--surface)),var(--surface) 55%);
+  box-shadow:0 1px 0 #fff inset,0 26px 50px -30px var(--vc)}
+.fhead{display:flex;align-items:center;gap:18px}
+.c3d{position:relative;width:76px;height:76px;border-radius:24px;display:grid;place-items:center;color:#fff;font:800 2.6rem/1 var(--f-display);text-shadow:0 3px 0 rgba(0,0,0,.2);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--vc) 65%,#fff),var(--vc) 48%,color-mix(in srgb,var(--vc) 72%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -6px 0 rgba(0,0,0,.18),0 8px 0 -2px color-mix(in srgb,var(--vc) 55%,#000),0 22px 30px -10px var(--vc);
+  animation:icoFloat 3.4s ease-in-out infinite;--ic:var(--vc)}
+.c3d::before{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid var(--vc);animation:chRing 2.6s ease-out infinite;pointer-events:none}
+.fh-t strong{display:block;font:800 1.6rem var(--f-display);line-height:1.1;letter-spacing:-.02em}
+.fh-t span{color:var(--muted);font-weight:600;font-size:.95rem}
+.fbits{display:grid;gap:8px}
+.fb-row{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;max-width:420px}
+.fb-row i{font-style:normal;display:grid;place-items:center;aspect-ratio:1/1.1;border-radius:10px;font:700 1.05rem var(--f-mono);background:var(--surface-2);color:var(--muted);box-shadow:0 3px 0 var(--line);animation:bitpop .35s both;animation-delay:calc(var(--i) * 30ms)}
+.fb-row i.on{background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 72%,#fff),var(--vc));color:#fff;box-shadow:0 3px 0 color-mix(in srgb,var(--vc) 60%,#000),0 10px 16px -8px var(--vc)}
+.fbits small{color:var(--muted);font-size:.85rem}.fbits small b{color:var(--ink)}
+.ftiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ft{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 14px;border-radius:18px;background:var(--surface);border:1px solid color-mix(in srgb,var(--tc) 22%,var(--line));
+  box-shadow:0 1px 0 #fff inset,0 10px 20px -16px var(--tc);transition:transform .2s,box-shadow .2s,border-color .2s}
+.ft:hover{transform:translateY(-3px);border-color:var(--tc);box-shadow:0 16px 28px -16px var(--tc)}
+.fti{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--tc) 65%,#fff),var(--tc) 50%,color-mix(in srgb,var(--tc) 75%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -3px 0 rgba(0,0,0,.16),0 5px 0 -1px color-mix(in srgb,var(--tc) 55%,#000),0 12px 16px -8px var(--tc)}
+.fti svg{width:21px;height:21px;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}
+.ft small{display:block;font:700 .68rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ft b{display:block;font:600 .88rem var(--f-mono);font-variant-numeric:tabular-nums;overflow-wrap:anywhere;line-height:1.35}
+:root[data-theme="dark"] .c3d,:root[data-theme="dark"] .fti,:root[data-theme="dark"] .finder-head .ico,:root[data-theme="dark"] .fb-row i.on{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .c3d,:root:not([data-theme="light"]) .fti,:root:not([data-theme="light"]) .finder-head .ico,:root:not([data-theme="light"]) .fb-row i.on{color:#08130C}}
+@media (max-width:920px){.finder .classify{grid-template-columns:1fr}}
+@media (max-width:600px){.finder{padding:18px;border-radius:22px}.ftiles{grid-template-columns:1fr}.c3d{width:62px;height:62px;font-size:2.1rem;border-radius:20px}.fh-t strong{font-size:1.3rem}.finder #cout{padding:18px}.finder-head .ico{width:60px;height:60px}}
+@media (prefers-reduced-motion:reduce){.c3d,.finder-head .ico,.c3d::before,.finder-head .ico::before,.fb-row i{animation:none!important}}
+
+/* máscara padrão em destaque */
+.ft-mask{grid-column:1/-1;grid-template-columns:auto minmax(0,1fr);gap:18px;padding:20px 22px;border:2px solid var(--s1);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--s1) 12%,var(--surface)),var(--surface) 70%);box-shadow:0 1px 0 #fff inset,0 24px 40px -26px var(--s1)}
+.ft-mask .fti{width:58px;height:58px;border-radius:18px;animation:icoFloat 3.4s ease-in-out infinite}
+.ft-mask .fti svg{width:28px;height:28px}
+.ft-mask small{font-size:.74rem;color:var(--s1)}
+.fm-val{font:800 clamp(1.4rem,3.4vw,2rem) var(--f-mono)!important;letter-spacing:-.01em;margin:2px 0 10px;color:var(--ink)}
+.fm-val em{font-style:normal;color:var(--s1)}
+.fm-bin{display:flex;flex-wrap:wrap;gap:6px 12px}
+.fm-bin .mo{display:inline-flex;gap:2px;font:700 .95rem var(--f-mono)}
+.fm-bin i{font-style:normal;display:grid;place-items:center;width:1.25em;height:1.55em;border-radius:5px}
+.fm-bin i.mn,.fm-leg i.mn{background:var(--s1);color:#fff}
+.fm-bin i.mh,.fm-leg i.mh{background:color-mix(in srgb,var(--green) 22%,var(--surface));color:var(--green-strong)}
+.fm-leg{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:.78rem;color:var(--muted);font-weight:600}
+.fm-leg span{display:inline-flex;align-items:center;gap:6px}
+.fm-leg i{width:12px;height:12px;border-radius:4px;display:inline-block}
+:root[data-theme="dark"] .fm-bin i.mn,:root[data-theme="dark"] .fm-leg i.mn{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fm-bin i.mn{color:#08130C}}
+@media (max-width:600px){.ft-mask{grid-template-columns:1fr;padding:16px}.fm-bin .mo{font-size:.8rem}.fm-bin{gap:6px 8px}}
+@media (prefers-reduced-motion:reduce){.ft-mask .fti{animation:none}}
+.ftiles .ft:last-child:not(.ft-mask){grid-column:1/-1}
+
+/* ===== OSI: layout 3D, discreto e fácil de ler ===== */
+#osi .sec-head{margin-bottom:26px;gap:6px}
+#osi .sec-head h2{font-size:clamp(1.45rem,2.6vw,1.9rem)}
+#osi .sec-head h2::after{margin-top:10px;width:44px;height:3px}
+#osi .sec-head p{font-size:.98rem;max-width:78ch}
+#osi .osi-wrap{gap:22px;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}
+#osi .osi{gap:10px;padding:16px;border-radius:24px;background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);box-shadow:0 1px 0 #fff inset,0 26px 44px -32px rgba(15,36,23,.45)}
+.osi-cap{display:flex;justify-content:center}
+.osi-cap span{font:700 .68rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
+.osi-cap span::after{content:"↓";font-size:.95rem;color:var(--green-strong)}
+.osi-cap.down span::after{content:"→"}
+#osi .layer{--lc:var(--neutral);position:relative;grid-template-columns:42px minmax(0,1fr) auto;gap:12px;padding:10px 12px;border-radius:16px;border:1px solid color-mix(in srgb,var(--lc) 26%,var(--line));
+  background:linear-gradient(90deg,color-mix(in srgb,var(--lc) 11%,var(--surface)),var(--surface) 70%);box-shadow:0 1px 0 #fff inset,0 4px 0 color-mix(in srgb,var(--lc) 22%,var(--line)),0 12px 18px -14px var(--lc);transition:transform .2s,box-shadow .2s}
+#osi .layer:hover{transform:translateY(-2px);box-shadow:0 1px 0 #fff inset,0 6px 0 color-mix(in srgb,var(--lc) 30%,var(--line)),0 16px 22px -14px var(--lc)}
+#osi .layer .ln{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font:800 1.2rem var(--f-display);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--lc) 62%,#fff),var(--lc) 52%,color-mix(in srgb,var(--lc) 74%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -3px 0 rgba(0,0,0,.16),0 4px 0 -1px color-mix(in srgb,var(--lc) 55%,#000),0 10px 14px -8px var(--lc);text-shadow:0 2px 0 rgba(0,0,0,.18)}
+#osi .layer .lt b{font:700 .98rem var(--f-display)}
+#osi .layer .lt small{font-size:.8rem;margin-top:1px}
+#osi .layer .pdu{font:700 .7rem var(--f-mono);color:color-mix(in srgb,var(--lc) 70%,var(--ink));background:color-mix(in srgb,var(--lc) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--lc) 28%,transparent);padding:4px 9px;border-radius:999px}
+#osi .layer.soft{padding:7px 12px}
+#osi .layer.soft .ln{width:34px;height:34px;border-radius:11px;font-size:1rem}
+#osi .layer.soft{grid-template-columns:34px minmax(0,1fr) auto}
+#osi .layer.soft .lt{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+#osi .layer.hl{padding:14px;border:2px solid var(--green);border-radius:20px;transform:scale(1.03);margin:4px 0;
+  background:linear-gradient(100deg,color-mix(in srgb,var(--green) 20%,var(--surface)),var(--surface) 80%);
+  box-shadow:0 1px 0 #fff inset,0 6px 0 color-mix(in srgb,var(--green) 55%,#000),0 26px 36px -20px var(--green)}
+#osi .layer.hl:hover{transform:scale(1.03) translateY(-2px)}
+#osi .layer.hl .ln{width:50px;height:50px;border-radius:16px;font-size:1.6rem;animation:icoFloat 3.4s ease-in-out infinite;--ic:var(--green)}
+#osi .layer.hl .lt b{font-size:1.2rem}
+#osi .layer.hl .here{display:inline-block;font:800 .64rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--green-strong);padding:3px 9px;border-radius:999px;margin-bottom:5px;animation:chRing2 2.4s ease-out infinite}
+@keyframes chRing2{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--green) 55%,transparent)}70%,100%{box-shadow:0 0 0 9px transparent}}
+#osi .layer.hl .pdu{background:var(--green);color:#fff;border-color:transparent}
+#osi .layer.sw{border-style:solid}
+#osi .layer .dev{font:700 .62rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--s2);padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:2px}
+#osi .encap{padding:20px;border-radius:24px;gap:14px;box-shadow:0 1px 0 #fff inset,0 26px 44px -32px rgba(15,36,23,.45)}
+#osi .encap h3{font:700 .95rem var(--f-display);letter-spacing:0;text-transform:none;color:var(--ink)}
+#osi .encap h3 small{font:600 .8rem var(--f-body);color:var(--muted)}
+#osi .pkt-ruler{border-bottom:0;padding-bottom:2px;color:var(--muted)}
+#osi .pkt-ruler span::before{display:none}
+#osi .pkt-grid{background:transparent;border:0;border-radius:0;overflow:visible;gap:6px;margin-top:0}
+#osi .pkt .c{--cc:var(--neutral);border-radius:12px;background:color-mix(in srgb,var(--cc) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--cc) 26%,var(--line));box-shadow:0 3px 0 color-mix(in srgb,var(--cc) 22%,var(--line));padding:9px 6px}
+#osi .pkt .c small{color:color-mix(in srgb,var(--cc) 55%,var(--muted))}
+#osi .pkt .c.hot{--cc:var(--s2);background:color-mix(in srgb,var(--s2) 13%,var(--surface))}
+#osi .pkt .c.ip{padding:14px 10px;color:#fff;border:0}
+#osi .pkt .c.ip.src{background:linear-gradient(145deg,color-mix(in srgb,var(--green) 70%,#fff),var(--green) 50%,color-mix(in srgb,var(--green) 78%,#000));box-shadow:inset 0 2px 0 rgba(255,255,255,.45),0 5px 0 color-mix(in srgb,var(--green) 55%,#000),0 14px 20px -12px var(--green)}
+#osi .pkt .c.ip.dst{background:linear-gradient(145deg,color-mix(in srgb,var(--s1) 70%,#fff),var(--s1) 50%,color-mix(in srgb,var(--s1) 78%,#000));box-shadow:inset 0 2px 0 rgba(255,255,255,.45),0 5px 0 color-mix(in srgb,var(--s1) 55%,#000),0 14px 20px -12px var(--s1)}
+#osi .pkt .c.ip small,#osi .pkt .c.ip i{color:rgba(255,255,255,.88);opacity:1}
+#osi .pkt .c.ip b{color:#fff;font-size:1.3rem;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+.pkt-leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.78rem;font-weight:600;color:var(--muted)}
+.pkt-leg span{display:inline-flex;align-items:center;gap:7px}
+.pkt-leg i{width:14px;height:14px;border-radius:5px;display:inline-block}
+.lg-src{background:var(--green)}.lg-dst{background:var(--s1)}.lg-ping{background:color-mix(in srgb,var(--s2) 45%,var(--surface));border:1px solid var(--s2)}.lg-oth{background:var(--surface-2);border:1px solid var(--line)}
+#osi .pkt-note{font-size:.82rem}
+:root[data-theme="dark"] #osi .layer .ln,:root[data-theme="dark"] #osi .layer.hl .pdu{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #osi .layer .ln{color:#08130C}}
+@media (max-width:860px){#osi .osi-wrap{grid-template-columns:1fr}}
+@media (max-width:600px){#osi .osi{padding:12px}#osi .layer.hl{transform:none}#osi .layer.hl:hover{transform:translateY(-2px)}#osi .layer{grid-template-columns:36px minmax(0,1fr)}#osi .layer .pdu{grid-column:2;justify-self:start}#osi .layer .ln{width:36px;height:36px}}
+@media (prefers-reduced-motion:reduce){#osi .layer.hl .ln,#osi .layer.hl .here{animation:none}}
+#osi .layer.hl .lt{display:grid;justify-items:start;gap:2px}
+#osi .layer .lt small b,#osi .layer.hl .lt small b{font:700 inherit;font-size:inherit;color:var(--ink)}
+#osi .layer.hl .here{margin-bottom:3px}
+@media (max-width:600px){#osi .layer.hl{grid-template-columns:44px minmax(0,1fr)}#osi .layer.hl .ln{width:44px;height:44px;font-size:1.4rem}}
+
+/* cabeçalho IPv4: todos os quadros brancos, só o texto dos IPs em destaque */
+#osi .pkt .c,#osi .pkt .c.hot,#osi .pkt .c.ip,#osi .pkt .c.ip.src,#osi .pkt .c.ip.dst{background:#fff;border:1px solid var(--line);box-shadow:0 3px 0 var(--line);color:var(--ink)}
+:root[data-theme="dark"] #osi .pkt .c,:root[data-theme="dark"] #osi .pkt .c.hot,:root[data-theme="dark"] #osi .pkt .c.ip{background:var(--surface)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #osi .pkt .c,:root:not([data-theme="light"]) #osi .pkt .c.hot,:root:not([data-theme="light"]) #osi .pkt .c.ip{background:var(--surface)}}
+#osi .pkt .c small{color:var(--muted)}
+#osi .pkt .c.hot small{color:var(--muted)}
+#osi .pkt .c.ip{padding:14px 10px}
+#osi .pkt .c.ip small,#osi .pkt .c.ip i{color:var(--muted);opacity:1}
+#osi .pkt .c.ip b{font-size:1.45rem;font-weight:800;text-shadow:none;letter-spacing:.01em}
+#osi .pkt .c.ip.src b{color:var(--green-strong)}
+#osi .pkt .c.ip.dst b{color:var(--s1)}
+#osi .pkt .c.ip.src small{color:var(--green-strong);font-weight:800}
+#osi .pkt .c.ip.dst small{color:var(--s1);font-weight:800}
+
+/* ===== cards de classe: mesmo efeito de "A rede que você vai montar" ===== */
+.cls-grid .cls{padding:0;gap:0;border-top:1px solid color-mix(in srgb,var(--vc) 30%,var(--line));border-radius:22px;overflow:hidden;position:relative;
+  box-shadow:0 1px 0 #fff inset,0 18px 34px -26px var(--vc);transition:transform .25s,border-color .25s,box-shadow .25s}
+.cls-grid .cls::before{content:"";position:absolute;inset:0 0 auto 0;height:5px;background:linear-gradient(90deg,var(--vc),color-mix(in srgb,var(--vc) 55%,#fff));z-index:1}
+.cls-grid .cls:hover{transform:translateY(-6px);border-color:var(--vc);box-shadow:0 1px 0 #fff inset,0 30px 50px -24px var(--vc)}
+.cls-grid .cls-top{align-items:center;justify-content:flex-start;gap:14px;padding:22px 20px 16px;background:linear-gradient(90deg,color-mix(in srgb,var(--vc) 18%,var(--surface)),var(--surface))}
+.cls-grid .cls-top b{width:56px;height:56px;border-radius:17px;font-size:1.9rem;flex:none;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--vc) 62%,#fff),var(--vc) 52%,color-mix(in srgb,var(--vc) 74%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -4px 0 rgba(0,0,0,.16),0 5px 0 -1px color-mix(in srgb,var(--vc) 55%,#000),0 14px 20px -10px var(--vc);text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.cls-grid .cls-top span{font:700 .78rem var(--f-mono);color:color-mix(in srgb,var(--vc) 70%,var(--ink));background:color-mix(in srgb,var(--vc) 13%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 28%,transparent);padding:5px 11px;border-radius:999px}
+.cls-grid .range{padding:14px 20px 4px;font:800 1.25rem var(--f-mono);color:var(--ink)}
+.cls-grid .oct4{margin:8px 20px 14px;gap:6px}
+.cls-grid .oct4 span{padding:9px 2px;border-radius:10px;font-weight:700;border:1px solid var(--line);background:var(--surface-2);box-shadow:0 3px 0 var(--line)}
+.cls-grid .oct4 span.n{border-color:transparent;color:#fff;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 70%,#fff),var(--vc));box-shadow:0 3px 0 color-mix(in srgb,var(--vc) 60%,#000),0 10px 14px -8px var(--vc);animation:clsBeat 2.8s ease-in-out infinite}
+.cls-grid .oct4 span.n:nth-child(2){animation-delay:.2s}.cls-grid .oct4 span.n:nth-child(3){animation-delay:.4s}
+@keyframes clsBeat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.cls-grid .cls:hover .oct4 span{transform:translateY(-2px);transition:transform .25s}
+.cls-grid dl{padding:0 20px 20px;gap:0 12px}
+.cls-grid dl dt,.cls-grid dl dd{padding:9px 0;border-top:1px dashed var(--line)}
+.cls-grid dl dd{color:var(--ink);font-weight:600}
+:root[data-theme="dark"] .cls-grid .oct4 span.n{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cls-grid .oct4 span.n{color:#08130C}}
+.minor div{background:var(--surface);border:1px solid var(--line);box-shadow:0 3px 0 var(--line),0 12px 20px -16px rgba(15,36,23,.4);transition:transform .2s,box-shadow .2s}
+.minor div:hover{transform:translateY(-3px);box-shadow:0 5px 0 var(--line),0 18px 26px -16px rgba(15,36,23,.45)}
+@media (prefers-reduced-motion:reduce){.cls-grid .oct4 span.n{animation:none}}
+
+/* ===== cards do desafio: 3D, animados ===== */
+.desafio .ports.ch-ports{gap:16px}
+.desafio .port-card{--ic:var(--vc);display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:16px;row-gap:4px;align-items:start;align-content:start;
+  padding:20px 20px 18px;border:1px solid color-mix(in srgb,var(--vc) 30%,var(--line));border-top:1px solid color-mix(in srgb,var(--vc) 30%,var(--line));border-radius:22px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--vc) 13%,var(--surface)),var(--surface) 65%);
+  box-shadow:0 1px 0 #fff inset,0 5px 0 color-mix(in srgb,var(--vc) 20%,var(--line)),0 18px 30px -22px var(--vc);transition:transform .25s,box-shadow .25s,border-color .25s}
+.desafio .port-card::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:4px;border-radius:0 4px 4px 0;background:var(--vc)}
+.desafio .port-card:hover{transform:translateY(-5px);border-color:var(--vc);box-shadow:0 1px 0 #fff inset,0 7px 0 color-mix(in srgb,var(--vc) 28%,var(--line)),0 28px 40px -22px var(--vc)}
+.desafio .port-card b{grid-row:1 / span 2;position:relative;display:grid;place-items:center;min-width:68px;height:60px;padding:0 12px;border-radius:18px;color:#fff;font:800 1.45rem/1 var(--f-display);text-shadow:0 2px 0 rgba(0,0,0,.2);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--vc) 62%,#fff),var(--vc) 52%,color-mix(in srgb,var(--vc) 74%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -4px 0 rgba(0,0,0,.16),0 5px 0 -1px color-mix(in srgb,var(--vc) 55%,#000),0 14px 20px -10px var(--vc);animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite;transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.desafio .port-card:nth-child(2) b{animation-delay:-1.1s,-.9s}
+.desafio .port-card:nth-child(3) b{animation-delay:-2.2s,-1.8s}
+.desafio .port-card:nth-child(4) b{animation-delay:-.5s,-2.4s}
+.desafio .port-card:hover b{transform:scale(1.1) rotate(-6deg)}
+.desafio .port-card strong{align-self:end;font:800 1.08rem var(--f-display);color:var(--ink);letter-spacing:-.01em}
+.desafio .port-card span{align-self:start;font-size:.88rem;line-height:1.5;color:var(--muted)}
+.desafio .port-card span code{font-size:.8rem}
+:root[data-theme="dark"] .desafio .port-card b{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .desafio .port-card b{color:#08130C}}
+@media (max-width:480px){.desafio .ports.ch-ports{grid-template-columns:1fr}.desafio .port-card{padding:16px}.desafio .port-card b{min-width:58px;height:52px;font-size:1.2rem}}
+@media (prefers-reduced-motion:reduce){.desafio .port-card b{animation:none}}
+.desafio .port-card{grid-template-columns:minmax(0,1fr);grid-template-rows:none;row-gap:8px}
+.desafio .port-card b{grid-row:auto;justify-self:start;margin-bottom:6px}
+.desafio .port-card strong{align-self:auto}
+.desafio .port-card::before{display:none}
+.desafio .port-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--vc),transparent)}
+
+/* desenho da rede: ao passar o mouse o grupo "se aproxima" da tela */
+#draw{overflow:visible}
+.draw-scroll{padding:6px 0}
+#draw .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;
+  transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease}
+#draw:has(.grp:hover) .grp:not(:hover),#draw:has(.grp:focus-visible) .grp:not(:focus-visible){opacity:.55;filter:saturate(.6);transition:opacity .35s,filter .35s,transform .5s cubic-bezier(.3,1.5,.5,1)}
+#draw .grp:hover,#draw .grp:focus-visible{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
+#draw .grp > rect:first-child{transition:fill-opacity .35s,stroke-opacity .35s,stroke-width .35s}
+#draw .grp:hover > rect:first-child,#draw .grp:focus-visible > rect:first-child{fill-opacity:.2;stroke-opacity:1;stroke-width:2.5}
+#draw .grp .mon{transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
+#draw .grp:hover .mon{animation:monGlow 1.6s ease-in-out infinite}
+@keyframes monGlow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 6px var(--gc))}}
+@media (max-width:600px){#draw .grp:hover,#draw .grp:focus-visible{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){#draw .grp,#draw .grp .mon{transition:none;animation:none}#draw .grp:hover{transform:none}}
+</style>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ifsc-mark" viewBox="0 0 410 555">
+      <circle cx="60" cy="60" r="66" fill="#CD191E"></circle>
+      <g fill="#2F9E41">
+        <rect x="145" y="0" width="120" height="120" rx="10"></rect><rect x="290" y="0" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="145" width="120" height="120" rx="10"></rect><rect x="145" y="145" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="290" width="120" height="120" rx="10"></rect><rect x="145" y="290" width="120" height="120" rx="10"></rect><rect x="290" y="290" width="120" height="120" rx="10"></rect>
+        <rect x="0" y="435" width="120" height="120" rx="10"></rect><rect x="145" y="435" width="120" height="120" rx="10"></rect>
+      </g>
+    </symbol>
+    <symbol id="i-split" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M12 3v18M3 12h18"></path></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path><path d="m9 12 2 2 4-4"></path></symbol>
+    <symbol id="i-gauge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-4"></path><path d="M3.3 19a10 10 0 1 1 17.4 0"></path></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="4"></circle><path d="M2 21v-1a6 6 0 0 1 12 0v1"></path><path d="M16 4a4 4 0 0 1 0 8"></path><path d="M22 21v-1a6 6 0 0 0-4-5.6"></path></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"></ellipse><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"></path><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"></circle><circle cx="18" cy="5" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path></symbol>
+    <symbol id="i-switch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="2"></rect><path d="M6 12h.01M10 12h.01M14 12h.01M18 12h.01"></path></symbol>
+    <symbol id="i-pc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"></path></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6M9 9l6 6"></path></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path><path d="M12 9v4M12 17h.01"></path></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4"></path><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"></path></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m17 8-5-5-5 5M12 3v12"></path></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"></path><path d="M17 21v-8H7v8M7 3v5h8"></path></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
+  </defs>
+</svg>
+
+<div class="accent" aria-hidden="true"></div>
+<nav class="topbar" aria-label="Navegação">
+  <div class="wrap">
+    <a class="tb-brand" href="https://alberto-barros.github.io/" title="Página inicial">
+      <svg class="mark" viewBox="0 0 34 46" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8191E"/><g fill="#32A041"><rect x="12" y="0" width="10" height="10" rx="2"/><rect x="24" y="0" width="10" height="10" rx="2"/><rect x="0" y="12" width="10" height="10" rx="2"/><rect x="12" y="12" width="10" height="10" rx="2"/><rect x="0" y="24" width="10" height="10" rx="2"/><rect x="12" y="24" width="10" height="10" rx="2"/><rect x="24" y="24" width="10" height="10" rx="2"/><rect x="0" y="36" width="10" height="10" rx="2"/><rect x="12" y="36" width="10" height="10" rx="2"/></g></svg>
+      <span class="inst"><b>INSTITUTO FEDERAL</b><span>Santa Catarina · Câmpus Garopaba</span></span>
+    </a>
+    <div class="topnav">
+      <button type="button" class="ghost" id="tb-topics" aria-expanded="false" aria-controls="tmenu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span class="tb-lbl">Tópicos</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
+      <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
+    </div>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#vantagens"><b>02</b>Vantagens</a><a href="#cabecalho"><b>03</b>Cabeçalho</a><a href="#escrita"><b>04</b>Escrita</a><a href="#tipos"><b>05</b>Tipos</a><a href="#configurar"><b>06</b>Endereçar</a><a href="#subredes"><b>07</b>Sub-redes</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#desafio" class="nav-ch"><b>09</b>Desafio</a><a href="#erros"><b>10</b>Erros comuns</a><a href="#entrega"><b>11</b>Quiz</a><a href="#refs"><b>12</b>Referências</a></div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Aula · Redes de Computadores</span>
+      <h1>Endereçamento <em>IPv6</em> e criação de sub-redes</h1>
+      <p class="lead">Entenda o que é o IPv6, por que ele substitui o IPv4, como ler e abreviar um endereço de 128 bits, quais são os tipos de endereço e como configurar tudo. No final, divida um prefixo /48 em sub-redes /64 e use a calculadora para conferir.</p>
+      <div class="chips">
+        <span class="chip"><svg><use href="#i-lock"></use></svg>128 bits</span>
+        <span class="chip"><svg><use href="#i-search"></use></svg>Notação hexadecimal</span>
+        <span class="chip"><svg><use href="#i-split"></use></svg>Sub-redes /64</span>
+        <span class="chip"><svg><use href="#i-route"></use></svg>Testes com ping</span>
+        <span class="chip"><svg><use href="#i-clock"></use></svg>≈ 45 min</span>
+      </div>
+    </div>
+    <figure class="hero-net">
+      <svg id="hero-svg" viewBox="0 0 400 330" role="img" aria-label="Animação: 6 PCs em três sub-redes IPv6 ligados ao switch SW1. Pings trocados entre os PCs da mesma sub-rede."></svg>
+      <figcaption class="hn-leg"><span><i class="ok"></i>Cada PC conversa com o outro PC da mesma sub-rede /64</span></figcaption>
+    </figure>
+  </div>
+</div>
+
+<main>
+<section class="sec" id="conceito">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Conceito</span>
+      <h2>O que é o IPv6?</h2>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big">O <strong>IPv6</strong> (Internet Protocol versão 6) é a versão mais nova do protocolo IP. Ele identifica cada dispositivo da rede com um endereço de <strong>128 bits</strong> e foi criado para substituir o IPv4, que ficou pequeno demais para a Internet.</p>
+        <p>O endereço IPv4 tem 32 bits e permite cerca de 4,3 bilhões de endereços. O IPv6 usa 128 bits, o que dá 2<sup>128</sup> endereços. O número exato é <b>340.282.366.920.938.463.463.374.607.431.768.211.456</b>. Lê-se: <i>trezentos e quarenta undecilhões</i>. É tanto espaço que cada pessoa, cada celular e cada lâmpada inteligente pode ter endereços públicos próprios <span class="cites">(<a class="cite" href="#ref-rfc8200">DEERING; HINDEN, 2017</a>)</span>.</p>
+        <p>O endereço é escrito em <b>hexadecimal</b>, em <b>8 grupos de 16 bits</b> separados por dois-pontos. Exemplo: <code>2001:0db8:acad:0001:0000:0000:0000:0010</code>. Cada grupo tem de 1 a 4 dígitos hexadecimais (0 a 9 e a a f) <span class="cites">(<a class="cite" href="#ref-rfc4291">HINDEN; DEERING, 2006</a>)</span>.</p>
+        <p>Como no IPv4, o endereço tem uma <b>parte de rede</b> e uma <b>parte de host</b>. No IPv6 a divisão é indicada pelo <strong>comprimento do prefixo</strong>, escrito depois da barra (<code>/64</code>). Não existe máscara em decimal: só o prefixo <span class="cites">(<a class="cite" href="#ref-kurose">KUROSE; ROSS, 2013</a>)</span>.</p>
+      </div>
+      <div class="ip-anatomy">
+        <h3>Anatomia de 2001:db8:acad:1::10 com prefixo /64</h3>
+        <div class="binpair">
+          <span class="bl">Endereço</span>
+          <div class="ipline" aria-label="Endereço IPv6 expandido"><span class="n">2001:0db8:acad:0001:</span><span class="h">0000:0000:0000:0010</span></div>
+          <span class="bl">Prefixo /64</span>
+          <div class="ipline mask" aria-label="Prefixo de 64 bits em hexadecimal"><span class="m1">ffff:ffff:ffff:ffff:</span><span class="m0">0000:0000:0000:0000</span></div>
+        </div>
+        <div class="bitleg"><span><i style="background:var(--green-strong)"></i>64 bits de rede</span><span><i style="background:var(--s3)"></i>64 bits de interface</span></div>
+        <div class="anat-rows">
+          <div class="anat"><b>Tipo</b><span>Global unicast (começa com 2)</span></div>
+          <div class="anat"><b>Prefixo global</b><span>2001:db8:acad::/48 (os 3 primeiros grupos)</span></div>
+          <div class="anat"><b>ID da sub-rede</b><span>0001 (o 4º grupo, 16 bits)</span></div>
+          <div class="anat"><b>ID da interface</b><span>::10 (os 64 bits finais)</span></div>
+          <div class="anat"><b>Rede</b><span>2001:db8:acad:1::/64</span></div>
+          <div class="anat"><b>Hosts por rede</b><span>2⁶⁴ ≈ 1,8 × 10¹⁹</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="vantagens">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Vantagens</span>
+      <h2>Por que migrar para o IPv6</h2>
+      <p>O IPv6 não nasceu só para ter mais endereços. O protocolo foi redesenhado para deixar a rede mais simples de configurar e mais eficiente para os roteadores <span class="cites">(<a class="cite" href="#ref-tanenbaum">TANENBAUM; WETHERALL, 2011</a>)</span>.</p>
+    </div>
+    <div class="grid3 why">
+      <article class="ben"><div class="ico"><svg><use href="#i-users"></use></svg></div><h3>Espaço de endereços enorme</h3><p>Com 128 bits acabou a escassez. Cada rede recebe sub-redes <code>/64</code> inteiras, sem precisar economizar endereço.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-route"></use></svg></div><h3>Conexão fim a fim sem NAT</h3><p>Todo dispositivo pode ter endereço público. O NAT, criado para poupar endereços IPv4, deixa de ser necessário. Isso simplifica jogos, VoIP e acesso remoto.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-gauge"></use></svg></div><h3>Cabeçalho mais simples</h3><p>O cabeçalho tem tamanho fixo de 40 bytes e não tem checksum. Os roteadores processam menos campos por pacote <span class="cites">(<a class="cite" href="#ref-rfc8200">DEERING; HINDEN, 2017</a>)</span>.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-switch"></use></svg></div><h3>Autoconfiguração (SLAAC)</h3><p>O host monta o próprio endereço a partir do prefixo anunciado pelo roteador, sem servidor DHCP <span class="cites">(<a class="cite" href="#ref-rfc4862">THOMSON; NARTEN; JINMEI, 2007</a>)</span>.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-shield"></use></svg></div><h3>Segurança prevista no projeto</h3><p>O IPv6 foi desenhado com suporte ao IPsec. O NAT nunca foi um firewall: continue usando filtros de tráfego também no IPv6.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-search"></use></svg></div><h3>Multicast no lugar do broadcast</h3><p>Não existe broadcast. O ARP foi trocado pelo <b>NDP</b>, que usa multicast e só incomoda os dispositivos interessados <span class="cites">(<a class="cite" href="#ref-rfc4861">NARTEN et al., 2007</a>)</span>.</p></article>
+    </div>
+
+    <h3 class="ping-h3" style="margin-top:36px">IPv4 e IPv6 lado a lado</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Característica</th><th>IPv4</th><th>IPv6</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Característica">Tamanho do endereço</td><td data-label="IPv4" class="mono">32 bits</td><td data-label="IPv6" class="mono">128 bits</td></tr>
+          <tr><td data-label="Característica">Quantidade de endereços</td><td data-label="IPv4" class="mono">≈ 4,3 bilhões</td><td data-label="IPv6" class="mono">≈ 3,4 × 10³⁸<br>(340 undecilhões)</td></tr>
+          <tr><td data-label="Característica">Notação</td><td data-label="IPv4" class="mono">decimal com pontos<br>192.168.1.10</td><td data-label="IPv6" class="mono">hexadecimal com dois-pontos<br>2001:db8::10</td></tr>
+          <tr><td data-label="Característica">Máscara</td><td data-label="IPv4" class="mono">255.255.255.0 ou /24</td><td data-label="IPv6" class="mono">somente prefixo /64</td></tr>
+          <tr><td data-label="Característica">Cabeçalho</td><td data-label="IPv4" class="mono">20 a 60 bytes, com checksum</td><td data-label="IPv6" class="mono">40 bytes fixos, sem checksum</td></tr>
+          <tr><td data-label="Característica">Resolução de vizinhos</td><td data-label="IPv4" class="mono">ARP (broadcast)</td><td data-label="IPv6" class="mono">NDP (ICMPv6 multicast)</td></tr>
+          <tr><td data-label="Característica">Broadcast</td><td data-label="IPv4" class="mono">sim</td><td data-label="IPv6" class="mono">não existe</td></tr>
+          <tr><td data-label="Característica">Configuração automática</td><td data-label="IPv4" class="mono">DHCP</td><td data-label="IPv6" class="mono">SLAAC ou DHCPv6</td></tr>
+          <tr><td data-label="Característica">Ping</td><td data-label="IPv4" class="mono">ICMP (protocolo 1)</td><td data-label="IPv6" class="mono">ICMPv6 (próximo cabeçalho 58)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="cabecalho">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Camada 3 · Rede</span>
+      <h2>O cabeçalho do pacote IPv6</h2>
+      <p>Assim como o IPv4, o IPv6 trabalha na <b>camada 3 (Rede)</b> do modelo OSI e entrega o dado em forma de <b>pacote</b>. O cabeçalho ficou menor e mais regular: são só 8 campos, todos em posição fixa <span class="cites">(<a class="cite" href="#ref-rfc8200">DEERING; HINDEN, 2017</a>)</span>.</p>
+    </div>
+    <div class="encap" id="osi">
+      <h3>Cabeçalho IPv6 <small>(320 bits = 40 bytes)</small></h3>
+      <div class="pkt-scroll">
+        <div class="pkt" role="table" aria-label="Campos do cabeçalho IPv6, 32 bits por linha">
+          <div class="pkt-ruler" aria-hidden="true"><span>0</span><span>4</span><span>8</span><span>12</span><span>16</span><span>20</span><span>24</span><span>28</span><span class="end">31</span></div>
+          <div class="pkt-grid">
+            <div class="c" style="--w:1"><small>Versão</small><b>6</b><i>4 bits</i></div>
+            <div class="c" style="--w:2"><small>Classe de tráfego</small><b>0</b><i>8 bits</i></div>
+            <div class="c" style="--w:5"><small>Rótulo de fluxo</small><b>0</b><i>20 bits</i></div>
+            <div class="c" style="--w:4"><small>Tamanho dos dados</small><b>64 bytes</b><i>16 bits</i></div>
+            <div class="c hot" style="--w:2"><small>Próx. cabeçalho</small><b>58 = ICMPv6</b><i>8 bits</i></div>
+            <div class="c hot" style="--w:2"><small>Limite de saltos</small><b>64</b><i>8 bits</i></div>
+            <div class="c ip src" style="--w:8"><small>IPv6 de origem · bits 0 a 31</small><b>2001:0db8:acad:0001</b><i>128 bits no total</i></div>
+            <div class="c ip src" style="--w:8"><small>IPv6 de origem · bits 32 a 127</small><b>0000:0000:0000:0010</b><i>continuação</i></div>
+            <div class="c ip dst" style="--w:8"><small>IPv6 de destino · bits 0 a 31</small><b>2001:0db8:acad:0001</b><i>128 bits no total</i></div>
+            <div class="c ip dst" style="--w:8"><small>IPv6 de destino · bits 32 a 127</small><b>0000:0000:0000:0011</b><i>continuação</i></div>
+          </div>
+        </div>
+      </div>
+      <div class="pkt-leg"><span><i class="lg-src"></i>IPv6 de origem</span><span><i class="lg-dst"></i>IPv6 de destino</span></div>
+      <p class="pkt-note">Cada linha tem <b>32 bits</b>. Nos campos de endereço, as duas linhas de cada endereço mostram os 128 bits em partes (para caber na grade).</p>
+    </div>
+    <div class="errs" style="margin-top:20px">
+      <article class="err"><h3><svg><use href="#i-bulb"></use></svg>Hop Limit no lugar do TTL</h3><p>O campo de limite de saltos faz o papel do TTL do IPv4: cada roteador subtrai 1 e descarta o pacote quando chega a zero.</p></article>
+      <article class="err"><h3><svg><use href="#i-bulb"></use></svg>Próximo cabeçalho</h3><p>Diz o que vem depois do cabeçalho IPv6: <code>6</code> = TCP, <code>17</code> = UDP, <code>58</code> = ICMPv6. Também encadeia cabeçalhos de extensão opcionais.</p></article>
+      <article class="err"><h3><svg><use href="#i-bulb"></use></svg>Sem checksum e sem fragmentação nos roteadores</h3><p>A verificação de erros fica nas camadas de enlace e transporte. Só o host de origem fragmenta pacotes, e todo caminho precisa aceitar pelo menos 1280 bytes.</p></article>
+      <article class="err"><h3><svg><use href="#i-bulb"></use></svg>Mesma camada, outro protocolo</h3><p>O switch continua lendo só o quadro (MAC). O IPv6 vive na camada 3, onde ficam roteadores e o comando <code>ping</code>.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="escrita">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Como escrever</span>
+      <h2>Representação e abreviação de endereços</h2>
+      <p>Escrever 32 dígitos hexadecimais é cansativo. Por isso existem duas regras de abreviação, que podem ser usadas juntas <span class="cites">(<a class="cite" href="#ref-rfc5952">KAWAMURA; KAWASHIMA, 2010</a>)</span>.</p>
+    </div>
+    <div class="cls-grid">
+      <article class="cls" style="--vc:var(--s1)">
+        <div class="cls-top"><b>1</b><span>Zeros à esquerda</span></div>
+        <div class="range">Omita os zeros do início de cada grupo</div>
+        <dl><dt>Antes</dt><dd>2001:0db8:00a3:0001:0000:0000:0000:0010</dd><dt>Depois</dt><dd>2001:db8:a3:1:0:0:0:10</dd></dl>
+      </article>
+      <article class="cls" style="--vc:var(--s2)">
+        <div class="cls-top"><b>2</b><span>Dois-pontos duplos</span></div>
+        <div class="range">Troque uma sequência de grupos 0 por ::</div>
+        <dl><dt>Antes</dt><dd>2001:db8:a3:1:0:0:0:10</dd><dt>Depois</dt><dd>2001:db8:a3:1::10</dd></dl>
+      </article>
+      <article class="cls" style="--vc:var(--s3)">
+        <div class="cls-top"><b>!</b><span>Cuidados</span></div>
+        <div class="range">O :: só pode aparecer uma vez</div>
+        <dl><dt>Errado</dt><dd>2001::db8::10</dd><dt>Regra</dt><dd>use :: na maior sequência de zeros, com 2 ou mais grupos; letras em minúsculas</dd></dl>
+      </article>
+    </div>
+    <div class="minor">
+      <div><b>Prefixo</b><span><code>2001:db8:acad:1::/64</code> = rede. Os bits depois da barra dizem quantos bits são de rede.</span></div>
+      <div><b>Loopback</b><span><code>::1</code> é o próprio computador, como o 127.0.0.1 do IPv4.</span></div>
+      <div><b>Endereço nulo</b><span><code>::</code> significa “ainda sem endereço”. <code>::/0</code> é a rota padrão.</span></div>
+    </div>
+
+    <div class="finder">
+      <div class="finder-head">
+        <div class="ico"><svg><use href="#i-search"></use></svg></div>
+        <div><span class="eyebrow">Ferramenta interativa</span><h3>Expanda, abrevie e identifique um endereço</h3><p>Digite um endereço IPv6 (com ou sem prefixo) e veja a forma completa, a forma abreviada e o tipo.</p></div>
+      </div>
+      <div class="classify">
+        <form class="pform" id="xform" autocomplete="off">
+          <div class="field">
+            <label for="xip">Endereço IPv6</label>
+            <input type="text" id="xip" value="2001:db8:acad:1::10/64" spellcheck="false">
+            <div class="presets" aria-label="Exemplos">
+              <button type="button" data-ip="2001:db8:acad:1::10/64">2001:db8:acad:1::10</button>
+              <button type="button" data-ip="fe80::1a:2bff:fe3c:4d5e">fe80::1a:2bff:fe3c:4d5e</button>
+              <button type="button" data-ip="fd12:3456:789a:1::1">fd12:3456:789a:1::1</button>
+              <button type="button" data-ip="ff02::1">ff02::1</button>
+              <button type="button" data-ip="::1">::1</button>
+              <button type="button" data-ip="2001:0db8:0000:0000:0000:0000:0000:0001">2001:0db8:0000:…:0001</button>
+            </div>
+            <small>Aceita as formas completa e abreviada. Os botões trazem exemplos.</small>
+          </div>
+          <div id="xmsg"></div>
+        </form>
+        <div class="ip-anatomy" id="xout"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="tipos">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Tipos de endereço</span>
+      <h2>Global, link-local e local único</h2>
+      <p>No IPv6 não há classes A, B e C. O tipo do endereço é dado pelos <b>primeiros bits</b>, ou seja, pelo prefixo. Uma mesma placa de rede costuma ter vários endereços ao mesmo tempo <span class="cites">(<a class="cite" href="#ref-rfc4291">HINDEN; DEERING, 2006</a>)</span>.</p>
+    </div>
+    <div class="cls-grid">
+      <article class="cls" style="--vc:var(--s1)">
+        <div class="cls-top"><b>GUA</b><span>Global unicast</span></div>
+        <div class="range">2000::/3 · começa com 2 ou 3</div>
+        <div class="oct4" aria-label="Prefixo global, sub-rede e interface"><span class="n">Prefixo</span><span class="n">Prefixo</span><span>Sub</span><span>Interface</span></div>
+        <dl><dt>Alcance</dt><dd>Internet inteira (roteável)</dd><dt>Equivale no IPv4</dt><dd>IP público</dd><dt>Exemplo</dt><dd>2001:db8:acad:1::10</dd><dt>Observação</dt><dd>2001:db8::/32 é reservado para documentação</dd></dl>
+      </article>
+      <article class="cls" style="--vc:var(--s2)">
+        <div class="cls-top"><b>LLA</b><span>Link-local</span></div>
+        <div class="range">fe80::/10 · começa com fe80</div>
+        <div class="oct4" aria-label="Prefixo fe80 e interface"><span class="n">fe80</span><span>0000</span><span>0000</span><span>Interface</span></div>
+        <dl><dt>Alcance</dt><dd>Só o enlace local (nunca passa pelo roteador)</dd><dt>Uso</dt><dd>NDP, vizinhos, gateway padrão</dd><dt>Exemplo</dt><dd>fe80::1a:2bff:fe3c:4d5e</dd><dt>Observação</dt><dd>Toda interface IPv6 tem um, automático</dd></dl>
+      </article>
+      <article class="cls" style="--vc:var(--s3)">
+        <div class="cls-top"><b>ULA</b><span>Local único</span></div>
+        <div class="range">fc00::/7 · na prática fd00::/8</div>
+        <div class="oct4" aria-label="Prefixo fd, ID global, sub-rede e interface"><span class="n">fdxx</span><span class="n">xxxx</span><span>Sub</span><span>Interface</span></div>
+        <dl><dt>Alcance</dt><dd>Dentro da organização (não vai à Internet)</dd><dt>Equivale no IPv4</dt><dd>IP privado (192.168.x.x)</dd><dt>Exemplo</dt><dd>fd12:3456:789a:1::1</dd><dt>Observação</dt><dd>40 bits do prefixo são sorteados</dd></dl>
+      </article>
+    </div>
+    <div class="minor">
+      <div><b>Multicast · ff00::/8</b><span><code>ff02::1</code> todos os nós do enlace · <code>ff02::2</code> todos os roteadores. Substitui o broadcast.</span></div>
+      <div><b>Anycast</b><span>Mesmo endereço em vários servidores. A mensagem vai para o mais próximo. Usa o espaço unicast.</span></div>
+      <div><b>Especiais</b><span><code>::1</code> loopback · <code>::</code> não especificado · <code>::/0</code> rota padrão · <code>2001:db8::/32</code> documentação</span></div>
+    </div>
+    <div class="note"><div class="ico"><svg><use href="#i-bulb"></use></svg></div><p>O ULA <code>fd00::/8</code> é definido na <span class="cites"><a class="cite" href="#ref-rfc4193">RFC 4193</a></span>. Para laboratório e documentação, use sempre <code>2001:db8::/32</code>: ele nunca será entregue a nenhuma organização <span class="cites">(<a class="cite" href="#ref-rfc3849">HUSTON; LORD; MICHAELSON, 2004</a>)</span>.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="configurar">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Como endereçar</span>
+      <h2>Como um dispositivo recebe o endereço IPv6</h2>
+      <p>Há três formas de atribuir um endereço a uma interface. O roteador anuncia o prefixo da rede por mensagens <b>Router Advertisement</b> (ICMPv6) e o host decide o resto <span class="cites">(<a class="cite" href="#ref-rfc4862">THOMSON; NARTEN; JINMEI, 2007</a>)</span>.</p>
+    </div>
+    <div class="grid3 why">
+      <article class="ben"><div class="ico"><svg><use href="#i-save"></use></svg></div><h3>1 · Manual (estático)</h3><p>Você digita endereço, prefixo e gateway. É o padrão para roteadores, servidores e para os laboratórios desta aula.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-switch"></use></svg></div><h3>2 · SLAAC</h3><p>O host junta o prefixo /64 anunciado pelo roteador a um identificador de 64 bits que ele mesmo gera. Não precisa de servidor.</p></article>
+      <article class="ben"><div class="ico"><svg><use href="#i-coin"></use></svg></div><h3>3 · DHCPv6</h3><p>Um servidor entrega endereço e opções (DNS, domínio). Dá controle e registro de quem usa cada endereço.</p></article>
+    </div>
+
+    <div class="def" style="margin-top:36px">
+      <div>
+        <h3 class="ping-h3">Como o SLAAC monta o identificador (EUI-64)</h3>
+        <p>O método clássico parte do <b>endereço MAC</b> (48 bits). Ele divide o MAC ao meio, insere <code>ff:fe</code> no centro e inverte o 7º bit do primeiro byte. O resultado são os 64 bits de interface <span class="cites">(<a class="cite" href="#ref-rfc4291">HINDEN; DEERING, 2006</a>)</span>.</p>
+        <p>Sistemas atuais costumam preferir um identificador <b>aleatório e estável</b> para não expor o MAC na Internet, mas a lógica de prefixo + interface é a mesma.</p>
+      </div>
+      <div class="ip-anatomy">
+        <h3>Exemplo: MAC 00:1A:2B:3C:4D:5E</h3>
+        <div class="anat-rows">
+          <div class="anat"><b>1. MAC</b><span>00:1A:2B : 3C:4D:5E</span></div>
+          <div class="anat"><b>2. Insere ff:fe</b><span>00:1A:2B:ff:fe:3C:4D:5E</span></div>
+          <div class="anat"><b>3. Inverte o bit U/L</b><span>00 (0000 0000) → 02 (0000 0010)</span></div>
+          <div class="anat"><b>4. ID da interface</b><span>021a:2bff:fe3c:4d5e</span></div>
+          <div class="anat"><b>5. Com prefixo</b><span>2001:db8:acad:1:21a:2bff:fe3c:4d5e</span></div>
+          <div class="anat"><b>Link-local</b><span>fe80::21a:2bff:fe3c:4d5e</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cfg-grid" style="margin-top:36px">
+      <div class="cfg-card" style="grid-column:1/-1">
+        <h3>Roteador Cisco (Packet Tracer)</h3>
+        <p style="color:var(--muted)">O roteador só encaminha IPv6 depois do comando <code>ipv6 unicast-routing</code>. Cada interface recebe o primeiro endereço da sua sub-rede (<code>::1</code>) e vira o gateway dela.</p>
+        <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R1 · CLI</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre data-hl>enable
+configure terminal
+ipv6 unicast-routing
+interface GigabitEthernet0/0
+ ipv6 address 2001:db8:acad:1::1/64
+ no shutdown
+exit
+interface GigabitEthernet0/1
+ ipv6 address 2001:db8:acad:2::1/64
+ no shutdown
+end
+show ipv6 interface brief</pre></div>
+      </div>
+    </div>
+    <div class="note"><div class="ico"><svg><use href="#i-eye"></use></svg></div><p><b>Testar:</b> no Packet Tracer, use <code>ping 2001:db8:acad:1::1</code> a partir de um PC da mesma sub-rede.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="subredes">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Sub-redes</span>
+      <h2>Como criar sub-redes IPv6</h2>
+      <p>No IPv4 você <i>empresta</i> bits de host para economizar endereços. No IPv6 sobra espaço, então a sub-rede é uma questão de <b>organização</b>: o provedor entrega um prefixo (em geral <code>/48</code> ou <code>/56</code>) e você escolhe o ID de cada sub-rede nos bits seguintes, até o <code>/64</code> <span class="cites">(<a class="cite" href="#ref-rfc6177">NARTEN; HUSTON; ROBERTS, 2011</a>)</span>.</p>
+    </div>
+    <div class="def">
+      <div>
+        <p class="big">Regra de ouro: toda <strong>LAN</strong> usa um prefixo <strong>/64</strong>. O SLAAC e o NDP foram projetados para um identificador de interface de 64 bits.</p>
+        <p>Por isso os 64 bits finais ficam fixos como parte de host e você só mexe nos bits entre o prefixo recebido e o <code>/64</code>. Esses bits são o <b>ID da sub-rede</b>. Com um <code>/48</code> sobram 16 bits, ou seja, 2<sup>16</sup> = <b>65.536 sub-redes</b>. Com um <code>/56</code>, 8 bits e <b>256 sub-redes</b> <span class="cites">(<a class="cite" href="#ref-rfc4291">HINDEN; DEERING, 2006</a>)</span>.</p>
+        <p>Como o ID de sub-rede é hexadecimal, a contagem vai <code>0, 1, 2 … 9, a, b … f, 10, 11 …</code> e ocupa o <b>4º grupo</b> do endereço quando o prefixo recebido é /48.</p>
+      </div>
+      <div class="ip-anatomy">
+        <h3>Um /48 dividido em /64</h3>
+        <div class="binpair">
+          <span class="bl">Prefixo recebido</span>
+          <div class="ipline"><span class="n">2001:0db8:acad:</span><span class="h">0000:</span><span style="color:var(--muted)">0000:0000:0000:0000</span></div>
+        </div>
+        <div class="bitleg"><span><i style="background:var(--green-strong)"></i>48 bits do provedor</span><span><i style="background:var(--s3)"></i>16 bits de sub-rede</span><span><i style="background:var(--neutral)"></i>64 bits de host</span></div>
+        <div class="anat-rows">
+          <div class="anat"><b>1ª sub-rede</b><span>2001:db8:acad:0::/64</span></div>
+          <div class="anat"><b>2ª sub-rede</b><span>2001:db8:acad:1::/64</span></div>
+          <div class="anat"><b>11ª sub-rede</b><span>2001:db8:acad:a::/64</span></div>
+          <div class="anat"><b>17ª sub-rede</b><span>2001:db8:acad:10::/64</span></div>
+          <div class="anat"><b>Última</b><span>2001:db8:acad:ffff::/64</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">Passo a passo para criar sub-redes</h3>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Descubra quantos bits você tem</h3>
+          <p>Subtraia o prefixo recebido do prefixo desejado (em geral <code>/64</code>). Esse é o número de bits de sub-rede <code>b</code>, e a quantidade de sub-redes é <code>2<sup>b</sup></code>.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Prefixo recebido</th><th>Bits de sub-rede</th><th>Sub-redes /64</th><th>Onde fica o ID</th></tr></thead>
+              <tbody>
+                <tr><td data-label="Prefixo recebido" class="mono">/48</td><td data-label="Bits de sub-rede" class="mono">16</td><td data-label="Sub-redes /64" class="mono">65.536</td><td data-label="Onde fica o ID" class="mono">4º grupo inteiro</td></tr>
+                <tr><td data-label="Prefixo recebido" class="mono">/52</td><td data-label="Bits de sub-rede" class="mono">12</td><td data-label="Sub-redes /64" class="mono">4.096</td><td data-label="Onde fica o ID" class="mono">3 últimos dígitos do 4º grupo</td></tr>
+                <tr><td data-label="Prefixo recebido" class="mono">/56</td><td data-label="Bits de sub-rede" class="mono">8</td><td data-label="Sub-redes /64" class="mono">256</td><td data-label="Onde fica o ID" class="mono">2 últimos dígitos do 4º grupo</td></tr>
+                <tr><td data-label="Prefixo recebido" class="mono">/60</td><td data-label="Bits de sub-rede" class="mono">4</td><td data-label="Sub-redes /64" class="mono">16</td><td data-label="Onde fica o ID" class="mono">último dígito do 4º grupo</td></tr>
+                <tr><td data-label="Prefixo recebido" class="mono">/64</td><td data-label="Bits de sub-rede" class="mono">0</td><td data-label="Sub-redes /64" class="mono">1</td><td data-label="Onde fica o ID" class="mono">nenhum (é a própria LAN)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Numere as sub-redes em hexadecimal</h3>
+          <p>Preencha o ID no 4º grupo, a partir de <code>0</code> ou <code>1</code>. Muita gente usa IDs com significado (um por VLAN, por andar ou por setor). Os zeros finais viram <code>::</code>.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Setor</th><th>ID</th><th>Sub-rede</th><th>Gateway (1º endereço)</th></tr></thead>
+              <tbody>
+                <tr><td data-label="Setor">Diretoria</td><td data-label="ID" class="mono">1</td><td data-label="Sub-rede" class="mono">2001:db8:acad:1::/64</td><td data-label="Gateway" class="mono">2001:db8:acad:1::1</td></tr>
+                <tr><td data-label="Setor">TI</td><td data-label="ID" class="mono">2</td><td data-label="Sub-rede" class="mono">2001:db8:acad:2::/64</td><td data-label="Gateway" class="mono">2001:db8:acad:2::1</td></tr>
+                <tr><td data-label="Setor">Laboratório</td><td data-label="ID" class="mono">3</td><td data-label="Sub-rede" class="mono">2001:db8:acad:3::/64</td><td data-label="Gateway" class="mono">2001:db8:acad:3::1</td></tr>
+                <tr><td data-label="Setor">Wi-Fi</td><td data-label="ID" class="mono">a</td><td data-label="Sub-rede" class="mono">2001:db8:acad:a::/64</td><td data-label="Gateway" class="mono">2001:db8:acad:a::1</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Se o prefixo não for múltiplo de 16, calcule o salto</h3>
+          <p>Quando o prefixo termina no meio de um grupo (por exemplo <code>/52</code>), cada sub-rede ocupa um bloco de <code>2<sup>(64 − prefixo)</sup></code> sub-redes /64. No 4º grupo, esse é o tamanho do <b>salto</b> entre uma sub-rede e a seguinte.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Novo prefixo (a partir de /48)</th><th>Salto no 4º grupo</th><th>Primeiras sub-redes</th></tr></thead>
+              <tbody>
+                <tr><td data-label="Novo prefixo" class="mono">/52</td><td data-label="Salto" class="mono">1000</td><td data-label="Primeiras sub-redes" class="mono">…acad::/52 · …acad:1000::/52 · …acad:2000::/52</td></tr>
+                <tr><td data-label="Novo prefixo" class="mono">/56</td><td data-label="Salto" class="mono">0100</td><td data-label="Primeiras sub-redes" class="mono">…acad::/56 · …acad:100::/56 · …acad:200::/56</td></tr>
+                <tr><td data-label="Novo prefixo" class="mono">/60</td><td data-label="Salto" class="mono">0010</td><td data-label="Primeiras sub-redes" class="mono">…acad::/60 · …acad:10::/60 · …acad:20::/60</td></tr>
+                <tr><td data-label="Novo prefixo" class="mono">/64</td><td data-label="Salto" class="mono">0001</td><td data-label="Primeiras sub-redes" class="mono">…acad::/64 · …acad:1::/64 · …acad:2::/64</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <h3>Atribua os endereços de host</h3>
+          <p>Dentro de cada <code>/64</code> o primeiro endereço (<code>::1</code>) costuma ser o gateway. Hosts recebem o resto por SLAAC, DHCPv6 ou de forma manual. Não há endereço de broadcast para reservar, e é comum usar <code>/127</code> nos links ponto a ponto entre roteadores.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="finder">
+      <div class="finder-head">
+        <div class="ico"><svg><use href="#i-split"></use></svg></div>
+        <div><span class="eyebrow">Ferramenta interativa</span><h3>Calculadora de sub-redes IPv6</h3><p>Informe o prefixo recebido e o novo comprimento. A ferramenta conta as sub-redes e lista as primeiras com o primeiro e o último endereço.</p></div>
+      </div>
+      <form class="pform" id="sform" autocomplete="off">
+        <div class="field">
+          <label for="sbase">Prefixo recebido (endereço/prefixo)</label>
+          <input type="text" id="sbase" value="2001:db8:acad::/48" spellcheck="false">
+        </div>
+        <div class="field">
+          <label for="snew">Novo comprimento do prefixo</label>
+          <input type="number" id="snew" value="64" min="1" max="128" inputmode="numeric">
+        </div>
+        <div class="field">
+          <label for="scount">Quantas sub-redes listar (1 a 32)</label>
+          <input type="number" id="scount" value="8" min="1" max="32" inputmode="numeric">
+          <div class="presets" aria-label="Exemplos">
+            <button type="button" data-b="2001:db8:acad::/48" data-n="64">/48 → /64</button>
+            <button type="button" data-b="2001:db8:acad::/48" data-n="52">/48 → /52</button>
+            <button type="button" data-b="2001:db8:1000::/56" data-n="64">/56 → /64</button>
+            <button type="button" data-b="2001:db8::/32" data-n="48">/32 → /48</button>
+          </div>
+        </div>
+        <div id="smsg"></div>
+      </form>
+      <div class="ip-anatomy" id="sout" style="margin-top:16px"></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="checklist-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num" id="checklist-h">Checklist</span>
+    </div>
+    <div class="deliver">
+      <div class="dcard">
+        <div class="prog-head"><h3>Itens da aula</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 7</span></div>
+        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
+        <div class="check" id="checklist">
+          <label><input type="checkbox" id="ck1"><span>Sei explicar o que é o IPv6 e por que ele foi criado</span></label>
+          <label><input type="checkbox" id="ck2"><span>Sei abreviar um endereço com a regra dos zeros e o <code>::</code></span></label>
+          <label><input type="checkbox" id="ck3"><span>Diferencio endereço global, link-local, local único e multicast</span></label>
+          <label><input type="checkbox" id="ck4"><span>Configurei um endereço IPv6 manualmente (Linux, Windows ou Packet Tracer)</span></label>
+          <label><input type="checkbox" id="ck5"><span>Testei a comunicação com <code>ping</code> para um endereço IPv6</span></label>
+          <label><input type="checkbox" id="ck6"><span>Criei sub-redes /64 a partir de um /48 em hexadecimal</span></label>
+          <label><input type="checkbox" id="ck7"><span>Usei a calculadora e conferi meus resultados</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec desafio" id="desafio">
+  <div class="wrap">
+    <div class="ch-banner">
+      <div class="ico"><svg><use href="#i-lock"/></svg></div>
+      <div>
+        <span class="sec-num">Desafio · plano de endereçamento</span>
+        <h2>Planeje a rede da filial</h2>
+        <p>Você recebeu o prefixo <code>2001:db8:1000::/48</code> do provedor. Divida em sub-redes /64 para os setores da filial e configure os endereços.</p>
+      </div>
+    </div>
+
+    <div class="def">
+      <div>
+        <p class="big">O prefixo <strong>/48</strong> tem 16 bits para sub-redes e cada <strong>/64</strong> comporta 2<sup>64</sup> hosts. Seu trabalho é organizar, não economizar.</p>
+        <p>A filial tem 4 setores: <b>Administração</b>, <b>Laboratório</b>, <b>Servidores</b> e <b>Wi-Fi de visitantes</b>. Use os IDs de sub-rede <code>10</code>, <code>20</code>, <code>30</code> e <code>40</code> (hexadecimais) para lembrar dos setores.</p>
+      </div>
+      <div class="ports ch-ports">
+        <div class="port-card" style="--vc:var(--s1)"><b>/48</b><strong>Recebido</strong><span>2001:db8:1000::/48 tem 65.536 sub-redes /64.</span></div>
+        <div class="port-card" style="--vc:var(--s3)"><b>/64</b><strong>Cada setor</strong><span>Um ID de sub-rede no 4º grupo, como 2001:db8:1000:10::/64.</span></div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">Passo a passo do desafio</h3>
+    <ol class="steps">
+      <li class="step">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <h3>Escreva as 4 sub-redes e os gateways</h3>
+          <p>Monte a tabela com a sub-rede e o endereço de gateway (<code>::1</code>) de cada setor. Depois confira com a calculadora.</p>
+          <div class="tests">
+            <div class="test-row"><div class="test-head"><span class="kind same">Administração</span><b>ID 10</b><small>qual é a sub-rede e o gateway?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">2001:db8:1000:10::/64 </b>com gateway <code>2001:db8:1000:10::1</code>.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">Laboratório</span><b>ID 20</b><small>qual é a sub-rede e o gateway?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">2001:db8:1000:20::/64 </b>com gateway <code>2001:db8:1000:20::1</code>.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">Servidores</span><b>ID 30</b><small>qual é a sub-rede e o gateway?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">2001:db8:1000:30::/64 </b>com gateway <code>2001:db8:1000:30::1</code>.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">Wi-Fi visitantes</span><b>ID 40</b><small>qual é a sub-rede e o gateway?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">2001:db8:1000:40::/64 </b>com gateway <code>2001:db8:1000:40::1</code>.</span></p></details></div>
+          </div>
+        </div>
+      </li>
+      <li class="step test">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <h3>Responda <span class="tag">Observe</span></h3>
+          <div class="tests">
+            <div class="test-row"><div class="test-head"><span class="kind cross">Pergunta 1</span><b>Quantas sub-redes /64 cabem no /48?</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">65.536. </b>São 16 bits de sub-rede: 2<sup>16</sup>.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind cross">Pergunta 2</span><b>O ID “30” é maior ou menor que “1f”?</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Maior. </b>Em hexadecimal, 30 = 48 em decimal e 1f = 31. O ID é hexadecimal, não decimal.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind cross">Pergunta 3</span><b>Escreva a forma completa de 2001:db8:1000:10::1</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">2001:0db8:1000:0010:0000:0000:0000:0001</b></span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind cross">Pergunta 4</span><b>Por que o Wi-Fi de visitantes ganhou uma sub-rede própria?</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Para isolar. </b>Com sub-rede própria, o roteador (ou firewall) pode aplicar regras separadas ao tráfego dos visitantes.</span></p></details></div>
+          </div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <h3>Configure no Packet Tracer <span class="tag">R1 + 2 PCs</span></h3>
+          <p>Ligue o <b>R1</b> a um switch com dois PCs e configure só a sub-rede de Administração. Se der errado, volte ao estado anterior com <code>no ipv6 address</code> na interface.</p>
+          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R1 · CLI</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
+<pre data-hl>enable
+configure terminal
+ipv6 unicast-routing
+interface GigabitEthernet0/0
+ ipv6 address 2001:db8:1000:10::1/64
+ no shutdown
+end
+show ipv6 interface brief</pre></div>
+          <p>Nos PCs (<b>Desktop › IP Configuration</b>, IPv6 Configuration estático): PC0 com <code>2001:db8:1000:10::10/64</code> e PC1 com <code>2001:db8:1000:10::11/64</code>, ambos com gateway <code>2001:db8:1000:10::1</code>.</p>
+          <div class="tests">
+            <div class="test-row"><div class="test-head"><span class="kind same">Mesma sub-rede</span><b>PC0 › ping 2001:db8:1000:10::11</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>Os dois PCs estão na mesma /64. O primeiro pacote pode dar <i>timed out</i> enquanto o NDP descobre o MAC.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">Gateway</span><b>PC0 › ping 2001:db8:1000:10::1</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>É a interface do R1 que você configurou.</span></p></details></div>
+          </div>
+        </div>
+      </li>
+    </ol>
+    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Dica:</b> se o ping falhar, confira o prefixo (<code>/64</code>), depois o gateway e por último se digitou o <code>::</code> uma só vez. Um grupo faltando muda a rede inteira.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="erros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Solução de problemas</span>
+      <h2>Erros comuns</h2>
+    </div>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Usar :: duas vezes</h3><p><code>2001::db8::1</code> é ambíguo: não dá para saber quantos grupos zero cada <code>::</code> substitui. Use <code>::</code> só uma vez.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Prefixo diferente de /64 na LAN</h3><p>Redes com SLAAC precisam de <code>/64</code>. Um prefixo como <code>/80</code> numa LAN quebra a autoconfiguração.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Esquecer o ipv6 unicast-routing</h3><p>Sem esse comando o roteador Cisco tem endereço IPv6, mas não encaminha pacotes entre as sub-redes.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Tratar o ID da sub-rede como decimal</h3><p>O ID é hexadecimal: depois de <code>9</code> vem <code>a</code>, e depois de <code>f</code> vem <code>10</code>. A sub-rede <code>:10::</code> é a 17ª, não a 10ª.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Pingar link-local sem a interface</h3><p>No Linux, <code>ping -6 fe80::1</code> falha porque há um fe80::/10 em cada interface. Informe a placa: <code>fe80::1%enp0s3</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>“Ping não responde” no laboratório real</h3><p>O firewall do Windows pode bloquear o ICMPv6. Libere a regra de eco do ICMPv6, pois o NDP também depende dele.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Achar que sem NAT não precisa de firewall</h3><p>Com endereços públicos em todos os hosts, o filtro de tráfego passa a ser ainda mais importante. Mantenha regras no roteador ou no firewall.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Misturar IPv4 e IPv6 no ping</h3><p>No Windows e no Linux o <code>ping</code> escolhe a versão pelo endereço. Para forçar, use <code>ping -4</code> ou <code>ping -6</code>.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="entrega">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Quiz: teste seu conhecimento</span>
+    </div>
+    <div class="deliver">
+      <div class="quiz" id="quiz">
+        <div class="qz-bar">
+          <div class="qz-brand"><span class="qz-ico"><svg><use href="#i-bulb"></use></svg></span><div><b>Quiz · IPv6</b><small>10 perguntas · nota de 0 a 10</small></div></div>
+          <div class="qz-chips"><span class="qz-chip ok"><svg><use href="#i-check"></use></svg><b id="q-ok">0</b></span><span class="qz-chip bad"><svg><use href="#i-x"></use></svg><b id="q-bad">0</b></span></div>
+        </div>
+        <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
+        <div class="qz-stage" id="q-stage" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="refs">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Referências</span>
+      <h2>Para estudar mais</h2>
+      <p>Os conceitos desta aula vêm dos livros-texto de redes e das RFCs do IETF, que são as normas oficiais do protocolo.</p>
+    </div>
+    <h3 class="ref-h">Referências bibliográficas</h3>
+    <ol class="books">
+      <li id="ref-kurose"><span class="ref-a">KUROSE, J. F.; ROSS, K. W.</span> <i>Redes de computadores e a Internet</i>: uma abordagem top-down. 6. ed. São Paulo: Pearson, 2013.<small>Cap. 4: camada de rede, IPv4 e IPv6.</small></li>
+      <li id="ref-tanenbaum"><span class="ref-a">TANENBAUM, A. S.; WETHERALL, D.</span> <i>Redes de computadores</i>. 5. ed. São Paulo: Pearson Prentice Hall, 2011.<small>Cap. 5: camada de rede, IPv6, ICMP e descoberta de vizinhos.</small></li>
+      <li id="ref-rfc8200"><span class="ref-a">DEERING, S.; HINDEN, R.</span> <i>Internet Protocol, Version 6 (IPv6) Specification</i>. RFC 8200. IETF, 2017.<small>Cabeçalho IPv6, campos e comportamento dos nós.</small></li>
+      <li id="ref-rfc4291"><span class="ref-a">HINDEN, R.; DEERING, S.</span> <i>IP Version 6 Addressing Architecture</i>. RFC 4291. IETF, 2006.<small>Representação, prefixos, tipos de endereço e EUI-64.</small></li>
+      <li id="ref-rfc4193"><span class="ref-a">HINDEN, R.; HABERMAN, B.</span> <i>Unique Local IPv6 Unicast Addresses</i>. RFC 4193. IETF, 2005.<small>Endereços locais únicos fc00::/7.</small></li>
+      <li id="ref-rfc4861"><span class="ref-a">NARTEN, T. et al.</span> <i>Neighbor Discovery for IP version 6 (IPv6)</i>. RFC 4861. IETF, 2007.<small>NDP, Router Advertisement e resolução de vizinhos.</small></li>
+      <li id="ref-rfc4862"><span class="ref-a">THOMSON, S.; NARTEN, T.; JINMEI, T.</span> <i>IPv6 Stateless Address Autoconfiguration</i>. RFC 4862. IETF, 2007.<small>SLAAC.</small></li>
+      <li id="ref-rfc5952"><span class="ref-a">KAWAMURA, S.; KAWASHIMA, M.</span> <i>A Recommendation for IPv6 Address Text Representation</i>. RFC 5952. IETF, 2010.<small>Regras para escrever e abreviar endereços.</small></li>
+      <li id="ref-rfc3849"><span class="ref-a">HUSTON, G.; LORD, A.; MICHAELSON, G.</span> <i>IPv6 Address Prefix Reserved for Documentation</i>. RFC 3849. IETF, 2004.<small>O prefixo 2001:db8::/32.</small></li>
+      <li id="ref-rfc6177"><span class="ref-a">NARTEN, T.; HUSTON, G.; ROBERTS, L.</span> <i>IPv6 Address Assignment to End Sites</i>. RFC 6177. IETF, 2011.<small>Quanto espaço (/48, /56) entregar a cada site.</small></li>
+    </ol>
+    <h3 class="ref-h">Textos oficiais online</h3>
+    <div class="refs refs-2">
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc8200" target="_blank" rel="noopener"><span class="ref-n">IETF</span><b>RFC 8200 · especificação do IPv6</b><p>O texto-base do protocolo, com o formato do cabeçalho e as regras de funcionamento.</p><span class="ref-t"><i>IPv6</i><i>Cabeçalho</i></span><span class="ref-go">Abrir rfc-editor.org ↗</span></a>
+      <a class="ref" href="https://www.rfc-editor.org/rfc/rfc4291" target="_blank" rel="noopener"><span class="ref-n">IETF</span><b>RFC 4291 · arquitetura de endereçamento</b><p>Define a notação, os prefixos e os tipos de endereço usados nesta aula.</p><span class="ref-t"><i>Endereços</i><i>Prefixos</i></span><span class="ref-go">Abrir rfc-editor.org ↗</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"></use></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Redes de Computadores</span></div>
+</footer>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var ICON = function(id){ return '<svg><use href="#'+id+'"/></svg>'; };
+  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- IPv6: funções ----------
+  var ONE = BigInt(1), ZERO = BigInt(0), MAX = (ONE<<BigInt(128)) - ONE;
+  function parse6(s){
+    s = String(s).trim().toLowerCase();
+    if (!s || /[^0-9a-f:]/.test(s)) return null;
+    var dc = s.split('::');
+    if (dc.length > 2) return null;
+    function groups(p){ return p === '' ? [] : p.split(':'); }
+    var head = groups(dc[0]), tail = dc.length === 2 ? groups(dc[1]) : [], g;
+    var all = head.concat(tail);
+    for (var i=0;i<all.length;i++) if (!/^[0-9a-f]{1,4}$/.test(all[i])) return null;
+    if (dc.length === 2){
+      if (all.length > 7) return null;
+      g = head.concat(new Array(8 - all.length).fill('0'), tail);
+    } else { if (all.length !== 8) return null; g = all; }
+    var v = ZERO;
+    g.forEach(function(x){ v = (v<<BigInt(16)) | BigInt(parseInt(x,16)); });
+    return v;
+  }
+  function groupsOf(v){ var a=[]; for (var i=7;i>=0;i--) a.push(Number((v>>BigInt(16*i)) & BigInt(65535))); return a; }
+  function full(v){ return groupsOf(v).map(function(x){ return ('0000'+x.toString(16)).slice(-4); }).join(':'); }
+  function short(v){
+    var g = groupsOf(v), best=-1, bl=0, i=0;
+    while (i<8){ if (g[i]===0){ var j=i; while (j<8 && g[j]===0) j++; if (j-i>bl){ bl=j-i; best=i; } i=j; } else i++; }
+    var s = g.map(function(x){ return x.toString(16); });
+    if (bl < 2) return s.join(':');
+    var l = s.slice(0,best).join(':'), r = s.slice(best+bl).join(':');
+    return l + '::' + r;
+  }
+  function maskOf(p){ return p===0 ? ZERO : (MAX << BigInt(128-p)) & MAX; }
+  function pt(n){ return n.toLocaleString('pt-BR'); }
+  function kind(v){
+    var top = function(n){ return v >> BigInt(128-n); };
+    if (v === ZERO) return 'Não especificado (::)';
+    if (v === ONE) return 'Loopback (::1)';
+    if (top(32) === BigInt(0x20010db8)) return 'Documentação (2001:db8::/32)';
+    if (top(8) === BigInt(0xff)) return 'Multicast (ff00::/8)';
+    if (top(10) === BigInt(0x3fa)) return 'Link-local (fe80::/10)';
+    if (top(7) === BigInt(0x7e)) return 'Local único ULA (fc00::/7)';
+    if (top(3) === BigInt(1)) return 'Global unicast (2000::/3)';
+    return 'Reservado ou não alocado';
+  }
+  function row(k,v){ return '<div class="anat"><b>'+k+'</b><span>'+v+'</span></div>'; }
+  function bad(el, m){ el.innerHTML = '<div class="msg bad">'+ICON('i-x')+'<span>'+m+'</span></div>'; }
+
+  // ---------- realce de código ----------
+  document.querySelectorAll('pre[data-hl]').forEach(function(pre){
+    pre.innerHTML = pre.textContent.split('\n').map(function(l){
+      var e = l.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      return /^\s*(!|#|::)/.test(l) ? '<span class="c">'+e+'</span>' : e;
+    }).join('\n');
+  });
+  function selectEl(el){ var r=document.createRange(); r.selectNodeContents(el); var s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+  document.querySelectorAll('.code .copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var el = btn.closest('.code').querySelector('pre'), label = btn.innerHTML;
+      var done = function(msg){ btn.innerHTML = msg; setTimeout(function(){ btn.innerHTML = label; }, 1600); };
+      try { navigator.clipboard.writeText(el.textContent).then(function(){ done('Copiado'); }, function(){ selectEl(el); done('Selecionado: Ctrl+C'); }); }
+      catch(e){ selectEl(el); done('Selecionado: Ctrl+C'); }
+    });
+  });
+
+  // ---------- ferramenta 1: expandir e abreviar ----------
+  function runX(){
+    var raw = $('xip').value.trim(), out = $('xout'), msg = $('xmsg');
+    var m = raw.split('/'), pre = null;
+    if (m.length > 2){ out.innerHTML=''; bad(msg,'Use no máximo uma barra: endereço/prefixo.'); return; }
+    if (m.length === 2){ if (!/^\d{1,3}$/.test(m[1]) || +m[1] > 128){ out.innerHTML=''; bad(msg,'O prefixo deve ser um número de 0 a 128.'); return; } pre = +m[1]; }
+    var v = parse6(m[0]);
+    if (v === null){ out.innerHTML=''; bad(msg,'Endereço inválido. Use até 8 grupos hexadecimais de 1 a 4 dígitos e no máximo um “::”.'); return; }
+    msg.innerHTML = '';
+    var h = '<h3>Resultado</h3><div class="anat-rows">'+row('Completa', full(v))+row('Abreviada', short(v))+row('Tipo', kind(v));
+    if (pre !== null){
+      var net = v & maskOf(pre);
+      h += row('Prefixo', '/'+pre)+row('Rede', short(net)+'/'+pre);
+      if (pre < 128) h += row('Bits de host', String(128-pre));
+    }
+    out.innerHTML = h + row('Binário (1º grupo)', ('0000000000000000'+groupsOf(v)[0].toString(2)).slice(-16)) + '</div>';
+  }
+  $('xip').addEventListener('input', runX);
+  $('xform').addEventListener('submit', function(e){ e.preventDefault(); runX(); });
+  document.querySelectorAll('#xform .presets button').forEach(function(b){ b.addEventListener('click', function(){ $('xip').value = b.dataset.ip; runX(); }); });
+  runX();
+
+  // ---------- ferramenta 2: sub-redes ----------
+  function runS(){
+    var out = $('sout'), msg = $('smsg');
+    var m = $('sbase').value.trim().split('/');
+    if (m.length !== 2 || !/^\d{1,3}$/.test(m[1])){ out.innerHTML=''; bad(msg,'Digite o prefixo recebido no formato endereço/prefixo, por exemplo 2001:db8:acad::/48.'); return; }
+    var v = parse6(m[0]), p = +m[1], n = parseInt($('snew').value,10), c = parseInt($('scount').value,10);
+    if (v === null || p > 128){ out.innerHTML=''; bad(msg,'Prefixo recebido inválido. Confira o endereço e o comprimento (0 a 128).'); return; }
+    if (isNaN(n) || n < p || n > 128){ out.innerHTML=''; bad(msg,'O novo comprimento deve estar entre '+p+' (o prefixo recebido) e 128.'); return; }
+    if (isNaN(c) || c < 1) c = 1; if (c > 32) c = 32;
+    msg.innerHTML = '';
+    var base = v & maskOf(p), b = n - p, total = ONE << BigInt(b), step = ONE << BigInt(128-n);
+    var shown = total < BigInt(c) ? Number(total) : c;
+    var note = '';
+    if (base !== v) note = '<p style="color:var(--muted);margin:0 0 8px">O endereço foi ajustado ao início do prefixo: <code>'+short(base)+'/'+p+'</code>.</p>';
+    var h = '<h3>Resultado</h3>'+note+'<div class="anat-rows">'+
+      row('Prefixo recebido', short(base)+'/'+p)+row('Novo prefixo', '/'+n)+row('Bits de sub-rede', String(b))+
+      row('Nº de sub-redes', pt(total))+row('Endereços por sub-rede', '2^'+(128-n)+' = '+pt(step))+'</div>';
+    h += '<div class="tbl-wrap" style="margin-top:14px"><table><thead><tr><th>#</th><th>Sub-rede</th><th>Primeiro endereço</th><th>Último endereço</th></tr></thead><tbody>';
+    for (var i=0;i<shown;i++){
+      var s = base + step*BigInt(i), last = s + step - ONE;
+      h += '<tr><td data-label="#">'+(i+1)+'</td><td data-label="Sub-rede" class="mono">'+short(s)+'/'+n+'</td><td data-label="Primeiro" class="mono">'+short(s)+'</td><td data-label="Último" class="mono">'+short(last)+'</td></tr>';
+    }
+    h += '</tbody></table></div>';
+    if (total > BigInt(shown)) h += '<p style="color:var(--muted);margin-top:8px">Mostrando as primeiras '+shown+' de '+pt(total)+' sub-redes.</p>';
+    out.innerHTML = h;
+  }
+  ['sbase','snew','scount'].forEach(function(id){ $(id).addEventListener('input', runS); });
+  $('sform').addEventListener('submit', function(e){ e.preventDefault(); runS(); });
+  document.querySelectorAll('#sform .presets button').forEach(function(b){ b.addEventListener('click', function(){ $('sbase').value = b.dataset.b; $('snew').value = b.dataset.n; runS(); }); });
+  runS();
+
+  // ---------- checklist ----------
+  var cks = Array.prototype.slice.call(document.querySelectorAll('#checklist input')), ckState = {};
+  try { ckState = JSON.parse(localStorage.getItem('ipv6-check')||'{}') || {}; } catch(e){}
+  function updProg(){
+    var n = cks.filter(function(c){return c.checked;}).length, pc = Math.round(n/cks.length*100);
+    $('prog').style.width = pc+'%'; $('prog-bar').setAttribute('aria-valuenow', pc);
+    $('prog-txt').innerHTML = '<b>'+pc+'%</b> · '+n+' de '+cks.length;
+  }
+  cks.forEach(function(c){
+    c.checked = !!ckState[c.id];
+    c.addEventListener('change', function(){ ckState[c.id] = c.checked; try{ localStorage.setItem('ipv6-check', JSON.stringify(ckState)); }catch(e){} updProg(); });
+  });
+  updProg();
+
+  // ---------- menu de tópicos ----------
+  (function(){
+    var btn = $('tb-topics'), menu = $('tmenu');
+    function setOpen(o){ menu.hidden = !o; btn.setAttribute('aria-expanded', o); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); setOpen(menu.hidden); });
+    menu.addEventListener('click', function(e){ if (e.target.closest('a')) setOpen(false); });
+    document.addEventListener('click', function(e){ if (!menu.hidden && !menu.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function(e){ if (e.key==='Escape' && !menu.hidden){ setOpen(false); btn.focus(); } });
+  })();
+  
+// ---------- quiz ----------
+  (function(){
+    var BANK = [{"t": "Conceito", "q": "Quantos bits tem um endereço IPv6?", "o": ["128 bits", "32 bits", "64 bits", "48 bits"], "e": "O IPv6 usa <b>128 bits</b>. O IPv4 usa 32."}, {"t": "Conceito", "q": "Em que sistema de numeração o endereço IPv6 é escrito?", "o": ["Hexadecimal", "Decimal", "Binário puro", "Octal"], "e": "Os 8 grupos de 16 bits são escritos em <b>hexadecimal</b> (0 a 9 e a a f)."}, {"t": "Conceito", "q": "Quantos grupos de 16 bits tem um endereço IPv6 completo?", "o": ["8", "4", "6", "16"], "e": "128 ÷ 16 = <b>8 grupos</b>, separados por dois-pontos."}, {"t": "Conceito", "q": "Qual é o principal motivo da criação do IPv6?", "o": ["Esgotamento dos endereços IPv4", "Deixar a Internet mais lenta de propósito", "Substituir o protocolo TCP", "Eliminar os roteadores"], "e": "O IPv4 tem só cerca de 4,3 bilhões de endereços. O IPv6 resolve o <b>esgotamento</b>."}, {"t": "Vantagens", "q": "Qual protocolo substitui o ARP no IPv6?", "o": ["NDP (Neighbor Discovery)", "DHCP", "DNS", "RIP"], "e": "O <b>NDP</b>, que usa mensagens ICMPv6, descobre os vizinhos e seus endereços MAC."}, {"t": "Vantagens", "q": "O que o IPv6 não possui, ao contrário do IPv4?", "o": ["Broadcast", "Multicast", "Endereço de loopback", "Prefixo"], "e": "Não existe broadcast no IPv6: ele foi trocado por <b>multicast</b>."}, {"t": "Vantagens", "q": "Qual é o tamanho do cabeçalho IPv6 básico?", "o": ["40 bytes fixos", "20 a 60 bytes", "128 bytes", "8 bytes"], "e": "O cabeçalho IPv6 tem <b>40 bytes</b> de tamanho fixo."}, {"t": "Vantagens", "q": "Qual mecanismo permite ao host montar sozinho o endereço, sem servidor DHCP?", "o": ["SLAAC", "NAT", "VLAN", "ARP"], "e": "No <b>SLAAC</b> o host usa o prefixo anunciado pelo roteador e gera o identificador de interface."}, {"t": "Escrita", "q": "Qual é a forma abreviada de <code>2001:0db8:0000:0000:0000:0000:0000:0001</code>?", "o": ["2001:db8::1", "2001:db8:0:1", "2001:db8::0001", "2001::db8::1"], "e": "Tira-se os zeros à esquerda e troca-se a maior sequência de grupos zero por <b>::</b>."}, {"t": "Escrita", "q": "Quantas vezes o <code>::</code> pode aparecer em um endereço?", "o": ["No máximo uma vez", "Até duas vezes", "Quantas vezes quiser", "Nenhuma vez"], "e": "Se aparecesse duas vezes, não seria possível saber quantos zeros cada um substitui."}, {"t": "Escrita", "q": "O que representa <code>::1</code>?", "o": ["O loopback (o próprio host)", "A rota padrão", "Todos os roteadores", "Um endereço global"], "e": "<code>::1</code> é o <b>loopback</b>, como o 127.0.0.1 no IPv4."}, {"t": "Escrita", "q": "O que significa <code>::/0</code>?", "o": ["A rota padrão", "O loopback", "O endereço de broadcast", "Uma rede /64"], "e": "<code>::/0</code> é a <b>rota padrão</b>, equivalente ao 0.0.0.0/0."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços link-local?", "o": ["fe80::/10", "2000::/3", "fc00::/7", "ff00::/8"], "e": "Os endereços <b>link-local</b> começam com fe80 e só valem no enlace local."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços globais unicast?", "o": ["2000::/3", "fe80::/10", "ff00::/8", "::1/128"], "e": "Os globais começam com <b>2 ou 3</b> (2000::/3)."}, {"t": "Tipos", "q": "Qual prefixo identifica os endereços multicast?", "o": ["ff00::/8", "fe80::/10", "2001::/16", "fd00::/8"], "e": "O multicast começa com <b>ff</b>. Exemplo: ff02::1 (todos os nós)."}, {"t": "Tipos", "q": "Qual é o equivalente aproximado dos endereços privados IPv4 no IPv6?", "o": ["ULA (fd00::/8)", "Link-local", "Multicast", "Loopback"], "e": "O <b>ULA</b> (local único) vale dentro da organização e não é roteado na Internet."}, {"t": "Tipos", "q": "Qual prefixo é reservado para documentação e exemplos?", "o": ["2001:db8::/32", "fe80::/10", "2002::/16", "fd00::/8"], "e": "O <b>2001:db8::/32</b> nunca é entregue a ninguém, então é seguro usar em aulas."}, {"t": "Endereçar", "q": "Qual comprimento de prefixo deve ter uma LAN com SLAAC?", "o": ["/64", "/48", "/32", "/128"], "e": "O SLAAC usa 64 bits de rede e 64 bits de interface, então a LAN é um <b>/64</b>."}, {"t": "Endereçar", "q": "No EUI-64, quais dois bytes são inseridos no meio do MAC?", "o": ["ff:fe", "fe:80", "00:00", "ab:cd"], "e": "O MAC é dividido ao meio e recebe <b>ff:fe</b> no centro."}, {"t": "Endereçar", "q": "Qual comando Cisco habilita o encaminhamento IPv6 no roteador?", "o": ["ipv6 unicast-routing", "ip routing", "ipv6 enable-forward", "router ipv6"], "e": "Sem <b>ipv6 unicast-routing</b> o roteador não encaminha pacotes IPv6 entre interfaces."}, {"t": "Endereçar", "q": "Qual comando testa a conectividade IPv6 no Linux?", "o": ["ping -6 endereço", "arp -6", "ping -v6", "ipconfig6"], "e": "Use <b>ping -6</b> (ou o comando antigo ping6)."}, {"t": "Sub-redes", "q": "Quantas sub-redes /64 existem em um prefixo /48?", "o": ["65.536", "256", "4.096", "16"], "e": "São 16 bits de sub-rede: 2<sup>16</sup> = <b>65.536</b>."}, {"t": "Sub-redes", "q": "Quantas sub-redes /64 existem em um prefixo /56?", "o": ["256", "16", "65.536", "1.024"], "e": "São 8 bits: 2<sup>8</sup> = <b>256</b> sub-redes."}, {"t": "Sub-redes", "q": "Qual é a próxima sub-rede /64 depois de <code>2001:db8:acad:9::/64</code>?", "o": ["2001:db8:acad:a::/64", "2001:db8:acad:10::/64", "2001:db8:acad:9::1/64", "2001:db8:acad:90::/64"], "e": "O ID é hexadecimal: depois do <b>9</b> vem o <b>a</b>."}, {"t": "Sub-redes", "q": "Qual é a 17ª sub-rede /64 de 2001:db8:acad::/48 (contando a primeira como ::0)?", "o": ["2001:db8:acad:10::/64", "2001:db8:acad:17::/64", "2001:db8:acad:11::/64", "2001:db8:acad:f::/64"], "e": "A 1ª é 0 e a 16ª é f. A 17ª é <b>10</b> (hexadecimal, 16 em decimal)."}, {"t": "Sub-redes", "q": "Dividindo um /48 em sub-redes /52, qual é o salto no 4º grupo?", "o": ["1000", "0100", "0010", "0001"], "e": "Um /52 tem 4.096 /64, que é <b>0x1000</b> no 4º grupo."}, {"t": "Sub-redes", "q": "Qual é o primeiro endereço usável, em geral usado como gateway, em <code>2001:db8:acad:1::/64</code>?", "o": ["2001:db8:acad:1::1", "2001:db8:acad:1::", "2001:db8:acad:1:ffff:ffff:ffff:ffff", "2001:db8:acad::1"], "e": "Não há endereço de rede reservado como no IPv4. Por convenção o gateway é o <b>::1</b>."}, {"t": "Cabeçalho", "q": "Que campo do IPv6 substitui o TTL do IPv4?", "o": ["Hop Limit (limite de saltos)", "Flow Label", "Next Header", "Traffic Class"], "e": "O <b>Hop Limit</b> é decrementado a cada roteador."}, {"t": "Cabeçalho", "q": "Qual valor do campo Próximo Cabeçalho identifica o ICMPv6?", "o": ["58", "1", "6", "17"], "e": "<b>58</b> = ICMPv6. 6 = TCP e 17 = UDP."}, {"t": "Cabeçalho", "q": "O IPv6 elimina a necessidade de NAT para poupar endereços. Isso significa que:", "o": ["O firewall continua necessário", "Não é preciso firewall", "O ping deixa de funcionar", "O roteador não é necessário"], "e": "O NAT nunca foi um firewall. Mantenha <b>filtros de tráfego</b> também no IPv6."}];
+    var Q = [];
+    var stage = $('q-stage'), steps = $('q-steps'), cur = 0, ans = [], picks = [], timer = null, lastSet = [];
+    function shuffle(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+    function draw(){
+      var seen = [];
+      try { seen = JSON.parse(localStorage.getItem('ipv6-quiz-seen')||'[]') || []; } catch(e){}
+      var fresh = BANK.map(function(_,i){return i;}).filter(function(i){ return seen.indexOf(i)<0 && lastSet.indexOf(i)<0; });
+      if (fresh.length < 10){ seen = []; fresh = BANK.map(function(_,i){return i;}).filter(function(i){ return lastSet.indexOf(i)<0; }); }
+      var pick = shuffle(fresh).slice(0,10);
+      lastSet = pick; seen = seen.concat(pick);
+      try { localStorage.setItem('ipv6-quiz-seen', JSON.stringify(seen)); } catch(e){}
+      return pick.map(function(i){
+        var x = BANK[i], ord = shuffle([0,1,2,3]);
+        return {t:x.t, q:x.q, e:x.e, o:ord.map(function(k){return x.o[k];}), c:ord.indexOf(0)};
+      });
+    }
+    var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var SVG = function(id){ return '<svg><use href="#'+id+'"/></svg>'; };
+    function chips(){ var ok = ans.filter(function(a){return a===true;}).length, bad = ans.filter(function(a){return a===false;}).length; $('q-ok').textContent = ok; $('q-bad').textContent = bad; }
+    function drawSteps(){ steps.innerHTML = Q.map(function(_,i){ return '<i class="'+(ans[i]===true?'ok':ans[i]===false?'bad':i===cur?'cur':'')+'"></i>'; }).join(''); }
+    function swap(html){
+      var old = stage.firstElementChild;
+      var put = function(){ stage.innerHTML = html; };
+      if (old && !reduced){ old.classList.add('out'); setTimeout(put, 280); } else put();
+    }
+    function show(i){
+      clearTimeout(timer); cur = i; drawSteps();
+      var x = Q[i];
+      swap('<div class="qz-card"><div class="qz-meta"><span class="qz-num">Pergunta '+(i+1)+' de '+Q.length+'</span><span class="qz-tag">'+x.t+'</span></div>'+
+        '<p class="qz-q">'+x.q+'</p><div class="qz-opts" role="group" aria-label="Alternativas">'+
+        x.o.map(function(o,j){ return '<button type="button" class="qz-opt" data-o="'+j+'"><span class="L">'+'ABCD'[j]+'</span><span>'+o+'</span><span class="st"></span></button>'; }).join('')+
+        '</div><div class="qz-after"></div></div>');
+    }
+    function answer(j){
+      var x = Q[cur], right = j===x.c, card = stage.querySelector('.qz-card');
+      ans[cur] = right; picks[cur] = j; chips(); drawSteps();
+      card.querySelectorAll('.qz-opt').forEach(function(b,k){
+        b.disabled = true;
+        if (k===x.c){ b.classList.add('right'); b.querySelector('.st').innerHTML = SVG('i-check'); }
+        else if (k===j){ b.classList.add('wrong'); b.querySelector('.st').innerHTML = SVG('i-x'); }
+        else b.classList.add('dim');
+      });
+      var last = cur===Q.length-1, dur = right ? 3500 : 7000;
+      card.querySelector('.qz-after').outerHTML =
+        '<div class="qz-fb" style="--fc:'+(right?'var(--ok)':'var(--bad)')+'"><span class="fi">'+SVG(right?'i-check':'i-x')+'</span><div><h4>'+(right?'Resposta certa!':'Não foi dessa vez. A resposta é a letra '+'ABCD'[x.c]+'.')+'</h4><p>'+x.e+'</p></div></div>'+
+        '<div class="qz-next"><button type="button" class="btn" id="q-go">'+(last?'Ver minha nota':'Próxima pergunta')+' <span aria-hidden="true">→</span></button></div>';
+      $('q-go').focus({preventScroll:true});
+    }
+    function review(i){
+      var x = Q[i], p = picks[i], box = $('q-review'), ok = ans[i];
+      stage.querySelectorAll('[data-r]').forEach(function(b){ b.setAttribute('aria-pressed', +b.dataset.r===i); });
+      box.style.setProperty('--fc', ok ? 'var(--ok)' : 'var(--bad)');
+      box.innerHTML = '<div class="qz-meta"><span class="qz-num">Pergunta '+(i+1)+' de '+Q.length+'</span><span class="qz-tag">'+x.t+'</span><span class="qz-res">'+(ok?'Você acertou':'Você errou')+'</span></div>'+
+        '<p class="qz-rq">'+x.q+'</p><ul class="qz-rl">'+x.o.map(function(o,k){
+          var cls = k===x.c ? 'right' : (k===p ? 'wrong' : ''), note = k===x.c ? (k===p?'Sua resposta · correta':'Resposta correta') : (k===p ? 'Sua resposta' : '');
+          return '<li class="'+cls+'"><span class="L">'+'ABCD'[k]+'</span><span>'+o+'</span>'+(note?'<em>'+note+'</em>':'')+'</li>'; }).join('')+'</ul>'+
+        '<p class="qz-rexp"><b>Explicação: </b>'+x.e+'</p>';
+      box.hidden = false;
+      box.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'nearest'});
+    }
+    function next(){ clearTimeout(timer); if (cur < Q.length-1) show(cur+1); else end(); }
+    function end(){
+      cur = Q.length; drawSteps();
+      var ok = ans.filter(function(a){return a;}).length, nota = ok/Q.length*10, c, t, m;
+      if (nota>=9){ c='var(--ok)'; t='Excelente!'; m='Você domina o endereçamento IPv6 e as sub-redes.'; }
+      else if (nota>=7){ c='var(--green)'; t='Muito bem!'; m='Bom resultado. Revise as perguntas marcadas em vermelho.'; }
+      else if (nota>=5){ c='var(--warn)'; t='Quase lá'; m='Releia as seções Escrita, Tipos e Sub-redes e tente de novo.'; }
+      else { c='var(--bad)'; t='Vamos revisar'; m='Volte ao início da aula, use as ferramentas interativas e refaça o quiz.'; }
+      swap('<div class="qz-end"><div class="qz-ring" style="--gc:'+c+';--p:'+(nota*10)+'"><span>Sua nota</span><b>'+nota.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'</b><small>de 10</small></div>'+
+        '<div><h3>'+t+'</h3><p style="color:var(--muted);margin-top:6px">'+ok+' de '+Q.length+' acertos. '+m+'</p></div>'+
+        '<div class="qz-sumwrap"><p class="qz-hint">Clique em um card para rever a pergunta e a resposta.</p><div class="qz-sum">'+Q.map(function(x,i){ return '<button type="button" data-r="'+i+'" aria-pressed="false" style="--sc:'+(ans[i]?'var(--ok)':'var(--bad)')+'">'+(ans[i]?'✓':'✗')+' '+(i+1)+'<small>'+x.t+'</small></button>'; }).join('')+'</div><div class="qz-review" id="q-review" hidden></div></div>'+
+        '<button type="button" class="btn" id="q-redo">'+SVG('i-play')+'Tentar novamente com novas perguntas</button></div>');
+    }
+    stage.addEventListener('click', function(e){
+      var b = e.target.closest('.qz-opt'); if (b && !b.disabled){ answer(+b.dataset.o); return; }
+      var r = e.target.closest('[data-r]'); if (r){ review(+r.dataset.r); return; }
+      if (e.target.closest('#q-go')) next();
+      if (e.target.closest('#q-redo')){ ans = []; picks = []; Q = draw(); chips(); show(0); $('quiz').scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'}); }
+    });
+    Q = draw(); chips(); show(0);
+  })();
+})();
+</script>
+<script>
+(function(){
+  var svg=document.getElementById('hero-svg'); if(!svg) return;
+  var N='http://www.w3.org/2000/svg', C={'1':'var(--s1)','2':'var(--s2)','3':'var(--s3)'};
+  var SW={x:200,y:165};
+  var P=[
+    {n:'PC0',ip:'2001:db8:1::10',k:'1',x:66,y:52},{n:'PC2',ip:'2001:db8:2::10',k:'2',x:200,y:46},{n:'PC4',ip:'2001:db8:3::10',k:'3',x:334,y:52},
+    {n:'PC1',ip:'2001:db8:1::11',k:'1',x:66,y:262},{n:'PC3',ip:'2001:db8:2::11',k:'2',x:200,y:268},{n:'PC5',ip:'2001:db8:3::11',k:'3',x:334,y:262}
+  ];
+  function mk(t,a,p,tx){ var e=document.createElementNS(N,t); for(var k in a) e.setAttribute(k,a[k]); if(tx!=null) e.textContent=tx; (p||svg).appendChild(e); return e; }
+  var defs=mk('defs',{}), gr=mk('radialGradient',{id:'hn-glow'},defs);
+  mk('stop',{offset:'0','stop-color':'#4DC262','stop-opacity':'.22'},gr); mk('stop',{offset:'1','stop-color':'#4DC262','stop-opacity':'0'},gr);
+  mk('circle',{cx:SW.x,cy:SW.y,r:130,fill:'url(#hn-glow)'});
+  P.forEach(function(p){ p.port={x:SW.x+(p.x-SW.x)*0.3, y:p.y<SW.y?SW.y-20:SW.y+20}; mk('path',{'class':'hl',d:'M'+p.x+' '+p.y+' L'+p.port.x+' '+p.port.y,style:'stroke:'+C[p.k]}); });
+  mk('rect',{'class':'hr-ring',x:SW.x-68,y:SW.y-22,width:136,height:44,rx:12});
+  mk('rect',{'class':'hr-ring b',x:SW.x-68,y:SW.y-22,width:136,height:44,rx:12});
+  var gpk=mk('g',{});
+  mk('rect',{x:SW.x-68,y:SW.y-22,width:136,height:44,rx:10,fill:'#000'});
+  mk('rect',{x:SW.x-68,y:SW.y-22,width:136,height:7,rx:3.5,fill:'#4DC262'});
+  mk('text',{x:SW.x,y:SW.y+6,'text-anchor':'middle','font-size':13,'font-weight':700,'font-family':'Sora, sans-serif',fill:'#D7F2DD'},null,'SW1');
+  P.forEach(function(p){ p.led=mk('rect',{x:p.port.x-6,y:p.y<SW.y?SW.y-12:SW.y+11,width:12,height:5,rx:1.5,fill:'#8BE39B',opacity:.35}); });
+  P.forEach(function(p){
+    var g=mk('g',{transform:'translate('+p.x+','+p.y+')'}), c=C[p.k];
+    p.halo=mk('circle',{r:34,fill:'none','stroke-width':2.5,opacity:0,style:'stroke:var(--ok)'},g);
+    mk('rect',{x:-24,y:-18,width:48,height:32,rx:5,'stroke-width':2.5,style:'fill:var(--surface);stroke:'+c},g);
+    mk('rect',{x:-19,y:-13,width:38,height:22,rx:2,opacity:.25,style:'fill:'+c},g);
+    mk('text',{x:0,y:4,'text-anchor':'middle','font-size':13,'font-weight':800,'font-family':'Sora, sans-serif',style:'fill:'+c},g,p.k);
+    mk('rect',{x:-4,y:14,width:8,height:5,style:'fill:var(--ink)'},g); mk('rect',{x:-12,y:18,width:24,height:4,rx:2,style:'fill:var(--ink)'},g);
+    var ty=p.y<SW.y?-30:36, t2=p.y<SW.y?-44:49;
+    if(p.y<SW.y){ mk('text',{y:t2,'text-anchor':'middle','font-size':11,'font-weight':800,'font-family':'Sora, sans-serif','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:var(--ink);stroke:var(--bg)'},g,p.n);
+      mk('text',{y:ty,'text-anchor':'middle','font-size':8.5,'font-weight':600,'font-family':'JetBrains Mono, monospace','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:'+c+';stroke:var(--bg)'},g,p.ip); }
+    else { mk('text',{y:ty,'text-anchor':'middle','font-size':11,'font-weight':800,'font-family':'Sora, sans-serif','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:var(--ink);stroke:var(--bg)'},g,p.n);
+      mk('text',{y:t2,'text-anchor':'middle','font-size':8.5,'font-weight':600,'font-family':'JetBrains Mono, monospace','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:'+c+';stroke:var(--bg)'},g,p.ip); }
+    p.g=g;
+  });
+  var pk=[], last=0, acc=0;
+  function blink(p){ p.led.setAttribute('opacity',1); setTimeout(function(){ p.led.setAttribute('opacity',.35); },350); }
+  function spawn(){
+    var a=Math.floor(Math.random()*6), same=true, b;
+    if(same) b=P.findIndex(function(q,i){ return i!==a && q.k===P[a].k; });
+    else { var o=P.map(function(_,i){return i;}).filter(function(i){ return P[i].k!==P[a].k; }); b=o[Math.floor(Math.random()*o.length)]; }
+    var c=mk('circle',{r:5.5,'stroke-width':1.5,style:'fill:'+C[P[a].k]+';stroke:var(--surface)'},gpk);
+    pk.push({a:P[a],b:P[b],t:0,el:c,sp:.0042+Math.random()*.0012,hit:false,cross:!same});
+  }
+  function frame(ts){
+    if(!last) last=ts; var dt=Math.min(ts-last,50); last=ts; acc+=dt;
+    if(acc>1300){ acc=0; spawn(); }
+    pk=pk.filter(function(p){
+      p.t+=p.sp*dt/16; var A=p.a, B=p.b, t=p.t, x, y;
+      if(t<.4){ var u=t/.4; x=A.x+(A.port.x-A.x)*u; y=A.y+(A.port.y-A.y)*u; }
+      else if(t<.6){ if(!p.hit){ p.hit=true; blink(A); } var v=(t-.4)/.2; x=A.port.x+(B.port.x-A.port.x)*v; y=A.port.y+(B.port.y-A.port.y)*v; }
+      else { if(!p.out){ p.out=true; blink(B); } var w=Math.min((t-.6)/.4,1); x=B.port.x+(B.x-B.port.x)*w; y=B.port.y+(B.y-B.port.y)*w; }
+      p.el.setAttribute('cx',x); p.el.setAttribute('cy',y);
+      if(p.t>=1){ p.el.remove(); var h=B.halo; h.setAttribute('opacity',1); setTimeout(function(){ h.setAttribute('opacity',0); },450); return false; }
+      return true; });
+    requestAnimationFrame(frame);
+  }
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){ spawn(); requestAnimationFrame(frame); }
+})();
+</script>
+</body></html>
