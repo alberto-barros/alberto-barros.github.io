@@ -1283,7 +1283,7 @@ Get-NetIPConfiguration</pre></div>
             <figcaption>Linux (GNOME / Cinnamon) · janela Com fio, aba IPv4 em modo Manual</figcaption>
           </figure>
         </div>
-        <div class="cfg-card">
+        <div class="cfg-card" style="grid-column:1/-1">
           <h3>Temporário, com o comando ip</h3>
           <p>Vale até reiniciar. Descubra o nome da interface (ex.: <code>eth0</code>, <code>enp0s3</code>) com <code>ip a</code>.</p>
           <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal · iproute2</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
@@ -1294,26 +1294,6 @@ sudo ip route add default via 192.168.1.1
 ip route
 # remover o endereço
 sudo ip addr del 192.168.1.10/24 dev enp0s3</pre></div>
-        </div>
-        <div class="cfg-card">
-          <h3>Permanente, com NetworkManager (desktop)</h3>
-          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>terminal · nmcli</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
-<pre data-hl="">nmcli con show
-sudo nmcli con mod "Wired connection 1" ipv4.method manual ipv4.addresses 192.168.1.10/24 ipv4.gateway 192.168.1.1 ipv4.dns 8.8.8.8
-sudo nmcli con up "Wired connection 1"</pre></div>
-          <h3>Permanente, com Netplan (Ubuntu Server)</h3>
-          <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>/etc/netplan/01-rede.yaml</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
-<pre data-hl="">network:
-  version: 2
-  ethernets:
-    enp0s3:
-      addresses: [192.168.1.10/24]
-      routes:
-        - to: default
-          via: 192.168.1.1
-      nameservers:
-        addresses: [8.8.8.8]
-# depois: sudo netplan apply</pre></div>
         </div>
       </div>
     </div>
