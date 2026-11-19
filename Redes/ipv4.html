@@ -973,6 +973,12 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 .desafio .port-card span{line-height:1.5}
 .desafio .ports.ch-ports{gap:16px}
 @media (max-width:480px){.desafio .port-card{padding:18px 18px 16px}}
+
+/* "Como usar": borda preta só por fora da tabela */
+@media (min-width:641px){.tbl-wrap:has(.ping-tbl){border:2px solid #000}
+:root[data-theme="dark"] .tbl-wrap:has(.ping-tbl){border-color:#E4F3E8}
+}
+@media (min-width:641px) and (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tbl-wrap:has(.ping-tbl){border-color:#E4F3E8}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
