@@ -65,7 +65,7 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .dots{position:absolute;inset:0;z-index:-1;background-image:radial-gradient(var(--h-dot) 1.1px,transparent 1.3px);background-size:24px 24px;-webkit-mask-image:radial-gradient(ellipse 75% 80% at 70% 40%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 75% 80% at 70% 40%,#000 20%,transparent 75%)}
 .hero .wrap{position:relative;padding-block:clamp(44px,7vw,88px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
 .hero-text{display:grid;gap:20px;justify-items:start;min-width:0}
-.hero h1{font-size:clamp(3.2rem,7vw,5.6rem);font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--red)}
+.hero h1{font-size:clamp(3.2rem,7vw,5.6rem);font-weight:800;letter-spacing:-.045em;line-height:1;color:var(--h-ink)}
 /* Pinguim 3D (imagem enviada pelo professor): pula e bate as asas */
 .play{display:block;width:140px;height:auto;overflow:visible;margin-bottom:-6px}
 .play g,.play image,.play ellipse{transform-box:view-box}
@@ -85,14 +85,14 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .hero p code{font-family:var(--font-mono);font-size:.88em;background:var(--surface);border:1px solid var(--line);padding:1px 6px;border-radius:6px;color:var(--ink)}
 
 /* Terminal moderno */
-.term{position:relative;min-width:0;border-radius:18px;background:linear-gradient(180deg,#121722,#0B0F17);border:1px solid rgba(255,255,255,.08);box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 30px 60px -20px rgba(15,23,42,.45),0 18px 40px -18px rgba(15,23,42,.35);overflow:hidden;font-family:var(--font-mono);font-size:.84rem}
+.term{position:relative;min-width:0;border-radius:18px;background:#000;border:1px solid rgba(255,255,255,.08);box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 30px 60px -20px rgba(15,23,42,.45),0 18px 40px -18px rgba(15,23,42,.35);overflow:hidden;font-family:var(--font-mono);font-size:.84rem}
 .term .bar{display:flex;align-items:center;gap:7px;padding:12px 16px;background:#000;border-bottom:1px solid rgba(255,255,255,.06)}
 .term .bar i{width:12px;height:12px;border-radius:50%;background:#FF5F57}
 .term .bar i:nth-child(2){background:#FEBC2E}.term .bar i:nth-child(3){background:#28C840}
 .term .bar .ttl{flex:1;text-align:center;color:#8A94A6;font-size:.75rem;margin-right:44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .term pre{margin:0;padding:18px 20px;height:300px;overflow:hidden;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;color:#E2E8F0;font-family:inherit}
 .term .p{color:#4ADE80}.term .r{color:#FF6B6F;font-weight:600}.term .c{color:#7C879A}.term .ok{color:#4ADE80;font-weight:600}.term .w{color:#FBBF24}
-.term .foot{display:flex;align-items:center;gap:14px;padding:9px 16px;border-top:1px solid rgba(255,255,255,.06);color:#7C879A;font-size:.7rem;background:rgba(255,255,255,.02)}
+.term .foot{display:flex;align-items:center;gap:14px;padding:9px 16px;border-top:1px solid rgba(255,255,255,.06);color:#7C879A;font-size:.7rem;background:#000}
 .term .foot .on{display:inline-flex;align-items:center;gap:6px;color:#4ADE80}
 .term .foot .on::before{content:"";width:7px;height:7px;border-radius:50%;background:#4ADE80;box-shadow:0 0 0 3px rgba(74,222,128,.18)}
 .term .foot .r2{margin-left:auto}
@@ -137,32 +137,73 @@ section{padding-block:72px 16px}
 @keyframes arrx{0%{transform:translateX(0);opacity:0}15%,85%{opacity:1}100%{transform:translateX(48px);opacity:0}}
 @media (max-width:760px){.cards{grid-template-columns:1fr}.arr.right,.arr.elbow{display:none}.arr.m-only{display:block}}
 
-.chap{position:relative;display:grid;gap:10px;align-content:start;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s ease}
-.chap:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--green) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--green) 25%,transparent),0 14px 30px -6px color-mix(in srgb,var(--green) 45%,transparent),0 0 46px -4px color-mix(in srgb,var(--green) 40%,transparent)}
-.chap.lab:hover{border-color:color-mix(in srgb,var(--red) 70%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--red) 25%,transparent),0 14px 30px -6px color-mix(in srgb,var(--red) 40%,transparent),0 0 46px -4px color-mix(in srgb,var(--red) 35%,transparent)}
+.node.final{grid-column:1/-1;justify-self:center;width:calc(50% - 40px)}
+/* ---------- Cards modernos ---------- */
+.chap{--c:var(--green);--c2:#5FD16F;--c-ink:var(--green-ink);--c-soft:var(--green-soft);--c-chip:var(--green-chip);--mx:50%;--my:0%;
+  position:relative;display:grid;gap:12px;align-content:start;text-decoration:none;isolation:isolate;overflow:hidden;
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px -16px rgba(15,23,42,.18);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s}
+.chap.lab{--c:var(--red);--c2:#F0535A;--c-ink:var(--red);--c-soft:var(--red-soft);--c-chip:var(--red-chip)}
+.chap.gold{--c:#C99A06;--c2:#F5C518;--c-ink:#8A6500;--c-soft:#FEF7DC;--c-chip:#F1D88A;background:linear-gradient(180deg,#FFFCF0,var(--surface) 55%);border:1.5px solid var(--c-chip)}
+@media (prefers-color-scheme:dark){.chap.gold{--c:#F5C518;--c-ink:#F5C518;--c-soft:#3A2F08;--c-chip:#6B5512;background:linear-gradient(180deg,#221C08,var(--surface) 55%)}}
+/* luz que segue o mouse */
+.chap::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .35s;background:radial-gradient(420px circle at var(--mx) var(--my),color-mix(in srgb,var(--c) 13%,transparent),transparent 60%)}
+/* faixa colorida no topo */
+.chap::after{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--c),var(--c2),var(--c));transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.chap.gold::after{transform:none;height:4px}
+.chap:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--c) 45%,var(--line));box-shadow:0 1px 2px rgba(15,23,42,.04),0 22px 44px -18px color-mix(in srgb,var(--c) 55%,transparent)}
+.chap:hover::before{opacity:1}
+.chap:hover::after{transform:scaleX(1)}
 .chap .top{display:flex;align-items:center;gap:10px}
-.chap .ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--green);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.1);flex:none}
-.chap.lab .ic{background:var(--red)}
-.chap .ic .i{width:24px;height:24px}
-.chap .kind{margin-left:auto;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--green-soft);border:1px solid var(--green-chip);color:var(--green-ink)}
-.chap.lab .kind{background:var(--red-soft);border-color:var(--red-chip);color:var(--red)}
+.chap .ic{position:relative;width:52px;height:52px;border-radius:15px;display:grid;place-items:center;flex:none;color:#fff;overflow:hidden;
+  background:linear-gradient(140deg,var(--c2),var(--c));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 20px -8px color-mix(in srgb,var(--c) 70%,transparent);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.chap .ic::after{content:"";position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);transform:translateX(-80%);transition:transform .8s}
+.chap:hover .ic{transform:rotate(-6deg) scale(1.06)}
+.chap:hover .ic::after{transform:translateX(80%)}
+.chap .ic .i{width:26px;height:26px;overflow:visible}
+.chap .kind{margin-left:auto;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--c-soft);border:1px solid var(--c-chip);color:var(--c-ink)}
 .chap .num{font-family:var(--font-mono);font-weight:600;font-size:.82rem;color:var(--muted);min-width:2ch;text-align:right}
-.chap h3{font-size:1.14rem;font-weight:700;letter-spacing:-.015em;margin-top:2px}
+.chap h3{font-size:1.16rem;font-weight:700;letter-spacing:-.02em;margin-top:2px}
 .chap p{margin:0;color:var(--muted);font-size:.93rem;line-height:1.55}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-family:var(--font-mono);font-size:.7rem;padding:2px 8px;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
-.chap .go{display:flex;align-items:center;justify-content:space-between;gap:6px;font-weight:700;font-size:.88rem;color:var(--green-ink);margin-top:6px;padding-top:12px;border-top:1px solid var(--line)}
-.chap.lab .go{color:var(--red)}
-.go .i{width:16px;height:16px;transition:transform .2s}
-.chap:hover .go .i{transform:translateX(4px)}
-/* Card dourado do projeto final, centralizado no fim da trilha */
-.node.final{grid-column:1/-1;justify-self:center;width:calc(50% - 40px)}
-.chap.gold{overflow:hidden;--gold:#C99A06;--gold-ink:#8A6500;--gold-soft:#FEF7DC;--gold-chip:#F1D88A;background:linear-gradient(180deg,#FFFCF0,var(--surface) 60%);border:1.5px solid var(--gold-chip);box-shadow:0 1px 2px rgba(15,23,42,.04),0 10px 30px -14px rgba(201,154,6,.45)}
-.chap.gold::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,#F5C518,#C99A06,#F5C518)}
-.chap.gold:hover{border-color:color-mix(in srgb,var(--gold) 75%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 30%,transparent),0 14px 30px -6px color-mix(in srgb,var(--gold) 45%,transparent),0 0 46px -4px color-mix(in srgb,var(--gold) 40%,transparent)}
-.chap.gold .ic{background:linear-gradient(135deg,#F5C518,#C99A06)}
-.chap.gold .kind{background:var(--gold-soft);border-color:var(--gold-chip);color:var(--gold-ink)}
-.chap.gold .go{color:var(--gold-ink)}
+.tag{font-family:var(--font-mono);font-size:.7rem;padding:3px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);transition:border-color .3s,color .3s,background .3s}
+.chap:hover .tag{border-color:var(--c-chip);color:var(--c-ink);background:var(--c-soft)}
+.chap .go{display:flex;align-items:center;justify-content:space-between;gap:6px;font-weight:700;font-size:.9rem;color:var(--c-ink);margin-top:6px;padding-top:14px;border-top:1px dashed var(--line)}
+.go .i{width:16px;height:16px}
+.go .gb{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--c-soft);color:var(--c-ink);transition:background .3s,color .3s,transform .3s}
+.chap:hover .go .gb{background:var(--c);color:#fff;transform:translateX(4px)}
+
+/* ---------- Ícones animados ---------- */
+.a-float{animation:a-float 3.2s ease-in-out infinite;transform-origin:center}
+@keyframes a-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-2px) rotate(-6deg)}}
+.a-cube .edge{stroke-dasharray:30;animation:a-draw 3.2s ease-in-out infinite}
+@keyframes a-draw{0%,100%{stroke-dashoffset:0}50%{stroke-dashoffset:30}}
+.a-vm .scr{animation:a-scr 2.4s steps(1) infinite}
+@keyframes a-scr{0%,100%{fill:rgba(255,255,255,0)}50%{fill:rgba(255,255,255,.45)}}
+.a-term .chev{animation:a-chev 1.6s ease-in-out infinite}
+@keyframes a-chev{0%,100%{transform:translateX(0)}50%{transform:translateX(1.5px)}}
+.a-term .cur{animation:a-blink 1s steps(1) infinite}
+@keyframes a-blink{50%{opacity:0}}
+.a-term .ln1,.a-term .ln2{transform-box:fill-box;transform-origin:left;animation:a-type 2.4s ease-in-out infinite}
+.a-term .ln2{animation-delay:.4s}
+@keyframes a-type{0%{transform:scaleX(0)}40%,80%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+.a-srv .led{animation:a-led 1.2s steps(1) infinite}
+.a-srv .led2{animation-delay:.6s}
+@keyframes a-led{0%{fill:#fff;opacity:1}50%{opacity:.25}}
+.a-key .k{transform-origin:7.5px 15.5px;animation:a-turn 2.6s ease-in-out infinite}
+@keyframes a-turn{0%,40%,100%{transform:rotate(0)}55%,80%{transform:rotate(-28deg)}}
+.a-ftp .up{animation:a-up 1.6s ease-in infinite}
+@keyframes a-up{0%{transform:translateY(3px);opacity:0}30%{opacity:1}100%{transform:translateY(-3px);opacity:0}}
+.a-db .d1,.a-db .d2,.a-db .d3{animation:a-pulse 1.8s ease-in-out infinite}
+.a-db .d2{animation-delay:.3s}.a-db .d3{animation-delay:.6s}
+@keyframes a-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.a-trophy{animation:a-bounce 2.2s cubic-bezier(.3,.6,.4,1) infinite;transform-origin:50% 100%}
+@keyframes a-bounce{0%,60%,100%{transform:translateY(0) scale(1)}70%{transform:translateY(-3px) scale(1.05)}80%{transform:translateY(0) scale(.97)}}
+.a-trophy .star{transform-box:fill-box;transform-origin:center;animation:a-star 2.2s ease-in-out infinite}
+@keyframes a-star{0%,55%,100%{transform:scale(0);opacity:0}70%{transform:scale(1) rotate(45deg);opacity:1}90%{transform:scale(0) rotate(90deg);opacity:0}}
+.chap:hover .ic svg *{animation-duration:.9s}
 @media (prefers-color-scheme:dark){.chap.gold{--gold:#F5C518;--gold-ink:#F5C518;--gold-soft:#3A2F08;--gold-chip:#6B5512;background:linear-gradient(180deg,#221C08,var(--surface) 60%)}}
 .legend .g i{background:#D9A80B}
 .arr.g{--ac:#D9A80B}
@@ -245,88 +286,88 @@ footer .fb svg{height:26px;width:auto}
 
     <div class="node">
       <a class="chap reveal" href="https://alberto-barros.github.io/Linux/introducao.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-linux"/></svg></div><span class="kind">Teoria</span><span class="num">01</span></div>
+        <div class="top"><div class="ic"><svg class="i a-float a-cube" viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path class="edge" d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></div><span class="kind">Teoria</span><span class="num">01</span></div>
         <h3>O que é Linux</h3>
         <p>Apresentação de abertura: Linux, o sistema que roda o mundo. Abra em tela cheia para acompanhar a aula.</p>
         <div class="tags"><span class="tag">introdução</span><span class="tag">apresentação</span></div>
-        <span class="go">Estudar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Estudar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr right" aria-hidden="true"><svg viewBox="0 0 72 40"><path class="ln" d="M2 20H58"/><path class="hd" d="M56 12l13 8-13 8z"/><circle class="pk" cx="6" cy="20" r="4.5"/></svg></span><span class="arr down m-only" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
 
     <div class="node">
       <a class="chap reveal" href="https://alberto-barros.github.io/Linux/instalar_vm.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-vm"/></svg></div><span class="kind">Teoria</span><span class="num">02</span></div>
+        <div class="top"><div class="ic"><svg class="i a-vm" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><rect class="scr" x="7" y="7.5" width="10" height="6" rx="1"/></svg></div><span class="kind">Teoria</span><span class="num">02</span></div>
         <h3>Instalar o Linux em VM</h3>
         <p>Crie uma máquina virtual, configure memória, disco e rede e instale o Linux passo a passo, sem mexer no seu computador.</p>
         <div class="tags"><span class="tag">VirtualBox</span><span class="tag">ISO</span><span class="tag">instalação</span></div>
-        <span class="go">Estudar <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Estudar <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down m-only p" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span><span class="arr elbow p" aria-hidden="true"><svg class="el-line" viewBox="0 0 100 100" preserveAspectRatio="none"><path class="ln" vector-effect="non-scaling-stroke" d="M100 0V50H0V92"/></svg><svg class="el-head" viewBox="0 0 16 14"><path class="hd" d="M0 0l8 13 8-13z"/></svg><i class="el-pk"></i></span>
     </div>
 
     <div class="node">
       <a class="chap lab reveal" href="https://alberto-barros.github.io/Linux/terminal.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-term"/></svg></div><span class="kind">Prática</span><span class="num">03</span></div>
+        <div class="top"><div class="ic"><svg class="i a-term" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="16" rx="2.5"/><path class="chev" d="M6.5 9.5l3 2.5-3 2.5"/><path class="cur" d="M12 15h5"/></svg></div><span class="kind">Prática</span><span class="num">03</span></div>
         <h3>Comandos de Terminal · Parte 1</h3>
         <p>Primeiros passos no terminal do Debian: leia o prompt, navegue pelas pastas, crie arquivos e vire root com segurança.</p>
         <div class="tags"><span class="tag">ls</span><span class="tag">cd</span><span class="tag">su -</span><span class="tag">apt</span></div>
-        <span class="go">Acessar Aula Prática <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Acessar Aula Prática <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr right p" aria-hidden="true"><svg viewBox="0 0 72 40"><path class="ln" d="M2 20H58"/><path class="hd" d="M56 12l13 8-13 8z"/><circle class="pk" cx="6" cy="20" r="4.5"/></svg></span><span class="arr down m-only p" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
 
     <div class="node">
       <a class="chap lab reveal" href="https://alberto-barros.github.io/Linux/terminal2.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-term2"/></svg></div><span class="kind">Prática</span><span class="num">04</span></div>
+        <div class="top"><div class="ic"><svg class="i a-term" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="16" rx="2.5"/><path class="chev" d="M6.5 9.5l3 2.5-3 2.5"/><path class="ln1" d="M12.5 10h5"/><path class="ln2" d="M12.5 15h3"/></svg></div><span class="kind">Prática</span><span class="num">04</span></div>
         <h3>Comandos de Terminal · Parte 2</h3>
         <p>Do básico à administração no Linux Mint: texto, usuários, permissões, scripts, compactação, processos, Flatpak e agendamento com crontab.</p>
         <div class="tags"><span class="tag">chmod</span><span class="tag">adduser</span><span class="tag">tar</span><span class="tag">kill</span><span class="tag">crontab</span></div>
-        <span class="go">Acessar Aula Prática <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Acessar Aula Prática <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down m-only p" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span><span class="arr elbow p" aria-hidden="true"><svg class="el-line" viewBox="0 0 100 100" preserveAspectRatio="none"><path class="ln" vector-effect="non-scaling-stroke" d="M100 0V50H0V92"/></svg><svg class="el-head" viewBox="0 0 16 14"><path class="hd" d="M0 0l8 13 8-13z"/></svg><i class="el-pk"></i></span>
     </div>
 
     <div class="node">
       <a class="chap lab reveal" href="https://alberto-barros.github.io/Linux/servidor_web.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-server"/></svg></div><span class="kind">Prática</span><span class="num">05</span></div>
+        <div class="top"><div class="ic"><svg class="i a-srv" viewBox="0 0 24 24"><rect x="3" y="3.5" width="18" height="7" rx="1.5"/><rect x="3" y="13.5" width="18" height="7" rx="1.5"/><path d="M11 7h6M11 17h6"/><circle class="led" cx="7" cy="7" r="1.2" fill="#fff" stroke="none"/><circle class="led led2" cx="7" cy="17" r="1.2" fill="#fff" stroke="none"/></svg></div><span class="kind">Prática</span><span class="num">05</span></div>
         <h3>Servidor Web</h3>
         <p>Instale e configure o Apache e o Nginx no Linux Mint, publique uma página e acesse pelo navegador de outra máquina.</p>
         <div class="tags"><span class="tag">apache2</span><span class="tag">nginx</span><span class="tag">porta 80</span></div>
-        <span class="go">Acessar Aula Prática <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Acessar Aula Prática <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr right p" aria-hidden="true"><svg viewBox="0 0 72 40"><path class="ln" d="M2 20H58"/><path class="hd" d="M56 12l13 8-13 8z"/><circle class="pk" cx="6" cy="20" r="4.5"/></svg></span><span class="arr down m-only p" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
 
     <div class="node">
       <a class="chap lab reveal" href="https://alberto-barros.github.io/Linux/ssh.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-key"/></svg></div><span class="kind">Prática</span><span class="num">06</span></div>
+        <div class="top"><div class="ic"><svg class="i a-key" viewBox="0 0 24 24"><g class="k"><circle cx="7.5" cy="15.5" r="4"/><path d="M10.4 12.6L20 3M16 7l3 3M14 9l2 2"/></g></svg></div><span class="kind">Prática</span><span class="num">06</span></div>
         <h3>Acesso Remoto SSH</h3>
         <p>Instale o OpenSSH Server, descubra o IP da máquina e acesse o Linux de outro computador com segurança.</p>
         <div class="tags"><span class="tag">openssh</span><span class="tag">porta 22</span><span class="tag">PuTTY</span></div>
-        <span class="go">Acessar Aula Prática <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Acessar Aula Prática <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down m-only p" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span><span class="arr elbow p" aria-hidden="true"><svg class="el-line" viewBox="0 0 100 100" preserveAspectRatio="none"><path class="ln" vector-effect="non-scaling-stroke" d="M100 0V50H0V92"/></svg><svg class="el-head" viewBox="0 0 16 14"><path class="hd" d="M0 0l8 13 8-13z"/></svg><i class="el-pk"></i></span>
     </div>
 
     <div class="node">
       <a class="chap lab reveal" href="https://alberto-barros.github.io/Linux/ftp.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-ftp"/></svg></div><span class="kind">Prática</span><span class="num">07</span></div>
+        <div class="top"><div class="ic"><svg class="i a-ftp" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2h7.5A2.5 2.5 0 0 1 21 9.5v8A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5z"/><path class="up" d="M12 10.5v6M9.5 13l2.5-2.5 2.5 2.5"/></svg></div><span class="kind">Prática</span><span class="num">07</span></div>
         <h3>Servidor FTP</h3>
         <p>Instale o vsftpd, conecte pelo FileZilla na máquina hospedeira e publique os arquivos do site no Apache.</p>
         <div class="tags"><span class="tag">vsftpd</span><span class="tag">FileZilla</span><span class="tag">porta 21</span></div>
-        <span class="go">Acessar Aula Prática <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Acessar Aula Prática <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr right p" aria-hidden="true"><svg viewBox="0 0 72 40"><path class="ln" d="M2 20H58"/><path class="hd" d="M56 12l13 8-13 8z"/><circle class="pk" cx="6" cy="20" r="4.5"/></svg></span><span class="arr down m-only p" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
 
     <div class="node">
       <a class="chap lab reveal" href="https://alberto-barros.github.io/Linux/mysql.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-db"/></svg></div><span class="kind">Prática</span><span class="num">08</span></div>
+        <div class="top"><div class="ic"><svg class="i a-db" viewBox="0 0 24 24"><ellipse class="d1" cx="12" cy="5.5" rx="7.5" ry="3"/><path d="M4.5 5.5v13c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-13"/><path class="d2" d="M4.5 12c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3"/><path class="d3" d="M4.5 18.5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3"/></svg></div><span class="kind">Prática</span><span class="num">08</span></div>
         <h3>Banco de Dados</h3>
         <p>Instale e proteja o MySQL na VM, crie um banco com tabelas e consultas pelo terminal e gerencie tudo no navegador com o phpMyAdmin.</p>
         <div class="tags"><span class="tag">MySQL</span><span class="tag">SQL</span><span class="tag">phpMyAdmin</span><span class="tag">porta 3306</span></div>
-        <span class="go">Acessar Aula Prática <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Acessar Aula Prática <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
       <span class="arr down m-only g" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span><span class="arr elbow-c g" aria-hidden="true"><svg class="el-line" viewBox="0 0 100 100" preserveAspectRatio="none"><path class="ln" vector-effect="non-scaling-stroke" d="M100 0V50H0V92"/></svg><svg class="el-head" viewBox="0 0 16 14"><path class="hd" d="M0 0l8 13 8-13z"/></svg><i class="el-pk"></i></span>
     </div>
@@ -334,11 +375,11 @@ footer .fb svg{height:26px;width:auto}
 
     <div class="node final">
       <a class="chap gold reveal" href="https://alberto-barros.github.io/Linux/projeto.html">
-        <div class="top"><div class="ic"><svg class="i"><use href="#i-trophy"/></svg></div><span class="kind">Projeto final</span><span class="num">09</span></div>
+        <div class="top"><div class="ic"><svg class="i a-trophy" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 21h7M9.5 17h5v4h-5z"/><path class="star" d="M19.5 1.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z" fill="#fff" stroke="none"/></svg></div><span class="kind">Projeto final</span><span class="num">09</span></div>
         <h3>Projeto Final</h3>
         <p>Consultoria de Laboratório de Informática: em equipes, testem os computadores, montem a rede, instalem o servidor e padronizem todas as estações com Linux.</p>
         <div class="tags"><span class="tag">equipes</span><span class="tag">rede</span><span class="tag">servidor</span><span class="tag">4 fases</span></div>
-        <span class="go">Acessar Projeto Final <svg class="i"><use href="#i-arrow"/></svg></span>
+        <span class="go">Acessar Projeto Final <span class="gb"><svg class="i"><use href="#i-arrow"/></svg></span></span>
       </a>
     </div>
 
@@ -404,6 +445,9 @@ async function run(){
       await wait(280);html+=p+esc(c)+'\n';if(o)html+=o+'\n';render();await wait(700)}}
     await wait(1200);html+='<span class="c"># ---- reiniciando ----</span>\n'}}
 run();
+
+/* Luz dos cards seguindo o mouse */
+document.querySelectorAll('.chap').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')}));
 
 /* Contadores e revelação */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add('in');io.unobserve(e.target)}),{threshold:.15});
