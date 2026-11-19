@@ -994,6 +994,32 @@ details.src pre{max-height:360px;overflow:auto}
 @media (max-width:600px){.qz-rl li{grid-template-columns:28px minmax(0,1fr)}.qz-rl em{grid-column:2}.qz-res{margin-left:0}}
 @media (max-width:480px){.qz-sum{gap:6px}.qz-sum button{padding:10px 2px;font-size:.95rem}.qz-sum button small{display:none}.qz-review{padding:14px}.qz-rq{font-size:1.02rem}.qz-end h3{font-size:1.35rem}.qz-ring{width:150px;height:150px}.qz-ring b{font-size:2.8rem}}
 html{scroll-padding-top:84px}
+
+/* ===== terminais padronizados (mesmo visual do terminal da página Linux) ===== */
+:root{--code-bg:#000;--code-fg:#E2E8F0;--code-muted:#7C879A;--code-key:#4ADE80}
+.code,.hero-term,.logline,.fname{background:#000!important;border:1px solid rgba(255,255,255,.08);border-radius:18px}
+.code{color:#E2E8F0}
+.code-top{background:#000;padding:12px 16px;gap:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.dots{gap:7px}.dots i{width:11px;height:11px;font-size:0}.dots i::before{content:none!important}
+.dots i:nth-child(1){background:#FF5F57}.dots i:nth-child(2){background:#FEBC2E}.dots i:nth-child(3){background:#28C840}
+.code-top span{font:500 .78rem var(--f-mono);color:#7C879A}
+.code pre{font:400 .84rem/1.75 var(--f-mono);color:#E2E8F0;background:#000}
+.code .c{color:#7C879A;font-style:normal}.code .p,.out .ok{color:#4ADE80}.out .w{color:#FBBF24}.out pre{color:#E2E8F0}
+.ht-wrap::before{display:none}
+.hero-term{box-shadow:0 24px 50px -28px rgba(0,0,0,.6);-webkit-backdrop-filter:none;backdrop-filter:none;font-size:.84rem;color:#E2E8F0}
+.hero-term::after{display:none}
+.hero-term .bar{position:relative;background:#000;padding:12px 16px;gap:7px;border-bottom:1px solid rgba(255,255,255,.08)}
+.hero-term .dot{width:11px;height:11px}
+.hero-term .ttl{position:absolute;left:0;right:0;text-align:center;font-size:.76rem;color:#7C879A;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 70px}
+.ht-screen{height:300px;background:#000}
+.hero-term pre{padding:16px 18px;line-height:1.75;color:#E2E8F0;background:#000}
+.hero-term .pu{color:#4ADE80}.hero-term .pc{color:#E2E8F0}.hero-term .pd{color:#60A5FA}
+.hero-term .dim{color:#7C879A}.hero-term .ok{color:#4ADE80}.hero-term .w{color:#FBBF24}
+.hero-term .cursor{width:.6em;height:1.1em;background:#4ADE80;box-shadow:none;border-radius:0;vertical-align:-3px}
+.hero-term .foot{display:flex;align-items:center;gap:8px;padding:9px 16px;border-top:1px solid rgba(255,255,255,.08);background:#000;font-size:.7rem;color:#7C879A}
+.hero-term .foot i{width:7px;height:7px;border-radius:50%;background:#4ADE80}
+.hero-term .foot span:last-child{margin-left:auto}
+@media (max-width:600px){.ht-screen{height:300px}.hero-term{font-size:.72rem}.hero-term .foot span:nth-child(3){display:none}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1064,7 +1090,7 @@ html{scroll-padding-top:84px}
     </div>
     <div class="ht-wrap">
     <div class="hero-term" aria-label="Terminal do Linux Mint mostrando o login, o neofetch e os comandos da aula">
-      <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="tab"><svg aria-hidden="true"><use href="#i-term"/></svg>ifsc@mint: ~</span><span class="sh">bash · 80×24</span></div>
+      <div class="bar"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span class="ttl">ifsc@mint: ~ — bash</span></div>
       <div class="ht-screen"><pre id="ht-pre"><span class="dim">Linux Mint 22 mint tty1</span>
 
 mint login: ifsc
@@ -1097,6 +1123,7 @@ Password:
 <span class="ok">OK DOWNLOAD</span>: "/var/www/html/index.html"
 <span class="ok">OK UPLOAD</span>: "/var/www/html/index.html"
 <span class="pu">ifsc@mint</span><span class="pc">:</span><span class="pd">~</span><span class="pc">$</span> <span class="cursor"></span></pre></div>
+      <div class="foot"><i></i><span>conectado</span><span>bash</span><span>UTF-8 · 80×24</span></div>
     </div>
     </div>
     </div>
