@@ -1081,6 +1081,70 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 @media (max-width:600px){.ft-mask{grid-template-columns:1fr;padding:16px}.fm-bin .mo{font-size:.8rem}.fm-bin{gap:6px 8px}}
 @media (prefers-reduced-motion:reduce){.ft-mask .fti{animation:none}}
 .ftiles .ft:last-child:not(.ft-mask){grid-column:1/-1}
+
+/* ===== OSI: layout 3D, discreto e fácil de ler ===== */
+#osi .sec-head{margin-bottom:26px;gap:6px}
+#osi .sec-head h2{font-size:clamp(1.45rem,2.6vw,1.9rem)}
+#osi .sec-head h2::after{margin-top:10px;width:44px;height:3px}
+#osi .sec-head p{font-size:.98rem;max-width:78ch}
+#osi .osi-wrap{gap:22px;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}
+#osi .osi{gap:10px;padding:16px;border-radius:24px;background:linear-gradient(180deg,var(--surface),var(--surface-2));border:1px solid var(--line);box-shadow:0 1px 0 #fff inset,0 26px 44px -32px rgba(15,36,23,.45)}
+.osi-cap{display:flex;justify-content:center}
+.osi-cap span{font:700 .68rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
+.osi-cap span::after{content:"↓";font-size:.95rem;color:var(--green-strong)}
+.osi-cap.down span::after{content:"→"}
+#osi .layer{--lc:var(--neutral);position:relative;grid-template-columns:42px minmax(0,1fr) auto;gap:12px;padding:10px 12px;border-radius:16px;border:1px solid color-mix(in srgb,var(--lc) 26%,var(--line));
+  background:linear-gradient(90deg,color-mix(in srgb,var(--lc) 11%,var(--surface)),var(--surface) 70%);box-shadow:0 1px 0 #fff inset,0 4px 0 color-mix(in srgb,var(--lc) 22%,var(--line)),0 12px 18px -14px var(--lc);transition:transform .2s,box-shadow .2s}
+#osi .layer:hover{transform:translateY(-2px);box-shadow:0 1px 0 #fff inset,0 6px 0 color-mix(in srgb,var(--lc) 30%,var(--line)),0 16px 22px -14px var(--lc)}
+#osi .layer .ln{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font:800 1.2rem var(--f-display);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--lc) 62%,#fff),var(--lc) 52%,color-mix(in srgb,var(--lc) 74%,#000));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -3px 0 rgba(0,0,0,.16),0 4px 0 -1px color-mix(in srgb,var(--lc) 55%,#000),0 10px 14px -8px var(--lc);text-shadow:0 2px 0 rgba(0,0,0,.18)}
+#osi .layer .lt b{font:700 .98rem var(--f-display)}
+#osi .layer .lt small{font-size:.8rem;margin-top:1px}
+#osi .layer .pdu{font:700 .7rem var(--f-mono);color:color-mix(in srgb,var(--lc) 70%,var(--ink));background:color-mix(in srgb,var(--lc) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--lc) 28%,transparent);padding:4px 9px;border-radius:999px}
+#osi .layer.soft{padding:7px 12px}
+#osi .layer.soft .ln{width:34px;height:34px;border-radius:11px;font-size:1rem}
+#osi .layer.soft{grid-template-columns:34px minmax(0,1fr) auto}
+#osi .layer.soft .lt{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px}
+#osi .layer.hl{padding:14px;border:2px solid var(--green);border-radius:20px;transform:scale(1.03);margin:4px 0;
+  background:linear-gradient(100deg,color-mix(in srgb,var(--green) 20%,var(--surface)),var(--surface) 80%);
+  box-shadow:0 1px 0 #fff inset,0 6px 0 color-mix(in srgb,var(--green) 55%,#000),0 26px 36px -20px var(--green)}
+#osi .layer.hl:hover{transform:scale(1.03) translateY(-2px)}
+#osi .layer.hl .ln{width:50px;height:50px;border-radius:16px;font-size:1.6rem;animation:icoFloat 3.4s ease-in-out infinite;--ic:var(--green)}
+#osi .layer.hl .lt b{font-size:1.2rem}
+#osi .layer.hl .here{display:inline-block;font:800 .64rem var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--green-strong);padding:3px 9px;border-radius:999px;margin-bottom:5px;animation:chRing2 2.4s ease-out infinite}
+@keyframes chRing2{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--green) 55%,transparent)}70%,100%{box-shadow:0 0 0 9px transparent}}
+#osi .layer.hl .pdu{background:var(--green);color:#fff;border-color:transparent}
+#osi .layer.sw{border-style:solid}
+#osi .layer .dev{font:700 .62rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--s2);padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:2px}
+#osi .encap{padding:20px;border-radius:24px;gap:14px;box-shadow:0 1px 0 #fff inset,0 26px 44px -32px rgba(15,36,23,.45)}
+#osi .encap h3{font:700 .95rem var(--f-display);letter-spacing:0;text-transform:none;color:var(--ink)}
+#osi .encap h3 small{font:600 .8rem var(--f-body);color:var(--muted)}
+#osi .pkt-ruler{border-bottom:0;padding-bottom:2px;color:var(--muted)}
+#osi .pkt-ruler span::before{display:none}
+#osi .pkt-grid{background:transparent;border:0;border-radius:0;overflow:visible;gap:6px;margin-top:0}
+#osi .pkt .c{--cc:var(--neutral);border-radius:12px;background:color-mix(in srgb,var(--cc) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--cc) 26%,var(--line));box-shadow:0 3px 0 color-mix(in srgb,var(--cc) 22%,var(--line));padding:9px 6px}
+#osi .pkt .c small{color:color-mix(in srgb,var(--cc) 55%,var(--muted))}
+#osi .pkt .c.hot{--cc:var(--s2);background:color-mix(in srgb,var(--s2) 13%,var(--surface))}
+#osi .pkt .c.ip{padding:14px 10px;color:#fff;border:0}
+#osi .pkt .c.ip.src{background:linear-gradient(145deg,color-mix(in srgb,var(--green) 70%,#fff),var(--green) 50%,color-mix(in srgb,var(--green) 78%,#000));box-shadow:inset 0 2px 0 rgba(255,255,255,.45),0 5px 0 color-mix(in srgb,var(--green) 55%,#000),0 14px 20px -12px var(--green)}
+#osi .pkt .c.ip.dst{background:linear-gradient(145deg,color-mix(in srgb,var(--s1) 70%,#fff),var(--s1) 50%,color-mix(in srgb,var(--s1) 78%,#000));box-shadow:inset 0 2px 0 rgba(255,255,255,.45),0 5px 0 color-mix(in srgb,var(--s1) 55%,#000),0 14px 20px -12px var(--s1)}
+#osi .pkt .c.ip small,#osi .pkt .c.ip i{color:rgba(255,255,255,.88);opacity:1}
+#osi .pkt .c.ip b{color:#fff;font-size:1.3rem;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+.pkt-leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.78rem;font-weight:600;color:var(--muted)}
+.pkt-leg span{display:inline-flex;align-items:center;gap:7px}
+.pkt-leg i{width:14px;height:14px;border-radius:5px;display:inline-block}
+.lg-src{background:var(--green)}.lg-dst{background:var(--s1)}.lg-ping{background:color-mix(in srgb,var(--s2) 45%,var(--surface));border:1px solid var(--s2)}.lg-oth{background:var(--surface-2);border:1px solid var(--line)}
+#osi .pkt-note{font-size:.82rem}
+:root[data-theme="dark"] #osi .layer .ln,:root[data-theme="dark"] #osi .layer.hl .pdu{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #osi .layer .ln{color:#08130C}}
+@media (max-width:860px){#osi .osi-wrap{grid-template-columns:1fr}}
+@media (max-width:600px){#osi .osi{padding:12px}#osi .layer.hl{transform:none}#osi .layer.hl:hover{transform:translateY(-2px)}#osi .layer{grid-template-columns:36px minmax(0,1fr)}#osi .layer .pdu{grid-column:2;justify-self:start}#osi .layer .ln{width:36px;height:36px}}
+@media (prefers-reduced-motion:reduce){#osi .layer.hl .ln,#osi .layer.hl .here{animation:none}}
+#osi .layer.hl .lt{display:grid;justify-items:start;gap:2px}
+#osi .layer .lt small b,#osi .layer.hl .lt small b{font:700 inherit;font-size:inherit;color:var(--ink)}
+#osi .layer.hl .here{margin-bottom:3px}
+@media (max-width:600px){#osi .layer.hl{grid-template-columns:44px minmax(0,1fr)}#osi .layer.hl .ln{width:44px;height:44px;font-size:1.4rem}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1198,16 +1262,18 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     </div>
     <div class="osi-wrap">
       <div class="osi" aria-label="As 7 camadas do modelo OSI">
-        <div class="layer"><span class="ln">7</span><div><b>Aplicação</b><small>HTTP, DNS, DHCP: o que o usuário usa</small></div><span class="pdu">Dados</span></div>
-        <div class="layer"><span class="ln">6</span><div><b>Apresentação</b><small>Formato, compressão, criptografia</small></div><span class="pdu">Dados</span></div>
-        <div class="layer"><span class="ln">5</span><div><b>Sessão</b><small>Abre, mantém e fecha diálogos</small></div><span class="pdu">Dados</span></div>
-        <div class="layer"><span class="ln">4</span><div><b>Transporte</b><small>TCP e UDP, portas (80, 443, 53…)</small></div><span class="pdu">Segmento</span></div>
-        <div class="layer hl"><span class="ln">3</span><div><b>Rede · endereço IPv4</b><small>IP de origem e destino, máscara, roteamento, ICMP (ping). Dispositivo típico: <b>roteador</b></small></div><span class="pdu">Pacote</span></div>
-        <div class="layer sw"><span class="ln">2</span><div><b>Enlace <span class="dev">switch</span></b><small>Endereço MAC (ex.: 00D0.97A1.3B01), quadros, ARP liga IP ao MAC</small></div><span class="pdu">Quadro</span></div>
-        <div class="layer"><span class="ln">1</span><div><b>Física</b><small>Cabos, conectores RJ-45, sinais elétricos</small></div><span class="pdu">Bits</span></div>
+        <div class="osi-cap"><span>Dado do usuário</span></div>
+        <div class="layer soft" style="--lc:var(--s1)"><span class="ln">7</span><div class="lt"><b>Aplicação</b><small>HTTP, DNS, DHCP</small></div><span class="pdu">Dados</span></div>
+        <div class="layer soft" style="--lc:var(--s1)"><span class="ln">6</span><div class="lt"><b>Apresentação</b><small>Formato e criptografia</small></div><span class="pdu">Dados</span></div>
+        <div class="layer soft" style="--lc:var(--s1)"><span class="ln">5</span><div class="lt"><b>Sessão</b><small>Abre e fecha diálogos</small></div><span class="pdu">Dados</span></div>
+        <div class="layer " style="--lc:var(--s3)"><span class="ln">4</span><div class="lt"><b>Transporte</b><small>TCP e UDP · portas</small></div><span class="pdu">Segmento</span></div>
+        <div class="layer hl" style="--lc:var(--green)"><span class="ln">3</span><div class="lt"><span class="here">Endereço IPv4 mora aqui</span><b>Rede</b><small>IP de origem e destino, máscara, roteamento e ICMP (ping). Dispositivo: <b>roteador</b></small></div><span class="pdu">Pacote</span></div>
+        <div class="layer sw" style="--lc:var(--s2)"><span class="ln">2</span><div class="lt"><b>Enlace <span class="dev">switch</span></b><small>Endereço MAC e quadros. O ARP liga o IP ao MAC</small></div><span class="pdu">Quadro</span></div>
+        <div class="layer " style="--lc:var(--neutral)"><span class="ln">1</span><div class="lt"><b>Física</b><small>Cabos, RJ-45 e sinais elétricos</small></div><span class="pdu">Bits</span></div>
+        <div class="osi-cap down"><span>Rede (cabo)</span></div>
       </div>
       <div class="encap">
-        <h3>Cabeçalho IPv4 (simplificado)</h3>
+        <h3>Dentro do pacote: cabeçalho IPv4 <small>(simplificado)</small></h3>
         <div class="pkt-scroll">
         <div class="pkt" role="table" aria-label="Campos do cabeçalho IPv4, 32 bits por linha">
           <div class="pkt-ruler" aria-hidden="true"><span>0</span><span>4</span><span>8</span><span>12</span><span>16</span><span>20</span><span>24</span><span>28</span><span class="end">31</span></div>
@@ -1221,12 +1287,13 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
             <div class="c hot" style="--w:2"><small>TTL</small><b>128</b><i>8 bits</i></div>
             <div class="c hot" style="--w:2"><small>Protocolo</small><b>1 = ICMP</b><i>8 bits</i></div>
             <div class="c" style="--w:4"><small>Checksum</small><b>verificação</b><i>16 bits</i></div>
-            <div class="c ip" style="--w:8"><small>Endereço IP de origem</small><b>10.0.0.10</b><i>32 bits</i></div>
-            <div class="c ip" style="--w:8"><small>Endereço IP de destino</small><b>10.0.0.11</b><i>32 bits</i></div>
+            <div class="c ip src" style="--w:8"><small>Endereço IP de origem</small><b>10.0.0.10</b><i>32 bits</i></div>
+            <div class="c ip dst" style="--w:8"><small>Endereço IP de destino</small><b>10.0.0.11</b><i>32 bits</i></div>
           </div>
         </div>
         </div>
-        <p class="pkt-note">Cada linha tem <b>32 bits</b> (4 bytes) e a largura de cada campo é proporcional aos seus bits. Em <b class="g">verde</b> estão os endereços IP, foco desta aula.</p>
+        <div class="pkt-leg"><span><i class="lg-src"></i>IP de origem</span><span><i class="lg-dst"></i>IP de destino</span><span><i class="lg-ping"></i>usados pelo ping</span><span><i class="lg-oth"></i>outros campos</span></div>
+        <p class="pkt-note">Cada linha tem <b>32 bits</b> e o tamanho de cada campo é proporcional aos seus bits.</p>
         <div class="note" style="margin-top:0"><div class="ico"><svg><use href="#i-bulb"></use></svg></div><p>O switch lê apenas o <b>quadro</b> (MAC). Ele não olha o IP e não bloqueia nada entre classes. Quem decide se a comunicação acontece é o <b>próprio PC</b>, comparando as redes na camada 3.</p></div>
       </div>
     </div>
