@@ -732,6 +732,63 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 .code{border:1px solid #1c1c1c}
 .code-top{border-bottom-color:#1c1c1c}
 .dots i::before{content:none!important}
+
+/* ===== acabamento moderno ===== */
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+::selection{background:color-mix(in srgb,var(--green) 28%,transparent)}
+:root{--sh-1:0 1px 2px rgba(15,36,23,.05),0 8px 24px -12px rgba(15,36,23,.12);--sh-2:0 2px 4px rgba(15,36,23,.05),0 22px 44px -22px rgba(30,122,48,.35)}
+/* hero */
+.hero{position:relative;overflow:hidden;background:
+  radial-gradient(60% 80% at 85% 10%,color-mix(in srgb,var(--green) 20%,transparent),transparent 70%),
+  radial-gradient(45% 60% at 0% 100%,color-mix(in srgb,var(--red) 10%,transparent),transparent 70%),
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 18%,transparent) 1px,transparent 1.5px) 0 0/24px 24px,
+  linear-gradient(160deg,var(--surface-2),var(--bg) 75%)}
+.hero .wrap{padding-block:72px 64px}
+.hero h1{font-size:clamp(2.4rem,5.8vw,4rem);line-height:1.02}
+.hero h1 em{background:linear-gradient(100deg,var(--green-strong),#4DC262 60%,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:999px;box-shadow:var(--sh-1)}
+.eyebrow::before{width:14px}
+.chip{box-shadow:var(--sh-1);transition:transform .2s,border-color .2s}
+.chip:hover{transform:translateY(-2px);border-color:var(--green)}
+.hero-net{background:color-mix(in srgb,var(--surface) 80%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:28px;padding:18px;box-shadow:var(--sh-2)}
+/* seções */
+section.sec{padding-block:80px}
+section.sec:nth-of-type(even):not(.desafio){background:color-mix(in srgb,var(--surface) 55%,var(--bg))}
+.sec-head{margin-bottom:40px}
+.sec-num{display:inline-flex;align-items:center;gap:8px;width:fit-content;background:var(--mint);padding:5px 12px;border-radius:999px;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase}
+.sec-head h2::after{content:"";display:block;width:56px;height:4px;border-radius:4px;margin-top:14px;background:linear-gradient(90deg,var(--green),var(--red))}
+.desafio .sec-head h2::after{background:var(--red)}
+h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+/* cartões */
+.ben,.err,.dcard,.anim,.drawing,.stat,.test-row,.port-card,.vs-card,.quiz{box-shadow:var(--sh-1)}
+.ben{border-radius:20px;padding:26px;transition:transform .25s,border-color .25s,box-shadow .25s}
+.ben:hover{transform:translateY(-4px);box-shadow:var(--sh-2)}
+.ico{background:linear-gradient(135deg,var(--mint),color-mix(in srgb,var(--green) 28%,var(--mint)));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--green) 20%,transparent)}
+.anim,.drawing,.dcard,.err{border-radius:22px}
+.note{border:1px solid var(--line);box-shadow:var(--sh-1)}
+.tbl-wrap{box-shadow:var(--sh-1);border-radius:18px}
+th{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+/* passos */
+.step-n{background:linear-gradient(135deg,#4DC262,var(--green-strong));box-shadow:0 12px 26px -12px var(--green)}
+.step.test .step-n{background:var(--surface);box-shadow:none}
+.desafio .step-n{background:linear-gradient(135deg,#E5484D,var(--red))}
+.step::before{background:linear-gradient(var(--green),transparent);opacity:.5}
+/* botões e menu */
+.btn{background:linear-gradient(135deg,#3DB04F,var(--green-strong));box-shadow:0 10px 22px -12px var(--green-strong);transition:transform .2s,box-shadow .2s,filter .2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 14px 26px -12px var(--green-strong)}
+.desafio .btn{background:linear-gradient(135deg,#E5484D,var(--red));box-shadow:0 10px 22px -12px var(--red)}
+.topbar{box-shadow:0 8px 30px -22px rgba(15,36,23,.5)}
+/* terminal */
+.code{border-radius:18px;box-shadow:0 24px 48px -26px rgba(0,0,0,.7)}
+.code-top{padding:11px 14px}
+/* banner do desafio */
+.ch-banner{border-radius:28px;box-shadow:0 30px 60px -36px var(--red)}
+/* quiz */
+.quiz{border-radius:28px;box-shadow:var(--sh-2)}
+/* rodapé */
+footer{background:var(--surface);border-top:1px solid var(--line)}
+@media (max-width:600px){section.sec{padding-block:56px}.hero .wrap{padding-block:44px 40px}.hero-net{padding:12px;border-radius:22px}}
 </style>
 </head>
 <body>
