@@ -1169,6 +1169,14 @@ html,body{overflow-x:clip}
 
 @media (max-width:480px){.anat{grid-template-columns:1fr;gap:2px}}
 #vantagens .grid3{gap:18px}
+
+/* erros comuns: tudo em vermelho padronizado */
+.errs .err,.errs .err:nth-child(n){--vc:var(--red);background:linear-gradient(180deg,color-mix(in srgb,var(--red) 8%,var(--surface)),var(--surface) 62%);border-color:color-mix(in srgb,var(--red) 28%,var(--line))}
+.errs .err h3 svg{background:var(--red);color:#fff;box-shadow:0 8px 16px -8px var(--red)}
+:root[data-theme="dark"] .errs .err h3 svg{color:#1A0505}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .errs .err h3 svg{color:#1A0505}}
+.errs .err code{color:var(--red);background:color-mix(in srgb,var(--red) 9%,var(--surface))}
+.errs .err:hover{border-color:var(--red);box-shadow:0 26px 40px -26px var(--red)}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
