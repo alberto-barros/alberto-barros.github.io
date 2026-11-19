@@ -1145,6 +1145,20 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 #osi .layer .lt small b,#osi .layer.hl .lt small b{font:700 inherit;font-size:inherit;color:var(--ink)}
 #osi .layer.hl .here{margin-bottom:3px}
 @media (max-width:600px){#osi .layer.hl{grid-template-columns:44px minmax(0,1fr)}#osi .layer.hl .ln{width:44px;height:44px;font-size:1.4rem}}
+
+/* cabeçalho IPv4: todos os quadros brancos, só o texto dos IPs em destaque */
+#osi .pkt .c,#osi .pkt .c.hot,#osi .pkt .c.ip,#osi .pkt .c.ip.src,#osi .pkt .c.ip.dst{background:#fff;border:1px solid var(--line);box-shadow:0 3px 0 var(--line);color:var(--ink)}
+:root[data-theme="dark"] #osi .pkt .c,:root[data-theme="dark"] #osi .pkt .c.hot,:root[data-theme="dark"] #osi .pkt .c.ip{background:var(--surface)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #osi .pkt .c,:root:not([data-theme="light"]) #osi .pkt .c.hot,:root:not([data-theme="light"]) #osi .pkt .c.ip{background:var(--surface)}}
+#osi .pkt .c small{color:var(--muted)}
+#osi .pkt .c.hot small{color:var(--muted)}
+#osi .pkt .c.ip{padding:14px 10px}
+#osi .pkt .c.ip small,#osi .pkt .c.ip i{color:var(--muted);opacity:1}
+#osi .pkt .c.ip b{font-size:1.45rem;font-weight:800;text-shadow:none;letter-spacing:.01em}
+#osi .pkt .c.ip.src b{color:var(--green-strong)}
+#osi .pkt .c.ip.dst b{color:var(--s1)}
+#osi .pkt .c.ip.src small{color:var(--green-strong);font-weight:800}
+#osi .pkt .c.ip.dst small{color:var(--s1);font-weight:800}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1292,7 +1306,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
           </div>
         </div>
         </div>
-        <div class="pkt-leg"><span><i class="lg-src"></i>IP de origem</span><span><i class="lg-dst"></i>IP de destino</span><span><i class="lg-ping"></i>usados pelo ping</span><span><i class="lg-oth"></i>outros campos</span></div>
+        <div class="pkt-leg"><span><i class="lg-src"></i>IP de origem</span><span><i class="lg-dst"></i>IP de destino</span></div>
         <p class="pkt-note">Cada linha tem <b>32 bits</b> e o tamanho de cada campo é proporcional aos seus bits.</p>
         <div class="note" style="margin-top:0"><div class="ico"><svg><use href="#i-bulb"></use></svg></div><p>O switch lê apenas o <b>quadro</b> (MAC). Ele não olha o IP e não bloqueia nada entre classes. Quem decide se a comunicação acontece é o <b>próprio PC</b>, comparando as redes na camada 3.</p></div>
       </div>
