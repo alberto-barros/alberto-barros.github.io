@@ -390,6 +390,48 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 .flow code{font-size:.78rem;overflow-wrap:anywhere}
 @media (max-width:900px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow li::after{display:none}}
 @media (max-width:480px){.flow{grid-template-columns:1fr}.pool-how{padding:16px}}
+/* ---------- cartões 3D do DHCP (DORA + janela IP Configuration) ---------- */
+:root{--gloss:rgba(255,255,255,.75);--slab:rgba(15,36,23,.10)}
+:root[data-theme="dark"]{--gloss:rgba(255,255,255,.07);--slab:rgba(0,0,0,.45)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--gloss:rgba(255,255,255,.07);--slab:rgba(0,0,0,.45)}}
+.dora{perspective:1000px;gap:14px;padding-top:20px}
+.dora li{position:relative;transform-style:preserve-3d;will-change:transform;
+  --rx:0deg;--ry:0deg;--lift:0px;--mx:50%;--my:0%;
+  transform:translateY(var(--lift)) rotateX(var(--rx)) rotateY(var(--ry));
+  background:linear-gradient(165deg,color-mix(in srgb,var(--vc) 8%,var(--surface)) 0%,var(--surface) 55%);
+  border-color:color-mix(in srgb,var(--vc) 22%,var(--line));
+  box-shadow:inset 0 1px 0 var(--gloss),0 5px 0 -1px color-mix(in srgb,var(--vc) 28%,var(--line)),0 6px 0 -1px var(--slab),0 16px 26px -18px var(--vc);
+  transition:transform .45s cubic-bezier(.2,.9,.3,1.25),box-shadow .35s,border-color .3s,background .3s}
+.dora li::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(240px circle at var(--mx) var(--my),color-mix(in srgb,#fff 38%,transparent),transparent 60%);mix-blend-mode:soft-light}
+.dora li:hover::after,.dora li.on::after{opacity:1}
+.dora li > b,.dora li > div{transform:translateZ(22px)}
+.dora li > div{transform:translateZ(12px)}
+.dora li > b{position:relative;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 75%,#fff),var(--vc) 55%,color-mix(in srgb,var(--vc) 80%,#000));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 3px 0 color-mix(in srgb,var(--vc) 60%,#000),0 8px 14px -6px var(--vc);text-shadow:0 1px 0 rgba(0,0,0,.18);
+  transition:transform .4s cubic-bezier(.2,.9,.3,1.4),box-shadow .3s}
+.dora li:hover{--lift:-6px;box-shadow:inset 0 1px 0 var(--gloss),0 8px 0 -1px color-mix(in srgb,var(--vc) 40%,var(--line)),0 9px 0 -1px var(--slab),0 26px 34px -20px var(--vc)}
+.dora li.on{--lift:-10px;--rx:8deg;background:linear-gradient(165deg,color-mix(in srgb,var(--vc) 18%,var(--surface)),color-mix(in srgb,var(--vc) 6%,var(--surface)) 70%);border-color:var(--vc);
+  box-shadow:inset 0 1px 0 var(--gloss),0 10px 0 -1px color-mix(in srgb,var(--vc) 55%,var(--line)),0 11px 0 -1px var(--slab),0 30px 38px -20px var(--vc)}
+.dora li.on > b{transform:translateZ(34px) scale(1.08);animation:doraPop .6s cubic-bezier(.2,.9,.3,1.5)}
+@keyframes doraPop{0%{transform:translateZ(22px) scale(.8) rotate(-12deg)}100%{transform:translateZ(34px) scale(1.08)}}
+.dora li.done > b::after{content:"✓";position:absolute;right:-7px;top:-7px;width:17px;height:17px;border-radius:50%;background:var(--ok);color:#fff;font:800 .62rem/17px var(--f-body);text-align:center;box-shadow:0 0 0 2px var(--surface)}
+
+.dh-panel{perspective:1100px}
+.dh-win{position:relative;transform-style:preserve-3d;will-change:transform;
+  --rx:5deg;--ry:-9deg;--mx:30%;--my:0%;
+  transform:rotateX(var(--rx)) rotateY(var(--ry));
+  border-radius:14px;
+  box-shadow:inset 0 1px 0 var(--gloss),0 2px 0 var(--line),0 4px 0 var(--slab),0 28px 44px -24px rgba(15,36,23,.45),0 10px 18px -12px var(--green);
+  transition:transform .5s cubic-bezier(.2,.9,.3,1.2),box-shadow .35s}
+.dh-win::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(320px circle at var(--mx) var(--my),color-mix(in srgb,#fff 30%,transparent),transparent 55%);mix-blend-mode:soft-light}
+.dh-win-top{position:relative;background:linear-gradient(180deg,color-mix(in srgb,var(--code-bg) 80%,#fff),var(--code-bg) 60%);padding-left:52px}
+.dh-win-top::before{content:"";position:absolute;left:12px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#FF5F57;box-shadow:13px 0 #FEBC2E,26px 0 #28C840}
+.dh-win > *:not(.dh-win-top){transform:translateZ(8px)}
+.dh-win.ok{box-shadow:inset 0 1px 0 var(--gloss),0 2px 0 var(--line),0 4px 0 var(--slab),0 30px 46px -22px var(--ok),0 0 0 2px color-mix(in srgb,var(--ok) 55%,transparent)}
+@media (max-width:900px){.dh-win{--rx:4deg;--ry:0deg}}
+@media (prefers-reduced-motion:reduce){.dora li,.dh-win,.dora li > b{transition:none;animation:none!important}.dora li,.dh-win{transform:none!important}}
 @media (max-width:900px){.dh-body{grid-template-columns:1fr}.dh-panel{border-left:0;border-top:1px solid var(--line)}.dora{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){.dh-pkt span:last-child{flex-basis:100%}.dh-pkt{padding:12px 14px}}
 @media (max-width:480px){.dora{grid-template-columns:1fr;padding:12px}.ports{grid-template-columns:1fr 1fr}.port-card{padding:14px}.port-card b{font-size:1.4rem}}
@@ -1667,7 +1709,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     $('dh-pcname').textContent = 'PC'+(DH.k*2);
     ['dh-ip','dh-mask','dh-gw','dh-dns'].forEach(function(id){ $(id).textContent = '0.0.0.0'; $(id).classList.remove('set'); });
     $('dh-msg').textContent = 'Aguardando…'; $('dh-msg').className = 'dh-msg';
-    document.querySelectorAll('#dora li').forEach(function(li){ li.classList.remove('on','done'); });
+    document.querySelectorAll('#dora li').forEach(function(li){ li.classList.remove('on','done'); }); document.querySelector('.dh-win').classList.remove('ok');
     $('dora-o').textContent = toStr(n.gw)+':67 → 255.255.255.255:68';
     $('dora-a').textContent = toStr(n.gw)+':67 → 255.255.255.255:68';
   }
@@ -1728,7 +1770,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     .then(function(){
       var vals = {'dh-ip':ip,'dh-mask':plan.mask,'dh-gw':gw,'dh-dns':DH.dns};
       Object.keys(vals).forEach(function(id){ $(id).textContent = vals[id]; $(id).classList.add('set'); });
-      $('dh-msg').textContent = 'DHCP request successful.'; $('dh-msg').className = 'dh-msg ok';
+      $('dh-msg').textContent = 'DHCP request successful.'; $('dh-msg').className = 'dh-msg ok'; $('dh-msg').closest('.dh-win').classList.add('ok');
       DH.c.s.textContent = ip; DH.c.s.style.fill = 'var(--green-strong)';
       dhStep(4, 'Pronto: o PC'+(DH.k*2)+' agora tem IP <b>'+ip+'</b>, máscara '+plan.mask+', gateway '+gw+' e DNS '+DH.dns+', sem digitar nada.');
       document.querySelectorAll('#dora li').forEach(function(li){ li.classList.remove('on'); li.classList.add('done'); });
@@ -1837,6 +1879,26 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
     }
     d.innerHTML = h;
   }
+  // ---------- inclinação 3D que segue o mouse (DORA e janela IP Configuration) ----------
+  (function(){
+    if (!window.matchMedia || !matchMedia('(hover:hover) and (pointer:fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    function tilt(el, amp){
+      el.addEventListener('pointermove', function(e){
+        var b = el.getBoundingClientRect(), x = (e.clientX-b.left)/b.width, y = (e.clientY-b.top)/b.height;
+        el.style.setProperty('--ry', ((x-.5)*amp).toFixed(2)+'deg');
+        el.style.setProperty('--rx', ((.5-y)*amp).toFixed(2)+'deg');
+        el.style.setProperty('--mx', (x*100).toFixed(1)+'%');
+        el.style.setProperty('--my', (y*100).toFixed(1)+'%');
+        el.style.transition = 'transform .12s ease-out,box-shadow .35s,border-color .3s,background .3s';
+      });
+      el.addEventListener('pointerleave', function(){
+        ['--rx','--ry','--mx','--my'].forEach(function(p){ el.style.removeProperty(p); });
+        el.style.transition = '';
+      });
+    }
+    document.querySelectorAll('#dora li').forEach(function(li){ tilt(li, 22); });
+    var w = document.querySelector('.dh-win'); if (w) tilt(w, 16);
+  })();
   if (tMQ.addEventListener) tMQ.addEventListener('change', drawTopo); else tMQ.addListener(drawTopo);
 
   // ---------- animação do topo ----------
