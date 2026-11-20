@@ -1850,57 +1850,62 @@ show ipv6 dhcp binding</pre></div>
       <li class="step">
         <div class="step-n">2</div>
         <div class="step-body">
-          <h3>Configure no Packet Tracer <span class="tag">R1 + 2 PCs</span></h3>
-          <p>Ligue o <b>R1</b> a um switch com dois PCs e configure só a sub-rede de Administração. Se der errado, volte ao estado anterior com <code>no ipv6 address</code> na interface.</p>
+          <h3>Configure o R1 para entregar IPv6 em cada sub-rede <span class="tag">2 sub-redes</span></h3>
+          <p>No laboratório anterior o R1 atendia <b>uma</b> sub-rede. Agora ele atende <b>duas</b>: Administração e Laboratório. A regra é simples: <b>cada sub-rede tem a sua própria interface do R1 e o seu próprio pool DHCPv6</b>. O pool só entrega endereços do prefixo da interface em que está ligado.</p>
+          <ul>
+            <li>Monte <b>R1</b>, 2 switches 2960 (<code>SW-ADM</code> e <code>SW-LAB</code>) e 4 PCs: 2 em cada switch.</li>
+            <li><code>Gi0/0</code> do R1 vai para o <code>SW-ADM</code> e <code>Gi0/1</code> do R1 vai para o <code>SW-LAB</code>, com cabo <b>Copper Straight-Through</b>.</li>
+          </ul>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Sub-rede</th><th>Interface do R1</th><th>Pool DHCPv6</th><th>Prefixo entregue</th><th>Gateway</th></tr></thead>
+              <tbody>
+                <tr><td data-label="Sub-rede">Administração (ID 10)</td><td data-label="Interface" class="mono">Gi0/0</td><td data-label="Pool" class="mono">ADMIN</td><td data-label="Prefixo" class="mono">2001:db8:1000:10::/64</td><td data-label="Gateway" class="mono">2001:db8:1000:10::1</td></tr>
+                <tr><td data-label="Sub-rede">Laboratório (ID 20)</td><td data-label="Interface" class="mono">Gi0/1</td><td data-label="Pool" class="mono">LAB</td><td data-label="Prefixo" class="mono">2001:db8:1000:20::/64</td><td data-label="Gateway" class="mono">2001:db8:1000:20::1</td></tr>
+              </tbody>
+            </table>
+          </div>
           <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>R1 · CLI</span><button class="copy" type="button"><svg><use href="#i-copy"></use></svg>Copiar</button></div>
 <pre data-hl>enable
 configure terminal
 ipv6 unicast-routing
+! um pool para cada sub-rede
+ipv6 dhcp pool ADMIN
+ address prefix 2001:db8:1000:10::/64
+ dns-server 2001:4860:4860::8888
+ domain-name admin.aula.local
+exit
+ipv6 dhcp pool LAB
+ address prefix 2001:db8:1000:20::/64
+ dns-server 2001:4860:4860::8888
+ domain-name lab.aula.local
+exit
+! cada interface liga o seu pool
 interface GigabitEthernet0/0
+ description Administracao
  ipv6 address 2001:db8:1000:10::1/64
+ ipv6 nd managed-config-flag
+ ipv6 nd prefix default no-advertise
+ ipv6 dhcp server ADMIN
+ no shutdown
+exit
+interface GigabitEthernet0/1
+ description Laboratorio
+ ipv6 address 2001:db8:1000:20::1/64
+ ipv6 nd managed-config-flag
+ ipv6 nd prefix default no-advertise
+ ipv6 dhcp server LAB
  no shutdown
 end
-show ipv6 interface brief</pre></div>
-          <p>Nos PCs (<b>Desktop › IP Configuration</b>, IPv6 Configuration estático): PC0 com <code>2001:db8:1000:10::10/64</code> e PC1 com <code>2001:db8:1000:10::11/64</code>, ambos com gateway <code>2001:db8:1000:10::1</code>.</p>
-          <div class="tests">
-            <div class="test-row"><div class="test-head"><span class="kind same">Mesma sub-rede</span><b>PC0 › ping 2001:db8:1000:10::11</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>Os dois PCs estão na mesma /64. O primeiro pacote pode dar <i>timed out</i> enquanto o NDP descobre o MAC.</span></p></details></div>
-            <div class="test-row"><div class="test-head"><span class="kind same">Gateway</span><b>PC0 › ping 2001:db8:1000:10::1</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>É a interface do R1 que você configurou.</span></p></details></div>
-          </div>
-        </div>
-      </li>
-    </ol>
-    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Dica:</b> se o ping falhar, confira o prefixo (<code>/64</code>), depois o gateway e por último se digitou o <code>::</code> uma só vez. Um grupo faltando muda a rede inteira.</p></div>
-  </div>
-</section>
-
-<section class="sec" id="erros">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Solução de problemas</span>
-      <h2>Erros comuns</h2>
-    </div>
-    <div class="errs">
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Usar :: duas vezes</h3><p><code>2001::db8::1</code> é ambíguo: não dá para saber quantos grupos zero cada <code>::</code> substitui. Use <code>::</code> só uma vez.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Prefixo diferente de /64 na LAN</h3><p>Redes com SLAAC precisam de <code>/64</code>. Um prefixo como <code>/80</code> numa LAN quebra a autoconfiguração.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Esquecer o ipv6 unicast-routing</h3><p>Sem esse comando o roteador Cisco tem endereço IPv6, mas não encaminha pacotes entre as sub-redes.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Tratar o ID da sub-rede como decimal</h3><p>O ID é hexadecimal: depois de <code>9</code> vem <code>a</code>, e depois de <code>f</code> vem <code>10</code>. A sub-rede <code>:10::</code> é a 17ª, não a 10ª.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Pingar link-local sem a interface</h3><p>No Linux, <code>ping -6 fe80::1</code> falha porque há um fe80::/10 em cada interface. Informe a placa: <code>fe80::1%enp0s3</code>.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>“Ping não responde” no laboratório real</h3><p>O firewall do Windows pode bloquear o ICMPv6. Libere a regra de eco do ICMPv6, pois o NDP também depende dele.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Achar que sem NAT não precisa de firewall</h3><p>Com endereços públicos em todos os hosts, o filtro de tráfego passa a ser ainda mais importante. Mantenha regras no roteador ou no firewall.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Misturar IPv4 e IPv6 no ping</h3><p>No Windows e no Linux o <code>ping</code> escolhe a versão pelo endereço. Para forçar, use <code>ping -4</code> ou <code>ping -6</code>.</p></article>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="entrega">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Quiz: teste seu conhecimento</span>
-    </div>
-    <div class="deliver">
-      <div class="quiz" id="quiz">
-        <div class="qz-bar">
-          <div class="qz-brand"><span class="qz-ico"><svg><use href="#i-bulb"></use></svg></span><div><b>Quiz · IPv6</b><small>10 perguntas · nota de 0 a 10</small></div></div>
+show ipv6 interface brief
+show ipv6 dhcp pool</pre></div>
+          <ul>
+            <li><b>Dois pools, dois prefixos:</b> <code>ADMIN</code> entrega a <code>:10::/64</code> e <code>LAB</code> entrega a <code>:20::/64</code>. O prefixo do pool precisa ser o mesmo da interface onde ele será usado.</li>
+            <li><b>Cada interface tem o seu <code>ipv6 dhcp server</code></b> apontando para o pool da sua sub-rede. É isso que impede o PC do Laboratório de receber um endereço da Administração.</li>
+            <li><b>O gateway é o endereço da interface:</b> <code>::1</code> em cada sub-rede.</li>
+            <li><b>Para uma terceira sub-rede</b> (por exemplo Servidores, ID 30) repita o mesmo molde: novo pool, nova interface com <code>2001:db8:1000:30::1/64</code>, as duas linhas <code>ipv6 nd</code> e <code>ipv6 dhcp server</code>.</li>
+          </ul>
+          <p>Deixe os 4 PCs em <b>Desktop › IP Configuration › IPv6 Configuration › Automatic</b>. Não digite endereço nem gateway.</p>
           <div class="qz-chips"><span class="qz-chip ok"><svg><use href="#i-check"></use></svg><b id="q-ok">0</b></span><span class="qz-chip bad"><svg><use href="#i-x"></use></svg><b id="q-bad">0</b></span></div>
         </div>
         <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
