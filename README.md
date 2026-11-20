@@ -7,3 +7,4 @@ Os conteúdos não expressam a opnião do Instituto Federal de Santa Catarina, o
 As aulas são pensadas e produzidas pelo docente com apoio de Inteligencia Artificial para elaboração de layout e animações.
 Os conteúdos são revisados, editados e validados pelo docente para que as instruções sejam verdadeiras.
 Os conteúdos são públicos, livre de licença, qualquer interessado pode clonar o repositório, modificar e utilizar sem autorização expressa do autor.
+Acesse e aprenda: https://alberto-barros.github.io
