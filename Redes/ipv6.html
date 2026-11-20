@@ -1760,8 +1760,9 @@ show ipv6 dhcp binding</pre></div>
       </div>
       <form class="pform" id="sform" autocomplete="off">
         <div class="field">
-          <label for="sbase">Prefixo recebido (endereço/prefixo)</label>
+          <label for="sbase">Rede (endereço/prefixo)</label>
           <input type="text" id="sbase" value="2001:db8:acad::/48" spellcheck="false">
+          <small>Digite o prefixo recebido do provedor. Ao escolher o novo comprimento, este campo passa a mostrar a primeira sub-rede.</small>
         </div>
         <div class="field">
           <label for="snew">Novo comprimento do prefixo</label>
@@ -2087,9 +2088,14 @@ show ipv6 dhcp pool</pre></div>
   runX();
 
   // ---------- ferramenta 2: sub-redes ----------
-  function runS(){
+  var origBase = $('sbase').value;
+  function firstShown(base, n){
+    var g = groupsOf(base).map(function(x){ return x.toString(16); }), k = Math.ceil(n/16);
+    return (k >= 8 ? g.join(':') : g.slice(0,k).join(':') + '::') + '/' + n;
+  }
+  function runS(updateTop){
     var out = $('sout'), msg = $('smsg');
-    var m = $('sbase').value.trim().split('/');
+    var m = origBase.trim().split('/');
     if (m.length !== 2 || !/^\d{1,3}$/.test(m[1])){ out.innerHTML=''; bad(msg,'Digite o prefixo recebido no formato endereço/prefixo, por exemplo 2001:db8:acad::/48.'); return; }
     var v = parse6(m[0]), p = +m[1], n = parseInt($('snew').value,10), c = parseInt($('scount').value,10);
     if (v === null || p > 128){ out.innerHTML=''; bad(msg,'Prefixo recebido inválido. Confira o endereço e o comprimento (0 a 128).'); return; }
@@ -2111,10 +2117,13 @@ show ipv6 dhcp pool</pre></div>
     h += '</tbody></table></div>';
     if (total > BigInt(shown)) h += '<p style="color:var(--muted);margin-top:8px">Mostrando as primeiras '+shown+' de '+pt(total)+' sub-redes.</p>';
     out.innerHTML = h;
+    if (updateTop === true) $('sbase').value = firstShown(base, n);
   }
-  ['sbase','snew','scount'].forEach(function(id){ $(id).addEventListener('input', runS); });
+  $('sbase').addEventListener('input', function(){ origBase = $('sbase').value; runS(); });
+  $('snew').addEventListener('input', function(){ runS(true); });
+  $('scount').addEventListener('input', function(){ runS(); });
   $('sform').addEventListener('submit', function(e){ e.preventDefault(); runS(); });
-  document.querySelectorAll('#sform .presets button').forEach(function(b){ b.addEventListener('click', function(){ $('snew').value = b.dataset.n; runS(); }); });
+  document.querySelectorAll('#sform .presets button').forEach(function(b){ b.addEventListener('click', function(){ $('snew').value = b.dataset.n; runS(true); }); });
   runS();
 
   // ---------- checklist ----------
