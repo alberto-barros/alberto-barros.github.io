@@ -1761,7 +1761,7 @@ show ipv6 dhcp binding</pre></div>
         <div class="field">
           <label for="sbase">Rede (endereço/prefixo)</label>
           <input type="text" id="sbase" value="2001:db8:acad::/48" spellcheck="false">
-          <small>Digite o prefixo recebido do provedor. Ao escolher o novo comprimento, este campo passa a mostrar a primeira sub-rede.</small>
+          <small>Digite o prefixo recebido do provedor. Ao escolher o novo comprimento (/52, /56…), este campo passa a mostrar o endereço de rede da primeira sub-rede.</small>
         </div>
         <div class="field">
           <label for="snew">Novo comprimento do prefixo</label>
@@ -2088,10 +2088,7 @@ show ipv6 dhcp pool</pre></div>
 
   // ---------- ferramenta 2: sub-redes ----------
   var origBase = $('sbase').value;
-  function firstShown(base, n){
-    var g = groupsOf(base).map(function(x){ return x.toString(16); }), k = Math.ceil(n/16);
-    return (k >= 8 ? g.join(':') : g.slice(0,k).join(':') + '::') + '/' + n;
-  }
+  function firstShown(base, n){ return short(base)+'/'+n; }
   function runS(updateTop){
     var out = $('sout'), msg = $('smsg');
     var m = origBase.trim().split('/');
