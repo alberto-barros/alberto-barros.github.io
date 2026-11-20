@@ -1249,7 +1249,7 @@ footer .accent{margin-top:0}
 /* ===== fundo do topo: aurora suave, sem marcar as bordas de cima e de baixo ===== */
 .hero{position:relative;overflow:hidden;isolation:isolate;border-bottom:0;background:transparent}
 .hero::before,.hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.35) 18%,#000 42%,#000 58%,rgba(0,0,0,.35) 82%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.35) 18%,#000 42%,#000 58%,rgba(0,0,0,.35) 82%,transparent 100%)}
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,transparent 12%,rgba(0,0,0,.3) 30%,#000 50%,#000 60%,rgba(0,0,0,.35) 82%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,transparent 12%,rgba(0,0,0,.3) 30%,#000 50%,#000 60%,rgba(0,0,0,.35) 82%,transparent 100%)}
 .hero::before{
   background:
     radial-gradient(46% 62% at 8% 22%,color-mix(in srgb,var(--green) 24%,transparent),transparent 70%),
@@ -1264,6 +1264,10 @@ footer .accent{margin-top:0}
 @keyframes auroraMove{0%{background-position:0% 0%}50%{background-position:60% 30%}100%{background-position:100% 60%}}
 .hero .wrap{position:relative;z-index:1}
 @media (prefers-reduced-motion:reduce){.hero::before{animation:none}}
+/* topo branco: continua a barra branca até a etiqueta "Aula + Laboratório", sem linha nem sombra */
+.hero{background:linear-gradient(to bottom,var(--surface) 0,color-mix(in srgb,var(--surface) 70%,transparent) 8%,transparent 24%)}
+.topbar{border-bottom-color:transparent;transition:box-shadow .25s,border-color .25s}
+.topbar.scrolled{border-bottom-color:var(--line)}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
