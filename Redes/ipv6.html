@@ -1,36 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
-/* ---- acréscimos: aula IPv6 ---- */
-.cls{min-width:0}
-.cls .range{font-size:clamp(.95rem,1.5vw,1.1rem);overflow-wrap:anywhere;word-break:break-word}
-.cls dd{min-width:0;overflow-wrap:anywhere;word-break:break-word}
-.tests b,.tests span,.tests details p{overflow-wrap:anywhere;min-width:0}
-.test-row{min-width:0}
-.tbl-wrap{overflow-x:auto}
-.tbl-wrap td.mono{overflow-wrap:anywhere}
-.tbl-wrap th{overflow-wrap:anywhere}
-#osi .pkt .c.ip b u.pfx{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
-#osi .pkt .c.ip i{margin-top:6px}
-#osi .pkt .c.ip b{font-size:clamp(.6rem,3.2vw,1.45rem) !important;letter-spacing:0 !important}
-#osi .pkt .c small,#osi .pkt .c i{overflow-wrap:anywhere}
-.def>*,.finder>*,.finder-head>*,.ip-anatomy{min-width:0}
-.anat span,.anat b,.ip-anatomy h3,.finder-head h3,.finder-head p,.sec-head p{overflow-wrap:anywhere}
-@media (max-width:1000px){
-  .tbl-wrap{border:0;background:transparent;overflow:visible;border-radius:0}
-  .tbl-wrap table{display:block;min-width:0}
-  .tbl-wrap thead{display:none}
-  .tbl-wrap tbody{display:grid;gap:10px}
-  .tbl-wrap tr{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
-  .tbl-wrap td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;white-space:normal;text-align:right;border-bottom:1px dashed var(--line);min-width:0;overflow-wrap:anywhere}
-  .tbl-wrap td::before{content:attr(data-label);font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;flex:none}
-  .tbl-wrap tr td:last-child{border-bottom:0}
-}
-.def b,.def p{overflow-wrap:anywhere}
-#escrita .cls dl{grid-template-columns:1fr;gap:2px}
-#escrita .cls dd{text-align:left;margin-bottom:8px}
-#tipos .cls-top b{font-size:1rem;letter-spacing:-.02em}
-#tipos .cls .oct4{font-size:.62rem}
-#tipos .cls .oct4 span{padding:7px 0;overflow:hidden;text-overflow:ellipsis}
-</style></head><body>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>IPv6: conceitos, endereçamento e sub-redes</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1255,6 +1223,42 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 @keyframes monGlow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 6px var(--gc))}}
 @media (max-width:600px){#draw .grp:hover,#draw .grp:focus-visible{transform:scale(1.04)}}
 @media (prefers-reduced-motion:reduce){#draw .grp,#draw .grp .mon{transition:none;animation:none}#draw .grp:hover{transform:none}}
+
+/* ---- acréscimos: aula IPv6 ---- */
+.cls{min-width:0}
+.cls .range{font-size:clamp(.95rem,1.5vw,1.1rem);overflow-wrap:anywhere;word-break:break-word}
+.cls dd{min-width:0;overflow-wrap:anywhere;word-break:break-word}
+.tests b,.tests span,.tests details p{overflow-wrap:anywhere;min-width:0}
+.test-row{min-width:0}
+.tbl-wrap{overflow-x:auto}
+.tbl-wrap td.mono{overflow-wrap:anywhere}
+.tbl-wrap th{overflow-wrap:anywhere}
+#draw{min-width:0}
+.field input[type=text],.field input[type=number]{min-width:0;max-width:100%;box-sizing:border-box}
+@media (max-width:340px){#osi .pkt{overflow-x:auto}}
+@media (max-width:420px){.field input[type=text],.field input[type=number]{font-size:.85rem;padding:9px 10px}#osi .pkt .c.ip small{font-size:.58rem}}
+#osi .pkt .c.ip b u.pfx{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
+#osi .pkt .c.ip i{margin-top:6px}
+#osi .pkt .c.ip b{font-size:clamp(.6rem,3.2vw,1.45rem) !important;letter-spacing:0 !important}
+#osi .pkt .c small,#osi .pkt .c i{overflow-wrap:anywhere}
+.def>*,.finder>*,.finder-head>*,.ip-anatomy{min-width:0}
+.anat span,.anat b,.ip-anatomy h3,.finder-head h3,.finder-head p,.sec-head p{overflow-wrap:anywhere}
+@media (max-width:1000px){
+  .tbl-wrap{border:0;background:transparent;overflow:visible;border-radius:0}
+  .tbl-wrap table{display:block;min-width:0}
+  .tbl-wrap thead{display:none}
+  .tbl-wrap tbody{display:grid;gap:10px}
+  .tbl-wrap tr{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+  .tbl-wrap td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;white-space:normal;text-align:right;border-bottom:1px dashed var(--line);min-width:0;overflow-wrap:anywhere}
+  .tbl-wrap td::before{content:attr(data-label);font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;flex:none}
+  .tbl-wrap tr td:last-child{border-bottom:0}
+}
+.def b,.def p{overflow-wrap:anywhere}
+#escrita .cls dl{grid-template-columns:1fr;gap:2px}
+#escrita .cls dd{text-align:left;margin-bottom:8px}
+#tipos .cls-top b{font-size:1rem;letter-spacing:-.02em}
+#tipos .cls .oct4{font-size:.62rem}
+#tipos .cls .oct4 span{padding:7px 0;overflow:hidden;text-overflow:ellipsis}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
