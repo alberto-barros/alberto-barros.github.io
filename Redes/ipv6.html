@@ -1576,7 +1576,7 @@ show ipv6 interface brief</pre></div>
           <div class="anat"><b>Pool DHCPv6</b><span>LAN-ALUNOS</span></div>
           <div class="anat"><b>Prefixo entregue</b><span>2001:db8:acad:1::/64</span></div>
           <div class="anat"><b>DNS</b><span>2001:4860:4860::8888</span></div>
-          <div class="anat"><b>Clientes</b><span>PC0 e PC1 em modo automático</span></div>
+          <div class="anat"><b>Clientes</b><span>PC0 a PC4 (5 PCs) em modo automático</span></div>
         </div>
       </div>
     </div>
@@ -1588,7 +1588,15 @@ show ipv6 interface brief</pre></div>
           <h3>Monte a topologia</h3>
           <div class="pt-ui"><span>Network Devices</span><span>Routers</span><span>2911</span></div>
           <ul>
-            <li><b>1 roteador</b> renomeado para <code>R1</code>, <b>1 switch 2960</b> (<code>SW1</code>) e <b>2 PCs</b> (PC0 e PC1).</li>
+            <li><b>1 roteador</b> renomeado para <code>R1</code>, <b>1 switch 2960</b> (<code>SW1</code>) e <b>5 PCs</b> (PC0 a PC4): é a <b>rede alunos</b>.</li>
+            <li>Cabo <b>Copper Straight-Through</b> do <code>GigabitEthernet0/0</code> do R1 até a porta <code>GigabitEthernet0/1</code> do SW1.</li>
+            <li>Cabos <b>Copper Straight-Through</b> da porta <code>FastEthernet0</code> de cada PC até o SW1: PC0 em <code>Fa0/1</code>, PC1 em <code>Fa0/2</code>, até PC4 em <code>Fa0/5</code>.</li>
+          </ul>
+          <figure class="drawing">
+            <div class="draw-scroll"><svg id="draw" viewBox="0 0 1000 440" role="img" aria-label="Desenho da topologia: o roteador R1 no topo ligado ao switch SW1, que liga 5 PCs da rede alunos, todos em modo automático"></svg></div>
+            <figcaption>Rede alunos: o R1 entrega o IPv6 por DHCPv6 e os 5 PCs ficam em modo automático. Passe o mouse sobre um grupo.</figcaption>
+          </figure>
+        </li>
             <li>Cabo <b>Copper Straight-Through</b> do <code>GigabitEthernet0/0</code> do R1 até uma porta do SW1.</li>
             <li>Cabos <b>Copper Straight-Through</b> de PC0 e PC1 até o SW1.</li>
           </ul>
@@ -1628,7 +1636,7 @@ show ipv6 interface brief</pre></div>
         <div class="step-body">
           <h3>Deixe os PCs em modo automático</h3>
           <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>IPv6 Configuration</span><span>Automatic</span></div>
-          <p>Faça o mesmo no PC1. Não digite endereço nem gateway: o aluno só escolhe <b>Automatic</b>. Depois abra o <b>Command Prompt</b> e execute <code>ipconfig</code> para ver o endereço recebido.</p>
+          <p>Faça o mesmo nos outros 4 PCs (PC1 a PC4). Não digite endereço nem gateway: o aluno só escolhe <b>Automatic</b>. Depois abra o <b>Command Prompt</b> e execute <code>ipconfig</code> para ver o endereço recebido.</p>
         </div>
       </li>
       <li class="step test">
@@ -1641,7 +1649,7 @@ show ipv6 dhcp binding</pre></div>
           <div class="tests">
             <div class="test-row"><div class="test-head"><span class="kind same">No PC</span><b>ipconfig</b><small>qual endereço IPv6 o PC recebeu?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Endereço dentro de 2001:db8:acad:1::/64. </b>Os 64 primeiros bits são o prefixo da rede; os últimos 64 bits são o identificador que o servidor escolheu.</span></p></details></div>
             <div class="test-row"><div class="test-head"><span class="kind same">No roteador</span><b>show ipv6 dhcp binding</b><small>quem recebeu endereço?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Uma entrada para cada PC. </b>Cada entrada mostra o identificador do cliente e o endereço entregue a ele.</span></p></details></div>
-            <div class="test-row"><div class="test-head"><span class="kind same">Conectividade</span><b>PC0 › ping (endereço do PC1)</b><small>os PCs se enxergam?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>Os dois PCs estão na mesma /64. O primeiro pacote pode dar <i>timed out</i> enquanto o NDP descobre o MAC.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">Conectividade</span><b>PC0 › ping (endereço de outro PC)</b><small>os PCs se enxergam?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>Os PCs estão todos na mesma /64. O primeiro pacote pode dar <i>timed out</i> enquanto o NDP descobre o MAC.</span></p></details></div>
           </div>
         </div>
       </li>
@@ -2083,6 +2091,58 @@ show ipv6 interface brief</pre></div>
   });
   updProg();
 
+
+  // ---------- desenho da topologia (rede alunos) ----------
+  (function(){
+    var d = $('draw'); if (!d) return;
+    var mq = window.matchMedia ? matchMedia('(max-width: 600px)') : null;
+    var PCS = [0,1,2,3,4].map(function(i){ return {name:'PC'+i, port:'Fa0/'+(i+1), ip:'IPv6 automático', m:'via DHCPv6'}; });
+    var CA = 'var(--s1)', CR = 'var(--s2)';
+    function pc(p,x,y,port){
+      return '<g transform="translate('+x+','+y+')"><rect class="mon" x="-30" y="-26" width="60" height="40" rx="5" style="stroke:'+CA+'"/><rect x="-24" y="-20" width="48" height="28" rx="2" style="fill:'+CA+'" opacity=".25"/><rect class="stand" x="-4" y="14" width="8" height="8"/><rect class="stand" x="-14" y="21" width="28" height="4" rx="2"/>'+
+        '<text class="pc-t" y="46">'+p.name+'</text><text class="pc-ip" y="62">'+p.ip+'</text><text class="pc-ip" y="76">'+p.m+'</text>'+(port?'<text class="port" y="-34">'+p.port+'</text>':'')+'</g>';
+    }
+    function routerBox(cx,y,w){
+      return '<rect class="sw-body" x="'+(cx-w/2)+'" y="'+y+'" width="'+w+'" height="44" rx="10"/><rect x="'+(cx-w/2)+'" y="'+y+'" width="'+w+'" height="8" rx="4" style="fill:'+CR+'"/>'+
+        '<text class="sw-t" x="'+(cx-56)+'" y="'+(y+30)+'">R1</text><text class="sw-s" x="'+(cx+34)+'" y="'+(y+30)+'">Roteador 2911</text>';
+    }
+    function draw(){
+      var v = mq && mq.matches, h = '', router, alunos, i;
+      if (!v){
+        d.setAttribute('viewBox','0 0 1000 440');
+        var sx=500, sy=172;
+        router = '<rect x="340" y="8" width="320" height="104" rx="18" style="fill:'+CR+';fill-opacity:.1;stroke:'+CR+'" stroke-opacity=".45"/>'+
+          '<text class="grp-l" x="356" y="30" style="fill:'+CR+'">SERVIDOR DHCPv6</text><text class="grp-n" x="644" y="30" text-anchor="end">pool LAN-ALUNOS</text>'+
+          routerBox(500,50,180)+'<text class="port" x="500" y="106">Gi0/0 · 2001:db8:acad:1::1/64</text>';
+        alunos = '<rect x="20" y="252" width="960" height="180" rx="18" style="fill:'+CA+';fill-opacity:.1;stroke:'+CA+'" stroke-opacity=".45"/>'+
+          '<text class="grp-l" x="36" y="276" style="fill:'+CA+'">REDE ALUNOS</text><text class="grp-n" x="964" y="276" text-anchor="end">2001:db8:acad:1::/64</text>';
+        h += '<path class="cab" style="stroke:var(--green)" d="M500 112 L500 '+(sy-30)+'"/><text class="port" x="490" y="126" style="text-anchor:end">Gi0/0</text><text class="port" x="510" y="138" style="text-anchor:start">Gi0/1</text>';
+        PCS.forEach(function(p,k){ var x=120+k*190, s0=sx-72+k*36; h += '<path class="cab" style="stroke:'+CA+'" d="M'+s0+' '+(sy+24)+' C '+s0+' 250, '+x+' 260, '+x+' 316"/>'; alunos += pc(p,x,342,true); });
+        h += '<g transform="translate('+sx+','+sy+')"><rect class="sw-body" x="-150" y="-30" width="300" height="56" rx="10"/><rect class="sw-top" x="-150" y="-30" width="300" height="10" rx="5"/>';
+        for (i=0;i<5;i++) h += '<rect class="led" x="'+(-79+i*36)+'" y="12" width="14" height="7" rx="2"/>';
+        h += '<text class="sw-t" y="-1" x="-96">SW1</text><text class="sw-s" y="-1" x="96">Switch 2960</text></g>';
+      } else {
+        d.setAttribute('viewBox','0 0 360 560');
+        var cx=180, sy2=140;
+        router = '<rect x="6" y="6" width="348" height="104" rx="18" style="fill:'+CR+';fill-opacity:.1;stroke:'+CR+'" stroke-opacity=".45"/>'+
+          '<text class="grp-l" x="18" y="28" style="fill:'+CR+'">SERVIDOR DHCPv6</text><text class="grp-n" x="342" y="28" text-anchor="end">pool LAN-ALUNOS</text>'+
+          routerBox(180,44,180)+'<text class="port" x="180" y="102">Gi0/0 · 2001:db8:acad:1::1/64</text>';
+        alunos = '<rect x="6" y="216" width="348" height="336" rx="18" style="fill:'+CA+';fill-opacity:.1;stroke:'+CA+'" stroke-opacity=".45"/>'+
+          '<text class="grp-l" x="18" y="240" style="fill:'+CA+'">REDE ALUNOS</text><text class="grp-n" x="342" y="240" text-anchor="end">2001:db8:acad:1::/64</text>';
+        h += '<path class="cab" style="stroke:var(--green)" d="M180 110 L180 '+(sy2-30)+'"/>';
+        var pos=[[50,300],[180,300],[310,300],[115,440],[245,440]], ord=[0,2,4,1,3];
+        PCS.forEach(function(p,k){ var x=pos[k][0], y=pos[k][1], s0=cx-72+ord[k]*36; h += '<path class="cab" style="stroke:'+CA+'" d="M'+s0+' '+(sy2+24)+' C '+s0+' 200, '+x+' '+(y-70)+', '+x+' '+(y-26)+'"/>'; alunos += pc(p,x,y,false); });
+        h += '<g transform="translate('+cx+','+sy2+')"><rect class="sw-body" x="-130" y="-30" width="260" height="56" rx="10"/><rect class="sw-top" x="-130" y="-30" width="260" height="10" rx="5"/>';
+        for (i=0;i<5;i++) h += '<rect class="led" x="'+(-79+i*36)+'" y="12" width="14" height="7" rx="2"/>';
+        h += '<text class="sw-t" y="-1" x="-82">SW1</text><text class="sw-s" y="-1" x="68">Switch 2960</text></g>';
+      }
+      h += '<g class="grp" tabindex="0" style="--gc:'+CR+'" aria-label="Servidor DHCPv6 R1">'+router+'</g>';
+      h += '<g class="grp" tabindex="0" style="--gc:'+CA+'" aria-label="Rede alunos, 5 PCs">'+alunos+'</g>';
+      d.innerHTML = h;
+    }
+    draw();
+    if (mq){ if (mq.addEventListener) mq.addEventListener('change', draw); else if (mq.addListener) mq.addListener(draw); }
+  })();
   // ---------- menu de tópicos ----------
   (function(){
     var btn = $('tb-topics'), menu = $('tmenu');
