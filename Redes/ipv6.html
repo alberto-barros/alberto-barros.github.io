@@ -1847,20 +1847,8 @@ show ipv6 dhcp binding</pre></div>
           </div>
         </div>
       </li>
-      <li class="step test">
-        <div class="step-n">2</div>
-        <div class="step-body">
-          <h3>Responda <span class="tag">Observe</span></h3>
-          <div class="tests">
-            <div class="test-row"><div class="test-head"><span class="kind cross">Pergunta 1</span><b>Quantas sub-redes /64 cabem no /48?</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">65.536. </b>São 16 bits de sub-rede: 2<sup>16</sup>.</span></p></details></div>
-            <div class="test-row"><div class="test-head"><span class="kind cross">Pergunta 2</span><b>O ID “30” é maior ou menor que “1f”?</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Maior. </b>Em hexadecimal, 30 = 48 em decimal e 1f = 31. O ID é hexadecimal, não decimal.</span></p></details></div>
-            <div class="test-row"><div class="test-head"><span class="kind cross">Pergunta 3</span><b>Escreva a forma completa de 2001:db8:1000:10::1</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">2001:0db8:1000:0010:0000:0000:0000:0001</b></span></p></details></div>
-            <div class="test-row"><div class="test-head"><span class="kind cross">Pergunta 4</span><b>Por que o Wi-Fi de visitantes ganhou uma sub-rede própria?</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Para isolar. </b>Com sub-rede própria, o roteador (ou firewall) pode aplicar regras separadas ao tráfego dos visitantes.</span></p></details></div>
-          </div>
-        </div>
-      </li>
       <li class="step">
-        <div class="step-n">3</div>
+        <div class="step-n">2</div>
         <div class="step-body">
           <h3>Configure no Packet Tracer <span class="tag">R1 + 2 PCs</span></h3>
           <p>Ligue o <b>R1</b> a um switch com dois PCs e configure só a sub-rede de Administração. Se der errado, volte ao estado anterior com <code>no ipv6 address</code> na interface.</p>
