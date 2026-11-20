@@ -1300,7 +1300,7 @@ footer .accent{margin-top:0}
       </div>
     </div>
     <figure class="hero-net">
-      <svg id="hero-svg" viewBox="0 0 400 330" role="img" aria-label="Animação: 6 PCs de classes A, B e C ligados ao switch SW1. Pings trocados entre os PCs da mesma classe."></svg>
+      <svg id="hero-svg" viewBox="0 -18 400 356" role="img" aria-label="Animação: 6 PCs de classes A, B e C ligados ao switch SW1. Pings trocados entre os PCs da mesma classe."></svg>
       <figcaption class="hn-leg"><span><i class="ok"></i>Cada PC conversa com o outro PC da mesma classe</span></figcaption>
     </figure>
   </div>
@@ -2375,12 +2375,12 @@ show mac address-table
   P.forEach(function(p){ p.led=mk('rect',{x:p.port.x-6,y:p.y<SW.y?SW.y-12:SW.y+11,width:12,height:5,rx:1.5,fill:'#8BE39B',opacity:.35}); });
   P.forEach(function(p){
     var g=mk('g',{transform:'translate('+p.x+','+p.y+')'}), c=C[p.k];
-    p.halo=mk('circle',{r:34,fill:'none','stroke-width':2.5,opacity:0,style:'stroke:var(--ok)'},g);
+    p.halo=mk('rect',{x:-31,y:-25,width:62,height:49,rx:10,fill:'none','stroke-width':2.5,opacity:0,style:'stroke:var(--ok)'},g);
     mk('rect',{x:-24,y:-18,width:48,height:32,rx:5,'stroke-width':2.5,style:'fill:var(--surface);stroke:'+c},g);
     mk('rect',{x:-19,y:-13,width:38,height:22,rx:2,opacity:.25,style:'fill:'+c},g);
     mk('text',{x:0,y:4,'text-anchor':'middle','font-size':13,'font-weight':800,'font-family':'Sora, sans-serif',style:'fill:'+c},g,p.k);
     mk('rect',{x:-4,y:14,width:8,height:5,style:'fill:var(--ink)'},g); mk('rect',{x:-12,y:18,width:24,height:4,rx:2,style:'fill:var(--ink)'},g);
-    var ty=p.y<SW.y?-30:36, t2=p.y<SW.y?-44:49;
+    var ty=p.y<SW.y?-37:41, t2=p.y<SW.y?-52:55;
     if(p.y<SW.y){ mk('text',{y:t2,'text-anchor':'middle','font-size':11,'font-weight':800,'font-family':'Sora, sans-serif','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:var(--ink);stroke:var(--bg)'},g,p.n);
       mk('text',{y:ty,'text-anchor':'middle','font-size':9.5,'font-weight':600,'font-family':'JetBrains Mono, monospace','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:'+c+';stroke:var(--bg)'},g,p.ip); }
     else { mk('text',{y:ty,'text-anchor':'middle','font-size':11,'font-weight':800,'font-family':'Sora, sans-serif','paint-order':'stroke','stroke-width':4,'stroke-linejoin':'round',style:'fill:var(--ink);stroke:var(--bg)'},g,p.n);
