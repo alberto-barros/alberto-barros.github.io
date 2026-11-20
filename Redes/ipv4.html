@@ -1280,6 +1280,19 @@ footer .accent{margin-top:0}
 .topnav .solid:hover,.topnav .solid:focus-visible{background:#E5A800;color:#1A1400}
 .topnav .solid svg{stroke:currentColor}
 
+/* ícone do quiz: lâmpada amarela animada ao clicar */
+.qz-ico{background:linear-gradient(145deg,#FFE066,#FFC107 60%,#E5A800);color:#1A1400;cursor:pointer;border:0;padding:0;position:relative;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(0,0,0,.12),0 4px 0 #B88700,0 8px 16px -4px rgba(255,193,7,.6);transition:transform .2s}
+.qz-ico svg{stroke:#1A1400;color:#1A1400;position:relative;z-index:1}
+.qz-ico:hover{transform:translateY(-1px) scale(1.06) rotate(-4deg)}
+.qz-ico:active{transform:translateY(3px);box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 1px 0 #B88700}
+.qz-ico::after{content:"";position:absolute;inset:-4px;border-radius:17px;border:3px solid #FFC107;opacity:0;pointer-events:none}
+.qz-ico.pop{animation:bulbPop .7s cubic-bezier(.3,1.5,.5,1)}
+.qz-ico.pop::after{animation:bulbRing .7s ease-out}
+.qz-ico.pop svg{animation:bulbGlow .7s ease-out}
+@keyframes bulbPop{0%{transform:scale(1) rotate(0)}25%{transform:scale(1.28) rotate(-14deg)}50%{transform:scale(.94) rotate(10deg)}75%{transform:scale(1.1) rotate(-5deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes bulbRing{0%{opacity:.9;transform:scale(.9)}100%{opacity:0;transform:scale(1.9)}}
+@keyframes bulbGlow{0%,100%{filter:none}30%{filter:drop-shadow(0 0 6px #fff) drop-shadow(0 0 12px #FFE066)}}
+@media (prefers-reduced-motion:reduce){.qz-ico.pop,.qz-ico.pop::after,.qz-ico.pop svg{animation:none}}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1902,7 +1915,7 @@ show mac address-table
     <div class="deliver">
       <div class="quiz" id="quiz">
         <div class="qz-bar">
-          <div class="qz-brand"><span class="qz-ico"><svg><use href="#i-bulb"></use></svg></span><div><b>Quiz · IPv4 e classes</b><small>10 perguntas · nota de 0 a 10</small></div></div>
+          <div class="qz-brand"><span class="qz-ico" role="button" tabindex="0" aria-label="Acender a lâmpada"><svg><use href="#i-bulb"></use></svg></span><div><b>Quiz · IPv4 e classes</b><small>10 perguntas · nota de 0 a 10</small></div></div>
           <div class="qz-chips"><span class="qz-chip ok"><svg><use href="#i-check"></use></svg><b id="q-ok">0</b></span><span class="qz-chip bad"><svg><use href="#i-x"></use></svg><b id="q-bad">0</b></span></div>
         </div>
         <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
@@ -2458,6 +2471,7 @@ show mac address-table
   if(!matchMedia('(prefers-reduced-motion: reduce)').matches){ spawn(); requestAnimationFrame(frame); }
 })();
   (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; function f(){ tb.classList.toggle('scrolled',(window.scrollY||document.documentElement.scrollTop)>24); } f(); window.addEventListener('scroll',f,{passive:true}); })();
+(function(){var b=document.querySelector('.qz-ico');if(!b)return;function go(){b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}b.addEventListener('click',go);b.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});b.addEventListener('animationend',function(e){if(e.target===b)b.classList.remove('pop')})})();
 </script>
 
 </body>
