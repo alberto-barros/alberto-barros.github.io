@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
 /* ---- acréscimos: aula IPv6 ---- */
 .cls{min-width:0}
 .cls .range{font-size:clamp(.95rem,1.5vw,1.1rem);overflow-wrap:anywhere;word-break:break-word}
@@ -1775,7 +1774,7 @@ show ipv6 dhcp binding</pre></div>
             <button type="button" data-n="127">/127</button>
             <button type="button" data-n="128">/128</button>
           </div>
-          <small>Atalhos para o novo comprimento: /56, /60 e /64 para LANs, /127 para link entre roteadores e /128 para um único host.</small>
+          <small>Atalhos: /52, /56, /60 e /64 para LANs. Depois do /64 não há prefixos intermediários: só /127 (link entre roteadores) e /128 (um único host).</small>
         </div>
         <div class="field">
           <label for="scount">Quantas sub-redes listar (1 a 32)</label>
@@ -2100,6 +2099,7 @@ show ipv6 dhcp pool</pre></div>
     var v = parse6(m[0]), p = +m[1], n = parseInt($('snew').value,10), c = parseInt($('scount').value,10);
     if (v === null || p > 128){ out.innerHTML=''; bad(msg,'Prefixo recebido inválido. Confira o endereço e o comprimento (0 a 128).'); return; }
     if (isNaN(n) || n < p || n > 128){ out.innerHTML=''; bad(msg,'O novo comprimento deve estar entre '+p+' (o prefixo recebido) e 128.'); return; }
+    if (n > 64 && n < 127){ out.innerHTML=''; bad(msg,'Não existem prefixos de sub-rede entre /65 e /126 em uso: depois do /64 só se usa /127 (link entre roteadores) e /128 (um único host).'); return; }
     if (isNaN(c) || c < 1) c = 1; if (c > 32) c = 32;
     msg.innerHTML = '';
     var base = v & maskOf(p), b = n - p, total = ONE << BigInt(b), step = ONE << BigInt(128-n);
