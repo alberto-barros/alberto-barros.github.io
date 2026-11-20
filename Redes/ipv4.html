@@ -1270,10 +1270,11 @@ footer .accent{margin-top:0}
 .topbar.scrolled{border-bottom-color:var(--line)}
 /* checklist com borda verde */
 #checklist-sec .dcard{border:2px solid var(--green);box-shadow:0 1px 0 #fff inset,0 22px 40px -28px color-mix(in srgb,var(--green) 60%,transparent)}
-/* menu Tópicos: só o Desafio fica com fundo vermelho e letra branca */
-#tmenu a.nav-ch{background:var(--red)!important;color:#fff!important}
-#tmenu a.nav-ch b{color:#fff!important;opacity:.9}
-#tmenu a.nav-ch:hover,#tmenu a.nav-ch:focus-visible{background:#A51318!important;color:#fff!important}
+/* menu Tópicos: só o Desafio fica vermelho (fundo) com letra branca, e só ao passar o mouse */
+#tmenu a.nav-ch{background:transparent!important;color:var(--ink)!important}
+#tmenu a.nav-ch b{color:var(--green-strong)!important;opacity:1}
+#tmenu a.nav-ch:hover,#tmenu a.nav-ch:focus-visible{background:var(--red)!important;color:#fff!important}
+#tmenu a.nav-ch:hover b,#tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.9}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
