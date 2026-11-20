@@ -1746,24 +1746,6 @@ show ipv6 dhcp binding</pre></div>
       <li class="step">
         <div class="step-n">3</div>
         <div class="step-body">
-          <h3>Se o prefixo não for múltiplo de 16, calcule o salto</h3>
-          <p>Quando o prefixo termina no meio de um grupo (por exemplo <code>/52</code>), cada sub-rede ocupa um bloco de <code>2<sup>(64 − prefixo)</sup></code> sub-redes /64. No 4º grupo, esse é o tamanho do <b>salto</b> entre uma sub-rede e a seguinte.</p>
-          <div class="tbl-wrap">
-            <table>
-              <thead><tr><th>Novo prefixo (a partir de /48)</th><th>Salto no 4º grupo</th><th>Primeiras sub-redes</th></tr></thead>
-              <tbody>
-                <tr><td data-label="Novo prefixo" class="mono">/52</td><td data-label="Salto" class="mono">1000</td><td data-label="Primeiras sub-redes" class="mono">…acad::/52 · …acad:1000::/52 · …acad:2000::/52</td></tr>
-                <tr><td data-label="Novo prefixo" class="mono">/56</td><td data-label="Salto" class="mono">0100</td><td data-label="Primeiras sub-redes" class="mono">…acad::/56 · …acad:100::/56 · …acad:200::/56</td></tr>
-                <tr><td data-label="Novo prefixo" class="mono">/60</td><td data-label="Salto" class="mono">0010</td><td data-label="Primeiras sub-redes" class="mono">…acad::/60 · …acad:10::/60 · …acad:20::/60</td></tr>
-                <tr><td data-label="Novo prefixo" class="mono">/64</td><td data-label="Salto" class="mono">0001</td><td data-label="Primeiras sub-redes" class="mono">…acad::/64 · …acad:1::/64 · …acad:2::/64</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </li>
-      <li class="step">
-        <div class="step-n">4</div>
-        <div class="step-body">
           <h3>Atribua os endereços de host</h3>
           <p>Dentro de cada <code>/64</code> o primeiro endereço (<code>::1</code>) costuma ser o gateway. Hosts recebem o resto por SLAAC, DHCPv6 ou de forma manual. Não há endereço de broadcast para reservar, e é comum usar <code>/127</code> nos links ponto a ponto entre roteadores.</p>
         </div>
