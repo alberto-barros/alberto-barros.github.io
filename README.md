@@ -5,5 +5,5 @@ Nenhum dado sensível e de usuário é coletado ou informado, estando totalmente
 Dados de usuários utilizados nos materiais são fictícios e servem somente para fins didáticos não representando a realidade.
 Os conteúdos não expressam a opnião do Instituto Federal de Santa Catarina, o Docente é total responsável pelos materiais publicados.
 As aulas são pensadas e produzidas pelo docente com apoio de Inteligencia Artificial para elaboração de layout e animações.
-Os conteúdos revisados, editados e validados pelo docente para que as instruções sejam verdadeiras.
+Os conteúdos são revisados, editados e validados pelo docente para que as instruções sejam verdadeiras.
 Os conteúdos são públicos, livre de licença, qualquer interessado pode clonar o repositório, modificar e utilizar sem autorização expressa do autor.
