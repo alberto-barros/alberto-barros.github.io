@@ -1884,6 +1884,12 @@ show ipv6 dhcp binding</pre></div>
 <pre data-hl>enable
 configure terminal
 ipv6 unicast-routing
+! remova a configuração antiga da rede alunos (Gi0/0)
+interface GigabitEthernet0/0
+ no ipv6 address 2001:db8:acad:1::1/64
+ no ipv6 dhcp server LAN-ALUNOS
+exit
+no ipv6 dhcp pool LAN-ALUNOS
 ! um pool para cada sub-rede
 ipv6 dhcp pool ADMIN
  address prefix 2001:db8:1000:10::/64
@@ -1915,6 +1921,7 @@ end
 show ipv6 interface brief
 show ipv6 dhcp pool</pre></div>
           <ul>
+            <li><b>Primeiro apague a configuração antiga.</b> O R1 do laboratório anterior ainda tem o endereço <code>2001:db8:acad:1::1/64</code> e o <code>ipv6 dhcp server LAN-ALUNOS</code> na <code>Gi0/0</code>. Uma interface pode ter vários endereços IPv6, então o antigo não some sozinho: se ele ficar, a rede da Administração terá dois prefixos. Remova o endereço, o servidor e o pool <code>LAN-ALUNOS</code> antes de configurar os novos.</li>
             <li><b>Dois pools, dois prefixos:</b> <code>ADMIN</code> entrega a <code>:10::/64</code> e <code>LAB</code> entrega a <code>:20::/64</code>. O prefixo do pool precisa ser o mesmo da interface onde ele será usado.</li>
             <li><b>Cada interface tem o seu <code>ipv6 dhcp server</code></b> apontando para o pool da sua sub-rede. É isso que impede o PC do Laboratório de receber um endereço da Administração.</li>
             <li><b>O gateway é o endereço da interface:</b> <code>::1</code> em cada sub-rede.</li>
