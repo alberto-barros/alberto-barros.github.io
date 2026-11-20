@@ -1766,16 +1766,20 @@ show ipv6 dhcp binding</pre></div>
         <div class="field">
           <label for="snew">Novo comprimento do prefixo</label>
           <input type="number" id="snew" value="64" min="1" max="128" inputmode="numeric">
+          <div class="presets" aria-label="Novo comprimento do prefixo mais usado">
+            <button type="button" data-n="52">/52</button>
+            <button type="button" data-n="56">/56</button>
+            <button type="button" data-n="60">/60</button>
+            <button type="button" data-n="64">/64</button>
+            <button type="button" data-n="127">/127</button>
+            <button type="button" data-n="128">/128</button>
+          </div>
+          <small>Atalhos para o novo comprimento: /56, /60 e /64 para LANs, /127 para link entre roteadores e /128 para um único host.</small>
         </div>
         <div class="field">
           <label for="scount">Quantas sub-redes listar (1 a 32)</label>
           <input type="number" id="scount" value="8" min="1" max="32" inputmode="numeric">
-          <div class="presets" aria-label="Exemplos">
-            <button type="button" data-b="2001:db8:acad::/48" data-n="64">/48 → /64</button>
-            <button type="button" data-b="2001:db8:acad::/48" data-n="52">/48 → /52</button>
-            <button type="button" data-b="2001:db8:1000::/56" data-n="64">/56 → /64</button>
-            <button type="button" data-b="2001:db8::/32" data-n="48">/32 → /48</button>
-          </div>
+          
         </div>
         <div id="smsg"></div>
       </form>
@@ -2110,7 +2114,7 @@ show ipv6 dhcp pool</pre></div>
   }
   ['sbase','snew','scount'].forEach(function(id){ $(id).addEventListener('input', runS); });
   $('sform').addEventListener('submit', function(e){ e.preventDefault(); runS(); });
-  document.querySelectorAll('#sform .presets button').forEach(function(b){ b.addEventListener('click', function(){ $('sbase').value = b.dataset.b; $('snew').value = b.dataset.n; runS(); }); });
+  document.querySelectorAll('#sform .presets button').forEach(function(b){ b.addEventListener('click', function(){ $('snew').value = b.dataset.n; runS(); }); });
   runS();
 
   // ---------- checklist ----------
