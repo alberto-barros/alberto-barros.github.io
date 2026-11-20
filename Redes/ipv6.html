@@ -8,6 +8,8 @@
 .tbl-wrap{overflow-x:auto}
 .tbl-wrap td.mono{overflow-wrap:anywhere}
 .tbl-wrap th{overflow-wrap:anywhere}
+#osi .pkt .c.ip b u.pfx{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
+#osi .pkt .c.ip i{margin-top:6px}
 #osi .pkt .c.ip b{font-size:clamp(.6rem,3.2vw,1.45rem) !important;letter-spacing:0 !important}
 #osi .pkt .c small,#osi .pkt .c i{overflow-wrap:anywhere}
 .def>*,.finder>*,.finder-head>*,.ip-anatomy{min-width:0}
@@ -1416,13 +1418,13 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
             <div class="c" style="--w:4"><small>Tamanho dos dados</small><b>64 bytes</b><i>16 bits</i></div>
             <div class="c hot" style="--w:2"><small>Próx. cabeçalho</small><b>58 = ICMPv6</b><i>8 bits</i></div>
             <div class="c hot" style="--w:2"><small>Limite de saltos</small><b>64</b><i>8 bits</i></div>
-            <div class="c ip src" style="--w:8"><small>IPv6 de origem · 128 bits</small><b>2001:0db8:acad:0001:0000:0000:0000:0010</b><i>8 grupos de 16 bits</i></div>
-            <div class="c ip dst" style="--w:8"><small>IPv6 de destino · 128 bits</small><b>2001:0db8:acad:0001:0000:0000:0000:0011</b><i>8 grupos de 16 bits</i></div>
+            <div class="c ip src" style="--w:8"><small>IPv6 de origem · 128 bits</small><b><u class="pfx">2001:0db8:acad:0001</u>:0000:0000:0000:0010</b><i>8 grupos de 16 bits</i></div>
+            <div class="c ip dst" style="--w:8"><small>IPv6 de destino · 128 bits</small><b><u class="pfx">2001:0db8:acad:0001</u>:0000:0000:0000:0011</b><i>8 grupos de 16 bits</i></div>
           </div>
           </div>
         </div>
       </div>
-      <div class="pkt-leg"><span><i class="lg-src"></i>IPv6 de origem</span><span><i class="lg-dst"></i>IPv6 de destino</span></div>
+      <div class="pkt-leg"><span><i class="lg-src"></i>IPv6 de origem</span><span><i class="lg-dst"></i>IPv6 de destino</span><span><u style="text-decoration-thickness:3px;text-underline-offset:4px">2001:0db8:acad:0001</u>&nbsp;prefixo de rede (/64)</span></div>
       <p class="pkt-note">Os campos de controle usam <b>32 bits por linha</b>. Cada endereço IPv6 tem <b>128 bits</b> e foi desenhado em uma linha só.</p>
     </div>
     <div class="errs" style="margin-top:20px">
