@@ -6,6 +6,21 @@
 .cls dd{min-width:0;overflow-wrap:anywhere;word-break:break-word}
 .tests b,.tests span,.tests details p{overflow-wrap:anywhere;min-width:0}
 .test-row{min-width:0}
+.tbl-wrap{overflow-x:auto}
+.tbl-wrap td.mono{overflow-wrap:anywhere}
+.tbl-wrap th{overflow-wrap:anywhere}
+.def>*,.finder>*,.finder-head>*,.ip-anatomy{min-width:0}
+.anat span,.anat b,.ip-anatomy h3,.finder-head h3,.finder-head p,.sec-head p{overflow-wrap:anywhere}
+@media (max-width:1000px){
+  .tbl-wrap{border:0;background:transparent;overflow:visible;border-radius:0}
+  .tbl-wrap table{display:block;min-width:0}
+  .tbl-wrap thead{display:none}
+  .tbl-wrap tbody{display:grid;gap:10px}
+  .tbl-wrap tr{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 14px}
+  .tbl-wrap td{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;white-space:normal;text-align:right;border-bottom:1px dashed var(--line);min-width:0;overflow-wrap:anywhere}
+  .tbl-wrap td::before{content:attr(data-label);font:700 .7rem var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;flex:none}
+  .tbl-wrap tr td:last-child{border-bottom:0}
+}
 .def b,.def p{overflow-wrap:anywhere}
 #escrita .cls dl{grid-template-columns:1fr;gap:2px}
 #escrita .cls dd{text-align:left;margin-bottom:8px}
