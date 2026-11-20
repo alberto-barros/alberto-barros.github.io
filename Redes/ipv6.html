@@ -9,6 +9,8 @@
 .tbl-wrap{overflow-x:auto}
 .tbl-wrap td.mono{overflow-wrap:anywhere}
 .tbl-wrap th{overflow-wrap:anywhere}
+#osi .pkt .c.ip b{font-size:clamp(.6rem,3.2vw,1.45rem) !important;letter-spacing:0 !important}
+#osi .pkt .c small,#osi .pkt .c i{overflow-wrap:anywhere}
 .def>*,.finder>*,.finder-head>*,.ip-anatomy{min-width:0}
 .anat span,.anat b,.ip-anatomy h3,.finder-head h3,.finder-head p,.sec-head p{overflow-wrap:anywhere}
 @media (max-width:1000px){
@@ -1415,15 +1417,14 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
             <div class="c" style="--w:4"><small>Tamanho dos dados</small><b>64 bytes</b><i>16 bits</i></div>
             <div class="c hot" style="--w:2"><small>Próx. cabeçalho</small><b>58 = ICMPv6</b><i>8 bits</i></div>
             <div class="c hot" style="--w:2"><small>Limite de saltos</small><b>64</b><i>8 bits</i></div>
-            <div class="c ip src" style="--w:8"><small>IPv6 de origem · bits 0 a 31</small><b>2001:0db8:acad:0001</b><i>128 bits no total</i></div>
-            <div class="c ip src" style="--w:8"><small>IPv6 de origem · bits 32 a 127</small><b>0000:0000:0000:0010</b><i>continuação</i></div>
-            <div class="c ip dst" style="--w:8"><small>IPv6 de destino · bits 0 a 31</small><b>2001:0db8:acad:0001</b><i>128 bits no total</i></div>
-            <div class="c ip dst" style="--w:8"><small>IPv6 de destino · bits 32 a 127</small><b>0000:0000:0000:0011</b><i>continuação</i></div>
+            <div class="c ip src" style="--w:8"><small>IPv6 de origem · 128 bits</small><b>2001:0db8:acad:0001:0000:0000:0000:0010</b><i>8 grupos de 16 bits</i></div>
+            <div class="c ip dst" style="--w:8"><small>IPv6 de destino · 128 bits</small><b>2001:0db8:acad:0001:0000:0000:0000:0011</b><i>8 grupos de 16 bits</i></div>
+          </div>
           </div>
         </div>
       </div>
       <div class="pkt-leg"><span><i class="lg-src"></i>IPv6 de origem</span><span><i class="lg-dst"></i>IPv6 de destino</span></div>
-      <p class="pkt-note">Cada linha tem <b>32 bits</b>. Nos campos de endereço, as duas linhas de cada endereço mostram os 128 bits em partes (para caber na grade).</p>
+      <p class="pkt-note">Os campos de controle usam <b>32 bits por linha</b>. Cada endereço IPv6 tem <b>128 bits</b> e foi desenhado em uma linha só.</p>
     </div>
     <div class="errs" style="margin-top:20px">
       <article class="err"><h3><svg><use href="#i-bulb"></use></svg>Hop Limit no lugar do TTL</h3><p>O campo de limite de saltos faz o papel do TTL do IPv4: cada roteador subtrai 1 e descarta o pacote quando chega a zero.</p></article>
