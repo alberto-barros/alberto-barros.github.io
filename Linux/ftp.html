@@ -1300,21 +1300,19 @@ html,body{overflow-x:clip}
 .link{display:grid;gap:8px;justify-items:center;text-align:center}
 .link > b{font:700 .95rem var(--f-mono);color:var(--green-strong)}
 .track{position:relative;width:100%;height:46px}
-.track .wire{position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;border-radius:4px;background:repeating-linear-gradient(90deg,var(--green) 0 10px,transparent 10px 16px);background-size:16px 4px;animation:wire 1s linear infinite}
+.track .wire{position:absolute;left:0;right:0;top:50%;height:4px;margin-top:-2px;opacity:.85;border-radius:4px;background:repeating-linear-gradient(90deg,var(--green) 0 10px,transparent 10px 16px);background-size:16px 4px;animation:wire 1s linear infinite}
 @keyframes wire{to{background-position:16px 0}}
-.pkt{position:absolute;top:50%;left:0;transform:translate(0,-50%);display:inline-flex;align-items:center;gap:4px;font:700 .68rem var(--f-mono);white-space:nowrap;padding:4px 8px;border-radius:999px;color:#fff;opacity:0;box-shadow:0 6px 14px -6px rgba(0,0,0,.45)}
-.pkt svg{width:12px;height:12px}
-:root[data-theme="dark"] .pkt{color:#08130C}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pkt{color:#08130C}}
-.pkt.p1{background:var(--s2);animation:pr 9s ease-in-out infinite}
-.pkt.p2{background:var(--s1);animation:pl 9s ease-in-out infinite}
-.pkt.p3{background:var(--green);animation:pr 9s ease-in-out infinite 6s}
-.pkt.p1{animation-name:pr1}
-@keyframes pr1{0%{left:0;transform:translate(0,-50%);opacity:0}4%{opacity:1}28%{left:100%;transform:translate(-100%,-50%);opacity:1}32%,100%{left:100%;transform:translate(-100%,-50%);opacity:0}}
-@keyframes pl{0%,33%{left:100%;transform:translate(-100%,-50%);opacity:0}37%{opacity:1}61%{left:0;transform:translate(0,-50%);opacity:1}65%,100%{left:0;transform:translate(0,-50%);opacity:0}}
-@keyframes pr{0%{left:0;transform:translate(0,-50%);opacity:0}4%{opacity:1}28%{left:100%;transform:translate(-100%,-50%);opacity:1}32%,100%{left:100%;transform:translate(-100%,-50%);opacity:0}}
-.pkt.p3{animation-delay:0s;animation-name:pr3}
-@keyframes pr3{0%,66%{left:0;transform:translate(0,-50%);opacity:0}70%{opacity:1}94%{left:100%;transform:translate(-100%,-50%);opacity:1}98%,100%{left:100%;transform:translate(-100%,-50%);opacity:0}}
+.tpk{position:absolute;top:50%;left:0;transform:translate(0,-50%);display:inline-flex;align-items:center;gap:4px;font:700 .68rem var(--f-mono);white-space:nowrap;padding:4px 8px;border-radius:999px;color:#fff;opacity:0;box-shadow:0 6px 14px -6px rgba(0,0,0,.45)}
+.tpk svg{width:12px;height:12px}
+:root[data-theme="dark"] .tpk{color:#08130C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tpk{color:#08130C}}
+.tpk.p1{background:var(--s2);animation:pr1 9s ease-in-out infinite}
+.tpk.p2{background:var(--s1);animation:pl 9s ease-in-out infinite}
+.tpk.p3{background:var(--green);animation:pr3 9s ease-in-out infinite}
+.tpk.d1{animation-delay:.9s}
+@keyframes pr1{0%,2%{left:0;transform:translate(0,-50%);opacity:0}4%{opacity:1}20%{left:100%;transform:translate(-100%,-50%);opacity:1}23%,100%{left:100%;transform:translate(-100%,-50%);opacity:0}}
+@keyframes pl{0%,35%{left:100%;transform:translate(-100%,-50%);opacity:0}37%{opacity:1}53%{left:0;transform:translate(0,-50%);opacity:1}56%,100%{left:0;transform:translate(0,-50%);opacity:0}}
+@keyframes pr3{0%,68%{left:0;transform:translate(0,-50%);opacity:0}70%{opacity:1}86%{left:100%;transform:translate(-100%,-50%);opacity:1}89%,100%{left:100%;transform:translate(-100%,-50%);opacity:0}}
 .phase{display:grid;width:100%;min-height:2.6em}
 .phase span{grid-area:1/1;font-size:.8rem;color:var(--muted);opacity:0;animation:ph 9s infinite}
 .phase span b{display:block;color:var(--ink);font-size:.86rem}
@@ -1330,15 +1328,15 @@ html,body{overflow-x:clip}
   .track{width:120px;height:110px}
   .track .wire{left:50%;right:auto;top:0;bottom:0;width:4px;height:auto;margin:0 0 0 -2px;background:repeating-linear-gradient(180deg,var(--green) 0 10px,transparent 10px 16px);background-size:4px 16px;animation-name:wirev}
   @keyframes wirev{to{background-position:0 16px}}
-  .pkt{left:50%;top:0;transform:translate(-50%,0)}
-  .pkt.p1{animation-name:vd1}.pkt.p2{animation-name:vu}.pkt.p3{animation-name:vd3}
-  @keyframes vd1{0%{top:0;transform:translate(-50%,0);opacity:0}4%{opacity:1}28%{top:100%;transform:translate(-50%,-100%);opacity:1}32%,100%{top:100%;transform:translate(-50%,-100%);opacity:0}}
-  @keyframes vu{0%,33%{top:100%;transform:translate(-50%,-100%);opacity:0}37%{opacity:1}61%{top:0;transform:translate(-50%,0);opacity:1}65%,100%{top:0;transform:translate(-50%,0);opacity:0}}
-  @keyframes vd3{0%,66%{top:0;transform:translate(-50%,0);opacity:0}70%{opacity:1}94%{top:100%;transform:translate(-50%,-100%);opacity:1}98%,100%{top:100%;transform:translate(-50%,-100%);opacity:0}}
+  .tpk{left:50%;top:0;transform:translate(-50%,0)}
+  .tpk.p1{animation-name:vd1}.tpk.p2{animation-name:vu}.tpk.p3{animation-name:vd3}
+  @keyframes vd1{0%,2%{top:0;transform:translate(-50%,0);opacity:0}4%{opacity:1}20%{top:100%;transform:translate(-50%,-100%);opacity:1}23%,100%{top:100%;transform:translate(-50%,-100%);opacity:0}}
+  @keyframes vu{0%,35%{top:100%;transform:translate(-50%,-100%);opacity:0}37%{opacity:1}53%{top:0;transform:translate(-50%,0);opacity:1}56%,100%{top:0;transform:translate(-50%,0);opacity:0}}
+  @keyframes vd3{0%,68%{top:0;transform:translate(-50%,0);opacity:0}70%{opacity:1}86%{top:100%;transform:translate(-50%,-100%);opacity:1}89%,100%{top:100%;transform:translate(-50%,-100%);opacity:0}}
 }
 @media (prefers-reduced-motion:reduce){
-  .track .wire,.pkt,.topo .bx-host,.topo .bx-vm{animation:none}
-  .pkt{display:none}
+  .track .wire,.tpk,.topo .bx-host,.topo .bx-vm{animation:none}
+  .tpk{display:none}
   .phase{gap:6px}
   .phase span{grid-area:auto;opacity:1;animation:none}
 }
@@ -1966,7 +1964,7 @@ Password:
     <h3 class="sub-h">Como vai funcionar nesta aula</h3>
     <div class="topo">
       <div class="box bx-host" style="--vc:var(--s1)"><div class="bh"><svg><use href="#i-pc"/></svg><div><b>Máquina hospedeira</b><span>Cliente FTP</span></div></div><ul><li>FileZilla Client</li><li>Pasta de backup do site</li><li>Arquivo <code>index.html</code> baixado</li></ul></div>
-      <div class="link" aria-label="Animação: login, download do backup e envio da nova página pela porta 21"><b>FTP · porta 21</b><div class="track" aria-hidden="true"><div class="wire"></div><span class="pkt p1"><svg><use href="#i-lock"/></svg>login</span><span class="pkt p2"><svg><use href="#i-down"/></svg>backup</span><span class="pkt p3"><svg><use href="#i-up"/></svg>index.html</span></div><div class="phase"><span class="ph1"><b>1 · Login</b>usuário e senha →</span><span class="ph2"><b>2 · Download</b>← backup do site</span><span class="ph3"><b>3 · Upload</b>nova página →</span></div></div>
+      <div class="link" aria-label="Animação: login, download do backup e envio da nova página pela porta 21"><b>FTP · porta 21</b><div class="track" aria-hidden="true"><div class="wire"></div><span class="tpk p1">ifsc</span><span class="tpk p1 d1">••••••</span><span class="tpk p2">index.html</span><span class="tpk p2 d1">.original</span><span class="tpk p3">index.html</span><span class="tpk p3 d1">nova página</span></div><div class="phase"><span class="ph1"><b>1 · Login</b>usuário e senha →</span><span class="ph2"><b>2 · Download</b>← backup do site</span><span class="ph3"><b>3 · Upload</b>nova página →</span></div></div>
       <div class="box bx-vm" style="--vc:var(--green)"><div class="bh"><svg><use href="#i-mint"/></svg><div><b>VM Linux Mint</b><span>Servidor FTP + servidor web</span></div></div><ul><li>vsftpd (porta 21)</li><li>Apache (porta 80)</li><li>Site em <code>/var/www/html</code></li></ul></div>
     </div>
 
