@@ -805,7 +805,8 @@ th{background:linear-gradient(180deg,var(--surface-2),var(--surface))}
 .btn{background:linear-gradient(135deg,#3DB04F,var(--green-strong));box-shadow:0 10px 22px -12px var(--green-strong);transition:transform .2s,box-shadow .2s,filter .2s}
 .btn:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 14px 26px -12px var(--green-strong)}
 .desafio .btn{background:linear-gradient(135deg,#E5484D,var(--red));box-shadow:0 10px 22px -12px var(--red)}
-.topbar{box-shadow:0 8px 30px -22px rgba(15,36,23,.5)}
+.topbar{box-shadow:none;transition:box-shadow .25s}
+.topbar.scrolled{box-shadow:0 8px 30px -22px rgba(15,36,23,.5)}
 /* terminal */
 .code{border-radius:18px;box-shadow:0 24px 48px -26px rgba(0,0,0,.7)}
 .code-top{padding:11px 14px}
@@ -2440,6 +2441,7 @@ show mac address-table
   }
   if(!matchMedia('(prefers-reduced-motion: reduce)').matches){ spawn(); requestAnimationFrame(frame); }
 })();
+  (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; function f(){ tb.classList.toggle('scrolled',(window.scrollY||document.documentElement.scrollTop)>24); } f(); window.addEventListener('scroll',f,{passive:true}); })();
 </script>
 
 </body>
