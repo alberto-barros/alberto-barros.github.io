@@ -1926,6 +1926,47 @@ show ipv6 dhcp pool</pre></div>
             <li><b>Para uma terceira sub-rede</b> (por exemplo Servidores, ID 30) repita o mesmo molde: novo pool, nova interface com <code>2001:db8:1000:30::1/64</code>, as duas linhas <code>ipv6 nd</code> e <code>ipv6 dhcp server</code>.</li>
           </ul>
           <p>Deixe os 4 PCs em <b>Desktop › IP Configuration › IPv6 Configuration › Automatic</b>. Não digite endereço nem gateway.</p>
+          <div class="tests">
+            <div class="test-row"><div class="test-head"><span class="kind same">PC da Administração</span><b>ipconfig</b><small>qual prefixo ele recebeu?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Endereço dentro de 2001:db8:1000:10::/64.</b></span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">PC do Laboratório</span><b>ipconfig</b><small>qual prefixo ele recebeu?</small></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Endereço dentro de 2001:db8:1000:20::/64.</b> Cada PC recebe o prefixo da sub-rede onde está ligado.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">Entre sub-redes</span><b>PC da Administração › ping (endereço do PC do Laboratório)</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Responde. </b>O pacote passa pelo R1, que conhece as duas sub-redes. O primeiro pacote pode dar <i>timed out</i> enquanto o NDP descobre o MAC.</span></p></details></div>
+            <div class="test-row"><div class="test-head"><span class="kind same">No roteador</span><b>show ipv6 dhcp binding</b></div><details><summary>Ver resultado esperado</summary><p class="r-ok"><svg><use href="#i-check"></use></svg><span style="color:var(--muted)"><b class="r-ok">Quatro entradas, </b>uma para cada PC, com endereços dos dois prefixos.</span></p></details></div>
+          </div>
+        </div>
+      </li>
+    </ol>
+    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Dica:</b> se o ping falhar, confira o prefixo (<code>/64</code>), depois o gateway e por último se digitou o <code>::</code> uma só vez. Um grupo faltando muda a rede inteira.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="erros">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Solução de problemas</span>
+      <h2>Erros comuns</h2>
+    </div>
+    <div class="errs">
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Usar :: duas vezes</h3><p><code>2001::db8::1</code> é ambíguo: não dá para saber quantos grupos zero cada <code>::</code> substitui. Use <code>::</code> só uma vez.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Prefixo diferente de /64 na LAN</h3><p>Redes com SLAAC precisam de <code>/64</code>. Um prefixo como <code>/80</code> numa LAN quebra a autoconfiguração.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Esquecer o ipv6 unicast-routing</h3><p>Sem esse comando o roteador Cisco tem endereço IPv6, mas não encaminha pacotes entre as sub-redes.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Tratar o ID da sub-rede como decimal</h3><p>O ID é hexadecimal: depois de <code>9</code> vem <code>a</code>, e depois de <code>f</code> vem <code>10</code>. A sub-rede <code>:10::</code> é a 17ª, não a 10ª.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Pingar link-local sem a interface</h3><p>No Linux, <code>ping -6 fe80::1</code> falha porque há um fe80::/10 em cada interface. Informe a placa: <code>fe80::1%enp0s3</code>.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>“Ping não responde” no laboratório real</h3><p>O firewall do Windows pode bloquear o ICMPv6. Libere a regra de eco do ICMPv6, pois o NDP também depende dele.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Achar que sem NAT não precisa de firewall</h3><p>Com endereços públicos em todos os hosts, o filtro de tráfego passa a ser ainda mais importante. Mantenha regras no roteador ou no firewall.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"></use></svg>Misturar IPv4 e IPv6 no ping</h3><p>No Windows e no Linux o <code>ping</code> escolhe a versão pelo endereço. Para forçar, use <code>ping -4</code> ou <code>ping -6</code>.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="entrega">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Quiz: teste seu conhecimento</span>
+    </div>
+    <div class="deliver">
+      <div class="quiz" id="quiz">
+        <div class="qz-bar">
+          <div class="qz-brand"><span class="qz-ico"><svg><use href="#i-bulb"></use></svg></span><div><b>Quiz · IPv6</b><small>10 perguntas · nota de 0 a 10</small></div></div>
           <div class="qz-chips"><span class="qz-chip ok"><svg><use href="#i-check"></use></svg><b id="q-ok">0</b></span><span class="qz-chip bad"><svg><use href="#i-x"></use></svg><b id="q-bad">0</b></span></div>
         </div>
         <div class="qz-steps" id="q-steps" aria-hidden="true"></div>
