@@ -875,6 +875,80 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 .port-card{position:relative;overflow:hidden;background:linear-gradient(160deg,color-mix(in srgb,var(--vc) 10%,var(--surface)),var(--surface) 65%);transition:transform .25s,box-shadow .25s}
 .port-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px -24px var(--vc)}
 @media (prefers-reduced-motion:reduce){.ben .ico,.vs-card .ico,.obs .ico,.note .ico,.vs-card .ico svg,.err h3 svg,.err-g::before{animation:none!important}}
+
+/* ===== layout da aula IPv6 ===== */
+.step:not(.test) .step-n{position:relative;background:linear-gradient(160deg,#5FD274 0%,#32A041 42%,#1E7A30 100%);color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -4px 0 rgba(0,50,12,.3),0 5px 0 #145A22,0 14px 22px -8px rgba(30,122,48,.55);text-shadow:0 2px 2px rgba(0,40,10,.45);overflow:hidden}
+.step:not(.test) .step-n::before{content:"";position:absolute;left:5px;right:5px;top:3px;height:45%;border-radius:12px 12px 20px 20px;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0));pointer-events:none}
+.desafio .step:not(.test) .step-n{background:linear-gradient(160deg,#FF6B70 0%,#E5484D 38%,#B3121A 100%);box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -4px 0 rgba(90,0,6,.35),0 5px 0 #8E0D14,0 14px 22px -8px rgba(200,25,30,.55);text-shadow:0 2px 2px rgba(90,0,6,.45);color:#fff}
+.desafio .step.test .step-n{background:var(--surface);color:var(--red);border:2px dashed var(--red);box-shadow:none}
+.step.test .step-n{background:var(--surface);box-shadow:none}
+/* menu Tópicos */
+#tmenu a:not(.nav-ch):hover,#tmenu a:not(.nav-ch):focus-visible{background:#32A041!important;color:#fff!important}
+#tmenu a:not(.nav-ch):hover b,#tmenu a:not(.nav-ch):focus-visible b{color:#fff!important;opacity:.85}
+#tmenu a.nav-ch,#tmenu a.nav-ch b{color:var(--red)}
+#tmenu a.nav-ch:hover,#tmenu a.nav-ch:focus-visible{background:var(--red)!important;color:#fff!important}
+#tmenu a.nav-ch:hover b,#tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.85}
+/* topo branco contínuo e hero */
+.hero{background:linear-gradient(to bottom,var(--surface) 0,color-mix(in srgb,var(--surface) 70%,transparent) 8%,transparent 24%),radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,linear-gradient(135deg,var(--surface-2),var(--bg) 70%)}
+.topbar{box-shadow:none!important;border-bottom-color:transparent;transition:box-shadow .25s,border-color .25s}
+.topbar.scrolled{border-bottom-color:var(--line);box-shadow:0 8px 30px -22px rgba(15,36,23,.5)!important}
+.hero h1{font-size:clamp(2.2rem,5.4vw,3.5rem)}
+.hero-net{margin:0;align-self:center;display:grid;align-content:center}
+.chip{box-shadow:none;cursor:default;transition:transform .2s,background .2s,border-color .2s,color .2s,box-shadow .2s}
+.chip svg{transition:color .2s;animation:icoBob 3.2s ease-in-out infinite}
+.chip:nth-child(2n) svg{animation-delay:-.8s}.chip:nth-child(3n) svg{animation-delay:-1.6s}
+@keyframes icoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.chip:hover,.chip:focus-visible{background:linear-gradient(145deg,#3DB351,var(--green) 55%,#25852F);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 10px 18px -10px var(--green)}
+.chip:hover svg,.chip:focus-visible svg{color:#fff}
+@media (prefers-reduced-motion:reduce){.chip svg{animation:none!important}}
+/* tabelas */
+.tbl-wrap thead th{background:#32A041!important;color:#fff!important;border-bottom-color:#32A041!important}
+.tbl-wrap tbody tr:hover td{background:#32A041!important;color:#fff!important}
+.tbl-wrap tbody tr:hover td *{color:#fff!important}
+.tbl-wrap tbody tr:hover td code{background:rgba(255,255,255,.2)!important}
+.tbl-wrap tbody tr:hover td::before{color:#fff!important;opacity:.85}
+.tbl-wrap tbody tr:hover{background:#32A041}
+#rip .tbl-wrap thead th{background:#C8191E!important;border-bottom-color:#C8191E!important}
+#rip .tbl-wrap tbody tr:hover td,#rip .tbl-wrap tbody tr:hover{background:#C8191E!important}
+/* comparação (protocolos): moldura preta, cabeçalho escuro, hover amarelo */
+#tipos .tbl-wrap{border:2px solid #111;border-radius:16px;box-shadow:0 12px 30px -18px rgba(0,0,0,.3)}
+#tipos .tbl-wrap thead th{background:#1B1F1C!important;color:#C9D3CC!important;border-bottom-color:#1B1F1C!important}
+#tipos .tbl-wrap tbody tr:hover td{background:color-mix(in srgb,#F5C451 60%,var(--surface))!important;color:#000!important}
+#tipos .tbl-wrap tbody tr:hover td *{color:#000!important}
+#tipos .tbl-wrap tbody tr:hover{background:color-mix(in srgb,#F5C451 60%,var(--surface))}
+@media (max-width:640px){#tipos .tbl-wrap{border:0;box-shadow:none}}
+/* dicas e avisos */
+.obs{grid-template-columns:40px minmax(0,1fr)}
+.obs>div{min-width:0}
+.obs strong{color:var(--ink)}
+.obs code{overflow-wrap:anywhere;white-space:normal}
+.observe.one{grid-template-columns:1fr;margin-top:20px!important;margin-bottom:6px}
+.observe.one .obs .ico{background:linear-gradient(135deg,#FFE9A8,#F5C451)!important;color:#7A4B00!important}
+.observe.one:not(.eye) .obs{border-top:4px solid #F5C451;border-radius:20px;background:linear-gradient(180deg,color-mix(in srgb,#F5C451 16%,var(--surface)),var(--surface) 62%);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 16px 32px -26px color-mix(in srgb,#C98204 70%,transparent)}
+.observe.one:not(.eye) .obs:hover{border-color:#F5C451;box-shadow:0 26px 40px -26px color-mix(in srgb,#C98204 80%,transparent)}
+.observe.one:not(.eye) .obs .ico{box-shadow:0 8px 16px -8px #C98204;--ic:#F5C451}
+.observe.one:not(.eye) .obs code{color:#8A5A00!important;background:color-mix(in srgb,#F5C451 20%,var(--surface))!important}
+.observe.one.eye .obs{border-top:4px solid var(--red);border-radius:20px;background:linear-gradient(180deg,color-mix(in srgb,var(--red) 9%,var(--surface)),var(--surface) 62%)}
+.observe.one.eye .obs .ico{background:var(--red)!important;color:#fff!important;box-shadow:0 8px 16px -8px var(--red);--ic:var(--red)}
+/* erros: ícone vermelho sólido */
+.err h3 svg{background:var(--red)!important;color:#fff!important;box-shadow:0 8px 16px -8px var(--red);--ic:var(--red);animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite!important;flex:none}
+.errs .err:nth-child(2n) h3 svg{animation-delay:-1.1s,-.9s!important}
+@media (prefers-reduced-motion:reduce){.err h3 svg{animation:none!important}}
+/* checklist */
+.check label{transition:background .15s}
+.check label:hover{background:#32A041!important}
+.check label:hover,.check label:hover span,.check label:hover input:checked + span{color:#fff!important}
+.check label:hover code{background:rgba(255,255,255,.2)!important;color:#fff!important}
+.check label:hover input{accent-color:#fff}
+#checklist-sec .dcard{border:2px solid #32A041}
+/* rodapé da aula Linux */
+footer{background:var(--surface);border-top:1px solid var(--line);padding-bottom:0}
+footer .wrap{padding-bottom:36px}
+footer .accent{margin-top:0}
+.foot-brand.tb-brand{pointer-events:none}
+.foot-brand.tb-brand .inst span{display:block!important}
+@media (max-width:420px){.foot-brand.tb-brand .inst{display:grid!important}}
+.dh-win-top{}
 </style>
 </head>
 <body>
@@ -931,28 +1005,26 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#beneficios"><b>02</b>Vantagens</a><a href="#tipos"><b>03</b>Estático × dinâmico</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Passo a passo</a><a href="#servidor"><b>06</b>Servidor web</a><a href="#rip" class="tm-ch"><b>07</b>Desafio RIP</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#erros"><b>09</b>Erros comuns</a><a href="#entrega"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#beneficios"><b>02</b>Vantagens</a><a href="#tipos"><b>03</b>Estático × dinâmico</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Passo a passo</a><a href="#servidor"><b>06</b>Servidor web</a><a href="#rip" class="tm-ch nav-ch"><b>07</b>Desafio RIP</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#erros"><b>09</b>Erros comuns</a><a href="#entrega"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
   </div>
 </nav>
 
 <div class="hero">
   <div class="wrap">
     <div>
-      <span class="eyebrow">Laboratório · Cisco Packet Tracer</span>
-      <h1>Laboratório de <em>Roteamento</em></h1>
+      <span class="eyebrow">Aula · Redes de Computadores</span>
+      <h1><em>Roteamento</em> no Packet Tracer</h1>
       <p class="lead">Entenda como um roteador escolhe o caminho de um pacote, ligue 4 roteadores em anel, escreva as tabelas de roteamento à mão com rotas estáticas e publique um site em <code>ifsc.edu.br</code> para acessar de um PC remoto. No desafio, deixe o RIP descobrir os caminhos sozinho.</p>
       <div class="chips">
         <span class="chip"><svg><use href="#i-route"/></svg>4× Roteador 2911</span>
-        <span class="chip"><svg><use href="#i-pc"/></svg>4 PCs · 1 por rede</span>
         <span class="chip"><svg><use href="#i-pin"/></svg>Rotas estáticas</span>
-        <span class="chip"><svg><use href="#i-globe"/></svg>Servidor web + DNS</span>
         <span class="chip chip-ch"><svg><use href="#i-flag"/></svg>Desafio: RIP v2</span>
         <span class="chip"><svg><use href="#i-clock"/></svg>≈ 90 min</span>
       </div>
     </div>
-    <div class="hero-net">
+    <figure class="hero-net">
       <svg id="hero-svg" viewBox="0 0 400 300" role="img" aria-label="Animação: o cabo entre R1 e R2 falha e os pacotes passam a seguir pelo outro lado do anel, por R4 e R3"></svg>
-    </div>
+    </figure>
   </div>
 </div>
 
@@ -1167,10 +1239,8 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
           <h3>Teste 1: antes das rotas <span class="tag">Observe</span></h3>
           <p>Abra <b>Desktop › Command Prompt</b> no PC0 e a aba <b>CLI</b> do R1. Todos os cabos estão ligados e todas as portas têm IP.</p>
           <div class="tests" id="tests1"></div>
-          <div class="observe">
-            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>O que observar</b><span>Quem responde ao ping que falha: o PC de destino ou o seu gateway? O que a mensagem diz?</span></div></div>
-            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>O R1 está a um cabo de distância do R2. Por que ele não sabe chegar à rede do PC1?</span></div></div>
-          </div>
+          <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><span><strong>O que observar:</strong> Quem responde ao ping que falha: o PC de destino ou o seu gateway? O que a mensagem diz?</span></div></div></div>
+          <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><span><strong>Pense nisto:</strong> O R1 está a um cabo de distância do R2. Por que ele não sabe chegar à rede do PC1?</span></div></div></div>
         </div>
       </li>
 
@@ -1199,10 +1269,8 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
           <h3>Teste 2: com rotas estáticas <span class="tag">Observe</span></h3>
           <p>Repita os pings e use o <code>tracert</code> para ver por quais roteadores o pacote passa. O primeiro ping pode perder 1 ou 2 pacotes enquanto o ARP é resolvido em cada salto; isso é normal.</p>
           <div class="tests" id="tests2"></div>
-          <div class="observe">
-            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>O que observar</b><span>Compare o <code>tracert</code> do PC0 para o PC2 com o do PC2 para o PC0. A ida e a volta passam pelos mesmos roteadores?</span></div></div>
-            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>No modo <b>Simulation</b>, filtre por <code>ICMP</code> e acompanhe o envelope. Em que momento cada roteador consulta a tabela?</span></div></div>
-          </div>
+          <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><span><strong>O que observar:</strong> Compare o <code>tracert</code> do PC0 para o PC2 com o do PC2 para o PC0. A ida e a volta passam pelos mesmos roteadores?</span></div></div></div>
+          <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><span><strong>Pense nisto:</strong> No modo <b>Simulation</b>, filtre por <code>ICMP</code> e acompanhe o envelope. Em que momento cada roteador consulta a tabela?</span></div></div></div>
         </div>
       </li>
 
@@ -1330,10 +1398,8 @@ interface gigabitEthernet 0/1
         <div class="web-page"><strong>Cisco Packet Tracer</strong><span>Welcome to Cisco Packet Tracer. Opening doors to new opportunities. Mind Wide Open.</span></div>
 </div>
           <div class="tests" id="tests6"></div>
-          <div class="observe">
-            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>No modo Simulation</b><span>Filtre por <code>DNS</code>, <code>TCP</code> e <code>HTTP</code> e abra a página de novo. Qual envelope sai primeiro do PC0?</span></div></div>
-            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>Desligue de novo a <code>G0/1</code> do R1 e recarregue a página. Ela ainda abre? Religue a porta e guarde a resposta para o desafio.</span></div></div>
-          </div>
+          <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><span><strong>No modo Simulation:</strong> Filtre por <code>DNS</code>, <code>TCP</code> e <code>HTTP</code> e abra a página de novo. Qual envelope sai primeiro do PC0?</span></div></div></div>
+          <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><span><strong>Pense nisto:</strong> Desligue de novo a <code>G0/1</code> do R1 e recarregue a página. Ela ainda abre? Religue a porta e guarde a resposta para o desafio.</span></div></div></div>
         </div>
       </li>
     </ol>
@@ -1447,10 +1513,8 @@ copy running-config startup-config</pre></div>
           <h3>Teste dos caminhos: derrube um enlace e veja o pacote mudar de rota <span class="tag">Observe</span></h3>
           <p>Faça o <code>tracert</code> antes, desligue a porta <code>G0/1</code> do R1 (os mesmos comandos do Teste 3), espere alguns segundos e faça o <code>tracert</code> de novo. Depois religue a porta e repita. Anote os três resultados.</p>
           <div class="tests" id="tests5"></div>
-          <div class="observe">
-            <div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><b>No modo Simulation</b><span>Filtre por <code>ICMP</code> e <code>RIPv2</code>. Envie um ping do PC0 ao PC1 com o enlace ligado e depois com ele desligado, e siga o envelope pelos roteadores.</span></div></div>
-            <div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><b>Pense nisto</b><span>Com o enlace caído, quantos saltos o R1 passa a mostrar para <code>192.168.2.0</code>? Por que esse número mudou?</span></div></div>
-          </div>
+          <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><span><strong>No modo Simulation:</strong> Filtre por <code>ICMP</code> e <code>RIPv2</code>. Envie um ping do PC0 ao PC1 com o enlace ligado e depois com ele desligado, e siga o envelope pelos roteadores.</span></div></div></div>
+          <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><span><strong>Pense nisto:</strong> Com o enlace caído, quantos saltos o R1 passa a mostrar para <code>192.168.2.0</code>? Por que esse número mudou?</span></div></div></div>
           <p>Para ver os anúncios chegando, rode <code>debug ip rip</code> no R1 e aguarde. Para parar, use <code>undebug all</code>.</p>
         </div>
       </li>
@@ -1580,7 +1644,8 @@ copy running-config startup-config</pre></div>
 </main>
 
 <footer>
-  <div class="wrap"><div class="foot-brand"><svg viewBox="0 0 410 555" role="img" aria-label="Logotipo do IFSC"><use href="#ifsc-mark"/></svg><div class="brand-txt"><span class="b1">INSTITUTO FEDERAL</span><span class="b2">Santa Catarina</span></div></div><span>Material didático · Redes de Computadores</span></div>
+  <div class="wrap"><div class="foot-brand tb-brand"><svg class="mark" viewBox="0 0 34 46" aria-hidden="true"><circle cx="5" cy="5" r="5" fill="#C8191E"/><g fill="#32A041"><rect x="12" y="0" width="10" height="10" rx="2"/><rect x="24" y="0" width="10" height="10" rx="2"/><rect x="0" y="12" width="10" height="10" rx="2"/><rect x="12" y="12" width="10" height="10" rx="2"/><rect x="0" y="24" width="10" height="10" rx="2"/><rect x="12" y="24" width="10" height="10" rx="2"/><rect x="24" y="24" width="10" height="10" rx="2"/><rect x="0" y="36" width="10" height="10" rx="2"/><rect x="12" y="36" width="10" height="10" rx="2"/></g></svg><span class="inst"><b>INSTITUTO FEDERAL</b><span>Santa Catarina · Câmpus Garopaba</span></span></div><span>Material didático do professor Alberto Felipe · Redes de Computadores</span></div>
+  <div class="accent" aria-hidden="true"></div>
 </footer>
 
 <script>
@@ -2033,6 +2098,7 @@ copy running-config startup-config</pre></div>
   }
   document.querySelectorAll('.code .copy').forEach(function(b){ b.addEventListener('click', function(){ copyFrom(b, b.closest('.code').querySelector('pre')); }); });
 
+  (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; function f(){ tb.classList.toggle('scrolled',(window.scrollY||document.documentElement.scrollTop)>24); } f(); window.addEventListener('scroll',f,{passive:true}); })();
   // ---------- menu de tópicos ----------
   (function(){
     var btn = $('tb-topics'), menu = $('tmenu');
