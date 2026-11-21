@@ -175,6 +175,11 @@ section{padding-block:72px 16px}
 @keyframes a-type{0%{transform:scaleX(0)}35%,80%{transform:scaleX(1)}100%{transform:scaleX(0)}}
 .a-form .ck{stroke-dasharray:10;animation:a-check 3s ease-in-out infinite}
 @keyframes a-check{0%,45%{stroke-dashoffset:10}65%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:10}}
+.a-dash .b1,.a-dash .b2,.a-dash .b3{transform-box:fill-box;transform-origin:bottom;animation:a-bar 2.6s ease-in-out infinite}
+.a-dash .b2{animation-delay:.25s}.a-dash .b3{animation-delay:.5s}
+@keyframes a-bar{0%{transform:scaleY(.15)}40%,80%{transform:scaleY(1)}100%{transform:scaleY(.15)}}
+.a-dash .tr{stroke-dasharray:24;animation:a-trend 2.6s ease-in-out infinite}
+@keyframes a-trend{0%,25%{stroke-dashoffset:24}60%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:24}}
 .chap:hover .ic svg *{animation-duration:.9s}
 
 footer{margin-top:80px;border-top:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:.86rem}
@@ -350,6 +355,15 @@ footer .fb svg{height:26px;width:auto}
         <h3>Formulários</h3>
         <p>Monte uma pesquisa de infraestrutura do IFSC no Google Formulários, em 9 etapas, e veja como ela aparece para quem responde.</p>
         <div class="tags"><span class="tag">prática</span><span class="tag">Google Formulários</span><span class="tag">pesquisa</span></div>
+        <span class="go">Acessar Aula Prática <span class="gb"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+      </a>
+    </div>
+    <div class="node">
+      <a class="chap reveal" href="https://alberto-barros.github.io/Informatica/dashboard.html">
+        <div class="top"><div class="ic"><svg class="i a-float a-dash" viewBox="0 0 24 24"><path d="M4 20h16"/><rect class="b1" x="5.5" y="12" width="3" height="8" rx="1"/><rect class="b2" x="10.5" y="7" width="3" height="13" rx="1"/><rect class="b3" x="15.5" y="10" width="3" height="10" rx="1"/><path class="tr" d="M5 8.5l5-3.5 4 2.5 5-4.5"/></svg></div><span class="kind">Prática</span><span class="num">02</span></div>
+        <h3>Dashboard</h3>
+        <p>Transforme a planilha de respostas da pesquisa em um dashboard interativo com o Gemini e o Canvas, com os dados anonimizados (LGPD).</p>
+        <div class="tags"><span class="tag">prática</span><span class="tag">Gemini</span><span class="tag">dashboard</span><span class="tag">LGPD</span></div>
         <span class="go">Acessar Aula Prática <span class="gb"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
       </a>
     </div>
