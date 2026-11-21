@@ -799,7 +799,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       <a class="solid" href="#quiz-sec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#dominios"><b>02</b>Domínios</a><a href="#cenas"><b>03</b>Animação em cenas</a><a href="#animacao"><b>04</b>Simulador</a><a href="#enderecos"><b>05</b>Topologia</a><a href="#passos"><b>06</b>Atividade</a><a href="#desafio" class="tm-ch"><b>07</b>Desafio</a><a href="#entrega"><b>08</b>Checklist</a><a href="#erros"><b>09</b>Erros comuns</a><a href="#quiz-sec"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#dominios"><b>02</b>Domínios</a><a href="#cenas"><b>03</b>Animação em cenas</a><a href="#animacao"><b>04</b>Simulador</a><a href="#enderecos"><b>05</b>Topologia</a><a href="#passos"><b>06</b>Atividade</a><a href="#entrega"><b>07</b>Checklist</a><a href="#desafio" class="tm-ch"><b>08</b>Desafio</a><a href="#erros"><b>09</b>Erros comuns</a><a href="#quiz-sec"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1620,6 +1620,41 @@ copy running-config startup-config</pre></div>
   </div>
 </section>
 
+<section class="sec" id="entrega">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Revisão</span>
+      <h2>Checklist da atividade</h2>
+      <p>Cada item corresponde a uma tarefa do passo a passo; o número indica o passo. Marque conforme concluir. O progresso fica salvo neste navegador.</p>
+    </div>
+    <div class="deliver solo">
+      <div class="dcard">
+        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 15</span></div>
+        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
+        <div class="check" id="checklist">
+          <div class="ck-group">Parte 1 · VLANs</div>
+          <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>Topologia com 1 switch 2960 e 8 PCs nas portas Fa0/1 a Fa0/8</span></label>
+          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 2">2</em>PC0 a PC7 com IP, máscara e gateway do plano de endereçamento</span></label>
+          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 4">4</em>VLANs 10 T.I, 20 ADMINISTRATIVO, 30 RH e 40 FINANCEIRO criadas</span></label>
+          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 5">5</em>Portas Fa0/1 a Fa0/8 em modo access na VLAN correta</span></label>
+          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 6">6</em>Portas Fa0/9 a Fa0/24 na VLAN 999 e desligadas</span></label>
+          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 8">8</em>Configuração salva com <code>copy running-config startup-config</code></span></label>
+          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 9">9</em><code>show vlan brief</code> conferido</span></label>
+          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 9">9</em>Pings dentro da mesma VLAN respondem e entre VLANs dão <i>Request timed out</i></span></label>
+          <div class="ck-group ck-ch">Parte 2 · Roteamento entre VLANs</div>
+          <label><input type="checkbox" id="ck10"><span><em class="ck-n ch" title="Desafio, passo 1">D1</em>Roteador 2911 <code>R-IFSC</code> ligado: <code>G0/0</code> → <code>Gi0/1</code> do switch</span></label>
+          <label><input type="checkbox" id="ck11"><span><em class="ck-n ch" title="Desafio, passo 2">D2</em>Porta <code>Gi0/1</code> do switch em modo trunk com as VLANs 10, 20, 30 e 40</span></label>
+          <label><input type="checkbox" id="ck12"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>G0/0</code> ligada e subinterfaces <code>G0/0.10</code> a <code>G0/0.40</code> com <code>encapsulation dot1Q</code> e o IP .1</span></label>
+          <label><input type="checkbox" id="ck13"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em><code>show ip interface brief</code> com as 4 subinterfaces <i>up/up</i></span></label>
+          <label><input type="checkbox" id="ck16"><span><em class="ck-n ch" title="Desafio, passo 5">D5</em>ACL <code>SO-TI</code> criada e aplicada na entrada de <code>G0/0.20</code>, <code>.30</code> e <code>.40</code></span></label>
+          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 6">D6</em>Ping e <code>tracert</code> da T.I (PC0) para o PC6 funcionando</span></label>
+          <label><input type="checkbox" id="ck17"><span><em class="ck-n ch" title="Desafio, passo 6">D6</em>PC2 (ADMINISTRATIVO) pinga a T.I, mas não alcança o RH</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec desafio" id="desafio">
 <style>
 /* desafio em vermelho (padrão das aulas) */
@@ -2068,40 +2103,7 @@ ping 192.168.30.10</pre></div>
 </script>
 </section>
 
-<section class="sec" id="entrega">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Revisão</span>
-      <h2>Checklist da atividade</h2>
-      <p>Cada item corresponde a uma tarefa do passo a passo; o número indica o passo. Marque conforme concluir. O progresso fica salvo neste navegador.</p>
-    </div>
-    <div class="deliver solo">
-      <div class="dcard">
-        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 15</span></div>
-        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
-        <div class="check" id="checklist">
-          <div class="ck-group">Parte 1 · VLANs</div>
-          <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>Topologia com 1 switch 2960 e 8 PCs nas portas Fa0/1 a Fa0/8</span></label>
-          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 2">2</em>PC0 a PC7 com IP, máscara e gateway do plano de endereçamento</span></label>
-          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 4">4</em>VLANs 10 T.I, 20 ADMINISTRATIVO, 30 RH e 40 FINANCEIRO criadas</span></label>
-          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 5">5</em>Portas Fa0/1 a Fa0/8 em modo access na VLAN correta</span></label>
-          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 6">6</em>Portas Fa0/9 a Fa0/24 na VLAN 999 e desligadas</span></label>
-          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 8">8</em>Configuração salva com <code>copy running-config startup-config</code></span></label>
-          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 9">9</em><code>show vlan brief</code> conferido</span></label>
-          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 9">9</em>Pings dentro da mesma VLAN respondem e entre VLANs dão <i>Request timed out</i></span></label>
-          <div class="ck-group ck-ch">Parte 2 · Roteamento entre VLANs</div>
-          <label><input type="checkbox" id="ck10"><span><em class="ck-n ch" title="Desafio, passo 1">D1</em>Roteador 2911 <code>R-IFSC</code> ligado: <code>G0/0</code> → <code>Gi0/1</code> do switch</span></label>
-          <label><input type="checkbox" id="ck11"><span><em class="ck-n ch" title="Desafio, passo 2">D2</em>Porta <code>Gi0/1</code> do switch em modo trunk com as VLANs 10, 20, 30 e 40</span></label>
-          <label><input type="checkbox" id="ck12"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>G0/0</code> ligada e subinterfaces <code>G0/0.10</code> a <code>G0/0.40</code> com <code>encapsulation dot1Q</code> e o IP .1</span></label>
-          <label><input type="checkbox" id="ck13"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em><code>show ip interface brief</code> com as 4 subinterfaces <i>up/up</i></span></label>
-          <label><input type="checkbox" id="ck16"><span><em class="ck-n ch" title="Desafio, passo 5">D5</em>ACL <code>SO-TI</code> criada e aplicada na entrada de <code>G0/0.20</code>, <code>.30</code> e <code>.40</code></span></label>
-          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 6">D6</em>Ping e <code>tracert</code> da T.I (PC0) para o PC6 funcionando</span></label>
-          <label><input type="checkbox" id="ck17"><span><em class="ck-n ch" title="Desafio, passo 6">D6</em>PC2 (ADMINISTRATIVO) pinga a T.I, mas não alcança o RH</span></label>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+
 <section class="sec" id="erros">
   <div class="wrap">
     <div class="sec-head">
