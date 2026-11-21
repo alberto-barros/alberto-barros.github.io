@@ -2174,7 +2174,7 @@ show ipv6 dhcp pool</pre></div>
           '<text class="grp-l" x="30" y="28" style="fill:'+CR+'">SERVIDOR DHCPv6</text><text class="grp-n" x="330" y="28" text-anchor="end">pool LAN-ALUNOS</text>'+
           routerBox(180,44,180)+'<text class="port" x="180" y="102">Gi0/0 · 2001:db8:acad:1::1/64</text>';
         alunos = '<rect x="16" y="216" width="328" height="204" rx="18" style="fill:'+CA+';fill-opacity:.1;stroke:'+CA+'" stroke-opacity=".45"/>'+
-          '<text class="grp-l" x="30" y="240" style="fill:'+CA+'">REDE ALUNOS</text><text class="grp-n" x="330" y="240" text-anchor="end">2001:db8:acad:1::/64</text>';
+          '<text class="grp-l" x="30" y="408" style="fill:'+CA+'">REDE ALUNOS</text><text class="grp-n" x="330" y="408" text-anchor="end">2001:db8:acad:1::/64</text>';
         h += '<path class="cab" style="stroke:var(--green)" d="M180 110 L180 '+(sy2-30)+'"/>';
         var pos=[[72,300],[180,300],[288,300]], ord=[0,1,2];
         PCS.forEach(function(p,k){ var x=pos[k][0], y=pos[k][1], s0=cx-36+ord[k]*36; h += '<path class="cab" style="stroke:'+CA+'" d="M'+s0+' '+(sy2+24)+' C '+s0+' 200, '+x+' '+(y-70)+', '+x+' '+(y-26)+'"/>'; alunos += pc(p,x,y,false); });
