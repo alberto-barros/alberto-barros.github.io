@@ -1288,6 +1288,13 @@ footer .accent{margin-top:0}
 .hero{background:linear-gradient(to bottom,var(--surface) 0,color-mix(in srgb,var(--surface) 70%,transparent) 8%,transparent 24%)}
 .topbar{box-shadow:none!important;border-bottom-color:transparent;transition:box-shadow .25s,border-color .25s}
 .topbar.scrolled{border-bottom-color:var(--line);box-shadow:0 8px 30px -22px rgba(15,36,23,.5)!important}
+.chip{box-shadow:none;cursor:default;transition:transform .2s,background .2s,border-color .2s,color .2s,box-shadow .2s}
+.chip svg{transition:color .2s;animation:icoBob 3.2s ease-in-out infinite}
+.chip:nth-child(2n) svg{animation-delay:-.8s}.chip:nth-child(3n) svg{animation-delay:-1.6s}
+@keyframes icoBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.chip:hover,.chip:focus-visible{background:linear-gradient(145deg,#3DB351,var(--green) 55%,#25852F);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 10px 18px -10px var(--green)}
+.chip:hover svg,.chip:focus-visible svg{color:#fff}
+@media (prefers-reduced-motion:reduce){.chip svg{animation:none!important}}
 #draw{min-width:0}
 .field input[type=text],.field input[type=number]{min-width:0;max-width:100%;box-sizing:border-box}
 @media (max-width:340px){#osi .pkt{overflow-x:auto}}
@@ -1373,7 +1380,6 @@ footer .accent{margin-top:0}
       <p class="lead">Entenda o que é o IPv6, por que ele substitui o IPv4, como ler e abreviar um endereço de 128 bits, quais são os tipos de endereço e como configurar tudo. No final, divida um prefixo /48 em sub-redes /64 e use a calculadora para conferir.</p>
       <div class="chips">
         <span class="chip"><svg><use href="#i-lock"></use></svg>128 bits</span>
-        <span class="chip"><svg><use href="#i-search"></use></svg>Notação hexadecimal</span>
         <span class="chip"><svg><use href="#i-split"></use></svg>Sub-redes /64</span>
         <span class="chip"><svg><use href="#i-route"></use></svg>Testes com ping</span>
         <span class="chip"><svg><use href="#i-clock"></use></svg>≈ 45 min</span>
