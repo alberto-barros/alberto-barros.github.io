@@ -1866,7 +1866,7 @@ ping 192.168.30.10</pre></div>
   function rtrSvg(x,y,r){ return '<circle class="rtr" cx="'+x+'" cy="'+y+'" r="'+r+'"/><path class="rtr-i" transform="translate('+x+','+y+')" d="M-12,-6 H11 M6,-11 L11,-6 L6,-1 M12,6 H-11 M-6,1 L-11,6 L-6,11"/>'; }
   function trunk(x1,y1,x2,y2){ var h=''; VL.forEach(function(v,k){ var o=(k-1.5)*3.4; h+='<line class="cab" style="stroke:'+v.c+'" x1="'+(x1+o)+'" y1="'+y1+'" x2="'+(x2+o)+'" y2="'+y2+'"/>'; }); return h; }
   function draw(){
-    var m=mq&&mq.matches, h='';
+    var m=mq&&mq.matches, h='', gh=['','','',''];
     if(m){
       d.setAttribute('viewBox','0 0 360 770');
       h+=trunk(180,70,180,104);
@@ -1875,13 +1875,13 @@ ping 192.168.30.10</pre></div>
       VL.forEach(function(v,k){ h+='<text class="sub-if" x="216" y="'+(26+k*14)+'" style="fill:'+v.c+'">G0/0.'+v.id+' · .'+v.id+'.1</text>'; });
       h+='<text class="trk" x="192" y="92">trunk</text>';
       VL.forEach(function(g,k){ var gy=120+k*156;
-        h+='<rect x="6" y="'+gy+'" width="348" height="146" rx="16" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>';
-        h+='<text class="grp-l" x="18" y="'+(gy+22)+'" style="fill:'+g.c+'">VLAN '+g.id+'</text><text class="grp-l" x="342" y="'+(gy+22)+'" text-anchor="end" style="fill:'+g.c+'">'+g.n.replace('ADMINISTRATIVO','ADMIN.')+'</text>'; });
+        gh[k]+='<rect x="6" y="'+gy+'" width="348" height="146" rx="16" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>';
+        gh[k]+='<text class="grp-l" x="18" y="'+(gy+22)+'" style="fill:'+g.c+'">VLAN '+g.id+'</text><text class="grp-l" x="342" y="'+(gy+22)+'" text-anchor="end" style="fill:'+g.c+'">'+g.n.replace('ADMINISTRATIVO','ADMIN.')+'</text>'; });
       PCS.forEach(function(p,i){ var left=i%2===0, y=120+Math.floor(i/2)*156+66; h+='<line class="cab" style="stroke:'+p.v.c+'" x1="'+(left?100:260)+'" y1="'+y+'" x2="'+(left?150:210)+'" y2="'+y+'"/><text class="port" x="'+(left?125:235)+'" y="'+(y-7)+'">'+p.port+'</text>'; });
       h+='<rect class="sw-body" x="150" y="100" width="60" height="640" rx="12"/><rect class="sw-top" x="150" y="100" width="60" height="10" rx="5"/><text class="sw-t" x="180" y="128" style="font-size:12px">SW-IFSC</text>';
       h+='<text class="sw-s" transform="translate(184,430) rotate(-90)">Switch 2960 · Gi0/1 trunk no topo</text>';
       PCS.forEach(function(p,i){ var left=i%2===0, y=120+Math.floor(i/2)*156+66; h+='<rect class="led" x="'+(left?153:197)+'" y="'+(y-6)+'" width="10" height="12" rx="2"/>'; });
-      PCS.forEach(function(p,i){ var left=i%2===0, x=left?70:290, y=120+Math.floor(i/2)*156+66; h+=pcSvg(p,x,y-4,false); });
+      PCS.forEach(function(p,i){ var left=i%2===0, x=left?70:290, y=120+Math.floor(i/2)*156+66; gh[Math.floor(i/2)]+=pcSvg(p,x,y-4,false); });
     } else {
       d.setAttribute('viewBox','0 0 1000 460');
       var sx=500, sy=170, px=function(i){ var k=Math.floor(i/2); return 20+k*245+(i%2?168:58); };
@@ -1891,19 +1891,24 @@ ping 192.168.30.10</pre></div>
       h+='<text class="pc-t" x="458" y="48" style="text-anchor:end">R-IFSC</text><text class="pc-ip" x="458" y="64" style="text-anchor:end">Router 2911</text>';
       VL.forEach(function(v,k){ h+='<text class="sub-if" x="544" y="'+(28+k*15)+'" style="fill:'+v.c+'">G0/0.'+v.id+' · 192.168.'+v.id+'.1</text>'; });
       VL.forEach(function(g,k){ var x=20+k*245;
-        h+='<rect x="'+x+'" y="260" width="225" height="190" rx="18" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>'; });
+        gh[k]+='<rect x="'+x+'" y="260" width="225" height="190" rx="18" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>'; });
       PCS.forEach(function(p,i){ var s0=sx-126+i*36; h+='<path class="cab" style="stroke:'+p.v.c+'" d="M'+s0+' '+(sy+24)+' C '+s0+' 252, '+px(i)+' 242, '+px(i)+' 328"/>'; });
       VL.forEach(function(g,k){ var x=20+k*245;
-        h+='<text class="grp-l halo" x="'+(x+16)+'" y="282" style="fill:'+g.c+'">VLAN '+g.id+' · '+g.n+'</text><text class="grp-n halo" x="'+(x+16)+'" y="298">192.168.'+g.id+'.0/24</text>'; });
+        gh[k]+='<text class="grp-l halo" x="'+(x+16)+'" y="282" style="fill:'+g.c+'">VLAN '+g.id+' · '+g.n+'</text><text class="grp-n halo" x="'+(x+16)+'" y="298">192.168.'+g.id+'.0/24</text>'; });
       h+='<g transform="translate('+sx+','+sy+')"><rect class="sw-body" x="-150" y="-30" width="300" height="56" rx="10"/><rect class="sw-top" x="-150" y="-30" width="300" height="10" rx="5"/>';
       for(var j=0;j<8;j++) h+='<rect class="led" x="'+(-133+j*36)+'" y="12" width="14" height="7" rx="2"/>';
       h+='<text class="sw-t" y="-1" x="-40">SW-IFSC</text><text class="sw-s" y="-1" x="90">Switch 2960</text></g>';
-      PCS.forEach(function(p,i){ h+=pcSvg(p,px(i),354,true); });
+      PCS.forEach(function(p,i){ gh[Math.floor(i/2)]+=pcSvg(p,px(i),354,true); });
     }
-    d.innerHTML=h;
+    var gg=''; VL.forEach(function(g,k){ gg+='<g class="grp" tabindex="0" role="button" style="--gc:'+g.c+'" aria-label="VLAN '+g.id+' · '+g.n+' 192.168.'+g.id+'.0/24">'+gh[k]+'</g>'; });
+    d.innerHTML = m ? gg+h : h+gg;
   }
   draw();
   if(mq){ if(mq.addEventListener) mq.addEventListener('change',draw); else if(mq.addListener) mq.addListener(draw); }
+  function pick2(gEl){ var on=gEl&&!gEl.classList.contains('on'); d.querySelectorAll('.grp.on').forEach(function(x){x.classList.remove('on');}); d.classList.toggle('has-on',!!on); if(on) gEl.classList.add('on'); }
+  d.addEventListener('click',function(e){ pick2(e.target.closest('.grp')); });
+  d.addEventListener('keydown',function(e){ var g=e.target.closest&&e.target.closest('.grp'); if(g&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); pick2(g); } });
+  document.addEventListener('click',function(e){ if(!d.contains(e.target)) pick2(null); });
 
   // ---------- animação do roteamento ----------
   var st=document.getElementById('rt-stage'), MOB=mq&&mq.matches;
@@ -2230,16 +2235,25 @@ footer .accent{margin-top:0}
 
 /* desenho da rede: o grupo da VLAN "se aproxima" ao passar o mouse ou clicar */
 #draw{overflow:visible}
+#draw2{overflow:visible}
 .drawing .draw-scroll{padding:6px 0}
 #draw .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
+#draw2 .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
 #draw:has(.grp:hover) .grp:not(:hover),#draw:has(.grp:focus-visible) .grp:not(:focus-visible),#draw.has-on .grp:not(.on):not(:hover){opacity:.55;filter:saturate(.6)}
+#draw2:has(.grp:hover) .grp:not(:hover),#draw2:has(.grp:focus-visible) .grp:not(:focus-visible),#draw2.has-on .grp:not(.on):not(:hover){opacity:.55;filter:saturate(.6)}
 #draw .grp:hover,#draw .grp:focus-visible,#draw .grp.on{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
+#draw2 .grp:hover,#draw2 .grp:focus-visible,#draw2 .grp.on{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
 #draw .grp > rect:first-child{transition:fill-opacity .35s,stroke-opacity .35s,stroke-width .35s}
+#draw2 .grp > rect:first-child{transition:fill-opacity .35s,stroke-opacity .35s,stroke-width .35s}
 #draw .grp:hover > rect:first-child,#draw .grp:focus-visible > rect:first-child,#draw .grp.on > rect:first-child{fill-opacity:.2;stroke-opacity:1;stroke-width:2.5}
+#draw2 .grp:hover > rect:first-child,#draw2 .grp:focus-visible > rect:first-child,#draw2 .grp.on > rect:first-child{fill-opacity:.2;stroke-opacity:1;stroke-width:2.5}
 #draw .grp:hover .mon,#draw .grp.on .mon{animation:monGlow 1.6s ease-in-out infinite}
+#draw2 .grp:hover .mon,#draw2 .grp.on .mon{animation:monGlow 1.6s ease-in-out infinite}
 @keyframes monGlow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 6px var(--gc))}}
 @media (max-width:600px){#draw .grp:hover,#draw .grp:focus-visible,#draw .grp.on{transform:scale(1.04)}}
+@media (max-width:600px){#draw2 .grp:hover,#draw2 .grp:focus-visible,#draw2 .grp.on{transform:scale(1.04)}}
 @media (prefers-reduced-motion:reduce){#draw .grp,#draw .grp .mon{transition:none;animation:none}#draw .grp:hover,#draw .grp.on{transform:none}}
+@media (prefers-reduced-motion:reduce){#draw2 .grp,#draw2 .grp .mon{transition:none;animation:none}#draw2 .grp:hover,#draw2 .grp.on{transform:none}}
 </style>
 <script>
 (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; function f(){ tb.classList.toggle('scrolled',(window.scrollY||document.documentElement.scrollTop)>24); } f(); window.addEventListener('scroll',f,{passive:true}); })();
