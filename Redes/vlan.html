@@ -1629,7 +1629,7 @@ copy running-config startup-config</pre></div>
     </div>
     <div class="deliver solo">
       <div class="dcard">
-        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 15</span></div>
+        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 8</span></div>
         <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
         <div class="check" id="checklist">
           <div class="ck-group">Parte 1 · VLANs</div>
@@ -1641,14 +1641,6 @@ copy running-config startup-config</pre></div>
           <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 8">8</em>Configuração salva com <code>copy running-config startup-config</code></span></label>
           <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 9">9</em><code>show vlan brief</code> conferido</span></label>
           <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 9">9</em>Pings dentro da mesma VLAN respondem e entre VLANs dão <i>Request timed out</i></span></label>
-          <div class="ck-group ck-ch">Parte 2 · Roteamento entre VLANs</div>
-          <label><input type="checkbox" id="ck10"><span><em class="ck-n ch" title="Desafio, passo 1">D1</em>Roteador 2911 <code>R-IFSC</code> ligado: <code>G0/0</code> → <code>Gi0/1</code> do switch</span></label>
-          <label><input type="checkbox" id="ck11"><span><em class="ck-n ch" title="Desafio, passo 2">D2</em>Porta <code>Gi0/1</code> do switch em modo trunk com as VLANs 10, 20, 30 e 40</span></label>
-          <label><input type="checkbox" id="ck12"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>G0/0</code> ligada e subinterfaces <code>G0/0.10</code> a <code>G0/0.40</code> com <code>encapsulation dot1Q</code> e o IP .1</span></label>
-          <label><input type="checkbox" id="ck13"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em><code>show ip interface brief</code> com as 4 subinterfaces <i>up/up</i></span></label>
-          <label><input type="checkbox" id="ck16"><span><em class="ck-n ch" title="Desafio, passo 5">D5</em>ACL <code>SO-TI</code> criada e aplicada na entrada de <code>G0/0.20</code>, <code>.30</code> e <code>.40</code></span></label>
-          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 6">D6</em>Ping e <code>tracert</code> da T.I (PC0) para o PC6 funcionando</span></label>
-          <label><input type="checkbox" id="ck17"><span><em class="ck-n ch" title="Desafio, passo 6">D6</em>PC2 (ADMINISTRATIVO) pinga a T.I, mas não alcança o RH</span></label>
         </div>
       </div>
     </div>
