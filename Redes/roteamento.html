@@ -1187,7 +1187,7 @@ footer .accent{margin-top:0}
             <li><b>4 PCs</b> (<i>End Devices › PC-PT</i>), um ao lado de cada roteador: PC0 em R1, PC1 em R2, PC2 em R3 e PC3 em R4.</li>
             <li>Use cabo <b>Copper Cross-Over</b> em todas as ligações (roteador com roteador e roteador com PC).</li>
             <li>Em cada roteador, a porta <code>G0/0</code> vai para o PC, a <code>G0/1</code> vai para o <b>próximo</b> roteador e a <code>G0/2</code> recebe o cabo do roteador <b>anterior</b>.</li>
-            <li>Os links ficam <b>vermelhos</b> por enquanto: as portas de um roteador vêm desligadas de fábrica. Elas serão ligadas no passo 4.</li>
+            <li>Os links ficam <b>vermelhos</b> por enquanto: as portas de um roteador vêm desligadas de fábrica. Elas serão ligadas no passo 3.</li>
           </ul>
           <h4 class="topo-h">A rede que você vai montar</h4>
           <figure class="drawing">
@@ -1200,21 +1200,6 @@ footer .accent{margin-top:0}
 
       <li class="step">
         <div class="step-n">2</div>
-        <div class="step-body">
-          <h3>Confira o plano de endereços</h3>
-          <p>São 8 redes: 4 redes locais <code>/24</code> e 4 enlaces ponto a ponto <code>/30</code> (cada <code>/30</code> tem exatamente 2 endereços úteis, um para cada ponta do cabo) <span class="cites">(<a class="cite" href="#ref-forouzan">FOROUZAN, 2010</a>)</span>.</p>
-          <div class="tbl-wrap">
-            <table>
-              <thead><tr><th>Roteador</th><th>G0/0 · rede local</th><th>G0/1 · próximo</th><th>G0/2 · anterior</th></tr></thead>
-              <tbody id="addr-body"></tbody>
-            </table>
-          </div>
-          <p>Máscaras: <code>255.255.255.0</code> nas redes locais e <code>255.255.255.252</code> nos enlaces.</p>
-        </div>
-      </li>
-
-      <li class="step">
-        <div class="step-n">3</div>
         <div class="step-body">
           <h3>Configure o IP de cada PC</h3>
           <div class="pt-ui"><span>PC0</span><span>Desktop</span><span>IP Configuration</span><span>Static</span></div>
@@ -1229,7 +1214,7 @@ footer .accent{margin-top:0}
       </li>
 
       <li class="step">
-        <div class="step-n">4</div>
+        <div class="step-n">3</div>
         <div class="step-body">
           <h3>Configure as interfaces dos roteadores</h3>
           <p>Clique no roteador e abra a aba <b>CLI</b>. Se aparecer <i>Would you like to enter the initial configuration dialog?</i>, responda <code>no</code>. Escolha o roteador abaixo para ver os comandos dele; o <code>no shutdown</code> é o que liga a porta.</p>
@@ -1241,7 +1226,7 @@ footer .accent{margin-top:0}
       </li>
 
       <li class="step test">
-        <div class="step-n">5</div>
+        <div class="step-n">4</div>
         <div class="step-body">
           <h3>Teste 1: antes das rotas <span class="tag">Observe</span></h3>
           <p>Abra <b>Desktop › Command Prompt</b> no PC0 e a aba <b>CLI</b> do R1. Todos os cabos estão ligados e todas as portas têm IP.</p>
@@ -1252,7 +1237,7 @@ footer .accent{margin-top:0}
       </li>
 
       <li class="step">
-        <div class="step-n">6</div>
+        <div class="step-n">5</div>
         <div class="step-body">
           <h3>Escreva as tabelas de roteamento (rotas estáticas)</h3>
           <p>Cada roteador conhece só as 3 redes ligadas nele. Faltam as 3 redes locais dos outros roteadores. A sintaxe é <code>ip route &lt;rede de destino&gt; &lt;máscara&gt; &lt;próximo salto&gt;</code>, em que o próximo salto é o IP do roteador <b>vizinho</b> que fica no caminho.</p>
@@ -1271,7 +1256,7 @@ footer .accent{margin-top:0}
       </li>
 
       <li class="step test">
-        <div class="step-n">7</div>
+        <div class="step-n">6</div>
         <div class="step-body">
           <h3>Teste 2: com rotas estáticas <span class="tag">Observe</span></h3>
           <p>Repita os pings e use o <code>tracert</code> para ver por quais roteadores o pacote passa. O primeiro ping pode perder 1 ou 2 pacotes enquanto o ARP é resolvido em cada salto; isso é normal.</p>
@@ -1282,7 +1267,7 @@ footer .accent{margin-top:0}
       </li>
 
       <li class="step test">
-        <div class="step-n">8</div>
+        <div class="step-n">7</div>
         <div class="step-body">
           <h3>Teste 3: derrube um enlace <span class="tag">Observe</span></h3>
           <p>Simule a queda do cabo entre R1 e R2 desligando a porta no R1. Depois dos testes, <b>religue</b> a porta.</p>
@@ -1457,7 +1442,7 @@ interface gigabitEthernet 0/1
         <div class="step-n">1</div>
         <div class="step-body">
           <h3>Apague as rotas estáticas</h3>
-          <p>Enquanto existir uma rota estática para uma rede, a rota RIP para a mesma rede não entra na tabela. Repita cada <code>ip route</code> do passo 6 com <code>no</code> na frente, nos 4 roteadores.</p>
+          <p>Enquanto existir uma rota estática para uma rede, a rota RIP para a mesma rede não entra na tabela. Repita cada <code>ip route</code> do passo 5 com <code>no</code> na frente, nos 4 roteadores.</p>
           <div class="seg rsel" role="group" aria-label="Roteador" data-for="cli-rm"></div>
           <div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span id="cli-rm-t">R1 · remover rotas estáticas</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div>
 <pre id="cli-rm"></pre></div>
@@ -1554,13 +1539,13 @@ copy running-config startup-config</pre></div>
         <div class="check" id="checklist">
           <div class="ck-group">Parte 1 · Rotas estáticas</div>
           <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>4 roteadores 2911 e 4 PCs ligados com cabo cruzado, nas portas do desenho</span></label>
-          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 3">3</em>IP, máscara e gateway configurados nos 4 PCs</span></label>
-          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 4">4</em>3 interfaces de cada roteador com IP e <code>no shutdown</code>; todos os links verdes</span></label>
-          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 5">5</em>Teste 1: ping ao gateway responde e ping a outro PC dá <i>Destination host unreachable</i></span></label>
-          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 6">6</em>3 rotas estáticas em cada roteador; <code>show ip route</code> com 3 linhas S</span></label>
-          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 7">7</em>Teste 2: pings entre os 4 PCs respondendo</span></label>
-          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 7">7</em><code>tracert</code> de ida e de volta entre PC0 e PC2 anotados e comparados</span></label>
-          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 8">8</em>Teste 3: com o enlace R1–R2 desligado, o ping ao PC1 falha; porta religada depois</span></label>
+          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 2">2</em>IP, máscara e gateway configurados nos 4 PCs</span></label>
+          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 3">3</em>3 interfaces de cada roteador com IP e <code>no shutdown</code>; todos os links verdes</span></label>
+          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 4">4</em>Teste 1: ping ao gateway responde e ping a outro PC dá <i>Destination host unreachable</i></span></label>
+          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 5">5</em>3 rotas estáticas em cada roteador; <code>show ip route</code> com 3 linhas S</span></label>
+          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 6">6</em>Teste 2: pings entre os 4 PCs respondendo</span></label>
+          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 6">6</em><code>tracert</code> de ida e de volta entre PC0 e PC2 anotados e comparados</span></label>
+          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 7">7</em>Teste 3: com o enlace R1–R2 desligado, o ping ao PC1 falha; porta religada depois</span></label>
           <div class="ck-group">Parte 2 · Servidor web e DNS</div>
           <label><input type="checkbox" id="ck15"><span><em class="ck-n" title="Servidor, passo 1">S1</em>Switch e SRV-WEB ligados ao R3, com o PC2 de volta à rede</span></label>
           <label><input type="checkbox" id="ck16"><span><em class="ck-n" title="Servidor, passo 2">S2</em>SRV-WEB com IP 192.168.3.100, máscara, gateway e DNS</span></label>
@@ -1568,15 +1553,7 @@ copy running-config startup-config</pre></div>
           <label><input type="checkbox" id="ck18"><span><em class="ck-n" title="Servidor, passo 5">S5</em>DNS Server 192.168.3.100 nos 4 PCs</span></label>
           <label><input type="checkbox" id="ck19"><span><em class="ck-n" title="Servidor, passo 6">S6</em>Página <code>http://ifsc.edu.br</code> aberta no Web Browser do PC0</span></label>
           <label><input type="checkbox" id="ck20"><span><em class="ck-n" title="Servidor, passo 6">S6</em><code>nslookup ifsc.edu.br</code> respondendo 192.168.3.100; arquivo .pkt salvo</span></label>
-          <div class="ck-group ck-ch">Parte 3 · Desafio RIP</div>
-          <label><input type="checkbox" id="ck9"><span><em class="ck-n ch" title="Desafio, passo 1">D1</em>Rotas estáticas removidas dos 4 roteadores (nenhuma linha S)</span></label>
-          <label><input type="checkbox" id="ck10"><span><em class="ck-n ch" title="Desafio, passo 2">D2</em>RIP v2 com <code>no auto-summary</code> e os dois <code>network</code> em R1, R2, R3 e R4</span></label>
-          <label><input type="checkbox" id="ck11"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em><code>show ip route</code> com rotas R para as 3 redes locais remotas</span></label>
-          <label><input type="checkbox" id="ck12"><span><em class="ck-n ch" title="Desafio, passo 3">D3</em>Pings entre os 4 PCs respondendo com RIP</span></label>
-          <label><input type="checkbox" id="ck13"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em><code>tracert</code> do PC0 ao PC1 anotado antes, durante e depois da queda do enlace</span></label>
-          <label><input type="checkbox" id="ck14"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em>No Simulation, envelope ICMP seguindo pelo caminho alternativo</span></label>
-          <label><input type="checkbox" id="ck21"><span><em class="ck-n ch" title="Desafio, passo 4">D4</em>Com o enlace desligado, <code>http://ifsc.edu.br</code> continua abrindo no PC0</span></label>
-        </div>
+                  </div>
       </div>
     </div>
   </div>
@@ -1595,7 +1572,7 @@ copy running-config startup-config</pre></div>
       <article class="err"><h3><svg><use href="#i-alert"/></svg>“Destination host unreachable”</h3><p>Quem responde é um roteador avisando que não tem rota para o destino. Veja o IP de quem respondeu e confira o <code>show ip route</code> desse roteador.</p></article>
       <article class="err"><h3><svg><use href="#i-alert"/></svg>“Request timed out”</h3><p>O pacote foi, mas a resposta não voltou. Normalmente falta a rota de <b>volta</b> em algum roteador do caminho, ou o gateway do PC de destino está errado.</p></article>
       <article class="err"><h3><svg><use href="#i-alert"/></svg>“% Invalid next hop address”</h3><p>O próximo salto digitado é um IP do próprio roteador. O próximo salto é sempre o IP do <b>vizinho</b>, na outra ponta do cabo.</p></article>
-      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% overlaps with GigabitEthernet”</h3><p>Duas portas do mesmo roteador receberam IPs da mesma rede. Confira a tabela do passo 2: cada porta fica em uma rede diferente.</p></article>
+      <article class="err"><h3><svg><use href="#i-alert"/></svg>“% overlaps with GigabitEthernet”</h3><p>Duas portas do mesmo roteador receberam IPs da mesma rede. Confira os endereços do passo 3: cada porta fica em uma rede diferente.</p></article>
       <article class="err"><h3><svg><use href="#i-alert"/></svg>Rota S não aparece no show ip route</h3><p>A rota estática só entra na tabela se o próximo salto for alcançável. Confira se a porta que leva a ele está <i>up/up</i> e se o IP foi digitado certo.</p></article>
       <article class="err"><h3><svg><use href="#i-alert"/></svg>Ping ao próprio gateway falha</h3><p>IP, máscara ou gateway do PC estão errados, ou o PC foi ligado em outra porta que não a <code>G0/0</code>.</p></article>
       <article class="err"><h3><svg><use href="#i-alert"/></svg>Configuração sumiu ao reabrir</h3><p>Faltou <code>copy running-config startup-config</code> em cada roteador ou salvar o arquivo .pkt (Ctrl+S) antes de fechar.</p></article>
@@ -1723,7 +1700,7 @@ copy running-config startup-config</pre></div>
   // ---------- tabelas ----------
   var h = '', i;
   for (i=0; i<4; i++) h += '<tr style="--vc:'+COL[i]+'"><td data-label="Roteador"><span class="vtag" style="--vc:'+COL[i]+'">'+R(i)+'</span></td><td data-label="G0/0 · rede local" class="mono">'+gw(i)+' /24</td><td data-label="G0/1 · próximo" class="mono">'+la(i)+' /30 → '+R(nx(i))+'</td><td data-label="G0/2 · anterior" class="mono">'+lb(pv(i))+' /30 → '+R(pv(i))+'</td></tr>';
-  $('addr-body').innerHTML = h; h = '';
+  h = '';
   for (i=0; i<4; i++) h += '<tr style="--vc:'+COL[i]+'"><td data-label="PC"><span class="vtag" style="--vc:'+COL[i]+'">PC'+i+'</span></td><td data-label="Ligado em" class="mono">'+R(i)+' G0/0</td><td data-label="Endereço IP" class="mono">'+pc(i)+'</td><td data-label="Máscara" class="mono">'+M24+'</td><td data-label="Gateway" class="mono">'+gw(i)+'</td></tr>';
   $('pc-body').innerHTML = h; h = '';
   for (i=0; i<4; i++){
