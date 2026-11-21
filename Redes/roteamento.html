@@ -951,11 +951,11 @@ footer .accent{margin-top:0}
 .dh-win-top{}
 
 /* protocolos: hover na cor do protocolo */
-#tipos .tbl-wrap tbody tr[style*="--vc"]:hover,#tipos .tbl-wrap tbody tr[style*="--vc"]:hover td{background:var(--vc)!important;color:#fff!important}
-#tipos .tbl-wrap tbody tr[style*="--vc"]:hover td *{color:#fff!important}
-#tipos .tbl-wrap tbody tr[style*="--vc"]:hover .vtag{background:#fff!important;color:var(--vc)!important}
-#tipos .tbl-wrap tbody tr[style*="--vc"]:hover .vtag *{color:var(--vc)!important}
-#tipos .tbl-wrap tbody tr[style*="--vc"]:hover td::before{color:#fff!important}
+.tbl-wrap tbody tr[style*="--vc"]:hover,.tbl-wrap tbody tr[style*="--vc"]:hover td{background:var(--vc)!important;color:#fff!important}
+.tbl-wrap tbody tr[style*="--vc"]:hover td *{color:#fff!important}
+.tbl-wrap tbody tr[style*="--vc"]:hover .vtag{background:#fff!important;color:var(--vc)!important}
+.tbl-wrap tbody tr[style*="--vc"]:hover .vtag *{color:var(--vc)!important}
+.tbl-wrap tbody tr[style*="--vc"]:hover td::before{color:#fff!important}
 </style>
 </head>
 <body>
@@ -1722,12 +1722,12 @@ copy running-config startup-config</pre></div>
 
   // ---------- tabelas ----------
   var h = '', i;
-  for (i=0; i<4; i++) h += '<tr><td data-label="Roteador"><span class="vtag" style="--vc:'+COL[i]+'">'+R(i)+'</span></td><td data-label="G0/0 · rede local" class="mono">'+gw(i)+' /24</td><td data-label="G0/1 · próximo" class="mono">'+la(i)+' /30 → '+R(nx(i))+'</td><td data-label="G0/2 · anterior" class="mono">'+lb(pv(i))+' /30 → '+R(pv(i))+'</td></tr>';
+  for (i=0; i<4; i++) h += '<tr style="--vc:'+COL[i]+'"><td data-label="Roteador"><span class="vtag" style="--vc:'+COL[i]+'">'+R(i)+'</span></td><td data-label="G0/0 · rede local" class="mono">'+gw(i)+' /24</td><td data-label="G0/1 · próximo" class="mono">'+la(i)+' /30 → '+R(nx(i))+'</td><td data-label="G0/2 · anterior" class="mono">'+lb(pv(i))+' /30 → '+R(pv(i))+'</td></tr>';
   $('addr-body').innerHTML = h; h = '';
-  for (i=0; i<4; i++) h += '<tr><td data-label="PC"><span class="vtag" style="--vc:'+COL[i]+'">PC'+i+'</span></td><td data-label="Ligado em" class="mono">'+R(i)+' G0/0</td><td data-label="Endereço IP" class="mono">'+pc(i)+'</td><td data-label="Máscara" class="mono">'+M24+'</td><td data-label="Gateway" class="mono">'+gw(i)+'</td></tr>';
+  for (i=0; i<4; i++) h += '<tr style="--vc:'+COL[i]+'"><td data-label="PC"><span class="vtag" style="--vc:'+COL[i]+'">PC'+i+'</span></td><td data-label="Ligado em" class="mono">'+R(i)+' G0/0</td><td data-label="Endereço IP" class="mono">'+pc(i)+'</td><td data-label="Máscara" class="mono">'+M24+'</td><td data-label="Gateway" class="mono">'+gw(i)+'</td></tr>';
   $('pc-body').innerHTML = h; h = '';
   for (i=0; i<4; i++){
-    h += '<tr><td data-label="Roteador"><span class="vtag" style="--vc:'+COL[i]+'">'+R(i)+'</span></td>';
+    h += '<tr style="--vc:'+COL[i]+'"><td data-label="Roteador"><span class="vtag" style="--vc:'+COL[i]+'">'+R(i)+'</span></td>';
     for (var d=0; d<4; d++){ var s = stat(i, d); h += '<td data-label="Para '+lan(d)+'" class="mono">'+(d === i ? 'conectada' : s.nh+' ('+R(s.via)+')')+'</td>'; }
     h += '</tr>';
   }
