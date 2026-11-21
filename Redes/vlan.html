@@ -2227,6 +2227,19 @@ footer{padding-bottom:0}
 footer .wrap{padding-bottom:36px}
 footer .accent{margin-top:0}
 @media (prefers-reduced-motion:reduce){.chip svg,.obs .ico,#erros .err h3 svg,.ch-banner .ico::before,.ch-banner .ico svg{animation:none!important}}
+
+/* desenho da rede: o grupo da VLAN "se aproxima" ao passar o mouse ou clicar */
+#draw{overflow:visible}
+.drawing .draw-scroll{padding:6px 0}
+#draw .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
+#draw:has(.grp:hover) .grp:not(:hover),#draw:has(.grp:focus-visible) .grp:not(:focus-visible),#draw.has-on .grp:not(.on):not(:hover){opacity:.55;filter:saturate(.6)}
+#draw .grp:hover,#draw .grp:focus-visible,#draw .grp.on{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
+#draw .grp > rect:first-child{transition:fill-opacity .35s,stroke-opacity .35s,stroke-width .35s}
+#draw .grp:hover > rect:first-child,#draw .grp:focus-visible > rect:first-child,#draw .grp.on > rect:first-child{fill-opacity:.2;stroke-opacity:1;stroke-width:2.5}
+#draw .grp:hover .mon,#draw .grp.on .mon{animation:monGlow 1.6s ease-in-out infinite}
+@keyframes monGlow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 6px var(--gc))}}
+@media (max-width:600px){#draw .grp:hover,#draw .grp:focus-visible,#draw .grp.on{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){#draw .grp,#draw .grp .mon{transition:none;animation:none}#draw .grp:hover,#draw .grp.on{transform:none}}
 </style>
 <script>
 (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; function f(){ tb.classList.toggle('scrolled',(window.scrollY||document.documentElement.scrollTop)>24); } f(); window.addEventListener('scroll',f,{passive:true}); })();
@@ -2258,35 +2271,40 @@ footer .accent{margin-top:0}
     return '<g transform="translate('+x+','+y+')"><rect class="mon" x="-30" y="-26" width="60" height="40" rx="5" style="stroke:'+c+'"/><rect x="-24" y="-20" width="48" height="28" rx="2" style="fill:'+c+'" opacity=".25"/><rect class="stand" x="-4" y="14" width="8" height="8"/><rect class="stand" x="-14" y="21" width="28" height="4" rx="2"/>'+
       '<text class="pc-t" y="46">'+p.name+'</text><text class="pc-ip" y="62">'+p.ip+'</text><text class="pc-ip" y="76">'+p.m+'</text>'+(port?'<text class="port" y="-34">'+p.port+'</text>':'')+'</g>'; }
   function draw(){
-    var v=mq&&mq.matches, h='';
+    var v=mq&&mq.matches, h='', gh=['','','',''];
     if(v){
       d.setAttribute('viewBox','0 0 360 666');
       G.forEach(function(g,k){ var gy=40+k*156;
-        h+='<rect x="6" y="'+gy+'" width="348" height="146" rx="16" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>';
-        h+='<text class="grp-l" x="18" y="'+(gy+22)+'" style="fill:'+g.c+'">'+g.t.split(' · ')[0]+'</text><text class="grp-l" x="342" y="'+(gy+22)+'" text-anchor="end" style="fill:'+g.c+'">'+g.t.split(' · ')[1].replace('ADMINISTRATIVO','ADMIN.')+'</text>'; });
+        gh[k]+='<rect x="6" y="'+gy+'" width="348" height="146" rx="16" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>';
+        gh[k]+='<text class="grp-l" x="18" y="'+(gy+22)+'" style="fill:'+g.c+'">'+g.t.split(' · ')[0]+'</text><text class="grp-l" x="342" y="'+(gy+22)+'" text-anchor="end" style="fill:'+g.c+'">'+g.t.split(' · ')[1].replace('ADMINISTRATIVO','ADMIN.')+'</text>'; });
       PCS.forEach(function(p,i){ var left=i%2===0, y=40+Math.floor(i/2)*156+66; h+='<line class="cab" style="stroke:'+G[p.g].c+'" x1="'+(left?100:260)+'" y1="'+y+'" x2="'+(left?150:210)+'" y2="'+y+'"/><text class="port" x="'+(left?125:235)+'" y="'+(y-7)+'">'+p.port+'</text>'; });
       h+='<rect class="sw-body" x="150" y="8" width="60" height="650" rx="12"/><rect class="sw-top" x="150" y="8" width="60" height="10" rx="5"/><text class="sw-t" x="180" y="38" style="font-size:12px">SW-IFSC</text>';
       h+='<text class="sw-s" transform="translate(184,334) rotate(-90)">Switch 2960</text>';
       PCS.forEach(function(p,i){ var left=i%2===0, y=40+Math.floor(i/2)*156+66; h+='<rect class="led" x="'+(left?153:197)+'" y="'+(y-6)+'" width="10" height="12" rx="2"/>'; });
-      PCS.forEach(function(p,i){ var left=i%2===0, x=left?70:290, y=40+Math.floor(i/2)*156+66; h+=pcSvg(p,x,y-4,false); });
+      PCS.forEach(function(p,i){ var left=i%2===0, x=left?70:290, y=40+Math.floor(i/2)*156+66; gh[p.g]+=pcSvg(p,x,y-4,false); });
     } else {
       d.setAttribute('viewBox','0 0 1000 370');
       var sx=500, sy=78, px=function(i){ var k=Math.floor(i/2); return 20+k*245+(i%2?168:58); };
       G.forEach(function(g,k){ var x=20+k*245;
-        h+='<rect x="'+x+'" y="168" width="225" height="190" rx="18" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>';
+        gh[k]+='<rect x="'+x+'" y="168" width="225" height="190" rx="18" style="fill:color-mix(in srgb,'+g.c+' 10%,var(--surface));stroke:'+g.c+'" stroke-opacity=".45"/>';
       });
       PCS.forEach(function(p,i){ var s0=sx-126+i*36; h+='<path class="cab" style="stroke:'+G[p.g].c+'" d="M'+s0+' '+(sy+24)+' C '+s0+' 160, '+px(i)+' 150, '+px(i)+' 236"/>'; });
       G.forEach(function(g,k){ var x=20+k*245;
-        h+='<text class="grp-l halo" x="'+(x+16)+'" y="190" style="fill:'+g.c+'">'+g.t+'</text><text class="grp-n halo" x="'+(x+16)+'" y="206">'+g.n+'</text>'; });
+        gh[k]+='<text class="grp-l halo" x="'+(x+16)+'" y="190" style="fill:'+g.c+'">'+g.t+'</text><text class="grp-n halo" x="'+(x+16)+'" y="206">'+g.n+'</text>'; });
       h+='<g transform="translate('+sx+','+sy+')"><rect class="sw-body" x="-150" y="-30" width="300" height="56" rx="10"/><rect class="sw-top" x="-150" y="-30" width="300" height="10" rx="5"/>';
       for(var j=0;j<8;j++) h+='<rect class="led" x="'+(-133+j*36)+'" y="12" width="14" height="7" rx="2"/>';
       h+='<text class="sw-t" y="-1" x="-40">SW-IFSC</text><text class="sw-s" y="-1" x="90">Switch 2960</text></g>';
-      PCS.forEach(function(p,i){ h+=pcSvg(p,px(i),262,true); });
+      PCS.forEach(function(p,i){ gh[p.g]+=pcSvg(p,px(i),262,true); });
     }
-    d.innerHTML=h;
+    var gg=''; G.forEach(function(g,k){ gg+='<g class="grp" tabindex="0" role="button" style="--gc:'+g.c+'" aria-label="'+g.t+' '+g.n+'">'+gh[k]+'</g>'; });
+    d.innerHTML = v ? gg+h : h+gg;
   }
   draw();
   if(mq){ if(mq.addEventListener) mq.addEventListener('change',draw); else if(mq.addListener) mq.addListener(draw); }
+  function pick(gEl){ var on=gEl&&!gEl.classList.contains('on'); d.querySelectorAll('.grp.on').forEach(function(x){x.classList.remove('on');}); d.classList.toggle('has-on',!!on); if(on) gEl.classList.add('on'); }
+  d.addEventListener('click',function(e){ pick(e.target.closest('.grp')); });
+  d.addEventListener('keydown',function(e){ var g=e.target.closest&&e.target.closest('.grp'); if(g&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); pick(g); } });
+  document.addEventListener('click',function(e){ if(!d.contains(e.target)) pick(null); });
 })();
 </script>
 <script>
