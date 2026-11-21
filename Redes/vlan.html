@@ -970,7 +970,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
 #cs-stage .iflbl{fill:var(--muted);font:400 11px var(--f-mono)}
 #cs-stage .linklbl{fill:var(--ink);font:600 12px var(--f-mono)}
 #cs-stage .sdom{--k:var(--muted)}
-#cs-stage .sdom rect{fill:color-mix(in srgb,var(--k) 8%,transparent);stroke:var(--k);stroke-width:1.5;stroke-dasharray:7 5}
+#cs-stage .sdom > rect:first-child{fill:color-mix(in srgb,var(--k) 8%,transparent);stroke:var(--k);stroke-width:1.5;stroke-dasharray:7 5}
 #cs-stage .sdom .halo{stroke:var(--k);stroke-width:24;stroke-linecap:round;opacity:.16}
 #cs-stage .sdom circle{fill:var(--k)}
 #cs-stage .sdom .snum{fill:var(--pkt-ink);font:700 12px var(--f-mono);text-anchor:middle;dominant-baseline:central}
@@ -1105,7 +1105,7 @@ const SCENES=[
         [4.4,'Do outro lado acontece o mesmo: o broadcast de F fica contido no seu domínio.'],
         [6.8,'Cada interface do roteador delimita um domínio de broadcast. Aqui: 2 domínios de broadcast e 8 de colisão (1 por enlace).']]},
 
-{ name:'Sub-redes', title:'Sub-redes: divisão lógica do IP (camada 3)',
+{ name:'Sub-redes', title:'Sub-redes: divisão lógica do IP (camada 3)', zoom:true,
   stats:[['Rede','192.168.10.0/24'],['Máscara','/25 = 255.255.255.128'],['Hosts por sub-rede','126']],
   extra:'bar',
   nodes:{R:{x:400,y:150,t:'router',l:'Roteador',ifs:[[-34,4,'end','g0/0 .1'],[34,4,'start','g0/1 .129']]},
@@ -1121,7 +1121,7 @@ const SCENES=[
         [4.8,'O roteador recebe pela interface g0/0 e encaminha pela g0/1 até C. Entre sub-redes, sempre há roteamento.'],
         [7.2,'O broadcast de B fica na sub-rede A. Com cada sub-rede numa interface do roteador, 1 sub-rede = 1 domínio de broadcast.']]},
 
-{ name:'4 VLANs', title:'4 VLANs: um switch físico, quatro switches lógicos (camada 2)',
+{ name:'4 VLANs', title:'4 VLANs: um switch físico, quatro switches lógicos (camada 2)', zoom:true,
   stats:[['Switches físicos','1'],['VLANs','4'],['Domínios de broadcast','4']],
   nodes:vlanNodes,
   links:[['R','S','trunk'],...'ABCDEFGH'.split('').map((id,i)=>[id,'S',VK[i]])],
@@ -1142,6 +1142,10 @@ const SCENES=[
 
 const $=id=>document.getElementById('cs-'+id);
 const svg=$('stage');
+function csPick(gEl){ const on=gEl&&!gEl.classList.contains('on'); svg.querySelectorAll('.grp.on').forEach(x=>x.classList.remove('on')); svg.classList.toggle('has-on',!!on); if(on) gEl.classList.add('on'); }
+svg.addEventListener('click',e=>csPick(e.target.closest('.grp')));
+svg.addEventListener('keydown',e=>{const g=e.target.closest&&e.target.closest('.grp'); if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();csPick(g);}});
+document.addEventListener('click',e=>{ if(!svg.contains(e.target)) csPick(null); });
 let si=0, sc, N, P=[], FX=[], time=0, dur=10, playing=true, visible=true, speed=1, last=null, capIdx=-1;
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(reduce) playing=false;
@@ -1191,8 +1195,11 @@ function load(i){
 
   const gD=el('g',{},svg), gL=el('g',{},svg), gN=el('g',{},svg), gF=el('g',{},svg), gP=el('g',{},svg);
   if(sc.extra==='bar') drawBar(gL);
+  const DG=[];
+  svg.classList.remove('has-on');
   (sc.domains||[]).forEach(d=>{
     const g=el('g',{class:'sdom k-'+d.k},gD);
+    if(sc.zoom&&d.r){ g.classList.add('grp'); g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('style','--gc:var(--k)'); g.setAttribute('aria-label',d.l+(d.l2?' · '+d.l2:'')); DG.push({g,r:d.r}); }
     if(d.r){const[x,y,w,h]=d.r;el('rect',{x,y,width:w,height:h,rx:18},g);el('text',{class:'domlbl',x:x+14,y:y+21},g,d.l);
       if(d.l2) el('text',{class:'domlbl2',x:x+14,y:y+37},g,d.l2);}
     else{const a=N[d.a],b=N[d.b];el('line',{class:'halo',x1:a.x,y1:a.y,x2:b.x,y2:b.y},g);
@@ -1207,8 +1214,14 @@ function load(i){
   });
   for(const id in N) drawNode(id,N[id],gN);
   (sc.links||[]).forEach(([a,b,c])=>{
-    [[a,b],[b,a]].forEach(([p,q])=>{if(N[p].w){const an=anchor(N[p],N[q]);el('rect',{class:'port'+(c&&c!=='trunk'?' p-'+c:''),x:an.x-6,y:an.y-(an.y>N[p].y?5:1),width:12,height:6,rx:1.5},gN);}});
+    [[a,b],[b,a]].forEach(([p,q])=>{if(N[p].w){const an=anchor(N[p],N[q]);el('rect',{class:'port'+(c&&c!=='trunk'?' p-'+c:''),'data-o':p,x:an.x-6,y:an.y-(an.y>N[p].y?5:1),width:12,height:6,rx:1.5},gN);}});
   });
+  if(DG.length){
+    const owner={};
+    for(const id in N){ const n=N[id]; const d=DG.find(o=>n.x>o.r[0]&&n.x<o.r[0]+o.r[2]&&n.y>o.r[1]&&n.y<o.r[1]+o.r[3]); if(d&&n.g){ d.g.appendChild(n.g); owner[id]=d.g; } }
+    gN.querySelectorAll('rect.port[data-o]').forEach(pt=>{ const o=owner[pt.getAttribute('data-o')]; if(o) o.appendChild(pt); });
+    DG.forEach(o=>svg.insertBefore(o.g,gN));
+  }
 
   const fxKeys=new Set();
   (sc.packets||[]).forEach(p=>{
@@ -2268,6 +2281,18 @@ footer .accent{margin-top:0}
 #animacao .stage svg#topo{width:84%;min-width:0;margin:0 auto}
 @media (max-width:600px){#animacao .stage svg#topo{width:100%}}
 #animacao .anim-ctl{justify-content:center}
+/* cenas 4 e 5: o quadro da sub-rede/VLAN "se aproxima" como na topologia */
+#cs-stage{overflow:visible}
+#cs-stage .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
+#cs-stage:has(.grp:hover) .grp:not(:hover) > :not(.node),#cs-stage:has(.grp:focus-visible) .grp:not(:focus-visible) > :not(.node),#cs-stage.has-on .grp:not(.on):not(:hover) > :not(.node){opacity:.5}
+#cs-stage:has(.grp:hover) .grp:not(:hover),#cs-stage:has(.grp:focus-visible) .grp:not(:focus-visible),#cs-stage.has-on .grp:not(.on):not(:hover){filter:saturate(.5)}
+#cs-stage .grp > *{transition:opacity .35s}
+#cs-stage .grp:hover,#cs-stage .grp:focus-visible,#cs-stage .grp.on{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
+#cs-stage .grp > rect:first-child{transition:fill .35s,stroke-width .35s}
+#cs-stage .grp:hover > rect:first-child,#cs-stage .grp:focus-visible > rect:first-child,#cs-stage .grp.on > rect:first-child{fill:color-mix(in srgb,var(--k) 18%,transparent);stroke-width:2.5}
+#cs-stage .grp:hover .node .dev,#cs-stage .grp.on .node .dev{animation:monGlow 1.6s ease-in-out infinite}
+@media (max-width:600px){#cs-stage .grp:hover,#cs-stage .grp:focus-visible,#cs-stage .grp.on{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){#cs-stage .grp,#cs-stage .grp .dev{transition:none;animation:none}#cs-stage .grp:hover,#cs-stage .grp.on{transform:none}}
 /* VLAN × sub-rede no estilo Apache x Nginx (aula Servidor Web) */
 #cs-card .cmp{--ap:var(--v10);--ng:var(--v20);border:2px solid #111;border-radius:16px;background:var(--surface);overflow-x:auto;box-shadow:0 12px 30px -18px rgba(0,0,0,.3)}
 #cs-card .cmp table{min-width:0;width:100%;border-collapse:collapse}
