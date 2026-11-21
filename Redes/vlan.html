@@ -1010,19 +1010,7 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
         <svg id="cs-stage" viewBox="0 0 800 440" role="img" aria-labelledby="cs-title"></svg>
       </div>
       <div class="cs-summary" id="cs-summary" hidden>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th></th><th class="b">VLAN</th><th class="o">Sub-rede</th></tr></thead>
-            <tbody>
-              <tr><th>Camada OSI</th><td>2 · Enlace</td><td>3 · Rede</td></tr>
-              <tr><th>O que ela divide</th><td>As portas de um ou mais switches, criando switches lógicos</td><td>Uma faixa de endereços IP, usando a máscara</td></tr>
-              <tr><th>Onde se configura</th><td>No switch: <code>switchport access vlan 10</code></td><td>Nos hosts e no roteador: IP + máscara + gateway</td></tr>
-              <tr><th>Identificador</th><td>VLAN ID (1–4094), levado na etiqueta 802.1Q nos trunks</td><td>Endereço de rede + prefixo, ex.: <code>192.168.10.0/24</code></td></tr>
-              <tr><th>Separa broadcast?</th><td>Sim. O switch não entrega quadros de uma VLAN em outra</td><td>Só logicamente. Duas sub-redes na mesma VLAN ainda recebem os broadcasts uma da outra</td></tr>
-              <tr><th>Comunicação entre elas</th><td>Roteador (router-on-a-stick) ou switch camada 3</td><td>Roteador ou switch camada 3 (gateway padrão)</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div class="cmp"><table><thead><tr><th>Característica</th><th><span class="sel" style="--sc:var(--v10)">VLAN</span></th><th><span class="sel" style="--sc:var(--v20)">Sub-rede</span></th></tr></thead><tbody><tr><td>Camada OSI</td><td><span>2 · Enlace</span></td><td><span>3 · Rede</span></td></tr><tr><td>O que ela divide</td><td><span>As portas de um ou mais switches, criando switches lógicos</span></td><td><span>Uma faixa de endereços IP, usando a máscara</span></td></tr><tr><td>Onde se configura</td><td><span>No switch: <code>switchport access vlan 10</code></span></td><td><span>Nos hosts e no roteador: IP + máscara + gateway</span></td></tr><tr><td>Identificador</td><td><span>VLAN ID (1–4094), levado na etiqueta 802.1Q nos trunks</span></td><td><span>Endereço de rede + prefixo, ex.: <code>192.168.10.0/24</code></span></td></tr><tr><td>Separa broadcast?</td><td><span>Sim. O switch não entrega quadros de uma VLAN em outra</span></td><td><span>Só logicamente. Duas sub-redes na mesma VLAN ainda recebem os broadcasts uma da outra</span></td></tr><tr><td>Comunicação entre elas</td><td><span>Roteador (router-on-a-stick) ou switch camada 3</span></td><td><span>Roteador ou switch camada 3 (gateway padrão)</span></td></tr></tbody></table></div>
         <div class="cs-callout"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><p><b>Na prática, as duas andam juntas.</b> Cria-se uma VLAN para isolar o tráfego na camada 2 e atribui-se a ela uma sub-rede para endereçar a camada 3. No nosso laboratório:</p>
           <div class="cs-vmap">
             <span style="--vc:var(--v10)">VLAN 10 T.I ↔ 192.168.10.0/24</span>
@@ -2280,6 +2268,32 @@ footer .accent{margin-top:0}
 #animacao .stage svg#topo{width:84%;min-width:0;margin:0 auto}
 @media (max-width:600px){#animacao .stage svg#topo{width:100%}}
 #animacao .anim-ctl{justify-content:center}
+/* VLAN × sub-rede no estilo Apache x Nginx (aula Servidor Web) */
+#cs-card .cmp{--ap:var(--v10);--ng:var(--v20);border:2px solid #111;border-radius:16px;background:var(--surface);overflow-x:auto;box-shadow:0 12px 30px -18px rgba(0,0,0,.3)}
+#cs-card .cmp table{min-width:0;width:100%;border-collapse:collapse}
+#cs-card .cmp th,#cs-card .cmp td{white-space:normal;padding:14px 18px;text-align:left;border-bottom:1px solid var(--line);font-size:.92rem;width:auto}
+#cs-card .cmp tbody tr:last-child td{border-bottom:0}
+#cs-card .cmp th{background:#1B1F1C;color:#C9D3CC;font:700 .76rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;border-bottom:0}
+#cs-card .cmp th .sel{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;letter-spacing:.02em;text-transform:none;font-weight:700;color:#fff}
+#cs-card .cmp th .sel::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--sc)}
+#cs-card .cmp tbody tr:hover td{background:var(--surface-2)}
+#cs-card .cmp td:first-child{color:var(--muted);font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+#cs-card .cmp td:nth-child(2){box-shadow:inset 3px 0 0 color-mix(in srgb,var(--ap) 70%,transparent)}
+#cs-card .cmp td:nth-child(3){box-shadow:inset 3px 0 0 color-mix(in srgb,var(--ng) 70%,transparent)}
+@media (max-width:600px){
+  #cs-card .cmp table,#cs-card .cmp tbody,#cs-card .cmp tr,#cs-card .cmp td{display:block;width:100%}
+  #cs-card .cmp thead{display:none}
+  #cs-card .cmp tbody tr{border-bottom:1px solid var(--line)}
+  #cs-card .cmp tbody tr:last-child{border-bottom:0}
+  #cs-card .cmp td{border:0!important;box-shadow:none!important;padding:6px 14px}
+  #cs-card .cmp td:first-child{padding-top:12px;white-space:normal}
+  #cs-card .cmp td:nth-child(2),#cs-card .cmp td:nth-child(3){display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;align-items:start}
+  #cs-card .cmp td:nth-child(3){padding-bottom:12px}
+  #cs-card .cmp td code{justify-self:start}
+  #cs-card .cmp td:nth-child(2)::before,#cs-card .cmp td:nth-child(3)::before{font-weight:700;font-size:.82rem}
+  #cs-card .cmp td:nth-child(2)::before{content:"● VLAN";color:var(--v10)}
+  #cs-card .cmp td:nth-child(3)::before{content:"● Sub-rede";color:var(--v20)}
+}
 /* erros comuns no estilo "Se não funcionar" da aula SSH */
 #erros .wrap{counter-reset:bn}
 #erros .errs{counter-reset:none}
