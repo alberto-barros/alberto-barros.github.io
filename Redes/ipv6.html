@@ -1245,6 +1245,31 @@ footer .accent{margin-top:0}
 .desafio .step:not(.test) .step-n::before{content:"";position:absolute;left:5px;right:5px;top:3px;height:45%;border-radius:12px 12px 20px 20px;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0));pointer-events:none}
 .step:not(.test) .step-n{background:linear-gradient(160deg,#5FD274 0%,#32A041 42%,#1E7A30 100%);color:#fff;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -4px 0 rgba(0,50,12,.3),0 5px 0 #145A22,0 14px 22px -8px rgba(30,122,48,.55);text-shadow:0 2px 2px rgba(0,40,10,.45);overflow:hidden}
 .step:not(.test) .step-n::before{content:"";position:absolute;left:5px;right:5px;top:3px;height:45%;border-radius:12px 12px 20px 20px;background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,0));pointer-events:none}
+.cmp{--ap:#E0A800;--ng:var(--green);border:2px solid #111;border-radius:16px;background:var(--surface);overflow-x:auto;box-shadow:0 12px 30px -18px rgba(0,0,0,.3)}
+.cmp table{min-width:0}
+.cmp th,.cmp td{white-space:normal;padding:14px 18px}
+.cmp th{background:#1B1F1C;color:#C9D3CC}
+.cmp th .sel{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;letter-spacing:.02em;text-transform:none;font-weight:700;color:#fff}
+.cmp th .sel::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--sc)}
+.cmp tbody tr:hover td{background:var(--surface-2)}
+.cmp td:first-child{color:var(--muted);font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.cmp td:nth-child(2){box-shadow:inset 3px 0 0 color-mix(in srgb,var(--ap) 70%,transparent)}
+.cmp td:nth-child(3){box-shadow:inset 3px 0 0 color-mix(in srgb,var(--ng) 70%,transparent)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cmp{border-color:#000}}
+:root[data-theme="dark"] .cmp{border-color:#000}
+@media (max-width:600px){
+  .cmp table,.cmp tbody,.cmp tr,.cmp td{display:block;width:100%}
+  .cmp thead{display:none}
+  .cmp tbody tr{border-bottom:1px solid var(--line)}
+  .cmp tbody tr:last-child{border-bottom:0}
+  .cmp td{border:0!important;box-shadow:none!important;padding:6px 14px}
+  .cmp td:first-child{padding-top:12px;white-space:normal}
+  .cmp td:nth-child(2),.cmp td:nth-child(3){display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;align-items:start}
+  .cmp td:nth-child(3){padding-bottom:12px}
+  .cmp td:nth-child(2)::before,.cmp td:nth-child(3)::before{font-weight:700;font-size:.82rem}
+  .cmp td:nth-child(2)::before{content:"● IPv4";color:#B8900C}
+  .cmp td:nth-child(3)::before{content:"● IPv6";color:var(--green-strong)}
+}
 #draw{min-width:0}
 .field input[type=text],.field input[type=number]{min-width:0;max-width:100%;box-sizing:border-box}
 @media (max-width:340px){#osi .pkt{overflow-x:auto}}
@@ -1396,22 +1421,7 @@ footer .accent{margin-top:0}
     </div>
 
     <h3 class="ping-h3" style="margin-top:36px">IPv4 e IPv6 lado a lado</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Característica</th><th>IPv4</th><th>IPv6</th></tr></thead>
-        <tbody>
-          <tr><td data-label="Característica">Tamanho do endereço</td><td data-label="IPv4" class="mono">32 bits</td><td data-label="IPv6" class="mono">128 bits</td></tr>
-          <tr><td data-label="Característica">Quantidade de endereços</td><td data-label="IPv4" class="mono">≈ 4,3 bilhões</td><td data-label="IPv6" class="mono">≈ 3,4 × 10³⁸<br>(340 undecilhões)</td></tr>
-          <tr><td data-label="Característica">Notação</td><td data-label="IPv4" class="mono">decimal com pontos<br>192.168.1.10</td><td data-label="IPv6" class="mono">hexadecimal com dois-pontos<br>2001:db8::10</td></tr>
-          <tr><td data-label="Característica">Máscara</td><td data-label="IPv4" class="mono">255.255.255.0 ou /24</td><td data-label="IPv6" class="mono">somente prefixo /64</td></tr>
-          <tr><td data-label="Característica">Cabeçalho</td><td data-label="IPv4" class="mono">20 a 60 bytes, com checksum</td><td data-label="IPv6" class="mono">40 bytes fixos, sem checksum</td></tr>
-          <tr><td data-label="Característica">Resolução de vizinhos</td><td data-label="IPv4" class="mono">ARP (broadcast)</td><td data-label="IPv6" class="mono">NDP (ICMPv6 multicast)</td></tr>
-          <tr><td data-label="Característica">Broadcast</td><td data-label="IPv4" class="mono">sim</td><td data-label="IPv6" class="mono">não existe</td></tr>
-          <tr><td data-label="Característica">Configuração automática</td><td data-label="IPv4" class="mono">DHCP</td><td data-label="IPv6" class="mono">SLAAC ou DHCPv6</td></tr>
-          <tr><td data-label="Característica">Ping</td><td data-label="IPv4" class="mono">ICMP (protocolo 1)</td><td data-label="IPv6" class="mono">ICMPv6 (próximo cabeçalho 58)</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="cmp"><table><thead><tr><th>Característica</th><th><span class="sel" style="--sc:var(--ap)">IPv4</span></th><th><span class="sel" style="--sc:var(--ng)">IPv6</span></th></tr></thead><tbody><tr><td>Tamanho do endereço</td><td>32 bits</td><td>128 bits</td></tr><tr><td>Quantidade de endereços</td><td>≈ 4,3 bilhões</td><td>≈ 3,4 × 10³⁸ (340 undecilhões)</td></tr><tr><td>Notação</td><td>decimal com pontos<br>192.168.1.10</td><td>hexadecimal com dois-pontos<br>2001:db8::10</td></tr><tr><td>Máscara</td><td>255.255.255.0 ou /24</td><td>somente prefixo /64</td></tr><tr><td>Cabeçalho</td><td>20 a 60 bytes, com checksum</td><td>40 bytes fixos, sem checksum</td></tr><tr><td>Resolução de vizinhos</td><td>ARP (broadcast)</td><td>NDP (ICMPv6 multicast)</td></tr><tr><td>Broadcast</td><td>sim</td><td>não existe</td></tr><tr><td>Configuração automática</td><td>DHCP</td><td>SLAAC ou DHCPv6</td></tr><tr><td>Ping</td><td>ICMP (protocolo 1)</td><td>ICMPv6 (próximo cabeçalho 58)</td></tr></tbody></table></div>
   </div>
 </section>
 
