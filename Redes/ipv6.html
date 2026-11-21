@@ -1315,6 +1315,9 @@ footer .accent{margin-top:0}
 .obs>div{min-width:0}
 .obs code{overflow-wrap:anywhere;white-space:normal}
 @media (prefers-reduced-motion:reduce){.obs .ico{animation:none!important}}
+#cabecalho .err h3 svg{background:var(--red);color:#fff;box-shadow:0 8px 16px -8px var(--red);--ic:var(--red);animation:icoFloat 3.4s ease-in-out infinite,icoPulse 2.8s ease-out infinite;flex:none}
+#cabecalho .err:nth-child(2n) h3 svg{animation-delay:-1.1s,-.9s}
+@media (prefers-reduced-motion:reduce){#cabecalho .err h3 svg{animation:none!important}}
 #draw{min-width:0}
 .field input[type=text],.field input[type=number]{min-width:0;max-width:100%;box-sizing:border-box}
 @media (max-width:340px){#osi .pkt{overflow-x:auto}}
