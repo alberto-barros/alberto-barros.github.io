@@ -1199,7 +1199,7 @@ function load(i){
   svg.classList.remove('has-on');
   (sc.domains||[]).forEach(d=>{
     const g=el('g',{class:'sdom k-'+d.k},gD);
-    if(sc.zoom&&d.r){ g.classList.add('grp'); g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('style','--gc:var(--k)'); g.setAttribute('aria-label',d.l+(d.l2?' · '+d.l2:'')); DG.push({g,r:d.r}); }
+    if(sc.zoom&&d.r){ g.classList.add('grp'); g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('style','--gc:var(--k)'); g.setAttribute('aria-label',d.l+(d.l2?' · '+d.l2:'')); if(sc.domains.length===2) g.classList.add('side', DG.length?'side-r':'side-l'); DG.push({g,r:d.r}); }
     if(d.r){const[x,y,w,h]=d.r;el('rect',{x,y,width:w,height:h,rx:18},g);el('text',{class:'domlbl',x:x+14,y:y+21},g,d.l);
       if(d.l2) el('text',{class:'domlbl2',x:x+14,y:y+37},g,d.l2);}
     else{const a=N[d.a],b=N[d.b];el('line',{class:'halo',x1:a.x,y1:a.y,x2:b.x,y2:b.y},g);
@@ -2292,6 +2292,10 @@ footer .accent{margin-top:0}
 #cs-stage .grp:hover > rect:first-child,#cs-stage .grp:focus-visible > rect:first-child,#cs-stage .grp.on > rect:first-child{fill:color-mix(in srgb,var(--k) 18%,transparent);stroke-width:2.5}
 #cs-stage .grp:hover .node .dev,#cs-stage .grp.on .node .dev{animation:monGlow 1.6s ease-in-out infinite}
 @media (max-width:600px){#cs-stage .grp:hover,#cs-stage .grp:focus-visible,#cs-stage .grp.on{transform:scale(1.04)}}
+/* sub-redes (2 quadros): cresce para fora e o vizinho recua, sem invadir */
+#cs-stage .grp.side-l{transform-origin:left center}
+#cs-stage .grp.side-r{transform-origin:right center}
+#cs-stage:has(.grp.side:hover) .grp.side:not(:hover),#cs-stage:has(.grp.side:focus-visible) .grp.side:not(:focus-visible),#cs-stage.has-on .grp.side:not(.on):not(:hover){transform:scale(.88)}
 @media (prefers-reduced-motion:reduce){#cs-stage .grp,#cs-stage .grp .dev{transition:none;animation:none}#cs-stage .grp:hover,#cs-stage .grp.on{transform:none}}
 /* VLAN × sub-rede no estilo Apache x Nginx (aula Servidor Web) */
 #cs-card .cmp{--ap:var(--v10);--ng:var(--v20);border:2px solid #111;border-radius:16px;background:var(--surface);overflow-x:auto;box-shadow:0 12px 30px -18px rgba(0,0,0,.3)}
