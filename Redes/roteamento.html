@@ -1024,7 +1024,7 @@ h1{font-size:clamp(2rem,7.5vw,3.4rem);overflow-wrap:anywhere}
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Redes/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#beneficios"><b>02</b>Vantagens</a><a href="#tipos"><b>03</b>Estático × dinâmico</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Passo a passo</a><a href="#servidor"><b>06</b>Servidor web</a><a href="#rip" class="tm-ch nav-ch"><b>07</b>Desafio RIP</a><a href="#checklist-sec"><b>08</b>Checklist</a><a href="#erros"><b>09</b>Erros comuns</a><a href="#entrega"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#conceito"><b>01</b>Conceito</a><a href="#beneficios"><b>02</b>Vantagens</a><a href="#tipos"><b>03</b>Estático × dinâmico</a><a href="#animacao"><b>04</b>Animação</a><a href="#passos"><b>05</b>Passo a passo</a><a href="#servidor"><b>06</b>Servidor web</a><a href="#checklist-sec"><b>07</b>Checklist</a><a href="#rip" class="tm-ch nav-ch"><b>08</b>Desafio RIP</a><a href="#erros"><b>09</b>Erros comuns</a><a href="#entrega"><b>10</b>Quiz</a><a href="#refs"><b>11</b>Referências</a></div>
   </div>
 </nav>
 
@@ -1422,6 +1422,40 @@ interface gigabitEthernet 0/1
   </div>
 </section>
 
+<section class="sec" id="checklist-sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">Revisão</span>
+      <h2>Checklist da atividade</h2>
+      <p>Cada item corresponde a uma tarefa do passo a passo; o número indica o passo. Marque conforme concluir. O progresso fica salvo neste navegador.</p>
+    </div>
+    <div class="deliver solo">
+      <div class="dcard">
+        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 14</span></div>
+        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
+        <div class="check" id="checklist">
+          <div class="ck-group">Parte 1 · Rotas estáticas</div>
+          <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>4 roteadores 2911 e 4 PCs ligados com cabo cruzado, nas portas do desenho</span></label>
+          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 2">2</em>IP, máscara e gateway configurados nos 4 PCs</span></label>
+          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 3">3</em>3 interfaces de cada roteador com IP e <code>no shutdown</code>; todos os links verdes</span></label>
+          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 4">4</em>Teste 1: ping ao gateway responde e ping a outro PC dá <i>Destination host unreachable</i></span></label>
+          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 5">5</em>3 rotas estáticas em cada roteador; <code>show ip route</code> com 3 linhas S</span></label>
+          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 6">6</em>Teste 2: pings entre os 4 PCs respondendo</span></label>
+          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 6">6</em><code>tracert</code> de ida e de volta entre PC0 e PC2 anotados e comparados</span></label>
+          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 7">7</em>Teste 3: com o enlace R1–R2 desligado, o ping ao PC1 falha; porta religada depois</span></label>
+          <div class="ck-group">Parte 2 · Servidor web e DNS</div>
+          <label><input type="checkbox" id="ck15"><span><em class="ck-n" title="Servidor, passo 1">S1</em>Switch e SRV-WEB ligados ao R3, com o PC2 de volta à rede</span></label>
+          <label><input type="checkbox" id="ck16"><span><em class="ck-n" title="Servidor, passo 2">S2</em>SRV-WEB com IP 192.168.3.100, máscara, gateway e DNS</span></label>
+          <label><input type="checkbox" id="ck17"><span><em class="ck-n" title="Servidor, passo 4">S4</em>DNS Service ligado com o registro A <code>ifsc.edu.br</code> → 192.168.3.100</span></label>
+          <label><input type="checkbox" id="ck18"><span><em class="ck-n" title="Servidor, passo 5">S5</em>DNS Server 192.168.3.100 nos 4 PCs</span></label>
+          <label><input type="checkbox" id="ck19"><span><em class="ck-n" title="Servidor, passo 6">S6</em>Página <code>http://ifsc.edu.br</code> aberta no Web Browser do PC0</span></label>
+          <label><input type="checkbox" id="ck20"><span><em class="ck-n" title="Servidor, passo 6">S6</em><code>nslookup ifsc.edu.br</code> respondendo 192.168.3.100; arquivo .pkt salvo</span></label>
+                  </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec desafio" id="rip">
   <div class="wrap">
     <div class="ch-banner">
@@ -1533,40 +1567,6 @@ copy running-config startup-config</pre></div>
         <li><b>R1 guarda as duas</b>Dois caminhos com <code>[120/2]</code>: por R2 e por R4.</li>
       </ol>
       <p>Se um dos caminhos cai, o R1 fica com o outro. Nas rotas estáticas, essa troca só aconteceria se alguém digitasse a nova rota.</p>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="checklist-sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Revisão</span>
-      <h2>Checklist da atividade</h2>
-      <p>Cada item corresponde a uma tarefa do passo a passo; o número indica o passo. Marque conforme concluir. O progresso fica salvo neste navegador.</p>
-    </div>
-    <div class="deliver solo">
-      <div class="dcard">
-        <div class="prog-head"><h3>Itens da atividade</h3><span id="prog-txt" aria-live="polite"><b>0%</b> · 0 de 14</span></div>
-        <div class="progress" role="progressbar" aria-label="Progresso do checklist" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="prog-bar"><i id="prog"></i></div>
-        <div class="check" id="checklist">
-          <div class="ck-group">Parte 1 · Rotas estáticas</div>
-          <label><input type="checkbox" id="ck1"><span><em class="ck-n" title="Passo 1">1</em>4 roteadores 2911 e 4 PCs ligados com cabo cruzado, nas portas do desenho</span></label>
-          <label><input type="checkbox" id="ck2"><span><em class="ck-n" title="Passo 2">2</em>IP, máscara e gateway configurados nos 4 PCs</span></label>
-          <label><input type="checkbox" id="ck3"><span><em class="ck-n" title="Passo 3">3</em>3 interfaces de cada roteador com IP e <code>no shutdown</code>; todos os links verdes</span></label>
-          <label><input type="checkbox" id="ck4"><span><em class="ck-n" title="Passo 4">4</em>Teste 1: ping ao gateway responde e ping a outro PC dá <i>Destination host unreachable</i></span></label>
-          <label><input type="checkbox" id="ck5"><span><em class="ck-n" title="Passo 5">5</em>3 rotas estáticas em cada roteador; <code>show ip route</code> com 3 linhas S</span></label>
-          <label><input type="checkbox" id="ck6"><span><em class="ck-n" title="Passo 6">6</em>Teste 2: pings entre os 4 PCs respondendo</span></label>
-          <label><input type="checkbox" id="ck7"><span><em class="ck-n" title="Passo 6">6</em><code>tracert</code> de ida e de volta entre PC0 e PC2 anotados e comparados</span></label>
-          <label><input type="checkbox" id="ck8"><span><em class="ck-n" title="Passo 7">7</em>Teste 3: com o enlace R1–R2 desligado, o ping ao PC1 falha; porta religada depois</span></label>
-          <div class="ck-group">Parte 2 · Servidor web e DNS</div>
-          <label><input type="checkbox" id="ck15"><span><em class="ck-n" title="Servidor, passo 1">S1</em>Switch e SRV-WEB ligados ao R3, com o PC2 de volta à rede</span></label>
-          <label><input type="checkbox" id="ck16"><span><em class="ck-n" title="Servidor, passo 2">S2</em>SRV-WEB com IP 192.168.3.100, máscara, gateway e DNS</span></label>
-          <label><input type="checkbox" id="ck17"><span><em class="ck-n" title="Servidor, passo 4">S4</em>DNS Service ligado com o registro A <code>ifsc.edu.br</code> → 192.168.3.100</span></label>
-          <label><input type="checkbox" id="ck18"><span><em class="ck-n" title="Servidor, passo 5">S5</em>DNS Server 192.168.3.100 nos 4 PCs</span></label>
-          <label><input type="checkbox" id="ck19"><span><em class="ck-n" title="Servidor, passo 6">S6</em>Página <code>http://ifsc.edu.br</code> aberta no Web Browser do PC0</span></label>
-          <label><input type="checkbox" id="ck20"><span><em class="ck-n" title="Servidor, passo 6">S6</em><code>nslookup ifsc.edu.br</code> respondendo 192.168.3.100; arquivo .pkt salvo</span></label>
-                  </div>
-      </div>
     </div>
   </div>
 </section>
