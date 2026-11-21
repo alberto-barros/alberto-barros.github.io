@@ -2201,10 +2201,16 @@ ping 192.168.30.10</pre></div>
 #erros .err:nth-child(2n) h3 svg{animation-delay:-1.1s,-.9s}
 /* tabela de endereçamento: verde */
 #enderecos .tbl-wrap thead th{background:#32A041!important;color:#fff!important;border-bottom-color:#32A041!important}
-#enderecos .tbl-wrap tbody tr:hover td{background:#32A041!important;color:#fff!important}
+#enderecos .tbl-wrap tbody tr{--rc:#32A041}
+#enderecos .tbl-wrap tbody tr:nth-child(1),#enderecos .tbl-wrap tbody tr:nth-child(2){--rc:var(--v10)}
+#enderecos .tbl-wrap tbody tr:nth-child(3),#enderecos .tbl-wrap tbody tr:nth-child(4){--rc:var(--v20)}
+#enderecos .tbl-wrap tbody tr:nth-child(5),#enderecos .tbl-wrap tbody tr:nth-child(6){--rc:var(--v30)}
+#enderecos .tbl-wrap tbody tr:nth-child(7),#enderecos .tbl-wrap tbody tr:nth-child(8){--rc:var(--v40)}
+#enderecos .tbl-wrap tbody tr:hover td{background:var(--rc)!important;color:#fff!important}
+#enderecos .tbl-wrap tbody tr:hover .vtag{background:rgba(255,255,255,.22)!important;color:#fff!important}
 #enderecos .tbl-wrap tbody tr:hover td *{color:#fff!important}
 #enderecos .tbl-wrap tbody tr:hover td::before{color:#fff!important;opacity:.85}
-#enderecos .tbl-wrap tbody tr:hover{background:#32A041}
+#enderecos .tbl-wrap tbody tr:hover{background:var(--rc)}
 /* checklist */
 #entrega .dcard{border:2px solid #32A041}
 .check label{transition:background .15s}
