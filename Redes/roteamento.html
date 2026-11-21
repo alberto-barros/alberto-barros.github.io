@@ -1834,6 +1834,62 @@ copy running-config startup-config</pre></div>
   function drawStatic(){ D = drawNet($('draw'), true, false); drawNet($('draw2'), true, true); }
   drawStatic();
 
+  // ---------- "Monte a topologia": pacote passando de PC em PC e roteadores pulsando ----------
+  (function(){
+    var svgD = $('draw'), reducedD = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var vis = true, trip = 0, dot = null, dotG = null, t0 = 0, path = null, len = 0, hit = [], lastD = null, rings = [];
+    function pulse(i){
+      if (!D || !D.rt[i] || !D.rt[i].animate) return;
+      var g = D.g, r = el('circle', {cx:g.R[i].x, cy:g.R[i].y, r:24, fill:'none', 'stroke-width':4, style:'stroke:var(--green);transform-box:fill-box;transform-origin:center'}, D.over);
+      var an = r.animate([{transform:'scale(1)', opacity:.9}, {transform:'scale(2.4)', opacity:0}], {duration:900, easing:'ease-out'});
+      an.onfinish = function(){ r.remove(); };
+    }
+    function ambient(){
+      // pulso verde contínuo e suave em cada roteador
+      D.rt.forEach(function(c, i){
+        var g = D.g, r = el('circle', {'class':'r-ring', cx:g.R[i].x, cy:g.R[i].y, r:24, fill:'none', 'stroke-width':3, style:'stroke:var(--green);animation-delay:'+(i*.6)+'s'});
+        D.trail.appendChild(r);
+      });
+    }
+    function route(s, d, dir){
+      var g = D.g, pts = [g.P[s], g.R[s]], k = s;
+      var ids = [s];
+      while (k !== d){ k = dir > 0 ? nx(k) : pv(k); pts.push(g.R[k]); ids.push(k); }
+      pts.push(g.P[d]);
+      return {pts:pts, ids:ids};
+    }
+    var TRIPS = [[0,2,1],[1,3,1],[2,0,-1],[3,1,-1],[0,1,1],[1,2,1],[2,3,1],[3,0,1],[0,3,-1],[3,2,-1]];
+    function start(){
+      if (!D || !svgD) return;
+      var T = TRIPS[trip++ % TRIPS.length], r = route(T[0], T[1], T[2]);
+      path = r.pts; len = 0; var cum = [0];
+      for (var i=1; i<path.length; i++){ len += Math.hypot(path[i].x-path[i-1].x, path[i].y-path[i-1].y); cum.push(len); }
+      path.cum = cum; path.ids = r.ids; path.fired = {};
+      if (lastD !== D){ lastD = D; ambient(); }
+      dotG = el('g', {}, D.over);
+      el('circle', {r:11, style:'fill:'+COL[T[0]]+';opacity:.25'}, dotG);
+      el('circle', {r:6.5, style:'fill:'+COL[T[0]]+';stroke:var(--surface);stroke-width:2'}, dotG);
+      t0 = 0;
+    }
+    function frame(ts){
+      requestAnimationFrame(frame);
+      if (!vis || !D) return;
+      if (!dotG || !dotG.isConnected || lastD !== D){ if (dotG) dotG.remove(); start(); }
+      if (!t0) t0 = ts;
+      var d = (ts - t0) / 1000 * 230, done = d >= len + 40;
+      var dd = Math.min(d, len), k = 1;
+      while (k < path.length-1 && path.cum[k] < dd) k++;
+      var a = path[k-1], b = path[k], seg = path.cum[k]-path.cum[k-1] || 1, u = (dd - path.cum[k-1]) / seg;
+      dotG.setAttribute('transform', 'translate('+(a.x+(b.x-a.x)*u)+','+(a.y+(b.y-a.y)*u)+')');
+      // roteador pulsa quando o pacote chega nele
+      for (var q=1; q<path.length-1; q++){ if (!path.fired[q] && dd >= path.cum[q]-2){ path.fired[q] = 1; pulse(path.ids[q-1]); } }
+      if (done){ dotG.remove(); dotG = null; start(); }
+    }
+    if (reducedD){ if (D) ambient(); return; }
+    new IntersectionObserver(function(es){ vis = es[0].isIntersecting; if (vis) t0 = 0; }, {threshold:.15}).observe(svgD);
+    requestAnimationFrame(frame);
+  })();
+
   // ---------- animação ----------
   var A = null, mode = 'static', cut = -1, busy = false;
   var srcSel = $('a-src'), dstSel = $('a-dst'), cutSel = $('a-cut');
