@@ -949,6 +949,13 @@ footer .accent{margin-top:0}
 .foot-brand.tb-brand .inst span{display:block!important}
 @media (max-width:420px){.foot-brand.tb-brand .inst{display:grid!important}}
 .dh-win-top{}
+
+/* protocolos: hover na cor do protocolo */
+#tipos .tbl-wrap tbody tr[style*="--vc"]:hover,#tipos .tbl-wrap tbody tr[style*="--vc"]:hover td{background:var(--vc)!important;color:#fff!important}
+#tipos .tbl-wrap tbody tr[style*="--vc"]:hover td *{color:#fff!important}
+#tipos .tbl-wrap tbody tr[style*="--vc"]:hover .vtag{background:#fff!important;color:var(--vc)!important}
+#tipos .tbl-wrap tbody tr[style*="--vc"]:hover .vtag *{color:var(--vc)!important}
+#tipos .tbl-wrap tbody tr[style*="--vc"]:hover td::before{color:#fff!important}
 </style>
 </head>
 <body>
@@ -1112,10 +1119,10 @@ footer .accent{margin-top:0}
       <table>
         <thead><tr><th>Protocolo</th><th>Tipo</th><th>Métrica</th><th>Distância adm.</th><th>Onde se usa</th></tr></thead>
         <tbody>
-          <tr><td data-label="Protocolo"><span class="vtag" style="--vc:var(--red)">RIP v2</span></td><td data-label="Tipo">Vetor de distância</td><td data-label="Métrica">Saltos (máx. 15)</td><td data-label="Distância adm." class="mono">120</td><td data-label="Onde se usa">Redes pequenas e ensino</td></tr>
-          <tr><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s1)">OSPF</span></td><td data-label="Tipo">Estado de enlace</td><td data-label="Métrica">Custo (largura de banda)</td><td data-label="Distância adm." class="mono">110</td><td data-label="Onde se usa">Redes corporativas</td></tr>
-          <tr><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s3)">EIGRP</span></td><td data-label="Tipo">Vetor de distância avançado</td><td data-label="Métrica">Banda e atraso</td><td data-label="Distância adm." class="mono">90</td><td data-label="Onde se usa">Redes com equipamentos Cisco</td></tr>
-          <tr><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s2)">BGP</span></td><td data-label="Tipo">Vetor de caminho</td><td data-label="Métrica">Atributos de caminho</td><td data-label="Distância adm." class="mono">20 / 200</td><td data-label="Onde se usa">Entre provedores, na Internet</td></tr>
+          <tr style="--vc:var(--red)"><td data-label="Protocolo"><span class="vtag" style="--vc:var(--red)">RIP v2</span></td><td data-label="Tipo">Vetor de distância</td><td data-label="Métrica">Saltos (máx. 15)</td><td data-label="Distância adm." class="mono">120</td><td data-label="Onde se usa">Redes pequenas e ensino</td></tr>
+          <tr style="--vc:var(--s1)"><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s1)">OSPF</span></td><td data-label="Tipo">Estado de enlace</td><td data-label="Métrica">Custo (largura de banda)</td><td data-label="Distância adm." class="mono">110</td><td data-label="Onde se usa">Redes corporativas</td></tr>
+          <tr style="--vc:var(--s3)"><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s3)">EIGRP</span></td><td data-label="Tipo">Vetor de distância avançado</td><td data-label="Métrica">Banda e atraso</td><td data-label="Distância adm." class="mono">90</td><td data-label="Onde se usa">Redes com equipamentos Cisco</td></tr>
+          <tr style="--vc:var(--s2)"><td data-label="Protocolo"><span class="vtag" style="--vc:var(--s2)">BGP</span></td><td data-label="Tipo">Vetor de caminho</td><td data-label="Métrica">Atributos de caminho</td><td data-label="Distância adm." class="mono">20 / 200</td><td data-label="Onde se usa">Entre provedores, na Internet</td></tr>
         </tbody>
       </table>
     </div>
