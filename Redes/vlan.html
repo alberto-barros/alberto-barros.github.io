@@ -812,7 +812,6 @@ footer{background:var(--surface);border-top:1px solid var(--line)}
       <div class="chips">
         <span class="chip"><svg><use href="#i-pc"/></svg>8 PCs</span>
         <span class="chip"><svg><use href="#i-layers"/></svg>4 VLANs</span>
-        <span class="chip chip-ch"><svg><use href="#i-flag"/></svg>Desafio: roteamento</span>
         <span class="chip"><svg><use href="#i-clock"/></svg>≈ 1h30</span>
       </div>
     </div>
@@ -2115,7 +2114,7 @@ ping 192.168.30.10</pre></div>
     </div>
     <h3 class="err-g ch">Parte 2 · Roteamento entre VLANs e ACL</h3>
     <div class="errs">
-      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Subinterfaces aparecem <i>down</i></h3><p>A interface física <code>G0/0</code> está desligada. Entre em <code>interface gigabitEthernet 0/0</code> e rode <code>no shutdown</code>; as subinterfaces sobem junto.</p></article>
+      <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg><span>Subinterfaces aparecem <i>down</i></span></h3><p>A interface física <code>G0/0</code> está desligada. Entre em <code>interface gigabitEthernet 0/0</code> e rode <code>no shutdown</code>; as subinterfaces sobem junto.</p></article>
       <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>“% Configuring IP routing on a LAN subinterface…”</h3><p>Faltou o <code>encapsulation dot1Q</code> antes do <code>ip address</code>. Na subinterface, a etiqueta da VLAN vem sempre primeiro.</p></article>
       <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>Nem a T.I alcança as outras VLANs</h3><p>Teste o <code>ping</code> ao gateway <code>192.168.10.1</code>. Confira o Default Gateway no PC e se a ACL não foi aplicada por engano na <code>G0/0.10</code> (<code>show ip interface g0/0.10</code>).</p></article>
       <article class="err err-ch"><h3><svg><use href="#i-alert"/></svg>A T.I não alcança uma das VLANs</h3><p>O número em <code>encapsulation dot1Q</code> não bate com a VLAN, ou ela ficou fora de <code>switchport trunk allowed vlan</code> na <code>Gi0/1</code> do switch.</p></article>
@@ -2281,6 +2280,21 @@ footer .accent{margin-top:0}
 #animacao .stage svg#topo{width:84%;min-width:0;margin:0 auto}
 @media (max-width:600px){#animacao .stage svg#topo{width:100%}}
 #animacao .anim-ctl{justify-content:center}
+/* ajustes de responsividade (celular pequeno) */
+.code-top span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.code-top .copy{flex:none}
+.anim-ctl label{min-width:0}
+.anim-ctl select{min-width:0;max-width:100%;text-overflow:ellipsis}
+@media (max-width:600px){
+  .rt-wrap .anim-ctl label{flex:1 1 100%;justify-content:space-between}
+  .rt-wrap .anim-ctl select{flex:1;width:0}
+  table.stack .vtag{white-space:nowrap;font-size:.7rem;padding:3px 6px}
+  #erros .err h3{padding-right:38px}
+  #erros .err::after{font-size:1.6rem;top:14px;right:12px}
+}
+@media (max-width:360px){.code-top{gap:6px;padding:9px 10px}.code-top .dots{display:none}}
+/* topologia cabe inteira no tablet, sem rolagem */
+@media (max-width:900px){#draw{min-width:0}}
 /* cenas 4 e 5: o quadro da sub-rede/VLAN "se aproxima" como na topologia */
 #cs-stage{overflow:visible}
 #cs-stage .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
