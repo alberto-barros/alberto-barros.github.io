@@ -1470,7 +1470,7 @@ html body #tmenu a.nav-ch:hover b,html body #tmenu a.nav-ch:focus-visible b{colo
       <a class="solid" href="#entrega"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V17h6v-.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2Z"/></svg>Quiz</a>
       <a class="tb-back" href="https://alberto-barros.github.io/Linux/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Voltar</a>
     </div>
-    <div class="tmenu" id="tmenu" hidden><a href="#sintaxe"><b>01</b>Sintaxe</a><a href="#m1"><b>02</b>Terminal</a><a href="#atalhos"><b>03</b>Atalhos</a><a href="#pastas"><b>04</b>Pastas</a><a href="#m2"><b>05</b>Navegar</a><a href="#m3"><b>06</b>Arquivos</a><a href="#m5"><b>07</b>Pacotes</a><a href="#desafio" class="nav-ch"><b>08</b>Desafio</a><a href="#m9"><b>09</b>Histórico</a><a href="#erros"><b>10</b>Problemas</a><a href="#checklist-sec"><b>11</b>Checklist</a><a href="#entrega"><b>12</b>Quiz</a><a href="#refs"><b>13</b>Referências</a></div>
+    <div class="tmenu" id="tmenu" hidden><a href="#sintaxe"><b>01</b>Sintaxe</a><a href="#m1"><b>02</b>Terminal</a><a href="#atalhos"><b>03</b>Atalhos</a><a href="#pastas"><b>04</b>Pastas</a><a href="#m2"><b>05</b>Navegar</a><a href="#m3"><b>06</b>Arquivos</a><a href="#m5"><b>07</b>Pacotes</a><a href="#desafio" class="nav-ch"><b>08</b>Desafio</a><a href="#m9"><b>09</b>Histórico</a><a href="#erros"><b>10</b>Problemas</a><a href="#checklist-sec"><b>11</b>Checklist</a><a href="#entrega"><b>12</b>Quiz</a></div>
   </div>
 </nav>
 
@@ -1557,7 +1557,7 @@ html body #tmenu a.nav-ch:hover b,html body #tmenu a.nav-ch:focus-visible b{colo
     <div class="sec-head">
       <span class="sec-num">Parte 1 · Sintaxe</span>
       <h2>Como um comando é escrito</h2>
-      <p>Primeiro o <b>comando</b>, depois as <b>opções</b> que mudam o jeito dele trabalhar e, por último, o <b>caminho</b> onde ele vai agir. As partes são separadas por <b>espaço</b> <span class="cites">(<a class="cite" href="#ref-shotts">SHOTTS, 2019</a>)</span>.</p>
+      <p>Primeiro o <b>comando</b>, depois as <b>opções</b> que mudam o jeito dele trabalhar e, por último, o <b>caminho</b> onde ele vai agir. As partes são separadas por <b>espaço</b>.</p>
     </div>
     <div class="def">
       <div style="display:grid;gap:12px">
@@ -1652,7 +1652,7 @@ man ls<span class="c">               # manual completo (q sai)</span></pre></div
     <div class="sec-head">
       <span class="sec-num">Parte 1 · Sistema de arquivos</span>
       <h2>As principais pastas do Linux</h2>
-      <p>No Linux não existe <code>C:\</code>. Tudo começa na <b>raiz</b>, escrita como uma barra <code>/</code>, e cada pasta tem uma função definida pelo padrão FHS <span class="cites">(<a class="cite" href="#ref-fhs">LINUX FOUNDATION, 2015</a>)</span>.</p>
+      <p>No Linux não existe <code>C:\</code>. Tudo começa na <b>raiz</b>, escrita como uma barra <code>/</code>, e cada pasta tem uma função definida pelo padrão FHS.</p>
     </div>
     <div class="def">
       <div class="code out tree"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>árvore de diretórios</span></div><pre><span class="ok">/</span>
@@ -1798,7 +1798,7 @@ ls -a                                       <span class="c"># lista tudo, inclus
     <div class="sec-head">
       <span class="sec-num">Passo 04 · Terminal · sudo</span>
       <h2>Instale pacotes com apt-get: neofetch e GIMP</h2>
-      <p>O <code>apt-get</code> baixa programas dos repositórios do sistema já com tudo o que eles precisam. Primeiro atualize a lista, depois instale <span class="cites">(<a class="cite" href="#ref-aoki">AOKI, 2024</a>)</span>. No Zorin e no Mint, instalar exige poder de administrador: coloque <code>sudo</code> na frente.</p>
+      <p>O <code>apt-get</code> baixa programas dos repositórios do sistema já com tudo o que eles precisam. Primeiro atualize a lista, depois instale. No Zorin e no Mint, instalar exige poder de administrador: coloque <code>sudo</code> na frente.</p>
     </div>
     <ol class="steps">
       <li class="step">
@@ -1865,7 +1865,7 @@ history                                           <span class="c"># lista os com
     <div class="sec-head">
       <span class="sec-num">Passo 05 · Terminal</span>
       <h2>Faça o neofetch abrir junto com o terminal</h2>
-      <p>Toda vez que o terminal abre, o Bash lê o arquivo oculto <code>~/.bashrc</code> <span class="cites">(<a class="cite" href="#ref-bash">FREE SOFTWARE FOUNDATION, 2022</a>)</span>. Basta acrescentar o <code>neofetch</code> no final dele. Faça isto <b>sem sudo</b>, com o seu usuário.</p>
+      <p>Toda vez que o terminal abre, o Bash lê o arquivo oculto <code>~/.bashrc</code>. Basta acrescentar o <code>neofetch</code> no final dele. Faça isto <b>sem sudo</b>, com o seu usuário.</p>
     </div>
     <ol class="steps">
       <li class="step">
@@ -2000,23 +2000,6 @@ cat ~/Downloads/comandos.txt                <span class="c"># mostra o arquivo s
         <div class="qz-stage" id="q-stage" aria-live="polite"></div>
       </div>
     </div>
-  </div>
-</section>
-<section class="sec" id="refs">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="sec-num">Referências</span>
-      <h2>Para estudar mais</h2>
-      <p>Os comandos desta aula funcionam igual no Zorin OS, no Linux Mint, no Ubuntu e no Debian. Eles vêm dos manuais do Debian, do Bash e do nano, do padrão de pastas do Linux e de um livro sobre a linha de comando. Clique numa citação do texto para ir até a referência.</p>
-    </div>
-    <h3 class="ref-h">Referências bibliográficas</h3>
-    <ol class="books">
-      <li id="ref-nano"><span class="ref-a">ALLEGRETTA, C. <i>et al.</i></span> <i>GNU nano</i>: a small and friendly text editor. [S. l.]: Free Software Foundation, [s.d.]. Disponível em: <a href="https://www.nano-editor.org/dist/latest/nano.html" target="_blank" rel="noopener">https://www.nano-editor.org/dist/latest/nano.html</a>.<small>Manual do nano: abrir, digitar, salvar com <kbd>Ctrl</kbd>+<kbd>O</kbd> e sair com <kbd>Ctrl</kbd>+<kbd>X</kbd>.</small></li>
-      <li id="ref-aoki"><span class="ref-a">AOKI, O.</span> <i>Debian Reference</i>. Versão 2.152. [S. l.]: Debian Project, 2026. Disponível em: <a href="https://www.debian.org/doc/manuals/debian-reference/" target="_blank" rel="noopener">https://www.debian.org/doc/manuals/debian-reference/</a>.<small>Manual de referência do Debian: terminal, pastas, usuários e gerenciamento de pacotes com o apt.</small></li>
-      <li id="ref-bash"><span class="ref-a">FREE SOFTWARE FOUNDATION.</span> <i>GNU Bash Reference Manual</i>. Versão 5.3. Boston: FSF, 2025. Disponível em: <a href="https://www.gnu.org/software/bash/manual/" target="_blank" rel="noopener">https://www.gnu.org/software/bash/manual/</a>.<small>Manual do Bash: prompt, histórico, autocompletar com Tab e o arquivo <code>~/.bashrc</code>.</small></li>
-      <li id="ref-fhs"><span class="ref-a">LINUX FOUNDATION.</span> <i>Filesystem Hierarchy Standard</i>: versão 3.0. [S. l.]: The Linux Foundation, 2015. Disponível em: <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html" target="_blank" rel="noopener">https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html</a>.<small>O padrão que define as pastas <code>/etc</code>, <code>/home</code>, <code>/usr</code>, <code>/var</code> e <code>/tmp</code>.</small></li>
-      <li id="ref-shotts"><span class="ref-a">SHOTTS, W.</span> <i>The Linux Command Line</i>. 2. ed. San Francisco: No Starch Press, 2019. Disponível em: <a href="https://linuxcommand.org/tlcl.php" target="_blank" rel="noopener">https://linuxcommand.org/tlcl.php</a>.<small>Livro gratuito para iniciantes: navegação, arquivos, sintaxe dos comandos e atalhos do teclado.</small></li>
-    </ol>
   </div>
 </section>
 </main>
