@@ -67,10 +67,6 @@ h1,h2,h3{font-family:var(--font-display);line-height:1.15;margin:0}
 .hero-text{display:grid;gap:22px;justify-items:start;min-width:0}
 .hero h1{font-size:clamp(2.6rem,5.2vw,4.4rem);font-weight:800;letter-spacing:-.04em;line-height:1.02;color:var(--h-strong)}
 .hero h1 .hl{display:block;background:linear-gradient(95deg,var(--h-g1),var(--h-g2));-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
-.term{display:inline-flex;align-items:center;gap:.6ch;max-width:100%;height:2.5em;padding:0 16px;border-radius:12px;background:#000;color:#E3F3E6;font-family:var(--font-mono);font-size:.92rem;box-shadow:0 10px 26px rgba(15,36,22,.22);white-space:nowrap;overflow:hidden}
-.term .pr{color:#6FE081}
-.term .type{color:#B8F5C2;min-width:20ch}
-.term .type::after{content:"▌";animation:blink 1s steps(1) infinite;color:#6FE081}
 @keyframes blink{50%{opacity:0}}
 .hero p{max-width:52ch;font-size:1.1rem;color:var(--h-strong);margin:0}
 .cta{display:flex;flex-wrap:wrap;gap:12px}
@@ -283,7 +279,6 @@ footer .fb svg{height:26px;width:auto}
   <div class="wrap">
     <div class="hero-text">
       <h1>Redes de <span class="hl">Computadores</span></h1>
-      <div class="term" aria-hidden="true"><span class="pr">$</span><span>estudar</span><span class="type" id="type"></span></div>
       <p>Uma trilha com teoria e laboratórios no Packet Tracer para entender, na prática, como os dados viajam de um computador a outro.</p>
     </div>
     <figure class="lan" aria-label="Animação: três computadores trocando quadros por um switch">
@@ -428,12 +423,7 @@ footer .fb svg{height:26px;width:auto}
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* Texto digitando */
-const words=['--tema "modelo OSI"','--tema "endereço IP"','--tema "sub-redes"','--lab vlan','--lab roteamento'];
-const te=document.getElementById('type');let wi=0,ci=0,del=false;
-function type(){const w=words[wi];te.textContent=w.slice(0,ci);
-  if(!del&&ci<w.length)ci++;else if(!del){del=true;return setTimeout(type,1400)}else if(ci>0)ci--;else{del=false;wi=(wi+1)%words.length}
-  setTimeout(type,del?45:90)}
-RM?te.textContent=words[0]:type();
+
 
 document.querySelectorAll('.chap').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')}));
 /* Contadores e revelação */
