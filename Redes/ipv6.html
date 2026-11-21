@@ -1295,6 +1295,26 @@ footer .accent{margin-top:0}
 .chip:hover,.chip:focus-visible{background:linear-gradient(145deg,#3DB351,var(--green) 55%,#25852F);border-color:transparent;color:#fff;transform:translateY(-2px);box-shadow:0 10px 18px -10px var(--green)}
 .chip:hover svg,.chip:focus-visible svg{color:#fff}
 @media (prefers-reduced-motion:reduce){.chip svg{animation:none!important}}
+.obs .ico svg{transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.obs:hover .ico svg{transform:scale(1.22) rotate(-10deg)}
+.obs{border:1px solid var(--line);background:linear-gradient(160deg,color-mix(in srgb,var(--green) 9%,var(--surface)),var(--surface));box-shadow:var(--sh-1);border-radius:18px;transition:transform .25s,box-shadow .25s}
+.obs:hover{transform:translateY(-3px);box-shadow:var(--sh-2)}
+.observe.one{grid-template-columns:1fr;margin-top:32px!important;margin-bottom:6px}
+.step-body .observe.one{margin-top:20px!important}
+.obs strong{color:var(--ink)}
+.observe.one .obs .ico{background:linear-gradient(135deg,#FFE9A8,#F5C451);color:#7A4B00}
+.observe.one:not(.eye) .obs{border-top:4px solid #F5C451;border-radius:20px;background:linear-gradient(180deg,color-mix(in srgb,#F5C451 16%,var(--surface)),var(--surface) 62%);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 16px 32px -26px color-mix(in srgb,#C98204 70%,transparent)}
+.observe.one:not(.eye) .obs:hover{border-color:#F5C451;box-shadow:0 26px 40px -26px color-mix(in srgb,#C98204 80%,transparent)}
+.observe.one:not(.eye) .obs .ico{box-shadow:0 8px 16px -8px #C98204;--ic:#F5C451}
+.observe.one:not(.eye) .obs code{color:#8A5A00!important;background:color-mix(in srgb,#F5C451 20%,var(--surface))!important;padding:.1em .4em;font-weight:inherit}
+.observe.one.eye .obs{border-top:4px solid var(--red);border-radius:20px;background:linear-gradient(180deg,color-mix(in srgb,var(--red) 9%,var(--surface)),var(--surface) 62%);box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 16px 32px -26px color-mix(in srgb,var(--red) 70%,transparent)}
+.observe.one.eye .obs:hover{border-color:var(--red);box-shadow:0 26px 40px -26px color-mix(in srgb,var(--red) 80%,transparent)}
+.observe.one.eye .obs .ico{background:var(--red);color:#fff;box-shadow:0 8px 16px -8px var(--red);--ic:var(--red)}
+.observe.one.eye .obs code{color:var(--red)!important;background:color-mix(in srgb,var(--red) 9%,var(--surface))!important;padding:.1em .4em;font-weight:inherit}
+.obs{grid-template-columns:40px minmax(0,1fr)}
+.obs>div{min-width:0}
+.obs code{overflow-wrap:anywhere;white-space:normal}
+@media (prefers-reduced-motion:reduce){.obs .ico{animation:none!important}}
 #draw{min-width:0}
 .field input[type=text],.field input[type=number]{min-width:0;max-width:100%;box-sizing:border-box}
 @media (max-width:340px){#osi .pkt{overflow-x:auto}}
@@ -1574,7 +1594,7 @@ footer .accent{margin-top:0}
       <div><b>Anycast</b><span>Mesmo endereço em vários servidores. A mensagem vai para o mais próximo. Usa o espaço unicast.</span></div>
       <div><b>Especiais</b><span><code>::1</code> loopback · <code>::</code> não especificado · <code>::/0</code> rota padrão · <code>2001:db8::/32</code> documentação</span></div>
     </div>
-    <div class="note"><div class="ico"><svg><use href="#i-bulb"></use></svg></div><p>O ULA <code>fd00::/8</code> é definido na <span class="cites"><a class="cite" href="#ref-rfc4193">RFC 4193</a></span>. Para laboratório e documentação, use sempre <code>2001:db8::/32</code>: ele nunca será entregue a nenhuma organização <span class="cites">(<a class="cite" href="#ref-rfc3849">HUSTON; LORD; MICHAELSON, 2004</a>)</span>.</p></div>
+    <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><span>O ULA <code>fd00::/8</code> é definido na <span class="cites"><a class="cite" href="#ref-rfc4193">RFC 4193</a></span>. Para laboratório e documentação, use sempre <code>2001:db8::/32</code>: ele nunca será entregue a nenhuma organização <span class="cites">(<a class="cite" href="#ref-rfc3849">HUSTON; LORD; MICHAELSON, 2004</a>)</span>.</span></div></div></div>
   </div>
 </section>
 
@@ -1718,9 +1738,9 @@ show ipv6 dhcp binding</pre></div>
         </div>
       </li>
     </ol>
-    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Se o PC não receber endereço:</b> alguns Packet Tracer tratam o modo automático só por SLAAC. Nesse caso, remova as linhas <code>ipv6 nd managed-config-flag</code> e <code>ipv6 nd prefix default no-advertise</code> da interface: com <code>ipv6 unicast-routing</code> e o endereço na interface, o PC monta o endereço sozinho (SLAAC), que também é automático. Confira com <code>show ipv6 interface brief</code> se a interface está <i>up</i>.</p></div>
+    <div class="observe one eye"><div class="obs"><div class="ico"><svg><use href="#i-alert"/></svg></div><div><span><strong>Se o PC não receber endereço:</strong> alguns Packet Tracer tratam o modo automático só por SLAAC. Nesse caso, remova as linhas <code>ipv6 nd managed-config-flag</code> e <code>ipv6 nd prefix default no-advertise</code> da interface: com <code>ipv6 unicast-routing</code> e o endereço na interface, o PC monta o endereço sozinho (SLAAC), que também é automático. Confira com <code>show ipv6 interface brief</code> se a interface está <i>up</i>.</span></div></div></div>
 
-    <div class="note"><div class="ico"><svg><use href="#i-eye"></use></svg></div><p><b>Testar:</b> no Packet Tracer, use <code>ping 2001:db8:acad:1::1</code> a partir de um PC da mesma sub-rede.</p></div>
+    <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-eye"/></svg></div><div><span><strong>Testar:</strong> no Packet Tracer, use <code>ping 2001:db8:acad:1::1</code> a partir de um PC da mesma sub-rede.</span></div></div></div>
   </div>
 </section>
 
@@ -1972,7 +1992,7 @@ show ipv6 dhcp pool</pre></div>
         </div>
       </li>
     </ol>
-    <div class="note warn"><div class="ico"><svg><use href="#i-alert"/></svg></div><p><b>Dica:</b> se o ping falhar, confira o prefixo (<code>/64</code>), depois o gateway e por último se digitou o <code>::</code> uma só vez. Um grupo faltando muda a rede inteira.</p></div>
+    <div class="observe one"><div class="obs"><div class="ico"><svg><use href="#i-bulb"/></svg></div><div><span><strong>Dica:</strong> se o ping falhar, confira o prefixo (<code>/64</code>), depois o gateway e por último se digitou o <code>::</code> uma só vez. Um grupo faltando muda a rede inteira.</span></div></div></div>
   </div>
 </section>
 
