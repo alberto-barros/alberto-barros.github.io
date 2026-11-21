@@ -126,11 +126,11 @@ section{padding-block:72px 16px}
 .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:80px;row-gap:60px;align-items:stretch}
 .node{position:relative;display:grid}
 .node>.chap{height:100%}
-.arr{position:absolute;pointer-events:none;color:var(--blue)}
+.arr{position:absolute;pointer-events:none;color:var(--violet)}
 .arr svg{display:block;width:100%;height:100%;overflow:visible}
-.arr .ln{fill:none;stroke:var(--blue);stroke-width:3;stroke-linecap:round;stroke-dasharray:7 7;animation:arrdash .9s linear infinite}
-.arr .hd{fill:var(--blue)}
-.arr .pk{fill:var(--violet);filter:drop-shadow(0 0 5px var(--violet))}
+.arr .ln{fill:none;stroke:var(--violet);stroke-width:3;stroke-linecap:round;stroke-dasharray:7 7;animation:arrdash .9s linear infinite}
+.arr .hd{fill:var(--violet)}
+.arr .pk{fill:#5B8DEF;filter:drop-shadow(0 0 5px #5B8DEF)}
 .arr.right{top:50%;left:100%;width:80px;height:40px;transform:translateY(-50%)}
 .arr.right .pk{animation:arrx 1.8s ease-in-out infinite}
 .arr.down{left:50%;top:100%;width:40px;height:60px;transform:translateX(-50%)}
@@ -146,7 +146,7 @@ section{padding-block:72px 16px}
   background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;
   box-shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px -16px rgba(15,23,42,.18);
   transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s}
-.chap.vio{--c:var(--violet);--c2:#B3A1FF;--c-ink:#5B3FD0;--c-soft:#EFEBFF;--c-chip:#D3C9FA}
+.chap.vio{--c:#8B6CF0;--c2:#B3A1FF;--c-ink:#5B3FD0;--c-soft:#EFEBFF;--c-chip:#D3C9FA}
 @media (prefers-color-scheme:dark){.chap.vio{--c-ink:#B3A1FF;--c-soft:#221B45;--c-chip:#3D3270}}
 /* luz que segue o mouse */
 .chap::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .35s;background:radial-gradient(420px circle at var(--mx) var(--my),color-mix(in srgb,var(--c) 13%,transparent),transparent 60%)}
@@ -357,7 +357,7 @@ footer .fb svg{height:26px;width:auto}
   <div class="head reveal"><span class="eyebrow">Conteúdo</span><h2>Escolha por onde começar</h2><p>Siga a trilha na ordem dos números.</p></div>
   <div class="cards">
     <div class="node">
-      <a class="chap reveal" href="https://alberto-barros.github.io/Informatica/formularios.html">
+      <a class="chap vio reveal" href="https://alberto-barros.github.io/Informatica/formularios.html">
         <div class="top"><div class="ic"><svg class="i a-float a-form" viewBox="0 0 24 24"><rect x="4.5" y="3" width="15" height="18" rx="2.5"/><path class="l1" d="M8 8h8"/><path class="l2" d="M8 12h8"/><path class="l3" d="M8 16h3.5"/><path class="ck" d="M13.5 16.3l1.7 1.7 3-3.4"/></svg></div><span class="kind">Prática</span><span class="num">01</span></div>
         <h3>Formulários</h3>
         <p>Monte uma pesquisa de infraestrutura do IFSC no Google Formulários, em 9 etapas, e veja como ela aparece para quem responde.</p>
@@ -367,7 +367,7 @@ footer .fb svg{height:26px;width:auto}
       <span class="arr right" aria-hidden="true"><svg viewBox="0 0 72 40"><path class="ln" d="M2 20H58"/><path class="hd" d="M56 12l13 8-13 8z"/><circle class="pk" cx="6" cy="20" r="4.5"/></svg></span><span class="arr down m-only" aria-hidden="true"><svg viewBox="0 0 40 56" preserveAspectRatio="none"><path class="ln" d="M20 2V42"/><path class="hd" d="M12 40l8 13 8-13z"/><circle class="pk" cx="20" cy="6" r="4.5"/></svg></span>
     </div>
     <div class="node">
-      <a class="chap reveal" href="https://alberto-barros.github.io/Informatica/dashboard.html">
+      <a class="chap vio reveal" href="https://alberto-barros.github.io/Informatica/dashboard.html">
         <div class="top"><div class="ic"><svg class="i a-float a-dash" viewBox="0 0 24 24"><path d="M4 20h16"/><rect class="b1" x="5.5" y="12" width="3" height="8" rx="1"/><rect class="b2" x="10.5" y="7" width="3" height="13" rx="1"/><rect class="b3" x="15.5" y="10" width="3" height="10" rx="1"/><path class="tr" d="M5 8.5l5-3.5 4 2.5 5-4.5"/></svg></div><span class="kind">Prática</span><span class="num">02</span></div>
         <h3>Dashboard</h3>
         <p>Transforme a planilha de respostas da pesquisa em um dashboard interativo com o Gemini e o Canvas, com os dados anonimizados (LGPD).</p>
