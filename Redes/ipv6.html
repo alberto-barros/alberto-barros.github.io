@@ -1285,6 +1285,9 @@ footer .accent{margin-top:0}
 .check label:hover code{background:rgba(255,255,255,.2)!important;color:#fff!important}
 .check label:hover input{accent-color:#fff}
 #checklist-sec .dcard{border:2px solid #32A041}
+.hero{background:linear-gradient(to bottom,var(--surface) 0,color-mix(in srgb,var(--surface) 70%,transparent) 8%,transparent 24%)}
+.topbar{box-shadow:none!important;border-bottom-color:transparent;transition:box-shadow .25s,border-color .25s}
+.topbar.scrolled{border-bottom-color:var(--line);box-shadow:0 8px 30px -22px rgba(15,36,23,.5)!important}
 #draw{min-width:0}
 .field input[type=text],.field input[type=number]{min-width:0;max-width:100%;box-sizing:border-box}
 @media (max-width:340px){#osi .pkt{overflow-x:auto}}
@@ -2227,6 +2230,7 @@ show ipv6 dhcp pool</pre></div>
     draw();
     if (mq){ if (mq.addEventListener) mq.addEventListener('change', draw); else if (mq.addListener) mq.addListener(draw); }
   })();
+  (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; function f(){ tb.classList.toggle('scrolled',(window.scrollY||document.documentElement.scrollTop)>24); } f(); window.addEventListener('scroll',f,{passive:true}); })();
   // ---------- menu de tópicos ----------
   (function(){
     var btn = $('tb-topics'), menu = $('tmenu');
