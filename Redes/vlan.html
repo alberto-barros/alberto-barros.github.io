@@ -1928,14 +1928,17 @@ ping 192.168.30.10</pre></div>
        sw:function(i){ var p=this.pc(i); return {x:p.x, y:192}; }};
   }
   function el(t,a,p,tx){ var e=document.createElementNS(NS,t); for(var k in a) e.setAttribute(k,a[k]); if(tx!=null) e.textContent=tx; if(p) p.appendChild(e); return e; }
-  var gZ=el('g',{},st), gC=el('g',{},st), gZL=el('g',{},st), gD=el('g',{},st), gP=el('g',{},st);
+  var gZ=el('g',{},st), gC=el('g',{},st), gZL=el('g',{},st), gD=el('g',{},st), gV=[], gP=el('g',{},st);
+  VL.forEach(function(v){ gV.push(el('g',{class:'grp',tabindex:'0',role:'button',style:'--gc:'+v.c,'aria-label':'VLAN '+v.id+' · '+v.n+' 192.168.'+v.id+'.0/24'})); });
+  gV.forEach(function(g){ if(MOB) st.insertBefore(g,gC); else st.insertBefore(g,gP); });
   // zonas
   VL.forEach(function(v,k){
     var a=L.pc(k*2), b=L.pc(k*2+1);
-    if(MOB){ el('rect',{x:8,y:a.y-62,width:344,height:124,rx:16,fill:'none','stroke-width':2,'stroke-dasharray':'6 5',style:'stroke:'+v.c},gZ);
-      el('text',{class:'zl',x:20,y:a.y-44,style:'fill:'+v.c},gZ,'VLAN '+v.id); el('text',{class:'zl','text-anchor':'end',x:340,y:a.y-44,style:'fill:'+v.c},gZ,v.n); }
-    else { el('rect',{x:a.x-45,y:296,width:160,height:160,rx:16,fill:'none','stroke-width':2,'stroke-dasharray':'6 5',style:'stroke:'+v.c},gZ);
-      el('text',{class:'zl halo',x:a.x-33,y:434,style:'fill:'+v.c},gZL,'VLAN '+v.id); el('text',{class:'zn halo',x:a.x-33,y:447,style:'fill:'+v.c},gZL,v.n); }
+    var gz=gV[k];
+    if(MOB){ el('rect',{x:8,y:a.y-62,width:344,height:124,rx:16,'fill-opacity':0,'stroke-width':2,'stroke-dasharray':'6 5',style:'fill:'+v.c+';stroke:'+v.c},gz);
+      el('text',{class:'zl',x:20,y:a.y-44,style:'fill:'+v.c},gz,'VLAN '+v.id); el('text',{class:'zl','text-anchor':'end',x:340,y:a.y-44,style:'fill:'+v.c},gz,v.n); }
+    else { el('rect',{x:a.x-45,y:296,width:160,height:160,rx:16,'fill-opacity':0,'stroke-width':2,'stroke-dasharray':'6 5',style:'fill:'+v.c+';stroke:'+v.c},gz);
+      el('text',{class:'zl halo',x:a.x-33,y:434,style:'fill:'+v.c},gz,'VLAN '+v.id); el('text',{class:'zn halo',x:a.x-33,y:447,style:'fill:'+v.c},gz,v.n); }
   });
   // cabos
   PCS.forEach(function(p){ var a=L.anchor(p.i), b=L.port(p.i); el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,'stroke-width':2.5,style:'stroke:'+p.v.c,opacity:.7},gC); });
@@ -1960,9 +1963,9 @@ ping 192.168.30.10</pre></div>
   el('text',{class:'rts',x:R.x-R.r-10,y:R.y+13,'text-anchor':'end'},rg,'Router 2911');
   VL.forEach(function(v,k){ el('text',{class:'sif',x:R.x+R.r+10,y:R.y-20+k*13,style:'fill:'+v.c},rg,(MOB?'.':'G0/0.')+v.id+' · .'+v.id+'.1'); });
   // PCs
-  PCS.forEach(function(p){ var q=L.pc(p.i), g=el('g',{transform:'translate('+q.x+','+q.y+')'},gD);
+  PCS.forEach(function(p){ var q=L.pc(p.i), g=el('g',{transform:'translate('+q.x+','+q.y+')'},gV[Math.floor(p.i/2)]);
     p.ring=el('circle',{r:32,fill:'none','stroke-width':3,style:'stroke:'+p.v.c,opacity:0},g);
-    el('rect',{x:-22,y:-18,width:44,height:30,rx:5,'stroke-width':2.5,style:'fill:var(--surface);stroke:'+p.v.c},g);
+    el('rect',{class:'mon',x:-22,y:-18,width:44,height:30,rx:5,'stroke-width':2.5,style:'fill:var(--surface);stroke:'+p.v.c},g);
     el('rect',{x:-17,y:-13,width:34,height:19,rx:2,style:'fill:'+p.v.c,opacity:.25},g);
     el('rect',{x:-8,y:14,width:16,height:4,rx:2,style:'fill:var(--muted)'},g);
     el('text',{class:'lbl',y:34},g,p.name); el('text',{class:'ip',y:47},g,MOB?p.ip:'.'+p.v.id+'.'+(10+p.i%2)); p.g=g; });
@@ -2023,7 +2026,7 @@ ping 192.168.30.10</pre></div>
     requestAnimationFrame(frame);
   }
   function run(){
-    if(running) return; var ab=plan(); if(!ab) return; running=true; reset();
+    if(running) return; var ab=plan(); if(!ab) return; running=true; reset(); pickR(null);
     var a=ab[0], b=ab[1], path=build(a,b);
     a.ring.setAttribute('opacity',1); pill.className='pill'; pill.textContent='Enviando';
     desc.textContent='Echo Request de '+a.ip+' para '+b.ip+'.';
@@ -2053,6 +2056,10 @@ ping 192.168.30.10</pre></div>
       animate(back,'reply',finish);
     });
   }
+  function pickR(gEl){ var on=gEl&&!gEl.classList.contains('on'); gV.forEach(function(x){x.classList.remove('on');}); st.classList.toggle('has-on',!!on); if(on) gEl.classList.add('on'); }
+  st.addEventListener('click',function(e){ pickR(e.target.closest('.grp')); });
+  st.addEventListener('keydown',function(e){ var g=e.target.closest&&e.target.closest('.grp'); if(g&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); pickR(g); } });
+  document.addEventListener('click',function(e){ if(!st.contains(e.target)) pickR(null); });
   document.getElementById('rt-play').addEventListener('click',run);
   src.addEventListener('change',function(){ if(!running){ reset(); plan(); } });
   dst.addEventListener('change',function(){ if(!running){ reset(); plan(); } });
@@ -2238,23 +2245,32 @@ footer .accent{margin-top:0}
 #draw2{overflow:visible}
 .drawing .draw-scroll{padding:6px 0}
 #draw .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
+#rt-stage .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
 #draw2 .grp{transform-box:fill-box;transform-origin:center;cursor:pointer;outline:none;transition:transform .5s cubic-bezier(.3,1.5,.5,1),filter .35s ease,opacity .35s}
 #draw:has(.grp:hover) .grp:not(:hover),#draw:has(.grp:focus-visible) .grp:not(:focus-visible),#draw.has-on .grp:not(.on):not(:hover){opacity:.55;filter:saturate(.6)}
+#rt-stage:has(.grp:hover) .grp:not(:hover),#rt-stage:has(.grp:focus-visible) .grp:not(:focus-visible),#rt-stage.has-on .grp:not(.on):not(:hover){opacity:.55;filter:saturate(.6)}
 #draw2:has(.grp:hover) .grp:not(:hover),#draw2:has(.grp:focus-visible) .grp:not(:focus-visible),#draw2.has-on .grp:not(.on):not(:hover){opacity:.55;filter:saturate(.6)}
 #draw .grp:hover,#draw .grp:focus-visible,#draw .grp.on{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
+#rt-stage .grp:hover,#rt-stage .grp:focus-visible,#rt-stage .grp.on{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
 #draw2 .grp:hover,#draw2 .grp:focus-visible,#draw2 .grp.on{transform:scale(1.1);filter:drop-shadow(0 18px 18px color-mix(in srgb,var(--gc) 55%,transparent)) drop-shadow(0 4px 4px rgba(0,0,0,.18))}
 #draw .grp > rect:first-child{transition:fill-opacity .35s,stroke-opacity .35s,stroke-width .35s}
+#rt-stage .grp > rect:first-child{transition:fill-opacity .35s,stroke-opacity .35s,stroke-width .35s}
 #draw2 .grp > rect:first-child{transition:fill-opacity .35s,stroke-opacity .35s,stroke-width .35s}
 #draw .grp:hover > rect:first-child,#draw .grp:focus-visible > rect:first-child,#draw .grp.on > rect:first-child{fill-opacity:.2;stroke-opacity:1;stroke-width:2.5}
+#rt-stage .grp:hover > rect:first-child,#rt-stage .grp:focus-visible > rect:first-child,#rt-stage .grp.on > rect:first-child{fill-opacity:.2;stroke-opacity:1;stroke-width:2.5}
 #draw2 .grp:hover > rect:first-child,#draw2 .grp:focus-visible > rect:first-child,#draw2 .grp.on > rect:first-child{fill-opacity:.2;stroke-opacity:1;stroke-width:2.5}
 #draw .grp:hover .mon,#draw .grp.on .mon{animation:monGlow 1.6s ease-in-out infinite}
+#rt-stage .grp:hover .mon,#rt-stage .grp.on .mon{animation:monGlow 1.6s ease-in-out infinite}
 #draw2 .grp:hover .mon,#draw2 .grp.on .mon{animation:monGlow 1.6s ease-in-out infinite}
 @keyframes monGlow{0%,100%{filter:none}50%{filter:drop-shadow(0 0 6px var(--gc))}}
 @media (max-width:600px){#draw .grp:hover,#draw .grp:focus-visible,#draw .grp.on{transform:scale(1.04)}}
+@media (max-width:600px){#rt-stage .grp:hover,#rt-stage .grp:focus-visible,#rt-stage .grp.on{transform:scale(1.04)}}
 @media (max-width:600px){#draw2 .grp:hover,#draw2 .grp:focus-visible,#draw2 .grp.on{transform:scale(1.04)}}
 @media (prefers-reduced-motion:reduce){#draw .grp,#draw .grp .mon{transition:none;animation:none}#draw .grp:hover,#draw .grp.on{transform:none}}
+@media (prefers-reduced-motion:reduce){#rt-stage .grp,#rt-stage .grp .mon{transition:none;animation:none}#rt-stage .grp:hover,#rt-stage .grp.on{transform:none}}
 @media (prefers-reduced-motion:reduce){#draw2 .grp,#draw2 .grp .mon{transition:none;animation:none}#draw2 .grp:hover,#draw2 .grp.on{transform:none}}
-</style>
+
+#rt-stage{overflow:visible}</style>
 <script>
 (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; function f(){ tb.classList.toggle('scrolled',(window.scrollY||document.documentElement.scrollTop)>24); } f(); window.addEventListener('scroll',f,{passive:true}); })();
 </script>
