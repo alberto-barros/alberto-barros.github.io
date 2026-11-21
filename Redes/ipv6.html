@@ -2377,12 +2377,12 @@ show ipv6 dhcp pool</pre></div>
   function launch(pts,fill,r,done){ var el=mk('circle',{r:r,'stroke-width':1.5,style:'fill:'+fill+';stroke:var(--surface)'},gpk); pk.push({path:mkPath(pts),d:0,el:el,done:done}); }
   function ping(){
     var a=P[Math.floor(Math.random()*P.length)], b=P.filter(function(q){return q!==a && q.k===a.k;})[0];
-    launch([a,a.port,b.port,b],C[a.k],5.5,function(){ b.halo.setAttribute('opacity',1); setTimeout(function(){ b.halo.setAttribute('opacity',0); },450); });
+    launch([a,a.port,b.port,b],C[a.k],5.5,function(){ b.halo.style.stroke=C[a.k]; b.halo.setAttribute('opacity',1); setTimeout(function(){ b.halo.setAttribute('opacity',0); },450); });
     blink(a.led);
   }
   function advertise(){
     rring.setAttribute('opacity',1); setTimeout(function(){ rring.setAttribute('opacity',0); },500);
-    P.forEach(function(p){ launch([rBot,swTop,p.port,p],'var(--green)',4.5,function(){ blink(p.led); p.halo.setAttribute('opacity',1); setTimeout(function(){ p.halo.setAttribute('opacity',0); },450); }); });
+    P.forEach(function(p){ launch([rBot,swTop,p.port,p],'var(--green)',4.5,function(){ blink(p.led); p.halo.style.stroke='var(--green)'; p.halo.setAttribute('opacity',1); setTimeout(function(){ p.halo.setAttribute('opacity',0); },450); }); });
   }
   function frame(ts){
     if(!last) last=ts; var dt=Math.min(ts-last,50); last=ts; acc+=dt;
