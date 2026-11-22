@@ -1926,7 +1926,7 @@ Password:
       <figcaption><span class="cap-up">↑ Envio (upload): hospedeira → VM</span><span class="cap-down">↓ Download: VM → hospedeira</span></figcaption>
     </figure>
     <div class="grid3"><div class="ben"><div class="ico"><svg><use href="#i-server"/></svg></div><h3>Apache funcionando</h3><p>A VM precisa ter o Apache instalado da aula anterior, com uma página em <code>/var/www/html</code>. Teste com <code>curl -I http://localhost</code>.</p></div><div class="ben"><div class="ico"><svg><use href="#i-route"/></svg></div><h3>Rede somente hospedeiro</h3><p>No VirtualBox, ligue um adaptador da VM em <b>Placa de rede exclusiva de hospedeiro</b> (host-only). Assim a hospedeira e a VM conversam numa rede só delas, em geral <code>192.168.56.0/24</code>. Deixe outro adaptador em <b>NAT</b> para a VM ter internet e instalar pacotes.</p></div><div class="ben"><div class="ico"><svg><use href="#i-pc"/></svg></div><h3>FileZilla na hospedeira</h3><p>O <b>FileZilla Client</b> deve estar instalado na máquina hospedeira. Ele é o programa que vai se conectar ao servidor.</p></div></div>
-    <div class="note"><div class="ico"><svg><use href="#i-term"/></svg></div><p>Abra o terminal da VM com <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>. Quando pedir senha, digite a sua. Ela não aparece na tela, é normal.</p></div>
+    <div class="note lamp"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>Abra o terminal da VM com <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>. Quando pedir senha, digite a sua. Ela não aparece na tela, é normal.</p></div>
   </div>
 </section>
 
