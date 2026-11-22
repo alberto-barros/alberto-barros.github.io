@@ -1709,6 +1709,17 @@ kbd{font-family:var(--f-mono);font-size:.8em;background:var(--surface);border:1p
 .logline .g3{background:rgba(127,190,255,.14);border-color:#7fbeff}
 .logline .g4{background:rgba(255,130,130,.16);border-color:#ff8a8a}
 .logline .g5{background:rgba(200,160,255,.14);border-color:#c8a0ff}
+/* botões numerados em 3D */
+.step-n{border-radius:18px;background:linear-gradient(180deg,#6FDD84 0%,#2F9E41 55%,#1E7A30 100%);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.28);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -4px 0 rgba(0,0,0,.18),0 6px 0 #14561F,0 14px 20px -6px rgba(20,86,31,.55);transform:translateY(-3px)}
+.desafio .step-n{background:linear-gradient(180deg,#FF7A7E 0%,#E5484D 50%,#C8191E 100%);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),inset 0 -4px 0 rgba(0,0,0,.2),0 6px 0 #8E1014,0 14px 20px -6px rgba(142,16,20,.55)}
+.step.test .step-n,.desafio .step.test .step-n{background:linear-gradient(180deg,#FFFFFF,#E7F5EA);color:var(--green-strong);text-shadow:none;border:2px dashed var(--green);
+  box-shadow:inset 0 -4px 0 rgba(0,0,0,.06),0 6px 0 #B9D8BF,0 14px 20px -8px rgba(20,86,31,.35)}
+.desafio .step.test .step-n{background:linear-gradient(180deg,#FFFFFF,#FCE9EA);color:var(--red);border-color:var(--red);box-shadow:inset 0 -4px 0 rgba(0,0,0,.06),0 6px 0 #EBB9BB,0 14px 20px -8px rgba(142,16,20,.35)}
+:root[data-theme="dark"] .step-n,:root[data-theme="dark"] .desafio .step-n{color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .step-n,:root:not([data-theme="light"]) .desafio .step-n{color:#fff}}
+.step::before{top:62px}
 .tmenu{max-height:calc(100vh - 100px);overflow-y:auto}
 .topnav .back{background:#C8191E;color:#fff;box-shadow:0 4px 12px rgba(200,25,30,.25)}
 .topnav .back:hover{background:#A51418}
