@@ -1631,6 +1631,11 @@ details.src pre{max-height:360px;overflow:auto}
 .note.lamp .ico svg{width:22px;height:22px}
 /* desafio: texto do cabeçalho das tabelas em vermelho */
 .desafio .val-tbl thead th{color:var(--red)}
+/* advertências (note warn): igual à referência — fundo e borda vermelhos, ícone vermelho sólido */
+.note.warn,.desafio .note.warn{background:linear-gradient(135deg,color-mix(in srgb,var(--red) 10%,var(--surface)),var(--surface));border:1px solid color-mix(in srgb,var(--red) 28%,transparent);border-radius:18px;box-shadow:0 14px 28px -24px color-mix(in srgb,var(--red) 70%,transparent)}
+.note.warn .ico,.desafio .note.warn .ico{width:40px;height:40px;display:grid;place-items:center;padding:0;background:var(--red);color:#fff;border-radius:13px;box-shadow:0 8px 16px -8px var(--red);animation:icoFloat 3.4s ease-in-out infinite}
+.note.warn .ico svg{width:22px;height:22px}
+.note.warn code{color:var(--red);background:color-mix(in srgb,var(--red) 9%,var(--surface))}
 /* checklist centralizado */
 #checklist-sec .sec-head{text-align:center}
 #checklist-sec .sec-head p{margin-left:auto;margin-right:auto}
