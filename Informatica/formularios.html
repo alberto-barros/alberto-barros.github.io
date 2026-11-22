@@ -1566,17 +1566,28 @@ footer{padding-bottom:0}footer .wrap{padding-bottom:32px}
 .ck-card .check label:hover,.ck-card .check label.ck-ch:hover{background:color-mix(in srgb,var(--green) 20%,var(--surface));border-color:var(--green);box-shadow:inset 4px 0 0 var(--green)}
 .ck-card .check label:hover em{color:var(--green-strong)}
 .ck-card .check label:hover input:checked ~ em{color:#fff}
-/* topo igual ao IPv6: fundo verde-claro pontilhado, respiro e destaque do título */
-.hero{position:relative;overflow:hidden;background:
-  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
-  linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
-.hero .wrap{padding-block:72px 64px}
-.hero h1{line-height:1.02}
-.hero h1 em{background:linear-gradient(100deg,var(--green-strong),#4DC262 60%,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
-.topbar{box-shadow:0 8px 30px -22px rgba(15,36,23,.5)}
-@media (max-width:600px){.hero .wrap{padding-block:44px 40px}}
-/* topo sem pontilhado: só o degradê suave verde-claro */
-.hero{background:linear-gradient(135deg,var(--surface-2),var(--bg) 70%)!important}
+/* ===== fundo do topo: aurora suave, sem marcar as bordas de cima e de baixo ===== */
+.hero{position:relative;overflow:hidden;isolation:isolate;border-bottom:0;background:transparent}
+.hero::before,.hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,transparent 12%,rgba(0,0,0,.3) 30%,#000 50%,#000 60%,rgba(0,0,0,.35) 82%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,transparent 12%,rgba(0,0,0,.3) 30%,#000 50%,#000 60%,rgba(0,0,0,.35) 82%,transparent 100%)}
+.hero::before{
+  background:
+    radial-gradient(46% 62% at 8% 22%,color-mix(in srgb,var(--green) 24%,transparent),transparent 70%),
+    radial-gradient(38% 55% at 62% 12%,color-mix(in srgb,var(--s1) 18%,transparent),transparent 70%),
+    radial-gradient(42% 60% at 94% 70%,color-mix(in srgb,var(--s3) 17%,transparent),transparent 72%),
+    radial-gradient(34% 50% at 40% 95%,color-mix(in srgb,var(--s2) 14%,transparent),transparent 72%),
+    radial-gradient(30% 45% at 78% 40%,color-mix(in srgb,var(--green) 14%,transparent),transparent 70%);
+  background-size:140% 140%;background-position:0% 0%;animation:auroraMove 22s ease-in-out infinite alternate}
+.hero::after{
+  background:radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 26%,transparent) 1px,transparent 1.6px) 0 0/26px 26px;
+  -webkit-mask-image:radial-gradient(75% 70% at 50% 50%,#000,transparent 90%);mask-image:radial-gradient(75% 70% at 50% 50%,#000,transparent 90%);opacity:.55}
+@keyframes auroraMove{0%{background-position:0% 0%}50%{background-position:60% 30%}100%{background-position:100% 60%}}
+.hero .wrap{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){.hero::before{animation:none}}
+/* topo branco: continua a barra branca até a etiqueta "Aula + Laboratório", sem linha nem sombra */
+.hero{background:linear-gradient(to bottom,var(--surface) 0,color-mix(in srgb,var(--surface) 70%,transparent) 8%,transparent 24%)}
+.topbar{border-bottom-color:transparent;transition:box-shadow .25s,border-color .25s}
+.topbar.scrolled{border-bottom-color:var(--line)}
 </style>
 </head>
 <body>
@@ -2244,6 +2255,7 @@ footer{padding-bottom:0}footer .wrap{padding-bottom:32px}
     document.addEventListener('keydown', function(e){ if (e.key==='Escape' && !menu.hidden){ setOpen(false); btn.focus(); } });
   })();
 })();
+  (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; function f(){ tb.classList.toggle('scrolled',(window.scrollY||document.documentElement.scrollTop)>24); } f(); window.addEventListener('scroll',f,{passive:true}); })();
 </script>
 
 </body></html>
