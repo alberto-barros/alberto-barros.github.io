@@ -1419,6 +1419,25 @@ html body #tmenu a.nav-ch{background:transparent!important;color:var(--ink)!impo
 html body #tmenu a.nav-ch b{color:var(--green-strong)!important;opacity:1}
 html body #tmenu a.nav-ch:hover,html body #tmenu a.nav-ch:focus-visible{background:var(--red)!important;color:#fff!important}
 html body #tmenu a.nav-ch:hover b,html body #tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.9}
+
+/* ===== numeração 1 2 3 4 em 3D (verde e vermelho) ===== */
+html body .step:not(.test) .step-n,html body .tasks .t b.n{
+  background:linear-gradient(160deg,#6EDB82 0%,#3DB351 40%,#1E7A30 100%)!important;color:#fff!important;
+  text-shadow:0 2px 0 rgba(0,0,0,.28);border:0!important;
+  box-shadow:inset 0 2px 1px rgba(255,255,255,.55),inset 0 -3px 4px rgba(0,0,0,.25),0 5px 0 #14561F,0 12px 16px -6px rgba(20,86,31,.55)!important;
+  transition:transform .15s,box-shadow .15s}
+html body .step:not(.test) .step-n:hover,html body .tasks .t b.n:hover{transform:translateY(-2px);
+  box-shadow:inset 0 2px 1px rgba(255,255,255,.55),inset 0 -3px 4px rgba(0,0,0,.25),0 7px 0 #14561F,0 16px 20px -6px rgba(20,86,31,.6)!important}
+html body .step:not(.test) .step-n:active,html body .tasks .t b.n:active{transform:translateY(4px);
+  box-shadow:inset 0 2px 1px rgba(255,255,255,.4),inset 0 -2px 3px rgba(0,0,0,.25),0 1px 0 #14561F!important}
+html body .tasks .t b.n{margin-bottom:5px;text-shadow:0 1px 0 rgba(0,0,0,.28);box-shadow:inset 0 2px 1px rgba(255,255,255,.55),inset 0 -2px 3px rgba(0,0,0,.25),0 3px 0 #14561F,0 8px 10px -4px rgba(20,86,31,.55)!important}
+html body .step.test .step-n{box-shadow:0 5px 0 color-mix(in srgb,var(--green) 55%,transparent),0 12px 16px -8px rgba(20,86,31,.35)!important}
+html body .desafio .step:not(.test) .step-n,html body .desafio .tasks .t b.n{
+  background:linear-gradient(160deg,#FF7A7E 0%,#E5484D 40%,#A51318 100%)!important;color:#fff!important;
+  box-shadow:inset 0 2px 1px rgba(255,255,255,.5),inset 0 -3px 4px rgba(0,0,0,.28),0 5px 0 #7A0D11,0 12px 16px -6px rgba(165,19,24,.55)!important}
+html body .desafio .tasks .t b.n{box-shadow:inset 0 2px 1px rgba(255,255,255,.5),inset 0 -2px 3px rgba(0,0,0,.28),0 3px 0 #7A0D11,0 8px 10px -4px rgba(165,19,24,.55)!important}
+html body .desafio .step.test .step-n{box-shadow:0 5px 0 color-mix(in srgb,var(--red) 55%,transparent),0 12px 16px -8px rgba(165,19,24,.35)!important}
+@media (prefers-reduced-motion:reduce){html body .step .step-n,html body .tasks .t b.n{transition:none}}
 </style>
 </head>
 <body>
