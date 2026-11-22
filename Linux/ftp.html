@@ -1603,6 +1603,25 @@ details.src pre{max-height:360px;overflow:auto}
 #tmenu a.tm-ch:hover b,#tmenu a.nav-ch:hover b,#tmenu a.tm-ch:focus-visible b,#tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.9}
 /* mais espaço entre os subtítulos (Portas usadas, Cuidados...) e os cards */
 .sec h3.sub-h{margin-bottom:18px}
+/* ---- Regras de validação por campo: tabela no estilo do comparativo da aula ---- */
+.val-tbl{border-collapse:separate;border-spacing:0}
+.val-tbl thead th{background:#1B1F1C;color:#D7F2DD;font-size:.72rem;letter-spacing:.09em;padding:14px 18px;border-bottom:3px solid var(--green);white-space:nowrap}
+.val-tbl thead th:first-child{box-shadow:inset 4px 0 0 var(--green)}
+.val-tbl td{padding:15px 18px;border-bottom:1px solid var(--line);transition:background .2s,color .2s}
+.val-tbl tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--green) 4%,var(--surface))}
+.val-tbl tbody tr:last-child td{border-bottom:0}
+.val-tbl td:first-child{box-shadow:inset 4px 0 0 transparent;font-weight:700;transition:box-shadow .2s,background .2s,color .2s}
+@media (min-width:641px){.val-tbl td:first-child::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:10px;vertical-align:1px;transition:transform .2s}}
+.val-tbl td:nth-child(3) .vpill,.val-tbl td:nth-child(3) span{background:var(--green);color:#fff}
+.val-tbl tbody tr{cursor:default}
+.val-tbl tbody tr:hover td{background:color-mix(in srgb,var(--green) 20%,var(--surface))}
+.val-tbl tbody tr:hover td:first-child{box-shadow:inset 4px 0 0 var(--green);color:var(--green-strong)}
+@media (min-width:641px){.val-tbl tbody tr:hover td:first-child::before{transform:scale(1.5)}}
+.val-tbl tbody tr:hover code{background:var(--surface)}
+:root[data-theme="dark"] .val-tbl thead th{background:#0A1510}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .val-tbl thead th{background:#0A1510}}
+@media (prefers-reduced-motion:reduce){.val-tbl td,.val-tbl td:first-child::before{transition:none}}
+
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1974,7 +1993,7 @@ Password:
     </div>
 
     <h3 class="sub-h">Arquivos do vsftpd</h3>
-    <div class="tbl-wrap files"><table><thead><tr><th>Caminho</th><th>Para que serve</th></tr></thead><tbody><tr><td>/etc/vsftpd.conf</td><td>Arquivo de configuração do servidor FTP</td></tr><tr><td>/var/log/vsftpd.log</td><td>Registro de logins e de cada arquivo enviado ou baixado</td></tr><tr><td>/etc/ftpusers</td><td>Usuários proibidos de entrar por FTP (o root está nesta lista)</td></tr><tr><td>/usr/sbin/vsftpd</td><td>O programa do servidor</td></tr></tbody></table></div>
+    <div class="tbl-wrap files"><table class="val-tbl"><thead><tr><th>Caminho</th><th>Para que serve</th></tr></thead><tbody><tr><td>/etc/vsftpd.conf</td><td>Arquivo de configuração do servidor FTP</td></tr><tr><td>/var/log/vsftpd.log</td><td>Registro de logins e de cada arquivo enviado ou baixado</td></tr><tr><td>/etc/ftpusers</td><td>Usuários proibidos de entrar por FTP (o root está nesta lista)</td></tr><tr><td>/usr/sbin/vsftpd</td><td>O programa do servidor</td></tr></tbody></table></div>
   
   </div>
 </section>
