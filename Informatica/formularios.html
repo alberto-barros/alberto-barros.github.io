@@ -1486,20 +1486,8 @@ tr.grp td{background:var(--surface-2);font-family:var(--f-display);font-weight:7
 .tmenu a:hover,.tmenu a:focus-visible{background:#32A041;color:#fff}
 .tmenu a:hover b,.tmenu a:focus-visible b{color:#fff}
 
-/* ---- Seção 1 · Identificação: branco como os outros; efeito só ao clicar ---- */
-.smap-s.id{background:var(--surface);border-color:var(--line);border-top-color:var(--vc);cursor:pointer}
-.smap-s.id:hover,.smap-s.id:focus-within{transform:none;box-shadow:none;background:var(--surface);border-color:var(--line);border-top-color:var(--vc)}
-.smap-s.id:hover::after{left:-60%;transition:none}
-.smap-s.id:hover .tag{color:var(--green-strong);letter-spacing:normal}
-.smap-s.id:hover h3{color:inherit}
-.smap-s.id:hover .q{background:var(--mint);color:var(--green-strong);transform:none}
-.smap-s.id.on{transform:translateY(-6px) scale(1.02);border-color:var(--vc);box-shadow:0 24px 40px -24px var(--vc);background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 10%,var(--surface)),var(--surface))}
-.smap-s.id.on::after{left:130%;transition:left .7s ease}
-.smap-s.id.on .tag{color:var(--vc);letter-spacing:.06em}
-.smap-s.id.on h3{color:var(--vc)}
-.smap-s.id.on .q{background:var(--vc);color:#fff;transform:translateX(4px)}
-.smap-s.id:focus-visible{outline:3px solid var(--green);outline-offset:2px}
-@media (prefers-reduced-motion:reduce){.smap-s.id.on{transform:none}}
+/* ---- Seção 1 · Identificação: branco como os outros, mesmo efeito ao passar o mouse ---- */
+.smap-s.id:not(:hover):not(:focus-within){background:var(--surface);border-color:var(--line);border-top-color:var(--vc)}
 </style>
 </head>
 <body>
@@ -1628,7 +1616,7 @@ tr.grp td{background:var(--surface-2);font-family:var(--f-display);font-weight:7
       <p>Uma seção de identificação e quatro seções temáticas. As 20 afirmativas do instrumento institucional foram agrupadas por tema e numeradas de 1 a 20, na ordem em que aparecem.</p>
     </div>
     <div class="smap">
-      <div class="smap-s id" tabindex="0" role="button" aria-pressed="false"><span class="tag">Seção 1</span><h3>Identificação</h3><p>Nome, cidade, idade, sexo, curso, turma e e-mail institucional, todos com validação.</p><span class="q">7 campos</span></div>
+      <div class="smap-s id"><span class="tag">Seção 1</span><h3>Identificação</h3><p>Nome, cidade, idade, sexo, curso, turma e e-mail institucional, todos com validação.</p><span class="q">7 campos</span></div>
       <div class="smap-s"><span class="tag">Seção 2</span><h3>Espaços físicos</h3><p>Salas, laboratórios, convivência, eventos e esportes.</p><span class="q">Q1–Q6</span></div>
       <div class="smap-s"><span class="tag">Seção 3</span><h3>Biblioteca</h3><p>Conforto, acervo e serviços de empréstimo.</p><span class="q">Q7–Q9</span></div>
       <div class="smap-s"><span class="tag">Seção 4</span><h3>Tecnologia</h3><p>Sistemas, computadores, internet e equipamentos.</p><span class="q">Q10–Q15</span></div>
@@ -2168,12 +2156,4 @@ tr.grp td{background:var(--surface-2);font-family:var(--f-display);font-weight:7
 })();
 </script>
 
-<script>
-(function(){
-  var c=document.querySelector('.smap-s.id'); if(!c) return;
-  function t(){ var on=c.classList.toggle('on'); c.setAttribute('aria-pressed',on); }
-  c.addEventListener('click',t);
-  c.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); t(); } });
-})();
-</script>
 </body></html>
