@@ -1596,10 +1596,11 @@ details.src pre{max-height:360px;overflow:auto}
 /* menu: Desafio fica vermelho ao passar o mouse */
 .tmenu a.tm-ch:hover,.tmenu a.tm-ch:focus-visible{background:color-mix(in srgb,var(--red) 10%,var(--surface));color:var(--red)}
 .tmenu a.tm-ch:hover b,.tmenu a.tm-ch:focus-visible b{color:var(--red)}
-/* menu: Desafio sempre vermelho, igual ao botão Voltar, com letra branca */
-#tmenu a.tm-ch,#tmenu a.nav-ch,#tmenu a.tm-ch:hover,#tmenu a.nav-ch:hover,#tmenu a.tm-ch:focus-visible,#tmenu a.nav-ch:focus-visible{background:#C8191E!important;color:#fff!important}
-#tmenu a.tm-ch b,#tmenu a.nav-ch b{color:#fff!important;opacity:.9}
-#tmenu a.tm-ch:hover,#tmenu a.nav-ch:hover{box-shadow:0 4px 12px rgba(200,25,30,.35)}
+/* menu: Desafio igual aos outros itens; vermelho com letra branca somente ao passar o mouse */
+#tmenu a.tm-ch,#tmenu a.nav-ch{background:transparent;color:var(--ink)}
+#tmenu a.tm-ch b,#tmenu a.nav-ch b{color:var(--green-strong)}
+#tmenu a.tm-ch:hover,#tmenu a.nav-ch:hover,#tmenu a.tm-ch:focus-visible,#tmenu a.nav-ch:focus-visible{background:#C8191E!important;color:#fff!important;box-shadow:0 4px 12px rgba(200,25,30,.35)}
+#tmenu a.tm-ch:hover b,#tmenu a.nav-ch:hover b,#tmenu a.tm-ch:focus-visible b,#tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.9}
 </style>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1660,12 +1661,10 @@ details.src pre{max-height:360px;overflow:auto}
       <h1><em>Servidor FTP</em> no Linux</h1>
       <p class="lead"><b>Objetivo:</b> Instalar e configurar um servidor FTP na máquina virtual, acessar pelo FileZilla da máquina hospedeira, fazer backup do site em <code>/var/www/html</code> e publicar uma nova página.</p>
       <div class="chips">
-        <span class="chip"><svg><use href="#i-mint"/></svg>Linux Mint (VM)</span>
         <span class="chip"><svg><use href="#i-server"/></svg>vsftpd</span>
         <span class="chip"><svg><use href="#i-swap"/></svg>FileZilla</span>
         <span class="chip"><svg><use href="#i-term"/></svg>Terminal</span>
-        <span class="chip"><svg><use href="#i-list"/></svg>8 passos</span>
-        <span class="chip"><svg><use href="#i-clock"/></svg>Tempo estimado: 2h30</span>
+        <span class="chip"><svg><use href="#i-clock"/></svg>Duração: 2h30</span>
       </div>
     </div>
     <div class="ht-wrap">
