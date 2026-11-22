@@ -1507,6 +1507,18 @@ tr.grp td{background:var(--surface-2);font-family:var(--f-display);font-weight:7
 :root[data-theme="dark"] .val-tbl thead th{background:#0A1510}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .val-tbl thead th{background:#0A1510}}
 @media (prefers-reduced-motion:reduce){.val-tbl td,.val-tbl td:first-child::before{transition:none}}
+
+/* ---- Atenção no estilo do cartão "Dica" da aula de IPv6 (âmbar) ---- */
+.note.warn{border:1px solid var(--line);border-top:4px solid #F5C451;border-radius:20px;grid-template-columns:40px minmax(0,1fr);
+  background:linear-gradient(180deg,color-mix(in srgb,#F5C451 16%,var(--surface)),var(--surface) 62%);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 16px 32px -26px color-mix(in srgb,#C98204 70%,transparent);transition:transform .25s,box-shadow .25s,border-color .25s}
+.note.warn:hover{transform:translateY(-3px);border-color:#F5C451;box-shadow:0 26px 40px -26px color-mix(in srgb,#C98204 80%,transparent)}
+.note.warn .ico{background:linear-gradient(135deg,#FFE9A8,#F5C451);color:#7A4B00;box-shadow:0 8px 16px -8px #C98204}
+.note.warn .ico svg{transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.note.warn:hover .ico svg{transform:scale(1.22) rotate(-10deg)}
+.note.warn code{color:#8A5A00;background:color-mix(in srgb,#F5C451 20%,var(--surface));padding:.1em .4em}
+.note.warn strong{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.note.warn,.note.warn .ico svg{transition:none}.note.warn:hover{transform:none}}
 </style>
 </head>
 <body>
