@@ -1562,6 +1562,10 @@ tr.grp td{background:var(--surface-2);font-family:var(--f-display);font-weight:7
 @media (max-width:600px){.tryw{padding:16px;border-radius:20px}.tryw .likert{gap:6px}.tryw .likert label{font-size:.62rem;padding:12px 2px 10px;border-radius:14px}.tryw .likert b{font-size:1.4rem}}
 @media (prefers-reduced-motion:reduce){.tryw .likert label,.af-tbl td{transition:none}.tryw .likert label:hover{transform:none}}
 footer{padding-bottom:0}footer .wrap{padding-bottom:32px}
+.ck-card .check label{transition:background .2s,border-color .2s,box-shadow .2s}
+.ck-card .check label:hover,.ck-card .check label.ck-ch:hover{background:color-mix(in srgb,var(--green) 20%,var(--surface));border-color:var(--green);box-shadow:inset 4px 0 0 var(--green)}
+.ck-card .check label:hover em{color:var(--green-strong)}
+.ck-card .check label:hover input:checked ~ em{color:#fff}
 </style>
 </head>
 <body>
