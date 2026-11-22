@@ -1616,6 +1616,19 @@ details.src pre{max-height:360px;overflow:auto}
 #tmenu a.tm-ch:hover b,#tmenu a.nav-ch:hover b,#tmenu a.tm-ch:focus-visible b,#tmenu a.nav-ch:focus-visible b{color:#fff!important;opacity:.9}
 /* mais espaço entre os subtítulos (Portas usadas, Cuidados...) e os cards */
 .sec h3.sub-h{margin-bottom:18px}
+/* ---- dica âmbar com lâmpada ---- */
+.note.lamp{border:1px solid var(--line);border-top:4px solid #F5C451;border-radius:20px;grid-template-columns:40px minmax(0,1fr);
+  background:linear-gradient(180deg,color-mix(in srgb,#F5C451 16%,var(--surface)),var(--surface) 62%);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 16px 32px -26px color-mix(in srgb,#C98204 70%,transparent);transition:transform .25s,box-shadow .25s,border-color .25s}
+.note.lamp:hover{transform:translateY(-3px);border-color:#F5C451;box-shadow:0 26px 40px -26px color-mix(in srgb,#C98204 80%,transparent)}
+.note.lamp .ico{background:linear-gradient(135deg,#FFE9A8,#F5C451);color:#7A4B00;box-shadow:0 8px 16px -8px #C98204}
+.note.lamp .ico svg{transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
+.note.lamp:hover .ico svg{transform:scale(1.22) rotate(-10deg)}
+.note.lamp code{color:#8A5A00;background:color-mix(in srgb,#F5C451 20%,var(--surface));padding:.1em .4em}
+.note.lamp strong{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.note.lamp,.note.lamp .ico svg{transition:none}.note.lamp:hover{transform:none}}
+.note.lamp .ico{animation:icoFloat 3.4s ease-in-out infinite;width:40px;height:40px;display:grid;place-items:center;border-radius:13px;padding:0}
+.note.lamp .ico svg{width:22px;height:22px}
 /* checklist centralizado */
 #checklist-sec .sec-head{text-align:center}
 #checklist-sec .sec-head p{margin-left:auto;margin-right:auto}
@@ -2299,7 +2312,7 @@ whoami</pre></div>
             </div>
           </div>
           <details class="src"><summary>Ver o código da página</summary><div class="code"><div class="code-top"><div class="dots"><i></i><i></i><i></i></div><span>index.html · modelo</span><button class="copy" type="button"><svg><use href="#i-copy"/></svg>Copiar</button></div><pre id="modelo-pre"></pre></div></details>
-          <div class="note"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>Se o botão de baixar não funcionar, clique em <b>Copiar código</b>, cole no Bloco de Notas da máquina hospedeira e salve com o nome <code>index.html</code>.</p></div>
+          <div class="note lamp"><div class="ico"><svg><use href="#i-bulb"/></svg></div><p>Se o botão de baixar não funcionar, clique em <b>Copiar código</b>, cole no Bloco de Notas da máquina hospedeira e salve com o nome <code>index.html</code>.</p></div>
         </div>
       </li>
       <li class="step">
