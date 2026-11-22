@@ -1519,6 +1519,48 @@ tr.grp td{background:var(--surface-2);font-family:var(--f-display);font-weight:7
 .note.warn code{color:#8A5A00;background:color-mix(in srgb,#F5C451 20%,var(--surface));padding:.1em .4em}
 .note.warn strong{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.note.warn,.note.warn .ico svg{transition:none}.note.warn:hover{transform:none}}
+
+/* ---- tabela das 20 afirmativas: mesmo estilo da tabela de regras ---- */
+.af-tbl{border-collapse:separate;border-spacing:0}
+.af-tbl thead th{background:#1B1F1C;color:#D7F2DD;font-size:.72rem;letter-spacing:.09em;padding:14px 18px;border-bottom:3px solid var(--green);white-space:nowrap}
+.af-tbl thead th:first-child{box-shadow:inset 4px 0 0 var(--green)}
+.af-tbl td{padding:14px 18px;border-bottom:1px solid var(--line);transition:background .2s,color .2s}
+.af-tbl tr.grp td{background:color-mix(in srgb,var(--gc,var(--green)) 14%,var(--surface));color:var(--gc,var(--green-strong));border-bottom:2px solid var(--gc,var(--green));box-shadow:inset 4px 0 0 var(--gc,var(--green));letter-spacing:.08em}
+.af-tbl td.n{box-shadow:inset 4px 0 0 transparent;color:var(--gc,var(--green-strong));font-weight:800;transition:box-shadow .2s,background .2s}
+.af-tbl tbody tr:not(.grp):nth-child(even) td{background:color-mix(in srgb,var(--gc,var(--green)) 4%,var(--surface))}
+.af-tbl tbody tr:not(.grp):hover td{background:color-mix(in srgb,var(--green) 20%,var(--surface))}
+.af-tbl tbody tr:not(.grp):hover td.n{box-shadow:inset 4px 0 0 var(--green);color:var(--green-strong)}
+.af-tbl tbody tr:last-child td{border-bottom:0}
+:root[data-theme="dark"] .af-tbl thead th{background:#0A1510}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .af-tbl thead th{background:#0A1510}}
+
+/* ---- Como o respondente lê a escala: teclas 3D ---- */
+.tryw{max-width:860px;border-radius:26px;padding:24px;gap:18px;background:linear-gradient(180deg,color-mix(in srgb,var(--green) 7%,var(--surface)),var(--surface) 55%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 24px 44px -28px color-mix(in srgb,var(--green) 60%,transparent)}
+.tryw legend{font:700 1.1rem var(--f-display);margin-bottom:12px;float:left;width:100%}
+.tryw fieldset{display:block}
+.tryw .likert{clear:both;gap:12px;padding-bottom:8px}
+.tryw .likert label{--k:var(--green);--kedge:color-mix(in srgb,var(--k) 55%,#000);position:relative;gap:4px;padding:16px 4px 14px;border:0;border-radius:18px;font-size:.78rem;font-weight:600;color:var(--muted);
+  background:linear-gradient(180deg,var(--surface),color-mix(in srgb,var(--k) 12%,var(--surface)));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -2px 0 color-mix(in srgb,var(--k) 18%,transparent),0 6px 0 color-mix(in srgb,var(--k) 38%,var(--line)),0 14px 18px -10px color-mix(in srgb,var(--k) 55%,transparent);
+  transition:transform .15s,box-shadow .15s,background .2s,color .2s}
+.tryw .likert label:nth-child(1){--k:#C8191E}.tryw .likert label:nth-child(2){--k:#E07B1A}.tryw .likert label:nth-child(3){--k:#C98204}.tryw .likert label:nth-child(4){--k:#4FA83A}.tryw .likert label:nth-child(5){--k:#1E7A30}
+.tryw .likert b{font:800 1.9rem/1 var(--f-display);color:var(--k);text-shadow:0 2px 0 color-mix(in srgb,var(--k) 18%,transparent)}
+.tryw .likert input{position:absolute;opacity:0;pointer-events:none}
+.tryw .likert label:hover{transform:translateY(-3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -2px 0 color-mix(in srgb,var(--k) 18%,transparent),0 9px 0 color-mix(in srgb,var(--k) 38%,var(--line)),0 20px 24px -10px color-mix(in srgb,var(--k) 60%,transparent)}
+.tryw .likert label:active{transform:translateY(4px)}
+.tryw .likert label:has(input:checked){transform:translateY(5px);color:#fff;background:linear-gradient(180deg,color-mix(in srgb,var(--k) 70%,#fff) 0%,var(--k) 55%,var(--kedge) 100%);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.3),0 1px 0 var(--kedge),0 6px 10px -6px var(--k)}
+.tryw .likert label:has(input:checked) b{color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.tryw .likert label:has(input:focus-visible){outline:3px solid var(--green);outline-offset:3px}
+#likOut{display:flex;align-items:center;gap:16px;margin-top:8px;padding:14px 18px;border-radius:18px;font-weight:500;color:var(--muted);min-height:64px;
+  background:var(--surface-2);border:1px dashed var(--line);transition:background .25s,border-color .25s}
+#likOut.on{--vc:var(--green);color:var(--ink);background:color-mix(in srgb,var(--vc) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--vc) 40%,var(--line));box-shadow:0 4px 0 color-mix(in srgb,var(--vc) 45%,var(--line)),0 14px 20px -14px var(--vc)}
+#likOut b{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;color:#fff;font:800 1.5rem var(--f-display);background:linear-gradient(180deg,color-mix(in srgb,var(--vc) 70%,#fff),var(--vc) 60%,color-mix(in srgb,var(--vc) 70%,#000));box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 0 color-mix(in srgb,var(--vc) 55%,#000)}
+#likOut span{font-size:.95rem;line-height:1.45}
+#likOut strong{display:block;font:700 1.02rem var(--f-display);color:var(--vc)}
+@media (max-width:600px){.tryw{padding:16px;border-radius:20px}.tryw .likert{gap:6px}.tryw .likert label{font-size:.62rem;padding:12px 2px 10px;border-radius:14px}.tryw .likert b{font-size:1.4rem}}
+@media (prefers-reduced-motion:reduce){.tryw .likert label,.af-tbl td{transition:none}.tryw .likert label:hover{transform:none}}
 </style>
 </head>
 <body>
@@ -1920,7 +1962,7 @@ tr.grp td{background:var(--surface-2);font-family:var(--f-display);font-weight:7
       <h2>As 20 afirmativas, por seção</h2>
       <p>Cada linha é uma pergunta do tipo escala linear (1 a 5), obrigatória. O número da primeira coluna é o que vai no começo do enunciado.</p>
     </div>
-    <div class="tbl-wrap"><table class="af-tbl"><thead><tr><th>Nº</th><th>Afirmativa</th></tr></thead><tbody><tr class="grp"><td colspan="2">Seção 2 · Espaços físicos</td></tr><tr><td class="n">1.</td><td>As salas de aula são confortáveis e funcionais.</td></tr><tr><td class="n">2.</td><td>Os laboratórios utilizados para as aulas práticas são confortáveis, funcionais e bem equipados.</td></tr><tr><td class="n">3.</td><td>As salas de aula possuem espaço, iluminação e ventilação adequados ao número de alunos.</td></tr><tr><td class="n">4.</td><td>Os espaços de convivência (pátio, corredores, refeitório) são suficientes para o número de alunos.</td></tr><tr><td class="n">5.</td><td>Há um espaço adequado para a realização de eventos (seminários, palestras, formaturas, encontros).</td></tr><tr><td class="n">6.</td><td>A escola disponibiliza espaços adequados para atividades esportivas e de educação física.</td></tr><tr class="grp"><td colspan="2">Seção 3 · Biblioteca</td></tr><tr><td class="n">7.</td><td>A biblioteca é confortável e oferece fácil acesso ao acervo físico.</td></tr><tr><td class="n">8.</td><td>O acervo da biblioteca é de qualidade e quantidade suficientes.</td></tr><tr><td class="n">9.</td><td>Os serviços de empréstimo e renovação na biblioteca são eficientes.</td></tr><tr class="grp"><td colspan="2">Seção 4 · Tecnologia</td></tr><tr><td class="n">10.</td><td>O acesso aos Sistemas SIGAA, Moodle e site são eficientes.</td></tr><tr><td class="n">11.</td><td>Há computadores disponíveis para utilização fora das salas e horários de aula.</td></tr><tr><td class="n">12.</td><td>O acesso à internet é simples e rápido.</td></tr><tr><td class="n">13.</td><td>A qualidade de transmissão audiovisual durante as web/vídeo conferências é boa.</td></tr><tr><td class="n">14.</td><td>As salas de aula possuem quadros, pincéis, projetores, computadores e internet.</td></tr><tr><td class="n">15.</td><td>Os laboratórios de informática possuem equipamentos suficientes e em bom funcionamento.</td></tr><tr class="grp"><td colspan="2">Seção 5 · Serviços e segurança</td></tr><tr><td class="n">16.</td><td>A cantina oferece qualidade, bons preços e atendimento.</td></tr><tr><td class="n">17.</td><td>Os banheiros apresentam conservação em manutenções, limpeza e reposição de material de higiene.</td></tr><tr><td class="n">18.</td><td>As dependências do câmpus dispõem de acesso às pessoas com deficiência.</td></tr><tr><td class="n">19.</td><td>A escola oferece condições adequadas de segurança (portões, vigilância, iluminação externa).</td></tr><tr><td class="n">20.</td><td>O estacionamento e o acesso de entrada/saída da escola são seguros e bem organizados.</td></tr></tbody></table></div>
+    <div class="tbl-wrap"><table class="af-tbl"><thead><tr><th>Nº</th><th>Afirmativa</th></tr></thead><tbody><tr class="grp" style="--gc:var(--s1)"><td colspan="2">Seção 2 · Espaços físicos</td></tr><tr style="--gc:var(--s1)"><td class="n">1.</td><td>As salas de aula são confortáveis e funcionais.</td></tr><tr style="--gc:var(--s1)"><td class="n">2.</td><td>Os laboratórios utilizados para as aulas práticas são confortáveis, funcionais e bem equipados.</td></tr><tr style="--gc:var(--s1)"><td class="n">3.</td><td>As salas de aula possuem espaço, iluminação e ventilação adequados ao número de alunos.</td></tr><tr style="--gc:var(--s1)"><td class="n">4.</td><td>Os espaços de convivência (pátio, corredores, refeitório) são suficientes para o número de alunos.</td></tr><tr style="--gc:var(--s1)"><td class="n">5.</td><td>Há um espaço adequado para a realização de eventos (seminários, palestras, formaturas, encontros).</td></tr><tr style="--gc:var(--s1)"><td class="n">6.</td><td>A escola disponibiliza espaços adequados para atividades esportivas e de educação física.</td></tr><tr class="grp" style="--gc:var(--s2)"><td colspan="2">Seção 3 · Biblioteca</td></tr><tr style="--gc:var(--s2)"><td class="n">7.</td><td>A biblioteca é confortável e oferece fácil acesso ao acervo físico.</td></tr><tr style="--gc:var(--s2)"><td class="n">8.</td><td>O acervo da biblioteca é de qualidade e quantidade suficientes.</td></tr><tr style="--gc:var(--s2)"><td class="n">9.</td><td>Os serviços de empréstimo e renovação na biblioteca são eficientes.</td></tr><tr class="grp" style="--gc:var(--s3)"><td colspan="2">Seção 4 · Tecnologia</td></tr><tr style="--gc:var(--s3)"><td class="n">10.</td><td>O acesso aos Sistemas SIGAA, Moodle e site são eficientes.</td></tr><tr style="--gc:var(--s3)"><td class="n">11.</td><td>Há computadores disponíveis para utilização fora das salas e horários de aula.</td></tr><tr style="--gc:var(--s3)"><td class="n">12.</td><td>O acesso à internet é simples e rápido.</td></tr><tr style="--gc:var(--s3)"><td class="n">13.</td><td>A qualidade de transmissão audiovisual durante as web/vídeo conferências é boa.</td></tr><tr style="--gc:var(--s3)"><td class="n">14.</td><td>As salas de aula possuem quadros, pincéis, projetores, computadores e internet.</td></tr><tr style="--gc:var(--s3)"><td class="n">15.</td><td>Os laboratórios de informática possuem equipamentos suficientes e em bom funcionamento.</td></tr><tr class="grp" style="--gc:var(--red)"><td colspan="2">Seção 5 · Serviços e segurança</td></tr><tr style="--gc:var(--red)"><td class="n">16.</td><td>A cantina oferece qualidade, bons preços e atendimento.</td></tr><tr style="--gc:var(--red)"><td class="n">17.</td><td>Os banheiros apresentam conservação em manutenções, limpeza e reposição de material de higiene.</td></tr><tr style="--gc:var(--red)"><td class="n">18.</td><td>As dependências do câmpus dispõem de acesso às pessoas com deficiência.</td></tr><tr style="--gc:var(--red)"><td class="n">19.</td><td>A escola oferece condições adequadas de segurança (portões, vigilância, iluminação externa).</td></tr><tr style="--gc:var(--red)"><td class="n">20.</td><td>O estacionamento e o acesso de entrada/saída da escola são seguros e bem organizados.</td></tr></tbody></table></div>
     <h3 class="sub-h">Como o respondente lê a escala</h3>
     <div class="try tryw"><fieldset><legend>1. As salas de aula são confortáveis e funcionais.</legend><div class="likert" id="likert"></div></fieldset><output id="likOut" aria-live="polite">Clique em um valor para ver a interpretação.</output></div>
   </div>
@@ -2136,7 +2178,8 @@ tr.grp td{background:var(--surface-2);font-family:var(--f-display);font-weight:7
     var M=["Rejeita a afirmativa por completo: as salas não são confortáveis nem funcionais.","Discorda em parte: há problemas que pesam mais que os pontos positivos.","Ponto neutro: não tem opinião formada ou vê equilíbrio entre pontos bons e ruins.","Concorda em parte: as salas atendem, mas há algo a melhorar.","Concorda plenamente: as salas são confortáveis e funcionais."];
     var lk=$('likert'), out=$('likOut');
     lk.innerHTML=L.map(function(l,k){return '<label for="lk'+(k+1)+'"><b>'+(k+1)+'</b><input type="radio" name="lk" id="lk'+(k+1)+'" value="'+(k+1)+'">'+l+'</label>';}).join('');
-    lk.addEventListener('change',function(e){var v=+e.target.value;out.textContent=v+' · '+L[v-1]+': '+M[v-1];});
+    var C=['#C8191E','#E07B1A','#C98204','#4FA83A','#1E7A30'];
+    lk.addEventListener('change',function(e){var v=+e.target.value;out.innerHTML='<b>'+v+'</b><span><strong>'+L[v-1]+'</strong>'+M[v-1]+'</span>';out.style.setProperty('--vc',C[v-1]);out.classList.add('on');});
   })();
 })();
 </script>
