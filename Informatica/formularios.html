@@ -1566,6 +1566,17 @@ footer{padding-bottom:0}footer .wrap{padding-bottom:32px}
 .ck-card .check label:hover,.ck-card .check label.ck-ch:hover{background:color-mix(in srgb,var(--green) 20%,var(--surface));border-color:var(--green);box-shadow:inset 4px 0 0 var(--green)}
 .ck-card .check label:hover em{color:var(--green-strong)}
 .ck-card .check label:hover input:checked ~ em{color:#fff}
+/* topo igual ao IPv6: fundo verde-claro pontilhado, respiro e destaque do título */
+.hero{position:relative;overflow:hidden;background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--green) 22%,transparent) 1px,transparent 1.5px) 0 0/22px 22px,
+  linear-gradient(135deg,var(--surface-2),var(--bg) 70%);border-bottom:1px solid var(--line)}
+.hero .wrap{padding-block:72px 64px}
+.hero h1{line-height:1.02}
+.hero h1 em{background:linear-gradient(100deg,var(--green-strong),#4DC262 60%,var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.topbar{box-shadow:0 8px 30px -22px rgba(15,36,23,.5)}
+@media (max-width:600px){.hero .wrap{padding-block:44px 40px}}
+/* topo sem pontilhado: só o degradê suave verde-claro */
+.hero{background:linear-gradient(135deg,var(--surface-2),var(--bg) 70%)!important}
 </style>
 </head>
 <body>
