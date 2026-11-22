@@ -1033,7 +1033,8 @@ details.src pre{max-height:360px;overflow:auto}
 /* ================= v2: mais leve, texto preto, ícones e animações ================= */
 :root{--ink:#0a0d0b;--muted:#27322b;--line:#e2ebe5}
 html{scroll-behavior:smooth}
-body{background:#f6faf7;color:var(--ink)}
+body{background:var(--bg);color:var(--ink)}
+.nx-bgfx{display:none}
 .nx-bgfx{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
 .nx-bgfx i{position:absolute;border-radius:50%;filter:blur(80px);opacity:.38;animation:nxdrift 24s ease-in-out infinite alternate}
 .nx-bgfx i:nth-child(1){width:460px;height:460px;left:-140px;top:8%;background:#bfe9c9}
@@ -1152,7 +1153,7 @@ body{background:#f6faf7;color:var(--ink)}
 
 /* barra superior igual à da página IPv4 */
 .accent{height:4px;background:linear-gradient(90deg,#C8191E 0%,#32A041 32%,#32A041 100%)}
-.topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 85%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
+.topbar{--f-top:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--surface) 90%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--f-top)}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;position:relative}
 .tb-brand{display:flex;align-items:center;gap:14px;text-decoration:none;min-width:0;color:var(--ink)}
 .tb-brand .mark{height:40px;width:auto;flex:none}
